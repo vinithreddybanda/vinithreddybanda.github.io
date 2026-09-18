@@ -13,7 +13,7 @@
 :root{--bg:#07080b;--text:#f7f8fb;--muted:#a1a7b3;--accent:#9c8cff;--accent2:#6f8cff;--line:rgba(255,255,255,.1);--glass:rgba(255,255,255,.055);--max:1180px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;overflow-x:hidden}body{margin:0;overflow-x:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.55}a{text-decoration:none;color:inherit}button,input,textarea{font:inherit}::selection{background:rgba(156,140,255,.32)}
 .wrap{width:min(var(--max),calc(100% - 40px));margin:auto;position:relative;z-index:2}.topbar{position:fixed;z-index:50;top:14px;left:50%;transform:translateX(-50%);width:min(760px,calc(100% - 24px));padding:7px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(16,18,25,.52);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);box-shadow:0 20px 70px rgba(0,0,0,.35)}.topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 5px 0 12px}.brand{font-weight:800;letter-spacing:-.05em}.brand b{color:var(--accent)}.nav{display:flex;gap:3px}.nav a{padding:9px 12px;border-radius:11px;font-size:12px;color:#aeb4c0}.nav a:hover{background:rgba(255,255,255,.06);color:#fff}
-canvas#fusion{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.75}.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at center,transparent 40%,rgba(0,0,0,.34) 100%)}main{position:relative;z-index:2}
+canvas#fusion{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.96;mix-blend-mode:screen}.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(circle at center,transparent 40%,rgba(0,0,0,.34) 100%)}main{position:relative;z-index:2}
 .hero{min-height:100svh;display:grid;align-items:center;padding:150px 0 110px}.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,280px);gap:36px;align-items:end}.eyebrow{font:500 11px "DM Mono",monospace;letter-spacing:.14em;color:#8f95a1;text-transform:uppercase}.hero h1{font-size:clamp(58px,9.5vw,128px);line-height:.86;letter-spacing:-.085em;max-width:900px;margin:17px 0 28px}.hero h1 span{display:block}.hero h1 .glow{background:linear-gradient(120deg,#fff 15%,#b4abff 48%,#7e95ff 82%);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-copy{max-width:660px;color:#b7bdc8;font-size:clamp(17px,1.8vw,20px)}.hero-copy strong{color:#f4f5f8;font-weight:600}.hero-side{align-self:end;display:flex;justify-content:flex-end}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.stat{padding:14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.02));backdrop-filter:blur(16px)}.stat b{display:block;font-size:19px;letter-spacing:-.04em}.stat small{font:10px "DM Mono",monospace;color:#7e8591}
 .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:13px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.045);color:#eef0f4;font-weight:600;font-size:13px;backdrop-filter:blur(14px);transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease}.btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.07);box-shadow:0 18px 45px rgba(0,0,0,.18)}.btn.primary{background:#f5f6f8;color:#090a0d;border-color:transparent}
 section{padding:110px 0;border-top:1px solid rgba(255,255,255,.075)}.section-title{display:flex;justify-content:space-between;gap:30px;align-items:flex-end;margin-bottom:30px}.section-title h2{font-size:clamp(36px,6vw,65px);line-height:.95;letter-spacing:-.07em;margin:0}.section-title p{max-width:440px;color:#8d94a1;font-size:14px;margin:0}
@@ -84,47 +84,50 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.m
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,canvas=document.getElementById('fusion');
 if(!reduced&&canvas){
  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:false,powerPreference:'high-performance'});
- renderer.setPixelRatio(Math.min(devicePixelRatio,1.4));renderer.setSize(innerWidth,innerHeight,false);
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.35));renderer.setSize(innerWidth,innerHeight,false);
  const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
  const material=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
- uniforms:{uTime:{value:0},uRes:{value:new THREE.Vector2(innerWidth,innerHeight)},uPointer:{value:new THREE.Vector2(.5,.5)}},
+ uniforms:{uTime:{value:0},uRes:{value:new THREE.Vector2(innerWidth,innerHeight)},uSeed:{value:Math.random()*100}}},
  vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position,1.0);}`,
  fragmentShader:`
- precision highp float;varying vec2 vUv;uniform float uTime;uniform vec2 uRes,uPointer;
- float hash(vec2 p){p=fract(p*vec2(127.1,311.7));p+=dot(p,p+74.7);return fract(p.x*p.y);}
- float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
- float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.02+17.13;a*=.5;}return v;}
+ precision highp float; varying vec2 vUv; uniform float uTime,uSeed; uniform vec2 uRes;
+ float hash12(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+ float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash12(i),hash12(i+vec2(1.,0.)),f.x),mix(hash12(i+vec2(0.,1.)),hash12(i+vec2(1.,1.)),f.x),f.y);}
+ float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<6;i++){v+=a*noise(p);p=p*2.01+19.7;a*=.5;}return v;}
+ float particles(vec2 uv,float scale,float threshold){vec2 g=uv*scale;vec2 cell=floor(g);vec2 f=fract(g)-.5;float h=hash12(cell+uSeed);vec2 jitter=vec2(hash12(cell+4.2),hash12(cell+9.1))-.5;float d=length(f-jitter*.82);float p=smoothstep(.045,.0,d);return p*step(threshold,h);}
  void main(){
    float ar=uRes.x/uRes.y;vec2 p=(vUv-.5)*vec2(ar,1.);
-   float t=uTime*.045;
-   vec2 flow=p+vec2(-t*.34,t*.07);
-   float n=fbm(flow*4.6+vec2(fbm(flow*2.7),0.)*.7);
-   float n2=fbm(flow*10.5-vec2(t*.4,-t*.16));
-   float fine=fbm(flow*34.0+vec2(t*.2));
-   float grain=hash(floor((flow+vec2(t*.015))*vec2(720.,440.)));
-   float sheets=smoothstep(.15,.82,n*.72+n2*.28);
-   float particles=pow(max(grain-.49,0.),2.2)*smoothstep(.1,.9,sheets)*(0.5+0.9*fine);
-   float sparks=pow(max(hash(floor(flow*vec2(185.,128.)*1.5))- .56,0.),3.5)*.55;
-   float density=(particles+sparks);
-   vec3 warm=vec3(1.0,.48,.22),cream=vec3(1.0,.82,.56),rose=vec3(.95,.32,.28),violet=vec3(.45,.32,1.0);
-   float heat=smoothstep(.3,.86,n);
-   vec3 col=mix(warm,cream,heat);
-   col=mix(col,rose,smoothstep(.63,.95,n2)*.35);
-   col=mix(col,violet,smoothstep(.76,.98,fine)*.25);
-   float haze=smoothstep(.05,.95,n)*.045;
-   gl_FragColor=vec4(col*(density*1.35+haze),density*.82+haze);
+   float t=uTime*.027;
+   vec2 q=p;
+   q+=vec2(t*.18,sin(t*.25)*.035);
+   float warp=fbm(q*2.5+vec2(-t*.7,t*.18));
+   q+=vec2(warp*.24,sin(q.x*2.2+t)*.055);
+   float fine=particles(q*1.0,180.0,.69);
+   float fine2=particles(q+vec2(.37,.19),310.0,.735);
+   float micro=particles(q*1.2+vec2(.2,.7),560.0,.79);
+   float ultra=particles(q*1.5-vec2(.4,.2),980.0,.84);
+   float cloud=fbm(q*7.0+vec2(t*.45,-t*.12));
+   float density=(fine*.32+fine2*.30+micro*.22+ultra*.16);
+   density*=.38+.9*smoothstep(.18,.92,cloud);
+   float haze=.018*smoothstep(.25,.85,fbm(q*3.4+vec2(-t*.35)));
+   float edge=1.-smoothstep(.55,1.55,abs(p.x)*.7+abs(p.y)*.34);
+   density*=.72+.28*edge;
+   vec3 c1=vec3(1.0,.74,.48),c2=vec3(1.0,.36,.18),c3=vec3(.72,.42,1.0);
+   vec3 col=mix(c2,c1,smoothstep(.2,.75,cloud));
+   col=mix(col,c3,.10+smoothstep(.76,1.0,noise(q*4.))* .16);
+   float alpha=density*.9+haze;
+   gl_FragColor=vec4(col*(density*1.65+haze),alpha);
  }`
  });
  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),material));
- addEventListener('pointermove',e=>material.uniforms.uPointer.value.set(e.clientX/innerWidth,e.clientY/innerHeight),{passive:true});
  addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight,false);material.uniforms.uRes.value.set(innerWidth,innerHeight)});
  renderer.setAnimationLoop(t=>{material.uniforms.uTime.value=t*.001;renderer.render(scene,camera)});
 }
 document.documentElement.classList.add('js');
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.01,rootMargin:'0px 0px 12% 0px'});
-document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=Math.min(i*24,160)+'ms';io.observe(el)});
-addEventListener('load',()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight*1.05)el.classList.add('show')}));
-if(!matchMedia('(pointer:coarse)').matches)document.querySelectorAll('[data-tilt]').forEach(card=>{card.onpointermove=e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(1200px) rotateX(${-y*1.2}deg) rotateY(${x*2}deg) translateY(-3px)`};card.onpointerleave=()=>card.style.transform=''});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.01,rootMargin:'0px 0px 14% 0px'});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=Math.min(i*22,150)+'ms';io.observe(el)});
+addEventListener('load',()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight*1.08)el.classList.add('show')}));
+if(!matchMedia('(pointer:coarse)').matches)document.querySelectorAll('[data-tilt]').forEach(card=>{card.onpointermove=e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(1200px) rotateX(${-y*1.1}deg) rotateY(${x*1.8}deg) translateY(-3px)`};card.onpointerleave=()=>card.style.transform=''});
 const key='vinith_wall_v2',reactionKey='vinith_wall_reactions_v2';
 const read=()=>{try{return JSON.parse(localStorage.getItem(key)||'[]')}catch{return[]}},rx=()=>{try{return JSON.parse(localStorage.getItem(reactionKey)||'{}')}catch{return{}}};
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
