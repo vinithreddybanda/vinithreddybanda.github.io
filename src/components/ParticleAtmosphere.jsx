@@ -4,12 +4,12 @@ export function ParticleAtmosphere(){
  const particles=useMemo(()=>Array.from({length:125},(_,i)=>({
   id:i,
   left:(i*37.17)%100,
-  top:(i*61.73)%100,
-  size:1.6+((i*13)%13)/3,
+  top:-((i*61.73)%100),
+  size:2.2+((i*13)%16)/3,
   delay:-((i*1.91)%34),
   duration:16+((i*19)%20),
   drift:8+((i*11)%22),
-  opacity:.24+((i*7)%46)/100,
+  opacity:.45+((i*7)%45)/100,
   warm:i%3
  })),[])
  return <div className="particle-atmosphere" aria-hidden="true">
