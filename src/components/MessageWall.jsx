@@ -60,7 +60,7 @@ export function MessageWall(){
    {selected&&
     <motion.div className="modal" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={()=>setSelected(null)}>
      <motion.div className="modal-inner glass" initial={{y:22,scale:.97}} animate={{y:0,scale:1}} exit={{y:16,scale:.985}} onClick={e=>e.stopPropagation()}>
-      <button className="close" type="button" onClick={()=>setSelected(null}>×</button>
+      <button className="close" type="button" onClick={()=>setSelected(null)}>×</button>
       <span className="mono">MESSAGE</span>
       <h3>{selected.name}</h3>
       <time>{new Date(selected.time).toLocaleString()}</time>
