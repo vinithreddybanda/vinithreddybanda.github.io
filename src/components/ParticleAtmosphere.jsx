@@ -86,7 +86,7 @@ void main(){
  vec2 q=p+pointer+flow*.055;
 
  // Almost imperceptible breathing of the whole field.
- q+=.0035*vec2(
+ q+=.0025*vec2(
   sin(q.y*6.0+t*1.4),
   cos(q.x*5.5-t*1.2)
  );
@@ -96,28 +96,28 @@ void main(){
  float stars=0.;
 
  // Dense particle field at several scales. Very low motion speeds.
- stars+=glitter(q,100.,.080,.012,.035,.62);
- stars+=glitter(q+vec2(.13,-.07),190.,.067,.032,.044,.52);
- stars+=glitter(q-vec2(.09,.12),350.,.055,.068,.054,.43);
- stars+=glitter(q+vec2(.06,.16),660.,.045,.13,.066,.35);
- stars+=glitter(q-vec2(.15,.05),1180.,.036,.21,.078,.28);
- stars+=glitter(q+vec2(.18,-.13),2050.,.029,.30,.090,.22);
- stars+=glitter(q-vec2(.18,.10),3350.,.024,.40,.105,.17);
- stars+=glitter(q+vec2(.11,.20),5100.,.020,.50,.120,.13);
+ stars+=glitter(q,120.,.078,.015,.022,.72);
+ stars+=glitter(q+vec2(.13,-.07),210.,.064,.045,.028,.58);
+ stars+=glitter(q-vec2(.09,.12),350.,.052,.095,.034,.48);
+ stars+=glitter(q+vec2(.06,.16),600.,.042,.17,.040,.39);
+ stars+=glitter(q-vec2(.15,.05),980.,.034,.26,.046,.31);
+ stars+=glitter(q+vec2(.18,-.13),1500.,.028,.36,.052,.24);
+ stars+=glitter(q-vec2(.18,.10),2300.,.023,.47,.058,.18);
+ stars+=glitter(q+vec2(.11,.20),3200.,.019,.58,.065,.13);
 
  float dust=noise(q*24.0+t*.004)*noise(q*52.0-t*.003);
  float density=.72+.90*smoothstep(.12,.88,cloud);
  stars*=density*(.92+.28*dust);
 
  // Explicit halo around every lit particle.
- float halo=pow(max(stars,0.),1.18)*6.0;
- float bloom=pow(max(stars,0.),.42)*3.1;
- float core=pow(max(stars,0.),.72)*2.4;
+ float halo=pow(max(stars,0.),.48)*2.7;
+ float bloom=pow(max(stars,0.),.78)*2.1;
+ float core=pow(max(stars,0.),1.18)*2.5;
 
- vec3 bg=vec3(.007,.0085,.012);
- vec3 red=vec3(1.0,.055,.018);
- vec3 orange=vec3(1.0,.255,.035);
- vec3 amber=vec3(1.0,.56,.085);
+ vec3 bg=vec3(.007,.008,.012);
+ vec3 red=vec3(1.0,.018,.006);
+ vec3 orange=vec3(1.0,.22,.012);
+ vec3 amber=vec3(1.0,.48,.025);
 
  float warm=smoothstep(.16,.80,cloud);
  vec3 col=mix(red,orange,warm);
