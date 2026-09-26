@@ -2,28 +2,328 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#07080b">
-<meta name="description" content="Vinith Reddy Banda">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#090b0f">
+<meta name="description" content="Vinith Reddy Banda · interactive developer portfolio">
 <title>Vinith Reddy Banda</title>
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#07080b;color:#f6f7fa;font-family:Inter,system-ui,sans-serif;overflow-x:hidden}body:before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 20% 25%,rgba(255,45,8,.08),transparent 28%),radial-gradient(circle at 80% 80%,rgba(255,105,12,.06),transparent 30%)}#particles{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}.p{position:absolute;border-radius:50%;background:#ff4a12;box-shadow:0 0 3px #ff4a12,0 0 9px rgba(255,65,10,.85),0 0 20px rgba(255,80,10,.45);animation:fall linear infinite;opacity:.7}.p:nth-child(3n){background:#ff7418;box-shadow:0 0 3px #ff7418,0 0 10px rgba(255,100,15,.8),0 0 22px rgba(255,120,20,.4)}.p:nth-child(5n){background:#ff9a28;box-shadow:0 0 3px #ff9a28,0 0 9px rgba(255,135,20,.8),0 0 19px rgba(255,145,25,.35)}@keyframes fall{0%{transform:translate3d(0,-12vh,0) rotate(0) scale(.4);opacity:0}8%{opacity:.8}25%{transform:translate3d(45px,25vh,0) rotate(100deg) scale(1)}45%{transform:translate3d(-35px,45vh,0) rotate(210deg) scale(.72);opacity:.5}65%{transform:translate3d(55px,66vh,0) rotate(330deg) scale(1.08);opacity:.75}83%{transform:translate3d(-30px,85vh,0) rotate(450deg) scale(.8);opacity:.45}100%{transform:translate3d(10px,112vh,0) rotate(560deg) scale(.3);opacity:0}}nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(850px,calc(100% - 24px));padding:9px 15px;border-radius:20px;background:rgba(18,20,27,.62);backdrop-filter:blur(22px);z-index:10;display:flex;gap:25px;align-items:center}nav b{font-size:15px;letter-spacing:-.05em}nav span{margin-left:auto;display:flex;gap:18px}nav a{color:#a4abb6;text-decoration:none;font-size:12px}main{width:min(1100px,calc(100% - 32px));margin:auto}.hero{min-height:100vh;display:flex;align-items:center;padding:120px 0}.eyebrow{font-size:10px;letter-spacing:.15em;color:#818995}.hero h1{font-size:clamp(52px,10vw,120px);line-height:.84;letter-spacing:-.09em;margin:20px 0}.hero h1 span{color:#ff5b18}.hero p{max-width:650px;color:#9da5b1;font-size:19px}.actions{display:flex;gap:9px;margin-top:28px;flex-wrap:wrap}.pill{padding:11px 16px;border-radius:13px;background:#151820;color:#fff;text-decoration:none;font-size:13px;font-weight:600}.pill:first-child{background:#f6f7fa;color:#07080b}.section{padding:90px 0}.section h2{font-size:clamp(36px,6vw,70px);letter-spacing:-.07em;margin:0 0 30px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{padding:25px;min-height:250px;border:1px solid rgba(255,255,255,.06);border-radius:22px;background:rgba(255,255,255,.035);backdrop-filter:blur(18px)}.card h3{font-size:25px}.card p{color:#9da5b1;font-size:14px;line-height:1.7}.tags{color:#777f8b;font-size:10px;letter-spacing:.05em}footer{padding:60px 0;color:#626a76;font-size:10px}@media(max-width:700px){nav span a{display:none}.grid{grid-template-columns:1fr}.hero h1{font-size:18vw}}
+:root{color-scheme:dark;--bg:#090b0f;--fg:#f6f3ed;--muted:#9b9ca4;--glass:rgba(18,20,25,.66);--line:rgba(255,255,255,.08);--orange:#ff6b2c;--gold:#ffb45a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+button,a{font:inherit}
+a{color:inherit}
+#world{position:fixed;inset:0;z-index:0;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+#ui{position:relative;z-index:2}
+.hud{position:fixed;left:50%;top:16px;transform:translateX(-50%);width:min(920px,calc(100% - 24px));padding:10px 14px;border:1px solid var(--line);border-radius:18px;background:rgba(11,13,18,.62);backdrop-filter:blur(20px);display:flex;align-items:center;gap:18px;box-shadow:0 10px 40px rgba(0,0,0,.18)}
+.logo{font-weight:750;letter-spacing:-.05em}
+.logo i{font-style:normal;color:var(--orange)}
+.nav{margin-left:auto;display:flex;gap:14px}
+.nav a{font-size:12px;color:#b6b6bd;text-decoration:none}
+.nav a:hover{color:#fff}
+.hud .status{font-size:10px;letter-spacing:.13em;color:#858791;text-transform:uppercase}
+.panel{position:fixed;left:18px;top:92px;width:min(330px,calc(100% - 36px));padding:16px;border:1px solid var(--line);border-radius:20px;background:var(--glass);backdrop-filter:blur(22px);box-shadow:0 18px 70px rgba(0,0,0,.22)}
+.kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#80828b}
+.panel h1{font-size:clamp(42px,7vw,74px);line-height:.86;letter-spacing:-.075em;margin:14px 0 12px}
+.panel h1 span{color:var(--orange)}
+.panel p{margin:0;color:#b0b1b9;font-size:14px;line-height:1.6}
+.controls{margin-top:15px;display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:#f4f4f6;text-decoration:none;font-size:12px;cursor:pointer;transition:transform .3s ease,background .3s ease}
+.pill:hover{transform:translateY(-2px);background:rgba(255,255,255,.09)}
+.pill.solid{background:#f4f4f3;color:#101116}
+.scroll{position:fixed;right:18px;bottom:18px;width:min(365px,calc(100% - 36px));max-height:64vh;overflow:auto;padding:13px;border:1px solid var(--line);border-radius:20px;background:var(--glass);backdrop-filter:blur(22px);box-shadow:0 18px 70px rgba(0,0,0,.22)}
+.section{padding:0 4px 14px}
+.section+ .section{padding-top:10px}
+.section h2{font-size:15px;margin:0 0 8px;letter-spacing:-.025em}
+.section p{font-size:12px;line-height:1.55;color:#a9aab2;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{font-size:10px;color:#c5c5ca;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.055)}
+.quest{margin-top:10px;padding:10px;border-radius:13px;background:rgba(255,255,255,.038);border:1px solid rgba(255,255,255,.05)}
+.quest b{display:block;font-size:12px;margin-bottom:4px}
+.quest span{font-size:10px;color:#9698a1}
+.mission{position:fixed;left:50%;bottom:19px;transform:translateX(-50%);padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(11,13,18,.6);backdrop-filter:blur(18px);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9d9da4}
+#tip{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);padding:11px 14px;border-radius:999px;background:rgba(12,14,18,.68);border:1px solid var(--line);backdrop-filter:blur(16px);font-size:11px;color:#c7c7cc;opacity:0;pointer-events:none;transition:opacity .5s ease}
+@media(max-width:760px){
+ .hud{top:10px}.nav{display:none}.panel{top:74px;left:12px;width:min(290px,calc(100% - 24px));padding:13px}.panel h1{font-size:47px}.scroll{left:12px;right:12px;bottom:54px;width:auto;max-height:31vh}.mission{bottom:12px}
+}
 </style>
 </head>
 <body>
-<div id="particles"></div>
-<nav><b>vinith<span style="color:#ff5b18">.</span></b><span><a href="#work">Work</a><a href="#experience">Experience</a><a href="#stack">Stack</a><a href="mailto:vinithreddybanda@gmail.com">Email</a></span></nav>
-<main>
-<section class="hero"><div><div class="eyebrow">INFORMATION TECHNOLOGY · BUILDER · RESEARCHER</div><h1>Vinith Reddy <span>Banda.</span></h1><p>I build full-stack systems, developer tooling and practical AI products.</p><div class="actions"><a class="pill" href="#work">Explore work ↘</a><a class="pill" href="mailto:vinithreddybanda@gmail.com">Email ↗</a><a class="pill" href="https://github.com/vinithreddybanda">GitHub ↗</a></div></div></section>
-<section id="work" class="section"><h2>Selected work.</h2><div class="grid"><article class="card"><h3>JournalAI</h3><p>AI-powered journaling with structured mood insights, secure persistence and cloud delivery.</p><div class="tags">NEXT.JS · SUPABASE · GROQ · DOCKER · KUBERNETES</div></article><article class="card"><h3>Activities for Discord</h3><p>Android Rich Presence control using a native JNI bridge and Discord SDK.</p><div class="tags">ANDROID · JAVA · C++ · JNI</div></article><article class="card"><h3>WhatsApp Status Saver</h3><p>Open-source Android utility for fast local media access.</p><div class="tags">KOTLIN · ANDROID · F-DROID</div></article></div></section>
-<section id="experience" class="section"><h2>Experience.</h2><div class="card"><h3>Software Engineering Intern</h3><p>Building software systems, full-stack applications and developer-focused solutions while continuing research and open-source development.</p></div></section>
-<section id="stack" class="section"><h2>Stack.</h2><div class="grid"><div class="card"><h3>Frontend</h3><p>React · Next.js · JavaScript · TypeScript · HTML · CSS</p></div><div class="card"><h3>Backend</h3><p>C# · ASP.NET Core · Node.js · SQL Server · Supabase</p></div><div class="card"><h3>Cloud</h3><p>Docker · Kubernetes · Azure · GitHub Actions · Jenkins</p></div></div></section>
-<footer>© 2026 Vinith Reddy Banda</footer>
-</main>
-<script>
-const root=document.getElementById('particles');
-const n=150;
-for(let i=0;i<n;i++){const p=document.createElement('i');p.className='p';const size=2+Math.random()*4;p.style.width=size+'px';p.style.height=size+'px';p.style.left=Math.random()*100+'%';p.style.top=(-5-Math.random()*100)+'%';p.style.animationDuration=(14+Math.random()*22)+'s';p.style.animationDelay=(-Math.random()*32)+'s';p.style.opacity=(.35+Math.random()*.55).toFixed(2);root.appendChild(p)}
+<div id="world"></div>
+<div id="ui">
+<header class="hud">
+ <div class="logo">vinith<span>.</span></div>
+ <div class="status">interactive portfolio · 2026</div>
+ <nav class="nav">
+  <a href="#work">Work</a><a href="#experience">Experience</a><a href="#stack">Stack</a>
+  <a href="mailto:vinithreddybanda@gmail.com">Email</a>
+ </nav>
+</header>
+
+<aside class="panel">
+ <div class="kicker">Courier profile · spawn point</div>
+ <h1>Vinith<br><span>Reddy Banda.</span></h1>
+ <p>Software engineer, builder and researcher. Explore the little world to discover projects, experience and the technologies behind them.</p>
+ <div class="controls">
+  <a class="pill solid" href="#work">Enter portfolio ↘</a>
+  <a class="pill" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub ↗</a>
+ </div>
+</aside>
+
+<section class="scroll" id="work">
+ <div class="section">
+  <div class="kicker">01 · Work</div>
+  <h2>Playable workbench</h2>
+  <div class="quest"><b>CareSchedule</b><span>ASP.NET Core · React · EF Core · SQL Server · Clean Architecture</span></div>
+  <div class="quest"><b>JournalAI</b><span>Next.js · Supabase · Groq AI · Docker · Kubernetes · Azure</span></div>
+  <div class="quest"><b>WhatsApp Status Saver</b><span>Kotlin · Android · open source · F-Droid</span></div>
+ </div>
+ <div class="section" id="experience">
+  <div class="kicker">02 · Experience</div>
+  <p>.NET Full Stack Intern at Cognizant, plus research and open-source work across interactive and developer-focused systems.</p>
+ </div>
+ <div class="section" id="stack">
+  <div class="kicker">03 · Stack</div>
+  <div class="chips">
+   <span class="chip">React</span><span class="chip">Next.js</span><span class="chip">ASP.NET Core</span><span class="chip">Node.js</span><span class="chip">C#</span><span class="chip">SQL Server</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Azure</span><span class="chip">Three.js</span>
+  </div>
+ </div>
+</section>
+
+<div class="mission">Move · discover · click objects · explore</div>
+<div id="tip">The world reacts to you.</div>
+</div>
+
+<script type="module">
+import*as THREE from"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+const host=document.getElementById("world");
+const scene=new THREE.Scene();
+scene.background=new THREE.Color("#090b0f");
+scene.fog=new THREE.FogExp2("#090b0f",.008);
+
+const camera=new THREE.PerspectiveCamera(54,innerWidth/innerHeight,.1,300);
+camera.position.set(0,5.7,14);
+
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+renderer.setSize(innerWidth,innerHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.05;
+host.appendChild(renderer.domElement);
+
+const hemi=new THREE.HemisphereLight("#fff4e9","#24202a",1.35);
+scene.add(hemi);
+const key=new THREE.DirectionalLight("#ffb36a",2.1);
+key.position.set(7,10,5);
+scene.add(key);
+
+const planet=new THREE.Group();
+planet.rotation.z=.08;
+scene.add(planet);
+
+const sphere=new THREE.Mesh(
+ new THREE.SphereGeometry(4.1,64,40),
+ new THREE.MeshToonMaterial({color:"#e8a86b",gradientMap:null})
+);
+planet.add(sphere);
+
+const rim=new THREE.Mesh(
+ new THREE.SphereGeometry(4.16,64,40),
+ new THREE.MeshBasicMaterial({color:"#ff7740",transparent:true,opacity:.06,side:THREE.BackSide})
+);
+planet.add(rim);
+
+// Stylized terrain patches, roads and landmarks.
+const patchMat=new THREE.MeshToonMaterial({color:"#6f8f55"});
+const roadMat=new THREE.MeshToonMaterial({color:"#5b5451"});
+const roofMat=new THREE.MeshToonMaterial({color:"#bb5b3f"});
+const creamMat=new THREE.MeshToonMaterial({color:"#f1d29c"});
+const rockMat=new THREE.MeshToonMaterial({color:"#635960"});
+
+function addPatch(lat,lon,size,color){
+ const phi=(90-lat)*Math.PI/180,theta=(lon+90)*Math.PI/180;
+ const n=new THREE.Vector3(Math.sin(phi)*Math.cos(theta),Math.cos(phi),Math.sin(phi)*Math.sin(theta));
+ const pos=n.clone().multiplyScalar(4.1+0.025);
+ const m=new THREE.Mesh(new THREE.CircleGeometry(size,24),new THREE.MeshToonMaterial({color}));
+ m.position.copy(pos);
+ m.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),n);
+ planet.add(m);
+ return m;
+}
+addPatch(28,-35,.8,"#78995a");
+addPatch(8,28,1.0,"#7e9c60");
+addPatch(-18,70,.72,"#64834d");
+addPatch(-28,-70,.92,"#7e9b61");
+addPatch(47,74,.58,"#6b8f57");
+
+function cylinderAt(lat,lon,h,r,mat){
+ const phi=(90-lat)*Math.PI/180,theta=(lon+90)*Math.PI/180;
+ const n=new THREE.Vector3(Math.sin(phi)*Math.cos(theta),Math.cos(phi),Math.sin(phi)*Math.sin(theta));
+ const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.05,h,10),mat);
+ m.position.copy(n.clone().multiplyScalar(4.1+h/2));
+ m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),n);
+ planet.add(m);
+ return m;
+}
+cylinderAt(31,-20,.55,.35,roofMat);
+cylinderAt(9,31,.42,.26,creamMat);
+cylinderAt(-20,68,.8,.3,rockMat);
+cylinderAt(44,72,.6,.28,creamMat);
+
+// Little trees.
+const treeMat=new THREE.MeshToonMaterial({color:"#355f3e"});
+for(let i=0;i<32;i++){
+ const a=Math.random()*Math.PI*2,b=(Math.random()-.5)*1.1;
+ const x=Math.cos(a)*Math.cos(b)*4.1,y=Math.sin(b)*4.1,z=Math.sin(a)*Math.cos(b)*4.1;
+ const n=new THREE.Vector3(x,y,z).normalize();
+ const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.025,.04,.22,6),new THREE.MeshToonMaterial({color:"#6f4a38"}));
+ trunk.position.copy(n.multiplyScalar(4.18));
+ trunk.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),n);
+ const crown=new THREE.Mesh(new THREE.ConeGeometry(.16,.38,7),treeMat);
+ crown.position.copy(trunk.position.clone().add(n.clone().multiplyScalar(.19)));
+ crown.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),n);
+ planet.add(trunk,crown);
+}
+
+// Landmark rings, placed as floating signboards.
+const landmarkGroup=new THREE.Group();
+planet.add(landmarkGroup);
+function landmark(lat,lon,label,color){
+ const phi=(90-lat)*Math.PI/180,theta=(lon+90)*Math.PI/180;
+ const n=new THREE.Vector3(Math.sin(phi)*Math.cos(theta),Math.cos(phi),Math.sin(phi)*Math.sin(theta));
+ const g=new THREE.Group();
+ g.position.copy(n.clone().multiplyScalar(4.8));
+ g.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),n);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(.25,.035,10,24),new THREE.MeshBasicMaterial({color}));
+ g.add(ring);
+ const labelSprite=makeLabel(label,color);
+ labelSprite.position.y=.4;
+ g.add(labelSprite);
+ landmarkGroup.add(g);
+ return g;
+}
+function makeLabel(text,color){
+ const c=document.createElement("canvas");c.width=320;c.height=88;
+ const x=c.getContext("2d");x.clearRect(0,0,c.width,c.height);x.fillStyle="#0c0d11d9";x.beginPath();x.roundRect(4,8,312,70,20);x.fill();x.fillStyle=color;x.font="700 27px system-ui";x.textAlign="center";x.textBaseline="middle";x.fillText(text,160,43);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+ return new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));
+}
+landmark(28,-35,"CARE SCHEDULE","#ff9a63");
+landmark(9,31,"JOURNAL AI","#ffbd72");
+landmark(-18,68,"ANDROID LAB","#ff815b");
+landmark(-28,-70,"RESEARCH","#f0c27b");
+landmark(44,72,"OPEN SOURCE","#ff8d64");
+
+// Courier character
+const player=new THREE.Group();
+const body=new THREE.Mesh(new THREE.CapsuleGeometry(.32,.72,6,12),new THREE.MeshToonMaterial({color:"#ece7df"}));
+body.position.y=.62;
+const head=new THREE.Mesh(new THREE.SphereGeometry(.27,20,16),new THREE.MeshToonMaterial({color:"#d59672"}));
+head.position.y=1.18;
+const hair=new THREE.Mesh(new THREE.SphereGeometry(.28,20,12,0,Math.PI*2,0,Math.PI*.52),new THREE.MeshToonMaterial({color:"#17181c"}));
+hair.position.y=1.26;
+player.add(body,head,hair);
+const legMat=new THREE.MeshToonMaterial({color:"#2c3340"});
+const leg1=new THREE.Mesh(new THREE.CylinderGeometry(.08,.1,.48,8),legMat);
+const leg2=leg1.clone();leg1.position.set(-.12,.25,0);leg2.position.set(.12,.25,0);player.add(leg1,leg2);
+const armMat=new THREE.MeshToonMaterial({color:"#ece7df"});
+const arm1=new THREE.Mesh(new THREE.CylinderGeometry(.065,.075,.45,8),armMat);
+const arm2=arm1.clone();arm1.position.set(-.39,.65,0);arm2.position.set(.39,.65,0);player.add(arm1,arm2);
+const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.34,.13),new THREE.MeshToonMaterial({color:"#b85f3e"}));
+bag.position.set(.34,.72,-.08);player.add(bag);
+player.position.set(0,3.95,0);
+player.scale.setScalar(.96);
+planet.add(player);
+
+const particleCount=1200;
+const positions=new Float32Array(particleCount*3);
+const colors=new Float32Array(particleCount*3);
+const sizes=new Float32Array(particleCount);
+for(let i=0;i<particleCount;i++){
+ const r=4.35+Math.random()*1.7;
+ const a=Math.random()*Math.PI*2;
+ const y=(Math.random()-.5)*9;
+ const rr=Math.sqrt(Math.max(0, r*r-y*y));
+ positions[i*3]=Math.cos(a)*rr;
+ positions[i*3+1]=y;
+ positions[i*3+2]=Math.sin(a)*rr;
+ const warm=Math.random();
+ colors[i*3]=1;
+ colors[i*3+1]=.16+warm*.46;
+ colors[i*3+2]=.06+warm*.16;
+ sizes[i]=1.2+Math.random()*2.8;
+}
+const pm=new THREE.PointsMaterial({size:.045,vertexColors:true,transparent:true,opacity:.92,blending:THREE.AdditiveBlending,depthWrite:false});
+const pts=new THREE.Points(new THREE.BufferGeometry(),pm);
+pts.geometry.setAttribute("position",new THREE.BufferAttribute(positions,3));
+pts.geometry.setAttribute("color",new THREE.BufferAttribute(colors,3));
+planet.add(pts);
+
+const keys={};
+addEventListener("keydown",e=>keys[e.key.toLowerCase()]=true);
+addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
+const pointer=new THREE.Vector2();
+let targetCam=new THREE.Vector3(0,5.7,14);
+addEventListener("pointermove",e=>{pointer.x=e.clientX/innerWidth-.5;pointer.y=e.clientY/innerHeight-.5});
+let touchStart=null;
+addEventListener("touchstart",e=>{touchStart=e.touches[0]},{passive:true});
+addEventListener("touchmove",e=>{
+ if(!touchStart)return;
+ const t=e.touches[0],dx=t.clientX-touchStart.clientX,dy=t.clientY-touchStart.clientY;
+ pointer.x=THREE.MathUtils.clamp(pointer.x+dx/innerWidth,.5,-.5);
+ pointer.y=THREE.MathUtils.clamp(pointer.y+dy/innerHeight,-.5,.5);
+ touchStart=t;
+},{passive:true});
+addEventListener("touchend",()=>touchStart=null,{passive:true});
+
+const tip=document.getElementById("tip");
+let first=true,walk=0;
+const clock=new THREE.Clock();
+function animate(){
+ const dt=Math.min(clock.getDelta(),.033);
+ const elapsed=clock.elapsedTime;
+
+ const moving=keys.w||keys.a||keys.s||keys.d||keys.arrowup||keys.arrowdown||keys.arrowleft||keys.arrowright;
+ let dx=0,dz=0;
+ if(keys.w||keys.arrowup)dz-=1;
+ if(keys.s||keys.arrowdown)dz+=1;
+ if(keys.a||keys.arrowleft)dx-=1;
+ if(keys.d||keys.arrowright)dx+=1;
+ if(dx||dz){
+  const len=Math.hypot(dx,dz);dx/=len;dz/=len;
+  player.position.x+=dx*dt*2.0;
+  player.position.z+=dz*dt*2.0;
+  player.position.x=THREE.MathUtils.clamp(player.position.x,-2.6,2.6);
+  player.position.z=THREE.MathUtils.clamp(player.position.z,-2.6,2.6);
+  walk+=dt*9;
+  body.rotation.z=Math.sin(walk)*.07;
+  leg1.rotation.x=Math.sin(walk)*.35;
+  leg2.rotation.x=-Math.sin(walk)*.35;
+ }else{
+  walk+=dt*1.5;
+  body.position.y=.62+Math.sin(walk)*.015;
+  player.position.y=3.95+Math.sin(elapsed*1.7)*.035;
+ }
+ planet.rotation.y+=dt*.035;
+ planet.rotation.x=THREE.MathUtils.lerp(planet.rotation.x,pointer.y*.08,.03);
+
+ camera.position.x=THREE.MathUtils.lerp(camera.position.x,targetCam.x+pointer.x*2.2,.025);
+ camera.position.y=THREE.MathUtils.lerp(camera.position.y,targetCam.y-pointer.y*1.0,.025);
+ camera.lookAt(0,.4,0);
+
+ pts.rotation.y+=dt*.004;
+ pts.rotation.x=Math.sin(elapsed*.05)*.015;
+
+ if(first&&elapsed>5){tip.style.opacity=".78";setTimeout(()=>tip.style.opacity="0",2600);first=false}
+
+ renderer.render(scene,camera);
+ requestAnimationFrame(animate);
+}
+animate();
+addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
 </script>
 </body>
 </html>
