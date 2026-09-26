@@ -7,7 +7,7 @@
 <meta name="description" content="Vinith Reddy Banda · interactive developer portfolio">
 <title>Vinith Reddy Banda</title>
 <style>
-#tip{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 13px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(12,14,18,.72);backdrop-filter:blur(16px);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#b9bac1;opacity:0;pointer-events:none;transition:opacity .25s;z-index:12}
+#tip{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);padding:9px 12px;border-radius:999px;background:rgba(7,9,12,.58);backdrop-filter:blur(14px);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#ddd;opacity:0;pointer-events:none;transition:opacity .25s;z-index:12}.minimal-ui{position:fixed;top:16px;left:16px;z-index:12;display:flex;align-items:center;gap:11px;pointer-events:none}.brand{font-size:11px;font-weight:800;letter-spacing:.16em}.coords{font-size:8px;letter-spacing:.13em;color:#777c85}.interaction{position:fixed;top:16px;right:16px;z-index:12;font-size:8px;letter-spacing:.14em;color:#777c85;text-transform:uppercase}
 :root{color-scheme:dark;--bg:#090b0f;--fg:#f6f3ed;--muted:#9b9ca4;--glass:rgba(18,20,25,.66);--line:rgba(255,255,255,.08);--orange:#ff6b2c;--gold:#ffb45a}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
@@ -18,36 +18,8 @@ a{color:inherit}
 canvas{display:block;width:100%;height:100%}
 #ui{position:relative;z-index:2}
 .hud{position:fixed;left:16px;top:16px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(11,13,18,.58);backdrop-filter:blur(18px);display:flex;align-items:center;gap:9px;box-shadow:0 10px 40px rgba(0,0,0,.18)}
-.logo{font-weight:750;letter-spacing:-.05em}
-.logo i{font-style:normal;color:var(--orange)}
-.nav{margin-left:auto;display:flex;gap:14px}
-.nav a{font-size:12px;color:#b6b6bd;text-decoration:none}
-.nav a:hover{color:#fff}
-.hud .status{font-size:10px;letter-spacing:.13em;color:#858791;text-transform:uppercase}
-.panel{position:fixed;left:18px;top:92px;width:min(330px,calc(100% - 36px));padding:16px;border:1px solid var(--line);border-radius:20px;background:var(--glass);backdrop-filter:blur(22px);box-shadow:0 18px 70px rgba(0,0,0,.22)}
-.kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#80828b}
-.panel h1{font-size:clamp(42px,7vw,74px);line-height:.86;letter-spacing:-.075em;margin:14px 0 12px}
-.panel h1 span{color:var(--orange)}
-.panel p{margin:0;color:#b0b1b9;font-size:14px;line-height:1.6}
-.controls{margin-top:15px;display:flex;gap:8px;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.045);color:#f4f4f6;text-decoration:none;font-size:12px;cursor:pointer;transition:transform .3s ease,background .3s ease}
-.pill:hover{transform:translateY(-2px);background:rgba(255,255,255,.09)}
-.pill.solid{background:#f4f4f3;color:#101116}
-.scroll{position:fixed;right:18px;bottom:18px;width:min(365px,calc(100% - 36px));max-height:64vh;overflow:auto;padding:13px;border:1px solid var(--line);border-radius:20px;background:var(--glass);backdrop-filter:blur(22px);box-shadow:0 18px 70px rgba(0,0,0,.22)}
-.section{padding:0 4px 14px}
-.section+ .section{padding-top:10px}
-.section h2{font-size:15px;margin:0 0 8px;letter-spacing:-.025em}
-.section p{font-size:12px;line-height:1.55;color:#a9aab2;margin:0}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.chip{font-size:10px;color:#c5c5ca;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.055)}
-.quest{margin-top:10px;padding:10px;border-radius:13px;background:rgba(255,255,255,.038);border:1px solid rgba(255,255,255,.05)}
-.quest b{display:block;font-size:12px;margin-bottom:4px}
-.quest span{font-size:10px;color:#9698a1}
-.mission{position:fixed;left:50%;bottom:19px;transform:translateX(-50%);padding:9px 13px;border:1px solid var(--line);border-radius:999px;background:rgba(11,13,18,.6);backdrop-filter:blur(18px);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9d9da4}
-#tip{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);padding:11px 14px;border-radius:999px;background:rgba(12,14,18,.68);border:1px solid var(--line);backdrop-filter:blur(16px);font-size:11px;color:#c7c7cc;opacity:0;pointer-events:none;transition:opacity .5s ease}
-@media(max-width:760px){
- .hud{top:10px}.nav{display:none}.panel{top:74px;left:12px;width:min(290px,calc(100% - 24px));padding:13px}.panel h1{font-size:47px}.scroll{left:12px;right:12px;bottom:54px;width:auto;max-height:31vh}.mission{bottom:12px}
-}
+
+
 </style>
 </head>
 <body>
@@ -59,13 +31,14 @@ canvas{display:block;width:100%;height:100%}
  
 </header>
 
-<div id="tip"></div>
+<div id="tip">E · INTERACT</div>
 </div>
 
 <script type="module">
 import*as THREE from"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 const world=document.getElementById("world");
 const tip=document.getElementById("tip");
+const coords=document.getElementById("coords");
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color("#090b0f");
@@ -308,6 +281,7 @@ function game(){
   nearby=near;
   if(near){tip.textContent="E · TALK TO "+near.name.toUpperCase();tip.style.opacity=".82"}else{tip.style.opacity="0"}
  }
+ coords.textContent="SECTOR "+String(Math.round((player.position.x+6)/12*9+1)).padStart(2,"0")+" · "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
  renderer.render(scene,camera);
  requestAnimationFrame(game);
 }
@@ -315,6 +289,7 @@ game();
 
 addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.6))});
 if(matchMedia("(max-width:760px)").matches)mobile.style.display="block";
+const interactionHint=document.createElement("div");interactionHint.className="interaction";interactionHint.textContent=matchMedia("(max-width:760px)").matches?"TOUCH · MOVE · EXPLORE":"WASD · MOUSE · E";document.body.appendChild(interactionHint);
 </script>
 </body>
 </html>
