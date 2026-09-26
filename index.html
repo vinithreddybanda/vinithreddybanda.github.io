@@ -2,289 +2,202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#090b0f">
-<meta name="description" content="Vinith Reddy Banda · interactive developer portfolio">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#dfe8ec">
+<meta name="description" content="Vinith Reddy Banda · interactive portfolio world">
 <title>Vinith Reddy Banda</title>
 <style>
-#tip{position:fixed;left:50%;bottom:36px;transform:translateX(-50%);padding:9px 12px;border-radius:999px;background:rgba(7,9,12,.58);backdrop-filter:blur(14px);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#ddd;opacity:0;pointer-events:none;transition:opacity .25s;z-index:12}.minimal-ui{position:fixed;top:16px;left:16px;z-index:12;display:flex;align-items:center;gap:11px;pointer-events:none}.brand{font-size:11px;font-weight:800;letter-spacing:.16em}.coords{font-size:8px;letter-spacing:.13em;color:#777c85}.interaction{position:fixed;top:16px;right:16px;z-index:12;font-size:8px;letter-spacing:.14em;color:#777c85;text-transform:uppercase}
-:root{color-scheme:dark;--bg:#090b0f;--fg:#f6f3ed;--muted:#9b9ca4;--glass:rgba(18,20,25,.66);--line:rgba(255,255,255,.08);--orange:#ff6b2c;--gold:#ffb45a}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
-button,a{font:inherit}
-a{color:inherit}
-#world{position:fixed;inset:0;z-index:0;overflow:hidden}
-canvas{display:block;width:100%;height:100%}
-#ui{position:relative;z-index:2}
-.hud{position:fixed;left:16px;top:16px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(11,13,18,.58);backdrop-filter:blur(18px);display:flex;align-items:center;gap:9px;box-shadow:0 10px 40px rgba(0,0,0,.18)}
-
-
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#dfe8ec;touch-action:none}body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#26343b}
+#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
+#loading{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#dfe8ec;color:#53636b;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+#loading.hide{display:none}
+#intro{position:fixed;inset:0;z-index:15;display:grid;place-items:center;background:linear-gradient(180deg,rgba(223,232,236,.96),rgba(223,232,236,.72));backdrop-filter:blur(6px);text-align:center;padding:22px}
+#intro>div{max-width:460px}
+#intro .mark{font-size:10px;letter-spacing:.2em;color:#74838a;text-transform:uppercase;margin-bottom:18px}
+#intro h1{margin:0;font-size:clamp(64px,15vw,116px);line-height:.8;letter-spacing:-.09em;font-weight:800}
+#intro p{margin:20px auto;max-width:350px;font-size:14px;line-height:1.65;color:#596970}
+#start{padding:13px 22px;border:0;border-radius:999px;background:#26343b;color:#fff;font-weight:700;cursor:pointer}
+#dialog{position:fixed;left:50%;bottom:38px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));padding:16px 18px;border-radius:18px;background:rgba(250,250,247,.93);backdrop-filter:blur(14px);box-shadow:0 16px 54px rgba(37,53,60,.18);display:none;z-index:12}
+#dialog.show{display:block}
+#speaker{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7b8990}
+#dialogText{font-size:14px;line-height:1.58;margin-top:6px;color:#2f4047}
+#continue{margin-top:11px;padding:8px 13px;border-radius:999px;border:1px solid #c6d0d4;background:#fff;color:#314047;cursor:pointer}
+#quest{position:fixed;right:16px;top:16px;z-index:10;width:min(290px,calc(100% - 32px));padding:12px 14px;border-radius:15px;background:rgba(250,250,247,.82);backdrop-filter:blur(12px);display:none;box-shadow:0 10px 35px rgba(42,56,62,.1)}
+#quest.show{display:block}
+#quest small{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#7d8a91}#quest b{display:block;margin-top:4px;font-size:13px}#quest span{display:block;margin-top:4px;font-size:11px;line-height:1.45;color:#66767d}
+#hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:10;padding:7px 10px;border-radius:999px;background:rgba(38,52,59,.42);color:#fff;font-size:8px;letter-spacing:.14em;text-transform:uppercase;opacity:.72}
+#mobile{position:fixed;left:16px;bottom:52px;width:120px;height:120px;border-radius:50%;border:1px solid rgba(255,255,255,.42);background:rgba(255,255,255,.16);backdrop-filter:blur(10px);display:none;z-index:11}
+#stick{position:absolute;width:46px;height:46px;left:36px;top:36px;border-radius:50%;background:rgba(255,255,255,.62)}
+@media(max-width:760px){#hint{bottom:14px}.dialog{}#mobile{display:block}}
 </style>
 </head>
 <body>
-<div id="world"></div>
-<div id="ui">
- <div class="minimal-ui"><div class="brand">VINITH</div><div class="coords" id="coords">SECTOR 01 · 00:00</div></div>
- <div id="tip">E · INTERACT</div>
-</div>
+<div id="game"></div>
+<div id="loading">loading world</div>
+<div id="intro"><div><div class="mark">VINITH · INTERACTIVE PORTFOLIO</div><h1>V.</h1><p>There is no scroll. Walk through the world, meet the NPCs, and discover the work one place at a time.</p><button id="start">ENTER WORLD</button></div></div>
+<div id="dialog"><div id="speaker"></div><div id="dialogText"></div><button id="continue">Continue ↗</button></div>
+<div id="quest"><small>discovered</small><b id="questTitle"></b><span id="questText"></span></div>
+<div id="hint">WASD · MOUSE · E</div>
+<div id="mobile"><div id="stick"></div></div>
 
 <script type="module">
 import*as THREE from"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
-const world=document.getElementById("world");
-const tip=document.getElementById("tip");
-const coords=document.getElementById("coords");
+
+const el=id=>document.getElementById(id);
+const game=el("game"),loading=el("loading"),intro=el("intro"),dialog=el("dialog"),speaker=el("speaker"),dialogText=el("dialogText"),quest=el("quest"),questTitle=el("questTitle"),questText=el("questText"),mobile=el("mobile"),stick=el("stick"),hint=el("hint");
 
 const scene=new THREE.Scene();
-scene.background=new THREE.Color("#090b0f");
-scene.fog=new THREE.FogExp2("#090b0f",.014);
+scene.background=new THREE.Color("#dfe8ec");
+scene.fog=new THREE.Fog("#dfe8ec",18,42);
 
-const camera=new THREE.PerspectiveCamera(56,innerWidth/innerHeight,.1,120);
-camera.position.set(0,4.8,11);
+const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,.1,100);
+camera.position.set(0,5.5,12);
 
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
 renderer.setSize(innerWidth,innerHeight);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.1;
-world.appendChild(renderer.domElement);
+renderer.toneMappingExposure=1.02;
+game.appendChild(renderer.domElement);
 
-const hemi=new THREE.HemisphereLight("#fff5e8","#2a2023",1.45);
-scene.add(hemi);
-const sun=new THREE.DirectionalLight("#ffc083",2.7);
-sun.position.set(6,10,4);
-scene.add(sun);
+scene.add(new THREE.HemisphereLight("#ffffff","#718087",1.65));
+const sun=new THREE.DirectionalLight("#fff2dc",2.15);sun.position.set(10,15,7);scene.add(sun);
 
-const toon=(c)=>new THREE.MeshToonMaterial({color:c});
-const root=new THREE.Group();
-scene.add(root);
+const toon=c=>new THREE.MeshToonMaterial({color:c});
+const world=new THREE.Group();
+scene.add(world);
 
-// Ground island
-const island=new THREE.Mesh(new THREE.CylinderGeometry(7.4,.2,1.05,64),toon("#69804e"));
-island.position.y=-.5;
-root.add(island);
-const soil=new THREE.Mesh(new THREE.CylinderGeometry(7.1,.25,.32,64),toon("#876b52"));
-soil.position.y=-.02;
-root.add(soil);
+// Floating mini-island with a soft, graphic silhouette.
+const island=new THREE.Mesh(new THREE.CylinderGeometry(8.6,8.95,1.2,72),toon("#879d69"));
+island.position.y=-.52;
+world.add(island);
+const soil=new THREE.Mesh(new THREE.CylinderGeometry(8.05,8.2,.34,72),toon("#b09572"));
+soil.position.y=.06;world.add(soil);
 
-// Roads
-const roadMat=toon("#554f4d");
-function road(x,z,w,d,r=.2){
- const m=new THREE.Mesh(new THREE.BoxGeometry(w,.08,d),roadMat);
- m.position.set(x,.17,z);m.rotation.y=r;root.add(m);return m;
-}
-road(0,0,12,.9,0);
-road(0,0,.9,12,0);
-road(-3.0,2.5,6,.65,-.55);
-road(3.0,-2.6,6,.65,-.55);
+const roadMat=toon("#6e6660");
+function road(x,z,w,d,r=0){const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),roadMat);m.rotation.x=-Math.PI/2;m.rotation.z=r;m.position.set(x,.24,z);world.add(m)}
+road(0,0,13,.9);road(0,0,.9,12);road(-2.8,2.4,5,.7,-.5);road(2.8,-2.4,5,.7,-.5);
 
-// Building helper
-function building(x,z,w,h,d,body,roof,label){
- const g=new THREE.Group();g.position.set(x,.2,z);
- const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),toon(body));b.position.y=h/2;g.add(b);
- const r=new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*.72,.7,4),toon(roof));r.position.y=h+.35;r.rotation.y=Math.PI/4;g.add(r);
- const door=new THREE.Mesh(new THREE.BoxGeometry(.42,.72,.06),toon("#27262a"));door.position.set(0,.36,d/2+.035);g.add(door);
- const sign=document.createElement("canvas");sign.width=320;sign.height=90;
- const ctx=sign.getContext("2d");ctx.fillStyle="#111218ee";ctx.beginPath();ctx.roundRect(8,10,304,70,18);ctx.fill();ctx.fillStyle="#ffbd83";ctx.font="700 25px system-ui";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(label,160,45);
- const tex=new THREE.CanvasTexture(sign);tex.colorSpace=THREE.SRGBColorSpace;
- const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));sp.scale.set(2.2,.62,1);sp.position.set(0,h+1.0,0);g.add(sp);
- root.add(g);return g;
-}
-const buildings=[
- {x:-4.3,z:-2.9,label:"CARE SCHEDULE",body:"#d59b72",roof:"#8f4b39",data:"care"},
- {x:4.1,z:-2.8,label:"JOURNAL AI",body:"#d8b06f",roof:"#915e3a",data:"journal"},
- {x:-4.1,z:2.9,label:"ANDROID LAB",body:"#c78467",roof:"#653f4c",data:"android"},
- {x:4.0,z:2.8,label:"RESEARCH",body:"#d0ba8a",roof:"#59677c",data:"research"},
- {x:0,z:4.5,label:"ARCHIVE",body:"#c8a16b",roof:"#594b50",data:"archive"},
- {x:0,z:-4.6,label:"GITHUB",body:"#b9b8b4",roof:"#34383f",data:"github"}
-];
-buildings.forEach(b=>building(b.x,b.z,1.8,1.55,1.7,b.body,b.roof,b.label));
-
-const treeMat=toon("#315f40"),trunkMat=toon("#725039");
-for(let i=0;i<48;i++){
- let a=Math.random()*Math.PI*2,r=5.1+Math.random()*1.5,x=Math.cos(a)*r,z=Math.sin(a)*r;
- const g=new THREE.Group();g.position.set(x,.22,z);
- const tr=new THREE.Mesh(new THREE.CylinderGeometry(.055,.075,.45,7),trunkMat);tr.position.y=.22;
- const cr=new THREE.Mesh(new THREE.ConeGeometry(.3,.7,8),treeMat);cr.position.y=.62;
- g.add(tr,cr);root.add(g);
-}
-
-// Fireflies / glitter
-const pCount=1500;
-const pPos=new Float32Array(pCount*3);
-for(let i=0;i<pCount;i++){
- const a=Math.random()*Math.PI*2,r=7+Math.random()*5,y=-.1+Math.random()*5;
- pPos[i*3]=Math.cos(a)*r;
- pPos[i*3+1]=y;
- pPos[i*3+2]=Math.sin(a)*r;
-}
-const pGeo=new THREE.BufferGeometry();
-pGeo.setAttribute("position",new THREE.BufferAttribute(pPos,3));
-const pts=new THREE.Points(pGeo,new THREE.PointsMaterial({color:"#ff8a45",size:.055,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));
-scene.add(pts);
-
-// Player
-const player=new THREE.Group();
-player.position.set(0,.22,0);
-const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.25,.5,5,10),toon("#f0ece5"));torso.position.y=.62;
-const head=new THREE.Mesh(new THREE.SphereGeometry(.22,18,14),toon("#d99572"));head.position.y=1.12;
-const hair=new THREE.Mesh(new THREE.SphereGeometry(.23,18,10,0,Math.PI*2,0,Math.PI*.52),toon("#202126"));hair.position.y=1.18;
-const shirtLogo=new THREE.Mesh(new THREE.BoxGeometry(.18,.18,.03),toon("#c55a39"));shirtLogo.position.set(0,.68,.24);
-player.add(torso,head,hair,shirtLogo);
-const legs=[];
-for(const x of [-.1,.1]){const l=new THREE.Mesh(new THREE.CapsuleGeometry(.065,.35,4,8),toon("#313643"));l.position.set(x,.22,0);legs.push(l);player.add(l);}
-const bag=new THREE.Mesh(new THREE.BoxGeometry(.28,.3,.15),toon("#a85039"));bag.position.set(.31,.73,-.09);player.add(bag);
-root.add(player);
-
-// NPC creation
-const npcDefs=[
- {id:"guide",x:-1.7,z:.7,name:"Maya",role:"Guide",color:"#ebae78",dialog:["Welcome, traveler.","This little island is Vinith's portfolio.","Talk to the people around the village. They each guard a part of his story."]},
- {id:"engineer",x:-2.2,z:-1.3,name:"Arun",role:"Engineer",color:"#d67d59",dialog:["I build systems.","Ask me about CareSchedule and the engineering work behind it.","Six-layer architecture, APIs, workflows and scheduling logic."]},
- {id:"ai",x:2.0,z:-1.2,name:"Nia",role:"AI Builder",color:"#dda95e",dialog:["I live where code meets AI.","JournalAI is the next stop.","There is more than a chatbot in that project."]},
- {id:"android",x:-2.1,z:1.7,name:"Kiran",role:"Android Builder",color:"#be7568",dialog:["Small apps can still solve real problems.","Activities for Discord and WhatsApp Status Saver are over there.","Open source belongs in the world, not only in a repo."]},
- {id:"research",x:2.15,z:1.7,name:"Dr. Rao",role:"Researcher",color:"#c6a476",dialog:["Some roads lead to research.","The rehabilitation work is the research chapter.","Find the Research building for the paper story."]},
- {id:"archive",x:.9,z:3.1,name:"Ivy",role:"Archivist",color:"#b99769",dialog:["Every builder has an archive.","Education, technologies, interests and the timeline live here.","Take what you need and keep moving."]},
- {id:"contact",x:.8,z:-3.2,name:"Sam",role:"Courier Master",color:"#9e9fa4",dialog:["Need a direct line?","The GitHub house contains the open-source trail.","For contact, use the mail route in the small HUD above."]}
+const destinations=[
+ {id:"care",name:"CARE SCHEDULE",x:-4.15,z:-2.95,color:"#a76755",title:"CareSchedule",body:"Full-stack scheduling system: ASP.NET Core, React, EF Core and SQL Server. 148 REST APIs, 32 controllers, 33 domain entities and six role-based workflows."},
+ {id:"journal",name:"JOURNAL AI",x:4.05,z:-2.95,color:"#c69a5d",title:"JournalAI",body:"AI journaling with Next.js, Supabase and Groq AI, shipped through Docker, Kubernetes and Azure."},
+ {id:"android",name:"ANDROID LAB",x:-4.05,z:2.9,color:"#ad7066",title:"Android Lab",body:"Activities for Discord uses Android, Java, C++, JNI and Discord's SDK. WhatsApp Status Saver is an open-source Kotlin Android utility."},
+ {id:"research",name:"RESEARCH",x:4.05,z:2.9,color:"#8b866f",title:"Research",body:"Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis, an IEEE I3CTCON 2026 full paper."},
+ {id:"archive",name:"ARCHIVE",x:0,z:4.8,color:"#977c65",title:"Archive",body:"Information Technology at CBIT, full-stack systems, developer tooling, AI, Android, open source and the story behind the projects."},
+ {id:"contact",name:"CONTACT",x:0,z:-4.7,color:"#777b80",title:"Contact",body:"GitHub: github.com/vinithreddybanda · Email: vinithreddybanda@gmail.com"}
 ];
 
-function makeNpc(n){
- const g=new THREE.Group();g.position.set(n.x,.22,n.z);g.userData=n;
- const body=new THREE.Mesh(new THREE.CapsuleGeometry(.23,.52,5,9),toon(n.color));body.position.y=.58;
- const head=new THREE.Mesh(new THREE.SphereGeometry(.2,16,12),toon("#d08e71"));head.position.y=1.05;
- const hair=new THREE.Mesh(new THREE.SphereGeometry(.21,16,10,0,Math.PI*2,0,Math.PI*.5),toon("#25252a"));hair.position.y=1.11;
- g.add(body,head,hair);
- const c=document.createElement("canvas");c.width=300;c.height=76;const x=c.getContext("2d");
- x.fillStyle="#101217dd";x.beginPath();x.roundRect(5,7,290,62,18);x.fill();x.fillStyle="#f0ba86";x.font="700 22px system-ui";x.textAlign="center";x.textBaseline="middle";x.fillText(n.name+" · "+n.role,150,38);
+function label(text){
+ const c=document.createElement("canvas");c.width=360;c.height=90;const x=c.getContext("2d");
+ x.fillStyle="#27353be8";x.beginPath();x.roundRect(5,8,350,72,20);x.fill();x.fillStyle="#ffe2bb";x.font="700 24px system-ui";x.textAlign="center";x.textBaseline="middle";x.fillText(text,180,45);
  const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;
- const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));s.scale.set(2.0,.5,1);s.position.y=1.75;g.add(s);
- root.add(g);return g;
+ const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));s.scale.set(2.7,.68,1);return s;
+}
+function house(d){
+ const g=new THREE.Group();g.position.set(d.x,.16,d.z);
+ const b=new THREE.Mesh(new THREE.BoxGeometry(1.95,1.55,1.75),toon("#eadcca"));b.position.y=.78;g.add(b);
+ const r=new THREE.Mesh(new THREE.ConeGeometry(1.5,.86,4),toon(d.color));r.position.y=2.0;r.rotation.y=Math.PI/4;g.add(r);
+ const door=new THREE.Mesh(new THREE.BoxGeometry(.43,.72,.07),toon("#37434a"));door.position.set(0,.36,.92);g.add(door);
+ const window=new THREE.Mesh(new THREE.BoxGeometry(.46,.46,.06),toon("#a9c6ca"));window.position.set(-.55,.9,.92);g.add(window);
+ const l=label(d.name);l.position.y=3.05;g.add(l);
+ world.add(g);d.object=g;
+}
+destinations.forEach(house);
+
+for(let i=0;i<55;i++){
+ const a=Math.random()*Math.PI*2,r=5.4+Math.random()*2.7,x=Math.cos(a)*r,z=Math.sin(a)*r;
+ const g=new THREE.Group();g.position.set(x,.2,z);
+ const t=new THREE.Mesh(new THREE.CylinderGeometry(.055,.075,.4,7),toon("#70513d"));t.position.y=.2;
+ const c=new THREE.Mesh(new THREE.ConeGeometry(.3,.68,8),toon(i%4?"#41694d":"#577a54"));c.position.y=.68;
+ g.add(t,c);world.add(g);
+}
+
+// Original NPCs, with game-style dialogue rather than overlay cards.
+const npcDefs=[
+ {name:"Mira",role:"Guide",x:-1.45,z:.55,color:"#d18b6c",lines:["Welcome to Vinith's world.","Every part of the portfolio is somewhere in this village.","Walk around. Talk to people. The world tells the story."]},
+ {name:"Arun",role:"Engineer",x:-2.1,z:-1.1,color:"#bd755f",lines:["I look after the engineering chapter.","CareSchedule is the house down that road.","Go there and press E when you are close."]},
+ {name:"Nia",role:"AI Builder",x:2.0,z:-1.12,color:"#c99f63",lines:["The AI chapter is mine.","JournalAI is the building with the warmer roof.","It connects product work, AI and cloud delivery."]},
+ {name:"Kiran",role:"Android Builder",x:-2.08,z:1.62,color:"#b7736a",lines:["Not every useful project needs a giant product page.","The Android Lab holds Activities for Discord and WhatsApp Status Saver.","Explore it when you are ready."]},
+ {name:"Dr. Rao",role:"Researcher",x:2.1,z:1.63,color:"#a59a7d",lines:["The research route is quieter.","The Research House tells the story of the rehabilitation paper.","There is a lot more than a title there."]},
+ {name:"Ivy",role:"Archivist",x:.7,z:3.15,color:"#9c8065",lines:["The Archive keeps the timeline.","Education, technologies and the path behind the projects live there.","Nothing here should feel like a résumé pasted onto a wall."]},
+ {name:"Sam",role:"Courier",x:.72,z:-3.0,color:"#85898c",lines:["The final route is simple.","The Contact house has the GitHub and email trail.","Take the route you came for."]},
+];
+function makeNpc(n){
+ const g=new THREE.Group();g.position.set(n.x,.16,n.z);g.userData=n;
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.23,.5,5,9),toon(n.color));body.position.y=.62;
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.2,16,12),toon("#d49474"));head.position.y=1.06;
+ const hair=new THREE.Mesh(new THREE.SphereGeometry(.21,16,10,0,Math.PI*2,0,Math.PI*.5),toon("#25262a"));hair.position.y=1.12;
+ g.add(body,head,hair);
+ const l=label(n.name);l.scale.set(1.65,.43,1);l.position.y=1.72;g.add(l);
+ world.add(g);return g
 }
 const npcs=npcDefs.map(makeNpc);
 
-const content={
- care:{title:"CARE SCHEDULE",text:"Full-stack scheduling system built with ASP.NET Core, React, EF Core and SQL Server. The system includes 148 REST APIs, 32 controllers, 33 domain entities and six role-based workflows."},
- journal:{title:"JOURNAL AI",text:"AI journaling built with Next.js, Supabase and Groq AI, delivered through Docker, Kubernetes and Azure."},
- android:{title:"ANDROID LAB",text:"Activities for Discord uses Android, Java, C++, JNI and Discord's SDK. WhatsApp Status Saver is an open-source Kotlin Android utility available through F-Droid."},
- research:{title:"RESEARCH",text:"Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis, presented as an IEEE I3CTCON 2026 full paper."},
- archive:{title:"ARCHIVE",text:"Vinith Reddy Banda · Information Technology · CBIT. Builder focused on full-stack systems, developer tooling, AI and research."},
- github:{title:"GITHUB",text:"Open-source work, experiments and project repositories live here: github.com/vinithreddybanda"}
-};
+const pCount=1900,pPos=new Float32Array(pCount*3);
+for(let i=0;i<pCount;i++){const a=Math.random()*Math.PI*2,r=9+Math.random()*13;pPos[i*3]=Math.cos(a)*r;pPos[i*3+1]=.2+Math.random()*6;pPos[i*3+2]=Math.sin(a)*r}
+const pgeo=new THREE.BufferGeometry();pgeo.setAttribute("position",new THREE.BufferAttribute(pPos,3));
+const particles=new THREE.Points(pgeo,new THREE.PointsMaterial({color:"#f2b986",size:.043,transparent:true,opacity:.48,blending:THREE.AdditiveBlending,depthWrite:false}));
+scene.add(particles);
 
-const panel=document.createElement("div");
-panel.id="dialog";
-panel.style.cssText="position:fixed;left:50%;bottom:70px;transform:translateX(-50%) translateY(16px);width:min(520px,calc(100% - 28px));padding:16px 18px;border:1px solid rgba(255,255,255,.11);border-radius:20px;background:rgba(12,14,18,.84);backdrop-filter:blur(24px);box-shadow:0 20px 80px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.32s ease;z-index:9;color:#f2f1ec";
-panel.innerHTML='<div id="dialogRole" style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#ffab72"></div><div id="dialogTitle" style="font-size:22px;font-weight:750;letter-spacing:-.04em;margin:6px 0"></div><div id="dialogText" style="font-size:13px;line-height:1.6;color:#b5b6bd"></div><button id="nextDialog" style="margin-top:11px;padding:8px 11px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;cursor:pointer">Continue ↗</button>';
-document.body.appendChild(panel);
+const player=new THREE.Group();player.position.set(0,.16,0);
+const pbody=new THREE.Mesh(new THREE.CapsuleGeometry(.26,.54,5,10),toon("#ebe6de"));pbody.position.y=.63;
+const phead=new THREE.Mesh(new THREE.SphereGeometry(.22,18,14),toon("#d79874"));phead.position.y=1.15;
+const phair=new THREE.Mesh(new THREE.SphereGeometry(.23,18,10,0,Math.PI*2,0,Math.PI*.52),toon("#202126"));phair.position.y=1.22;
+const pbag=new THREE.Mesh(new THREE.BoxGeometry(.26,.3,.14),toon("#aa583e"));pbag.position.set(.31,.73,-.08);
+player.add(pbody,phead,phair,pbag);world.add(player);
 
-let activeNpc=null,dialogIndex=0;
-const showNpc=(npc)=>{
- activeNpc=npc;dialogIndex=0;
- document.getElementById("dialogRole").textContent=npc.role;
- document.getElementById("dialogTitle").textContent=npc.name;
- document.getElementById("dialogText").textContent=npc.dialog[0];
- panel.style.opacity="1";panel.style.transform="translateX(-50%) translateY(0)";panel.style.pointerEvents="auto";
-};
-document.getElementById("nextDialog").onclick=()=>{
- if(!activeNpc)return;
- dialogIndex++;
- if(dialogIndex>=activeNpc.dialog.length){activeNpc=null;panel.style.opacity="0";panel.style.transform="translateX(-50%) translateY(16px)";panel.style.pointerEvents="none";return}
- document.getElementById("dialogText").textContent=activeNpc.dialog[dialogIndex];
-};
+const content=new Map(destinations.map(d=>[d.id,d]));
+const state={started:false,yaw:0,pitch:.2,npc:null,dialogIndex:0,near:null,discovered:new Set()};
 
-let nearby=null;
+function openNpc(n){state.npc=n;state.dialogIndex=0;speaker.textContent=n.role+" · "+n.name;dialogText.textContent=n.lines[0];dialog.classList.add("show");hint.style.opacity=".25"}
+el("continue").onclick=()=>{if(!state.npc)return;state.dialogIndex++;if(state.dialogIndex>=state.npc.lines.length){state.npc=null;dialog.classList.remove("show");hint.style.opacity=".72"}else dialogText.textContent=state.npc.lines[state.dialogIndex]};
+
+function discover(d){state.discovered.add(d.id);questTitle.textContent=d.title;questText.textContent=d.body;quest.classList.add("show");setTimeout(()=>quest.classList.remove("show"),7200)}
+
 function interact(){
- const p=player.position;
- let best=null,bd=1.45;
- for(const n of npcs){const d=n.position.distanceTo(p);if(d<bd){bd=d;best=n}}
- if(best){showNpc(best);return}
- for(const b of buildings){const d=Math.hypot(b.x-p.x,b.z-p.z);if(d<1.65){const c=content[b.data];if(c){document.getElementById("infoKicker").textContent="DISCOVERED";document.getElementById("infoTitle").textContent=c.title;document.getElementById("infoText").textContent=c.text;info.style.opacity="1";info.style.transform="translateY(0)";clearTimeout(info._t);info._t=setTimeout(()=>{info.style.opacity="0";info.style.transform="translateY(-8px)"},7000)}return}}
+ const p=player.position;let nBest=null,nDist=1.35;
+ for(const n of npcs){const d=n.position.distanceTo(p);if(d<nDist){nDist=d;nBest=n}}
+ if(nBest){openNpc(nBest.userData);return}
+ let best=null,bd=1.7;
+ for(const d of destinations){const q=Math.hypot(d.x-p.x,d.z-p.z);if(q<bd){bd=q;best=d}}
+ if(best)discover(best)
 }
 
 const keys={};
-addEventListener("keydown",e=>{keys[e.key.toLowerCase()]=true;if(e.key.toLowerCase()==="e")interact()});
+addEventListener("keydown",e=>{keys[e.key.toLowerCase()]=true;if(e.key.toLowerCase()==="e")interact();if(e.key==="Enter"&&!state.started)startGame()});
 addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
 
-let pointerX=0,pointerY=0;
-addEventListener("pointermove",e=>{pointerX=e.clientX/innerWidth-.5;pointerY=e.clientY/innerHeight-.5},{passive:true});
+let dragging=false,lastX=0,lastY=0;
+addEventListener("mousedown",e=>{if(state.started&&!dialog.classList.contains("show")){dragging=true;lastX=e.clientX;lastY=e.clientY}});
+addEventListener("mouseup",()=>dragging=false);
+addEventListener("mousemove",e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;state.yaw-=dx*.005;state.pitch=THREE.MathUtils.clamp(state.pitch-dy*.004,-.18,.7)});
 
-let yaw=0,pitch=.18,drag=false,lastX=0,lastY=0;
-addEventListener("mousedown",e=>{drag=true;lastX=e.clientX;lastY=e.clientY});
-addEventListener("mouseup",()=>drag=false);
-addEventListener("mousemove",e=>{if(!drag)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;yaw-=dx*.005;pitch=THREE.MathUtils.clamp(pitch-dy*.004,-.15,.75)});
+const joy={x:0,y:0};
+function moveJoy(t){const r=mobile.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=t.clientX-cx,dy=t.clientY-cy,l=Math.hypot(dx,dy),m=40;if(l>m){dx*=m/l;dy*=m/l}joy.x=dx/m;joy.y=dy/m;stick.style.transform=`translate(${dx}px,${dy}px)`}
+mobile.addEventListener("touchstart",e=>moveJoy(e.touches[0]),{passive:true});mobile.addEventListener("touchmove",e=>moveJoy(e.touches[0]),{passive:true});mobile.addEventListener("touchend",()=>{joy.x=0;joy.y=0;stick.style.transform="translate(0,0)"},{passive:true});
 
-let touch=null;
-addEventListener("touchstart",e=>{touch=e.touches[0]},{passive:true});
-addEventListener("touchmove",e=>{if(!touch)return;const t=e.touches[0];const dx=t.clientX-touch.clientX,dy=t.clientY-touch.clientY;pointerX=THREE.MathUtils.clamp(pointerX+dx/innerWidth,-.5,.5);pointerY=THREE.MathUtils.clamp(pointerY+dy/innerHeight,-.5,.5);touch=t},{passive:true});
-addEventListener("touchend",()=>touch=null,{passive:true});
-
-const mobile=document.createElement("div");
-mobile.id="mobileControls";
-mobile.style.cssText="position:fixed;left:16px;bottom:64px;width:118px;height:118px;border-radius:50%;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(18px);z-index:10;display:none";
-mobile.innerHTML='<div style="position:absolute;left:34px;top:34px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08)"></div>';
-document.body.appendChild(mobile);
-const joystick={x:0,y:0,active:false};
-mobile.addEventListener("touchstart",e=>{joystick.active=true;moveJoy(e.touches[0])},{passive:true});
-mobile.addEventListener("touchmove",e=>moveJoy(e.touches[0]),{passive:true});
-mobile.addEventListener("touchend",()=>{joystick.active=false;joystick.x=joystick.y=0},{passive:true});
-function moveJoy(t){const r=mobile.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=t.clientX-cx,dy=t.clientY-cy;const l=Math.hypot(dx,dy),m=40;if(l>m){dx*=m/l;dy*=m/l}joystick.x=dx/m;joystick.y=dy/m}
+function startGame(){state.started=true;intro.style.display="none";loading.classList.add("hide");hint.textContent=matchMedia("(max-width:760px)").matches?"JOYSTICK · TOUCH · E":"WASD · MOUSE · E";openNpc(npcs[0].userData)}
 
 let last=performance.now();
-function game(){
- const now=performance.now()/1000;
- const dt=Math.min((performance.now()-last)/1000,.033);
- last=performance.now();
- let dx=0,dz=0;
- if(keys.w||keys.arrowup)dz-=1;
- if(keys.s||keys.arrowdown)dz+=1;
- if(keys.a||keys.arrowleft)dx-=1;
- if(keys.d||keys.arrowright)dx+=1;
- dx+=joystick.x;dz+=joystick.y;
- if(dx||dz){
-  const l=Math.hypot(dx,dz);dx/=l;dz/=l;
-  const c=Math.cos(yaw),s=Math.sin(yaw);
-  const mx=dx*c-dz*s,mz=dx*s+dz*c;
-  player.position.x+=mx*dt*2.25;
-  player.position.z+=mz*dt*2.25;
-  player.position.x=THREE.MathUtils.clamp(player.position.x,-6,6);
-  player.position.z=THREE.MathUtils.clamp(player.position.z,-6,6);
-  player.rotation.y=Math.atan2(mx,mz);
-  legs[0].rotation.x=Math.sin(now*9)*.34;legs[1].rotation.x=-Math.sin(now*9)*.34;
-  torso.rotation.z=Math.sin(now*9)*.035;
- }else{
-  player.position.y=.22+Math.sin(now*1.7)*.018;
-  torso.rotation.z=0;
+function loop(now){
+ const dt=Math.min((now-last)/1000,.033);last=now;
+ if(state.started&&!state.npc){
+  let dx=0,dz=0;if(keys.w||keys.arrowup)dz-=1;if(keys.s||keys.arrowdown)dz+=1;if(keys.a||keys.arrowleft)dx-=1;if(keys.d||keys.arrowright)dx+=1;dx+=joy.x;dz+=joy.y;
+  if(dx||dz){const l=Math.hypot(dx,dz);dx/=l;dz/=l;const c=Math.cos(state.yaw),s=Math.sin(state.yaw),mx=dx*c-dz*s,mz=dx*s+dz*c;player.position.x=THREE.MathUtils.clamp(player.position.x+mx*dt*2.2,-6.4,6.4);player.position.z=THREE.MathUtils.clamp(player.position.z+mz*dt*2.2,-6.4,6.4);player.rotation.y=Math.atan2(mx,mz);pbody.rotation.z=Math.sin(now*.01)*.035}else pbody.position.y=.63+Math.sin(now*.002)*.015;
  }
- npcs.forEach((n,i)=>{n.position.y=.22+Math.sin(now*1.2+i)*.02;n.rotation.y=Math.sin(now*.18+i)*.16});
- root.rotation.y=Math.sin(now*.035)*.04;
- pts.rotation.y+=dt*.004;
-
- // soft follow camera
- const camTarget=new THREE.Vector3(player.position.x,1.0,player.position.z);
- const desired=new THREE.Vector3(
-  player.position.x+Math.sin(yaw)*8.2+pointerX*1.5,
-  player.position.y+4.1+pointerY*-1.2,
-  player.position.z+Math.cos(yaw)*8.2
- );
- camera.position.lerp(desired,.055);
- camera.lookAt(camTarget);
-
- // Nearby interaction cue
- let near=null,dist=99;
- for(const n of npcs){const d=n.position.distanceTo(player.position);if(d<1.55&&d<dist){dist=d;near=n}}
- if(near!==nearby){
-  nearby=near;
-  if(near){tip.textContent="E · TALK TO "+near.name.toUpperCase();tip.style.opacity=".82"}else{tip.style.opacity="0"}
- }
- coords.textContent="SECTOR "+String(Math.round((player.position.x+6)/12*9+1)).padStart(2,"0")+" · "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
- renderer.render(scene,camera);
- requestAnimationFrame(game);
+ for(let i=0;i<npcs.length;i++){npcs[i].position.y=.16+Math.sin(now*.0011+i)*.02;npcs[i].rotation.y=Math.sin(now*.00019+i)*.14}
+ particles.rotation.y+=dt*.006;
+ const target=new THREE.Vector3(player.position.x,1.0,player.position.z);
+ const desired=new THREE.Vector3(player.position.x+Math.sin(state.yaw)*7.9,player.position.y+3.8-state.pitch,player.position.z+Math.cos(state.yaw)*7.9);
+ camera.position.lerp(desired,.065);camera.lookAt(target);
+ let near=null,nd=1.35;
+ for(const n of npcs){const d=n.position.distanceTo(player.position);if(d<nd){nd=d;near=n.userData}}
+ if(near!==state.near){state.near=near;if(near&&!dialog.classList.contains("show")){hint.textContent="E · TALK TO "+near.name.toUpperCase();hint.style.opacity=".82"}else{hint.textContent="WASD · MOUSE · E";hint.style.opacity=".72"}}
+ renderer.render(scene,camera);requestAnimationFrame(loop)
 }
-game();
-
-addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.6))});
-if(matchMedia("(max-width:760px)").matches)mobile.style.display="block";
-const interactionHint=document.createElement("div");interactionHint.className="interaction";interactionHint.textContent=matchMedia("(max-width:760px)").matches?"TOUCH · MOVE · EXPLORE":"WASD · MOUSE · E";document.body.appendChild(interactionHint);
+loading.classList.add("hide");renderer.render(scene,camera);requestAnimationFrame(loop);
+addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
 </script>
 </body>
 </html>
