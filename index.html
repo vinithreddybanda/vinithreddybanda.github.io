@@ -7,6 +7,7 @@
 <meta name="description" content="Vinith Reddy Banda · interactive developer portfolio">
 <title>Vinith Reddy Banda</title>
 <style>
+#tip{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 13px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(12,14,18,.72);backdrop-filter:blur(16px);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#b9bac1;opacity:0;pointer-events:none;transition:opacity .25s;z-index:12}
 :root{color-scheme:dark;--bg:#090b0f;--fg:#f6f3ed;--muted:#9b9ca4;--glass:rgba(18,20,25,.66);--line:rgba(255,255,255,.08);--orange:#ff6b2c;--gold:#ffb45a}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--bg)}
@@ -16,7 +17,7 @@ a{color:inherit}
 #world{position:fixed;inset:0;z-index:0;overflow:hidden}
 canvas{display:block;width:100%;height:100%}
 #ui{position:relative;z-index:2}
-.hud{position:fixed;left:50%;top:16px;transform:translateX(-50%);width:min(920px,calc(100% - 24px));padding:10px 14px;border:1px solid var(--line);border-radius:18px;background:rgba(11,13,18,.62);backdrop-filter:blur(20px);display:flex;align-items:center;gap:18px;box-shadow:0 10px 40px rgba(0,0,0,.18)}
+.hud{position:fixed;left:16px;top:16px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(11,13,18,.58);backdrop-filter:blur(18px);display:flex;align-items:center;gap:9px;box-shadow:0 10px 40px rgba(0,0,0,.18)}
 .logo{font-weight:750;letter-spacing:-.05em}
 .logo i{font-style:normal;color:var(--orange)}
 .nav{margin-left:auto;display:flex;gap:14px}
@@ -54,45 +55,11 @@ canvas{display:block;width:100%;height:100%}
 <div id="ui">
 <header class="hud">
  <div class="logo">vinith<span>.</span></div>
- <div class="status">interactive portfolio · 2026</div>
- <nav class="nav">
-  <a href="#work">Work</a><a href="#experience">Experience</a><a href="#stack">Stack</a>
-  <a href="mailto:vinithreddybanda@gmail.com">Email</a>
- </nav>
+ 
+ 
 </header>
 
-<aside class="panel">
- <div class="kicker">Courier profile · spawn point</div>
- <h1>Vinith<br><span>Reddy Banda.</span></h1>
- <p>Software engineer, builder and researcher. Explore the little world to discover projects, experience and the technologies behind them.</p>
- <div class="controls">
-  <a class="pill solid" href="#work">Enter portfolio ↘</a>
-  <a class="pill" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub ↗</a>
- </div>
-</aside>
-
-<section class="scroll" id="work">
- <div class="section">
-  <div class="kicker">01 · Work</div>
-  <h2>Playable workbench</h2>
-  <div class="quest"><b>CareSchedule</b><span>ASP.NET Core · React · EF Core · SQL Server · Clean Architecture</span></div>
-  <div class="quest"><b>JournalAI</b><span>Next.js · Supabase · Groq AI · Docker · Kubernetes · Azure</span></div>
-  <div class="quest"><b>WhatsApp Status Saver</b><span>Kotlin · Android · open source · F-Droid</span></div>
- </div>
- <div class="section" id="experience">
-  <div class="kicker">02 · Experience</div>
-  <p>.NET Full Stack Intern at Cognizant, plus research and open-source work across interactive and developer-focused systems.</p>
- </div>
- <div class="section" id="stack">
-  <div class="kicker">03 · Stack</div>
-  <div class="chips">
-   <span class="chip">React</span><span class="chip">Next.js</span><span class="chip">ASP.NET Core</span><span class="chip">Node.js</span><span class="chip">C#</span><span class="chip">SQL Server</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Azure</span><span class="chip">Three.js</span>
-  </div>
- </div>
-</section>
-
-<div class="mission">Move · discover · click objects · explore</div>
-<div id="tip">The world reacts to you.</div>
+<div id="tip"></div>
 </div>
 
 <script type="module">
@@ -256,12 +223,6 @@ document.getElementById("nextDialog").onclick=()=>{
  if(dialogIndex>=activeNpc.dialog.length){activeNpc=null;panel.style.opacity="0";panel.style.transform="translateX(-50%) translateY(16px)";panel.style.pointerEvents="none";return}
  document.getElementById("dialogText").textContent=activeNpc.dialog[dialogIndex];
 };
-
-const info=document.createElement("div");
-info.id="worldInfo";
-info.style.cssText="position:fixed;right:18px;top:92px;width:min(330px,calc(100% - 36px));padding:14px 16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(12,14,18,.64);backdrop-filter:blur(22px);opacity:0;transform:translateY(-8px);transition:.3s ease;z-index:8;pointer-events:none";
-info.innerHTML='<div id="infoKicker" style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#ffab72"></div><div id="infoTitle" style="font-size:24px;font-weight:760;letter-spacing:-.05em;margin:5px 0"></div><div id="infoText" style="font-size:12px;line-height:1.6;color:#b5b6bd"></div>';
-document.body.appendChild(info);
 
 let nearby=null;
 function interact(){
