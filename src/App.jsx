@@ -55,7 +55,7 @@ function morphElements(root) {
   return new Map([...root.querySelectorAll("[data-morph]")].map((element) => [element.dataset.morph, element]));
 }
 
-function animateSharedElements(sourceRoot, destinationRoot, animations) {
+function animateSharedElements(sourceRoot, destinationRoot, animations, options = {}) {
   const sources = morphElements(sourceRoot);
   const destinations = morphElements(destinationRoot);
   destinations.forEach((destination, key) => {
@@ -70,28 +70,19 @@ function animateSharedElements(sourceRoot, destinationRoot, animations) {
     animations.push(destination.animate([
       { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(7px)", opacity: 0.55 },
       { transform: "translate3d(0,0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 }
-    ], { duration: 620, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" }));
+    ], { duration: 620, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both", ...options }));
   });
 }
 
-function animateElementsBack(sourceRoot, destinationRoot, animations, hiddenDestinations) {
-  const sources = morphElements(sourceRoot);
-  const destinations = morphElements(destinationRoot);
-  sources.forEach((source, key) => {
-    const destination = destinations.get(key);
-    if (!destination) return;
-    const from = source.getBoundingClientRect();
-    const to = destination.getBoundingClientRect();
-    const dx = to.left - from.left;
-    const dy = to.top - from.top;
-    const sx = to.width / Math.max(from.width, 1);
-    const sy = to.height / Math.max(from.height, 1);
-    hiddenDestinations.push({ element: destination, visibility: destination.style.visibility });
-    destination.style.visibility = "hidden";
-    animations.push(source.animate([
-      { transform: "translate3d(0,0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 },
-      { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(0.6px)", opacity: 1 }
-    ], { duration: 560, easing: "cubic-bezier(.22,.78,.2,1)", fill: "forwards" }));
+function hideDetailChrome(panel) {
+  panel.style.background = "transparent";
+  panel.style.opacity = "1";
+  panel.style.transform = "none";
+  panel.style.filter = "none";
+  panel.style.transition = "none";
+  panel.style.pointerEvents = "none";
+  panel.querySelectorAll("[data-morph],.detail-topbar,.detail-footer,.detail-rule,.detail-description,.detail-stack-label").forEach((element) => {
+    element.style.visibility = "hidden";
   });
 }
 
@@ -157,16 +148,12 @@ export default function App() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (source && panel && !reduceMotion) {
-      animateElementsBack(panel, source, openingAnimations.current, hiddenCardElements.current);
-      setDetailClosing(true);
+      // Reverse the forward morph itself: card nodes become the travelling
+      // elements, starting at the detail nodes' exact on-screen geometry.
+      hideDetailChrome(panel);
+      animateSharedElements(panel, source, openingAnimations.current);
       const reverseAnimations = [...openingAnimations.current];
       Promise.all(reverseAnimations.map((animation) => animation.finished.catch(() => undefined))).then(() => {
-        // End the handoff in one frame: hide the travelling detail nodes,
-        // reveal their card destinations, and remove the detail layer together.
-        panel.querySelectorAll("[data-morph]").forEach((element) => {
-          element.style.visibility = "hidden";
-        });
-        restoreCardElements();
         setDetailOpen(false);
         setSelectedProject(null);
         setDetailClosing(false);
