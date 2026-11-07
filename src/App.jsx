@@ -74,11 +74,32 @@ export default function App() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [origin, setOrigin] = useState({ x: "50vw", y: "50vh" });
   const closeTimer = useRef(null);
+  const sourceButton = useRef(null);
+  const closeButton = useRef(null);
+
+  const closeProject = () => {
+    setDetailOpen(false);
+    closeTimer.current = window.setTimeout(() => {
+      setSelectedProject(null);
+      sourceButton.current?.focus();
+    }, 520);
+  };
+
+  useEffect(() => {
+    if (!selectedProject) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") closeProject();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    closeButton.current?.focus();
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedProject]);
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
   const openProject = (project, event) => {
     window.clearTimeout(closeTimer.current);
+    sourceButton.current = event.currentTarget;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX || rect.left + rect.width / 2;
     const y = event.clientY || rect.top + rect.height / 2;
@@ -86,11 +107,6 @@ export default function App() {
     setSelectedProject(project);
     setDetailOpen(false);
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => setDetailOpen(true)));
-  };
-
-  const closeProject = () => {
-    setDetailOpen(false);
-    closeTimer.current = window.setTimeout(() => setSelectedProject(null), 520);
   };
 
   return (
@@ -196,7 +212,7 @@ export default function App() {
 
       {selectedProject && (
         <section className={`project-detail ${detailOpen ? "is-open" : ""}`} style={{ "--origin-x": origin.x, "--origin-y": origin.y }} aria-modal="true" role="dialog" aria-labelledby="detail-title">
-          <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
+          <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
             <p className="section-kicker">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
             <p className="detail-index">SELECTED WORK / {selectedProject.number}</p>
