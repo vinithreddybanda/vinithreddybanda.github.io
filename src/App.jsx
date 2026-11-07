@@ -112,6 +112,69 @@ export default function App() {
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
+  // Scroll-velocity response: native scrolling stays in control; the visual layer
+  // briefly stretches and softens with swipe speed, then settles with a damped spring.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    const root = document.documentElement;
+    let previousY = window.scrollY;
+    let previousTime = performance.now();
+    let target = 0;
+    let strength = 0;
+    let direction = 0;
+    let frame = 0;
+
+    const render = () => {
+      strength += (target - strength) * 0.32;
+      target *= 0.76;
+      if (target < 0.002) target = 0;
+
+      root.style.setProperty("--scroll-blur", `${(strength * 1.05).toFixed(3)}px`);
+      root.style.setProperty("--scroll-stretch", (strength * 0.006).toFixed(4));
+      root.style.setProperty("--scroll-shift", `${(strength * 2.2).toFixed(2)}px`);
+      root.style.setProperty("--scroll-direction", String(direction));
+      root.style.setProperty("--scroll-origin", direction > 0 ? "top" : "bottom");
+
+      if (strength > 0.003 || target > 0.003) {
+        frame = window.requestAnimationFrame(render);
+      } else {
+        strength = 0;
+        root.style.setProperty("--scroll-blur", "0px");
+        root.style.setProperty("--scroll-stretch", "0");
+        root.style.setProperty("--scroll-shift", "0px");
+        frame = 0;
+      }
+    };
+
+    const onScroll = () => {
+      const now = performance.now();
+      const y = window.scrollY;
+      const elapsed = Math.max(now - previousTime, 8);
+      const delta = y - previousY;
+      previousY = y;
+      previousTime = now;
+      if (Math.abs(delta) < 0.5) return;
+
+      direction = Math.sign(delta);
+      const velocity = Math.abs(delta) / elapsed;
+      target = Math.min(velocity / 1.15, 1);
+      if (!frame) frame = window.requestAnimationFrame(render);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+      root.style.removeProperty("--scroll-blur");
+      root.style.removeProperty("--scroll-stretch");
+      root.style.removeProperty("--scroll-shift");
+      root.style.removeProperty("--scroll-direction");
+      root.style.removeProperty("--scroll-origin");
+    };
+  }, []);
+
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
     if (!("IntersectionObserver" in window)) return undefined;
