@@ -55,7 +55,7 @@ function getClipFromRect(rect, radius) {
   return `inset(${rect.top}px ${window.innerWidth - rect.right}px ${window.innerHeight - rect.bottom}px ${rect.left}px round ${radius})`;
 }
 
-function animateProjectMorph(sourceSurface, destinationSurface, direction = "forward") {
+function animateProjectMorph(sourceSurface, destinationSurface, direction = "forward", companionSurfaces = []) {
   const duration = 620;
   const easing = "cubic-bezier(.2,.72,.18,1)";
   const blurPeak = "2.15px";
@@ -63,10 +63,12 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const animations = [];
   const hiddenSources = [];
+  const surfaces = [sourceSurface, destinationSurface, ...companionSurfaces];
 
   destinationSurface.style.visibility = "visible";
   destinationSurface.style.pointerEvents = "none";
 
+  // Matching content keeps its identity and travels between its real page positions.
   sources.forEach((source, key) => {
     const destination = destinations.get(key);
     if (!destination) return;
@@ -94,49 +96,51 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
     hiddenSources.push(source);
   });
 
+  // Unmatched destination details emerge upward; on reverse, those same details dissolve.
   const enteringSurface = direction === "forward" ? destinationSurface : sourceSurface;
-  const entering = enteringSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]");
-  entering.forEach((node) => {
+  enteringSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     animations.push(node.animate(
       direction === "forward"
         ? [
-            { opacity: 0, transform: "translate3d(0,18px,0)", filter: `blur(${blurPeak})` },
+            { opacity: 0, transform: "translate3d(0,10px,0)", filter: `blur(${blurPeak})` },
             { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
           ]
         : [
             { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
-            { opacity: 0, transform: "translate3d(0,18px,0)", filter: `blur(${blurPeak})` },
+            { opacity: 0, transform: "translate3d(0,10px,0)", filter: `blur(${blurPeak})` },
           ],
       { duration, easing, fill: "both" },
     ));
   });
 
-  const surfaceAnimations = direction === "forward"
-    ? [
-        sourceSurface.animate([{ opacity: 1 }, { opacity: 0 }], { duration, easing, fill: "both" }),
-        destinationSurface.animate([
-          { opacity: 0, transform: "translate3d(0,8px,0) scale(.995)" },
-          { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
-        ], { duration, easing, fill: "both" }),
-      ]
-    : [
-        destinationSurface.animate([{ opacity: 0 }, { opacity: 1 }], { duration, easing, fill: "both" }),
-        sourceSurface.animate([
-          { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
-          { opacity: 0, transform: "translate3d(0,8px,0) scale(.995)" },
-        ], { duration, easing, fill: "both" }),
-      ];
-  animations.push(...surfaceAnimations);
+  // The complete overview and detail page exchange visibility together, not as a card wipe.
+  animations.push(
+    sourceSurface.animate(
+      direction === "forward" ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 1 }, { opacity: 0 }],
+      { duration, easing, fill: "both" },
+    ),
+    destinationSurface.animate(
+      direction === "forward" ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0 }, { opacity: 1 }],
+      { duration, easing, fill: "both" },
+    ),
+  );
+  companionSurfaces.forEach((surface) => {
+    animations.push(surface.animate(
+      direction === "forward" ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }],
+      { duration, easing, fill: "both" },
+    ));
+  });
 
   hiddenSources.forEach((node) => { node.style.visibility = "hidden"; });
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenSources.forEach((node) => { node.style.visibility = ""; });
-    sourceSurface.style.opacity = "";
-    sourceSurface.style.transform = "";
-    destinationSurface.style.opacity = "";
-    destinationSurface.style.transform = "";
+    surfaces.forEach((surface) => {
+      surface.style.opacity = "";
+      surface.style.transform = "";
+      surface.style.filter = "";
+    });
     sourceSurface.style.visibility = direction === "backward" ? "hidden" : "";
     destinationSurface.style.visibility = "visible";
     destinationSurface.style.pointerEvents = "";
@@ -180,7 +184,7 @@ export default function App() {
   const [detailOpen, setDetailOpen] = useState(false);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
-  const detailPanel = useRef(null);
+  const detailPanel = useRef(null);\n  const mainSurface = useRef(null);\n  const sidebarSurface = useRef(null);
   const closing = useRef(false);
 
   const closeProject = () => {
@@ -195,7 +199,7 @@ export default function App() {
       sourceButton.current?.focus();
     };
     if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      animateProjectMorph(panel, source, "backward").then(finish);
+      animateProjectMorph(panel, mainSurface.current, "backward", [sidebarSurface.current]).then(finish);
     } else {
       finish();
     }
@@ -291,7 +295,7 @@ export default function App() {
         closeButton.current?.focus();
         return;
       }
-      animateProjectMorph(source, panel, "forward").then(() => {
+      animateProjectMorph(mainSurface.current, panel, "forward", [sidebarSurface.current]).then(() => {
         setDetailOpen(true);
         closing.current = false;
         closeButton.current?.focus();
@@ -301,7 +305,7 @@ export default function App() {
 
   return (
     <main className="dashboard">
-      <aside className="sidebar">
+      <aside ref={sidebarSurface} className="sidebar">
         <a className="brand" href="#home" aria-label="Vinith, home">v<span>.</span></a>
         <div className="sidebar-rule" />
         <nav className="side-nav" aria-label="Portfolio sections">
@@ -316,7 +320,7 @@ export default function App() {
         </div>
       </aside>
 
-      <div className="main-area" id="home">
+      <div ref={mainSurface} className="main-area" id="home">
         <header className="topbar">
           <span className="breadcrumb">PORTFOLIO <span>/</span> OVERVIEW</span>
           <a className="top-link" href="mailto:vinithreddybanda@gmail.com">LET'S TALK <Arrow /></a>
