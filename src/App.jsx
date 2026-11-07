@@ -101,12 +101,15 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
         transformOrigin: "top left",
         color: startColor,
         filter: "blur(0px)",
+        offset: 0,
       },
+      { filter: "blur(4px)", offset: 0.5 },
       {
         transform: direction === "forward" ? "translate3d(0,0,0) scale(1,1)" : `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
         transformOrigin: "top left",
         color: endColor,
-        filter: "blur(4px)",
+        filter: "blur(0px)",
+        offset: 1,
       },
     ], { duration, easing, fill: "both" }));
     hiddenNodes.push(hiddenNode);
