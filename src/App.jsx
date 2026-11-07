@@ -79,15 +79,15 @@ function animateProjectMorph(sourceSurface, destinationSurface) {
     position: "fixed", left: `${from.left}px`, top: `${from.top}px`,
     width: `${from.width}px`, height: `${from.height}px`,
     margin: "0", padding: "0", boxSizing: "border-box",
-    background: sourceStyle.backgroundColor, border: sourceStyle.border,
+    backgroundColor: sourceStyle.backgroundColor, border: sourceStyle.border,
     borderRadius: sourceStyle.borderRadius, boxShadow: sourceStyle.boxShadow,
     overflow: "hidden", pointerEvents: "none", zIndex: "2147483000",
   });
   document.body.appendChild(surface);
 
   const animations = [surface.animate([
-    { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: sourceStyle.borderRadius, border: sourceStyle.border },
-    { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px`, borderRadius: destinationStyle.borderRadius, border: destinationStyle.border },
+    { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: sourceStyle.borderRadius, border: sourceStyle.border, backgroundColor: sourceStyle.backgroundColor },
+    { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px`, borderRadius: destinationStyle.borderRadius, border: destinationStyle.border, backgroundColor: destinationStyle.backgroundColor },
   ], { duration, easing, fill: "both" })];
   const travelling = [];
 
@@ -264,6 +264,7 @@ export default function App() {
   const openProject = (project, event) => {
     if (closing.current) return;
     sourceButton.current = event.currentTarget;
+    closing.current = true;
     setSelectedProject(project);
     setDetailOpen(false);
     window.requestAnimationFrame(() => {
@@ -271,11 +272,13 @@ export default function App() {
       const source = sourceButton.current;
       if (!panel || !source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         setDetailOpen(true);
+        closing.current = false;
         closeButton.current?.focus();
         return;
       }
       animateProjectMorph(source, panel).then(() => {
         setDetailOpen(true);
+        closing.current = false;
         closeButton.current?.focus();
       });
     });
