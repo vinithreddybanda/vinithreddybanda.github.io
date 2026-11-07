@@ -102,6 +102,11 @@ These are guidance ranges, not targets that every element must animate toward. P
 - Use GSAP when a genuinely complex, coordinated timeline, ScrollTrigger narrative, SVG morph/draw, or advanced sequencing justifies it. Use Motion when React layout/gesture/state animation is the primary need. Use CSS for the rest.
 - Test actual browser support and React integration before using experimental View Transitions or other emerging APIs.
 
+### Ambient and particle motion
+- Only introduce particle fields, floating points, or ambient atmospheric effects when the brief calls for them; they must not compete with content or reduce text contrast.
+- When particle effects are requested, keep movement slow and glitter-like, with gentle twinkling and a red/orange glow. Avoid fast streaks, aggressive trails, and black or white particle treatments.
+- Keep particle density restrained, avoid continuous expensive blur/filter work, and pause or simplify the effect offscreen and under reduced motion. Provide a static or low-motion fallback.
+
 ### Interaction patterns to consider
 Use only when the page's actual information architecture benefits from them:
 - Navigation: restrained active-state feedback and clear page/section continuity.
