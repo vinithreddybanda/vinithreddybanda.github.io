@@ -52,8 +52,23 @@ function Arrow() {
 }
 
 function ProjectCard({ project, onOpen }) {
+  const pointer = useRef({ x: 0, y: 0, time: 0 });
+  const handlePointerMove = (event) => {
+    if (event.pointerType !== "mouse") return;
+    const now = performance.now();
+    const previous = pointer.current;
+    const elapsed = Math.max(now - previous.time, 1);
+    const dx = event.clientX - previous.x;
+    const velocity = Math.min(Math.abs(dx / elapsed) / 1.5, 1);
+    event.currentTarget.style.setProperty("--velocity-x", String(Math.sign(dx)));
+    event.currentTarget.style.setProperty("--velocity-strength", String(velocity));
+    pointer.current = { x: event.clientX, y: event.clientY, time: now };
+  };
+  const handlePointerLeave = (event) => {
+    event.currentTarget.style.setProperty("--velocity-strength", "0");
+  };
   return (
-    <button className={`project-card ${project.featured ? "project-card-featured" : ""}`} onClick={(event) => onOpen(project, event)} type="button">
+    <button className={`project-card motion-reveal ${project.featured ? "project-card-featured" : ""}`} onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave} onClick={(event) => onOpen(project, event)} type="button">
       <span className="project-card-top">
         <span className="project-number">{project.number} / SELECTED WORK</span>
         <span className="project-open" aria-hidden="true">↗</span>
@@ -97,6 +112,24 @@ export default function App() {
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    if (!("IntersectionObserver" in window)) return undefined;
+    const elements = document.querySelectorAll(".motion-reveal");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-inview");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -36px 0px" });
+    elements.forEach((element, index) => {
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 5, 4) * 42}ms`);
+      observer.observe(element);
+    });
+    return () => observer.disconnect();
+  }, []);
+
   const openProject = (project, event) => {
     window.clearTimeout(closeTimer.current);
     sourceButton.current = event.currentTarget;
@@ -132,7 +165,7 @@ export default function App() {
           <a className="top-link" href="mailto:vinithreddybanda@gmail.com">LET'S TALK <Arrow /></a>
         </header>
 
-        <section className="intro-section">
+        <section className="intro-section motion-reveal">
           <div className="intro-copy">
             <p className="section-kicker"><span className="kicker-line" /> DEVELOPER / BUILDER</p>
             <h1>Making<br /><span>things</span> work.</h1>
@@ -152,14 +185,14 @@ export default function App() {
           </div>
         </section>
 
-        <section className="metrics" aria-label="Highlights">
+        <section className="metrics motion-reveal" aria-label="Highlights">
           <div className="metric"><strong>03</strong><span>PROJECTS<br />IN FOCUS</span></div>
           <div className="metric"><strong>148</strong><span>REST APIs<br />IN CARESCHEDULE</span></div>
           <div className="metric"><strong>8.43</strong><span>B.E. CGPA<br />CBIT</span></div>
           <div className="metric"><strong>9.74</strong><span>DIPLOMA CGPA<br />GOVT. POLYTECHNIC</span></div>
         </section>
 
-        <section className="work-section" id="work">
+        <section className="work-section motion-reveal" id="work">
           <div className="section-heading">
             <div><p className="section-kicker">A FEW THINGS I'VE BUILT</p><h2>Selected work<span>.</span></h2></div>
             <span className="section-count">01 — 03</span>
@@ -169,7 +202,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="about-section" id="about">
+        <section className="about-section motion-reveal" id="about">
           <div className="about-main">
             <p className="section-kicker">THE TOOLKIT</p>
             <h2>Curious by nature.<br /><span>Practical by design.</span></h2>
@@ -185,7 +218,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="proof-section">
+        <section className="proof-section motion-reveal">
           <div className="proof-column">
             <p className="section-kicker">EDUCATION</p>
             <div className="proof-item"><span className="proof-year">2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology <span>8.43 CGPA</span></p></div></div>
@@ -200,7 +233,7 @@ export default function App() {
           </div>
         </section>
 
-        <footer className="footer" id="contact">
+        <footer className="footer motion-reveal" id="contact">
           <div><p className="section-kicker">HAVE SOMETHING IN MIND?</p><h2>Let's build<br /><span>something useful.</span></h2></div>
           <div className="footer-contact">
             <a href="mailto:vinithreddybanda@gmail.com">vinithreddybanda@gmail.com <Arrow /></a>
