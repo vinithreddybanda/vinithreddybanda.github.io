@@ -56,100 +56,135 @@ function getClipFromRect(rect, radius) {
 }
 
 function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
-  const duration = 760;
-  const easing = "cubic-bezier(.2,1.16,.28,1)";
-  const distance = Math.hypot(window.innerWidth, window.innerHeight);
-  const blurPeak = `${Math.min(2.1, Math.max(0.9, distance / 1050)).toFixed(2)}px`;
+  const forward = direction === "forward";
+  const easing = "linear";
   const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const animations = [];
+  const shared = [];
   const hiddenOrigins = [];
-  const forward = direction === "forward";
+  const animations = [];
+  let longestTravel = 0;
 
   if (detailSurface) {
     detailSurface.style.visibility = "visible";
     detailSurface.style.pointerEvents = "none";
   }
 
-  // Each shared detail is the same travelling element, measured from its real source.
   origins.forEach((origin, key) => {
     const destination = destinations.get(key);
     if (!destination) return;
     const from = origin.getBoundingClientRect();
     const to = destination.getBoundingClientRect();
     if (!from.width || !from.height || !to.width || !to.height) return;
-
     const dx = from.left - to.left;
     const dy = from.top - to.top;
     const sx = from.width / to.width;
     const sy = from.height / to.height;
-    const travel = Math.min(1, Math.hypot(dx, dy) / distance);
-    const peak = Math.min(2.1, Math.max(0.75, 0.75 + travel * 1.8));
+    longestTravel = Math.max(longestTravel, Math.hypot(dx, dy));
+    shared.push({ origin, destination, dx, dy, sx, sy });
+  });
+
+  // Scale duration with the longest journey, then run every layer on one clock.
+  const duration = 560 + Math.min(140, longestTravel * 0.12);
+  const blurPeak = `${Math.min(2.2, Math.max(1.05, longestTravel / 520)).toFixed(2)}px`;
+
+  shared.forEach(({ origin, destination, dx, dy, sx, sy }) => {
     animations.push(destination.animate([
       {
         transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
         transformOrigin: "top left",
         filter: "blur(0px)",
+        easing: "cubic-bezier(.38,0,.72,.18)",
       },
       {
-        transform: `translate3d(${dx * 0.42}px,${dy * 0.42}px,0) scale(${1 + (sx - 1) * 0.42},${1 + (sy - 1) * 0.42})`,
-        filter: `blur(${peak.toFixed(2)}px)`,
+        transform: `translate3d(${dx * 1.025}px,${dy * 1.025}px,0) scale(${sx * 0.985},${sy * 0.985})`,
+        filter: "blur(.15px)",
+        offset: 0.1,
+        easing: "cubic-bezier(.12,.88,.2,1)",
+      },
+      {
+        transform: `translate3d(${dx * 0.13}px,${dy * 0.13}px,0) scale(${1 + (sx - 1) * 0.13},${1 + (sy - 1) * 0.13})`,
+        filter: `blur(${blurPeak})`,
         offset: 0.68,
+        easing: "cubic-bezier(.2,1.35,.3,1)",
       },
       {
-        transform: "translate3d(-1px,-1px,0) scale(1.018,1.018)",
-        filter: "blur(.4px)",
-        offset: 0.9,
+        transform: `translate3d(${dx * -0.026}px,${dy * -0.026}px,0) scale(1.035,1.035)`,
+        filter: "blur(.55px)",
+        offset: 0.86,
+        easing: "cubic-bezier(.25,.72,.25,1)",
+      },
+      {
+        transform: "translate3d(0.5px,0.5px,0) scale(.992,.992)",
+        filter: "blur(.12px)",
+        offset: 0.95,
+        easing: "cubic-bezier(.2,.8,.2,1)",
       },
       {
         transform: "translate3d(0,0,0) scale(1,1)",
         filter: "blur(0px)",
+        offset: 1,
       },
     ], { duration, easing, fill: "both" }));
     hiddenOrigins.push(origin);
   });
 
-  // Unmatched details enter from above or leave downward. No opacity fade or re-creation.
-  const enteringSurface = forward ? destinationSurface : originSurface;
-  enteringSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
+  // Details without a counterpart enter from above or leave below, in sync with the morph.
+  const unmatchedSurface = forward ? destinationSurface : originSurface;
+  unmatchedSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     animations.push(node.animate(
       forward
         ? [
-            { translate: "0 30px", filter: `blur(${blurPeak})` },
+            { translate: "0 -18px", filter: `blur(${blurPeak})`, easing: "cubic-bezier(.12,.88,.2,1)" },
             { translate: "0 0", filter: "blur(0px)" },
           ]
         : [
-            { translate: "0 0", filter: "blur(0px)" },
-            { translate: "0 30px", filter: `blur(${blurPeak})` },
+            { translate: "0 0", filter: "blur(0px)", easing: "cubic-bezier(.38,0,.72,.18)" },
+            { translate: "0 22px", filter: `blur(${blurPeak})` },
           ],
       { duration, easing, fill: "both" },
     ));
   });
 
-  // The overview itself travels as one surface. It never fades away.
+  // Keep the overview's displaced resting position while the detail is open.
+  // The reverse morph measures from this exact position, preventing a first-frame jump.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     animations.push(surface.animate(
       forward
         ? [
-            { translate: "0 0", filter: "blur(0px)" },
-            { translate: "0 48px", filter: `blur(${blurPeak})` },
+            { translate: "0 0", filter: "blur(0px)", easing: "cubic-bezier(.38,0,.72,.18)" },
+            { translate: "0 -5px", filter: "blur(.15px)", offset: 0.1, easing: "cubic-bezier(.12,.88,.2,1)" },
+            { translate: "0 48px", filter: `blur(${blurPeak})`, offset: 0.68, easing: "cubic-bezier(.2,1.35,.3,1)" },
+            { translate: "0 53px", filter: "blur(.55px)", offset: 0.86, easing: "cubic-bezier(.25,.72,.25,1)" },
+            { translate: "0 47px", filter: "blur(.12px)", offset: 0.95 },
+            { translate: "0 48px", filter: "blur(0px)", offset: 1 },
           ]
         : [
-            { translate: "0 48px", filter: `blur(${blurPeak})` },
-            { translate: "0 0", filter: "blur(0px)" },
+            { translate: "0 48px", filter: "blur(0px)", easing: "cubic-bezier(.38,0,.72,.18)" },
+            { translate: "0 53px", filter: "blur(.15px)", offset: 0.1, easing: "cubic-bezier(.12,.88,.2,1)" },
+            { translate: "0 0", filter: `blur(${blurPeak})`, offset: 0.68, easing: "cubic-bezier(.2,1.35,.3,1)" },
+            { translate: "0 -5px", filter: "blur(.55px)", offset: 0.86, easing: "cubic-bezier(.25,.72,.25,1)" },
+            { translate: "0 1px", filter: "blur(.12px)", offset: 0.95 },
+            { translate: "0 0", filter: "blur(0px)", offset: 1 },
           ],
       { duration, easing, fill: "both" },
     ));
   });
 
-  // The detail canvas grows from transparent to its resting material in the same beat.
+  // The panel material resolves with the same clock, without fading its contents.
   if (detailSurface) {
     animations.push(detailSurface.animate(
       forward
-        ? [{ backgroundColor: "rgba(21,25,18,0)" }, { backgroundColor: "rgb(21,25,18)" }]
-        : [{ backgroundColor: "rgb(21,25,18)" }, { backgroundColor: "rgba(21,25,18,0)" }],
-      { duration, easing: "cubic-bezier(.28,.72,.24,1)", fill: "both" },
+        ? [
+            { backgroundColor: "rgba(21,25,18,0)", easing: "cubic-bezier(.2,.7,.25,1)" },
+            { backgroundColor: "rgb(21,25,18)" },
+          ]
+        : [
+            { backgroundColor: "rgb(21,25,18)", easing: "cubic-bezier(.2,.7,.25,1)" },
+            { backgroundColor: "rgba(21,25,18,0)" },
+          ],
+      { duration, easing, fill: "both" },
     ));
   }
 
@@ -160,7 +195,8 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
     pageSurfaces.forEach((surface) => {
       if (!surface) return;
-      surface.style.removeProperty("translate");
+      if (forward) surface.style.translate = "0 48px";
+      else surface.style.removeProperty("translate");
       surface.style.removeProperty("filter");
     });
     if (detailSurface) {
