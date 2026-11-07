@@ -81,3 +81,17 @@ a,button{-webkit-tap-highlight-color:transparent}
   .project-card::after{display:none}
   .project-detail{transition:none}
 }
+
+
+/* Swipe-reactive material response. The effect is brief and velocity-driven. */
+.main-area{
+  transform:translate3d(0,calc(var(--scroll-direction,0) * var(--scroll-shift,0px)),0)
+    scaleY(calc(1 + var(--scroll-stretch,0)));
+  transform-origin:var(--scroll-origin,center);
+  filter:blur(var(--scroll-blur,0px));
+  transition:filter 90ms linear;
+  will-change:transform,filter;
+}
+@media(prefers-reduced-motion:reduce){
+  .main-area{transform:none;filter:none;transition:none;will-change:auto}
+}
