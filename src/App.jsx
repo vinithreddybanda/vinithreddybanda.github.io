@@ -210,7 +210,11 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProject]);
 
-  useEffect(() => () => {\n    window.clearTimeout(closeTimer.current);\n    morphClones.current.forEach((clone) => clone.remove());\n    openingAnimations.current.forEach((animation) => animation.cancel());\n  }, []);
+  useEffect(() => () => {
+    window.clearTimeout(closeTimer.current);
+    morphClones.current.forEach((clone) => clone.remove());
+    openingAnimations.current.forEach((animation) => animation.cancel());
+  }, []);
 
   // Gesture energy drives a damped spring. Fast flicks compress the page;
   // sustained swipes remain responsive until the gesture settles.
