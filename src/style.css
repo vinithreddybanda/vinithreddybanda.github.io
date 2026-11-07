@@ -95,3 +95,40 @@ a,button{-webkit-tap-highlight-color:transparent}
 @media(prefers-reduced-motion:reduce){
   .main-area{transform:none;filter:none;transition:none;will-change:auto}
 }
+
+
+/* Gesture elasticity: short, velocity-weighted squeeze with a damped settle. */
+.main-area{
+  transform:translate3d(0,var(--scroll-shift,0px),0)
+    scaleX(calc(1 + var(--scroll-squeeze,0) * .16))
+    scaleY(calc(1 - var(--scroll-squeeze,0)))
+    skewY(var(--scroll-skew,0deg));
+  transform-origin:center;
+  filter:blur(var(--scroll-blur,0px));
+  transition:filter 70ms linear;
+}
+.is-scroll-moving .main-area{will-change:transform,filter}
+
+/* Project details resolve from the selected card's title, not a circular wipe. */
+.project-detail{
+  clip-path:none;
+  opacity:0;
+  transform:translate3d(0,12px,0) scale(.992);
+  filter:blur(8px);
+  pointer-events:none;
+  transition:opacity 300ms ease,transform 520ms cubic-bezier(.18,.78,.18,1),filter 300ms ease;
+}
+.project-detail.is-open{
+  clip-path:none;
+  opacity:1;
+  transform:translate3d(0,0,0) scale(1);
+  filter:blur(0);
+  pointer-events:auto;
+}
+#detail-title{transform-origin:top left;will-change:transform,filter,opacity}
+@media(prefers-reduced-motion:reduce){
+  .main-area{transform:none;filter:none;transition:none;will-change:auto}
+  .project-detail{opacity:1;transform:none;filter:none;transition:none}
+  .project-detail:not(.is-open){display:none}
+  #detail-title{will-change:auto}
+}
