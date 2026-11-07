@@ -94,7 +94,8 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
     hiddenSources.push(source);
   });
 
-  const entering = destinationSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]");
+  const enteringSurface = direction === "forward" ? destinationSurface : sourceSurface;
+  const entering = enteringSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]");
   entering.forEach((node) => {
     animations.push(node.animate(
       direction === "forward"
@@ -136,7 +137,8 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
     sourceSurface.style.transform = "";
     destinationSurface.style.opacity = "";
     destinationSurface.style.transform = "";
-    destinationSurface.style.visibility = direction === "forward" ? "visible" : "hidden";
+    sourceSurface.style.visibility = direction === "backward" ? "hidden" : "";
+    destinationSurface.style.visibility = "visible";
     destinationSurface.style.pointerEvents = "";
   });
 }
