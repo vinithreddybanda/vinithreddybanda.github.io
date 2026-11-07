@@ -143,6 +143,7 @@ export default function App() {
         root.style.setProperty("--scroll-blur", "0px");
         root.style.setProperty("--scroll-stretch", "0");
         root.style.setProperty("--scroll-shift", "0px");
+        root.classList.remove("is-scroll-moving");
         frame = 0;
       }
     };
@@ -157,6 +158,7 @@ export default function App() {
       if (Math.abs(delta) < 0.5) return;
 
       direction = Math.sign(delta);
+      root.classList.add("is-scroll-moving");
       const velocity = Math.abs(delta) / elapsed;
       target = Math.min(velocity / 1.15, 1);
       if (!frame) frame = window.requestAnimationFrame(render);
