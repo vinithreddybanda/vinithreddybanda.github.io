@@ -74,63 +74,24 @@ function animateSharedElements(sourceRoot, destinationRoot, animations) {
   });
 }
 
-function copyComputedTree(source, clone) {
-  const computed = getComputedStyle(source);
-  for (let index = 0; index < computed.length; index += 1) {
-    const property = computed[index];
-    clone.style.setProperty(property, computed.getPropertyValue(property), computed.getPropertyPriority(property));
-  }
-  [...source.children].forEach((child, index) => {
-    if (clone.children[index]) copyComputedTree(child, clone.children[index]);
-  });
-}
-
-function createMorphClone(source) {
-  const rect = source.getBoundingClientRect();
-  const clone = source.cloneNode(true);
-  copyComputedTree(source, clone);
-  Object.assign(clone.style, {
-    position: "fixed",
-    left: `${rect.left}px`,
-    top: `${rect.top}px`,
-    width: `${rect.width}px`,
-    height: `${rect.height}px`,
-    margin: "0",
-    zIndex: "1000",
-    pointerEvents: "none",
-    transform: "none",
-    transformOrigin: "top left",
-    filter: "none"
-  });
-  clone.removeAttribute("id");
-  clone.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
-  clone.setAttribute("aria-hidden", "true");
-  document.body.appendChild(clone);
-  return { clone, rect };
-}
-
-function animateReverseMorph(sourceRoot, destinationRoot, clones) {
+function animateElementsBack(sourceRoot, destinationRoot, animations, hiddenDestinations) {
   const sources = morphElements(sourceRoot);
   const destinations = morphElements(destinationRoot);
-  destinations.forEach((destination, key) => {
-    const source = sources.get(key);
-    if (!source) return;
-    const { clone, rect } = createMorphClone(destination);
-    clones.push(clone);
-    const to = source.getBoundingClientRect();
-    const dx = to.left - rect.left;
-    const dy = to.top - rect.top;
-    const sx = to.width / Math.max(rect.width, 1);
-    const sy = to.height / Math.max(rect.height, 1);
-    const animation = clone.animate([
-      { transform: "translate3d(0,0,0) scale(1,1)", filter: "blur(0px)", opacity: 1 },
-      { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, filter: "blur(1px)", opacity: 1 }
-    ], { duration: 560, easing: "cubic-bezier(.22,.78,.2,1)", fill: "forwards" });
-    animation.finished.then(() => {
-      clone.remove();
-      const index = clones.indexOf(clone);
-      if (index !== -1) clones.splice(index, 1);
-    }).catch(() => clone.remove());
+  sources.forEach((source, key) => {
+    const destination = destinations.get(key);
+    if (!destination) return;
+    const from = source.getBoundingClientRect();
+    const to = destination.getBoundingClientRect();
+    const dx = to.left - from.left;
+    const dy = to.top - from.top;
+    const sx = to.width / Math.max(from.width, 1);
+    const sy = to.height / Math.max(from.height, 1);
+    hiddenDestinations.push({ element: destination, visibility: destination.style.visibility });
+    destination.style.visibility = "hidden";
+    animations.push(source.animate([
+      { transform: "translate3d(0,0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 },
+      { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(0.6px)", opacity: 1 }
+    ], { duration: 560, easing: "cubic-bezier(.22,.78,.2,1)", fill: "forwards" }));
   });
 }
 
@@ -170,17 +131,20 @@ function ProjectCard({ project, onOpen }) {
 export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [detailClosing, setDetailClosing] = useState(false);
   const closeTimer = useRef(null);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
   const detailPanel = useRef(null);
   const openingAnimations = useRef([]);
-  const morphClones = useRef([]);
+  const hiddenCardElements = useRef([]);
   const closing = useRef(false);
 
-  const clearMorphClones = () => {
-    morphClones.current.forEach((clone) => clone.remove());
-    morphClones.current = [];
+  const restoreCardElements = () => {
+    hiddenCardElements.current.forEach(({ element, visibility }) => {
+      element.style.visibility = visibility;
+    });
+    hiddenCardElements.current = [];
   };
 
   const closeProject = () => {
@@ -190,16 +154,31 @@ export default function App() {
     openingAnimations.current = [];
     const source = sourceButton.current;
     const panel = detailPanel.current;
-    if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      animateReverseMorph(source, panel, morphClones.current);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (source && panel && !reduceMotion) {
+      animateElementsBack(panel, source, openingAnimations.current, hiddenCardElements.current);
+      setDetailClosing(true);
+      closeTimer.current = window.setTimeout(() => {
+        setDetailOpen(false);
+        closeTimer.current = window.setTimeout(() => {
+          restoreCardElements();
+          setSelectedProject(null);
+          setDetailClosing(false);
+          closing.current = false;
+          sourceButton.current?.focus();
+        }, 40);
+      }, 560);
+      return;
     }
+    setDetailClosing(true);
     setDetailOpen(false);
     closeTimer.current = window.setTimeout(() => {
-      clearMorphClones();
+      restoreCardElements();
       setSelectedProject(null);
+      setDetailClosing(false);
       closing.current = false;
       sourceButton.current?.focus();
-    }, 600);
+    }, 40);
   };
 
   useEffect(() => {
@@ -214,8 +193,10 @@ export default function App() {
 
   useEffect(() => () => {
     window.clearTimeout(closeTimer.current);
-    morphClones.current.forEach((clone) => clone.remove());
     openingAnimations.current.forEach((animation) => animation.cancel());
+    hiddenCardElements.current.forEach(({ element, visibility }) => {
+      element.style.visibility = visibility;
+    });
   }, []);
 
   // Gesture energy drives a damped spring. Fast flicks compress the page;
@@ -285,11 +266,12 @@ export default function App() {
 
   const openProject = (project, event) => {
     window.clearTimeout(closeTimer.current);
-    clearMorphClones();
+    restoreCardElements();
     openingAnimations.current.forEach((animation) => animation.cancel());
     openingAnimations.current = [];
     closing.current = false;
     sourceButton.current = event.currentTarget;
+    setDetailClosing(false);
     setSelectedProject(project);
     setDetailOpen(false);
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
@@ -411,7 +393,7 @@ export default function App() {
       </div>
 
       {selectedProject && (
-        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
+        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""} ${detailClosing ? "is-closing" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
           <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
             <p className="section-kicker" data-morph="project-type">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
