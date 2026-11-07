@@ -130,13 +130,14 @@ export default function App() {
       if (energy < 0.004) energy = 0;
       root.style.setProperty("--scroll-blur", `${(intensity * 2.15).toFixed(2)}px`);
       root.style.setProperty("--scroll-squeeze", (intensity * 0.038).toFixed(4));
+      root.style.setProperty("--scroll-expand", (intensity * 0.006).toFixed(4));
       root.style.setProperty("--scroll-shift", `${(direction * intensity * 7).toFixed(2)}px`);
       root.style.setProperty("--scroll-skew", `${(direction * intensity * 0.42).toFixed(2)}deg`);
       if (intensity > 0.004 || energy > 0.004 || Math.abs(springVelocity) > 0.004) {
         frame = requestAnimationFrame(render);
       } else {
         intensity = 0;
-        ["--scroll-blur","--scroll-squeeze","--scroll-shift","--scroll-skew"].forEach((name) => root.style.setProperty(name, "0"));
+        ["--scroll-blur","--scroll-squeeze","--scroll-expand","--scroll-shift","--scroll-skew"].forEach((name) => root.style.setProperty(name, "0"));
         root.classList.remove("is-scroll-moving");
         frame = 0;
       }
@@ -194,7 +195,7 @@ export default function App() {
         const panel = detailPanel.current;
         const title = panel?.querySelector("#detail-title");
         const from = sourceTitleRect.current;
-        if (!panel || !title || !from) return;
+        if (!panel || !title || !from || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const to = title.getBoundingClientRect();
         const dx = from.left - to.left, dy = from.top - to.top;
         const sx = Math.max(0.18, from.width / Math.max(to.width, 1));
