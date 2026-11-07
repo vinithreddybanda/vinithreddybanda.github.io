@@ -51,44 +51,12 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
-function wrapWords(root, includeMorph = true) {
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) {
-    const node = walker.currentNode;
-    if (!node.nodeValue.trim()) continue;
-    if (!includeMorph && node.parentElement?.closest("[data-morph]")) continue;
-    nodes.push(node);
-  }
-  const words = [];
-  nodes.forEach((node) => {
-    const fragment = document.createDocumentFragment();
-    (node.nodeValue.match(/\s+|[^\s]+/g) || []).forEach((part) => {
-      if (/^\s+$/.test(part)) fragment.appendChild(document.createTextNode(part));
-      else {
-        const span = document.createElement("span");
-        span.className = "morph-word";
-        span.textContent = part;
-        fragment.appendChild(span);
-        words.push(span);
-      }
-    });
-    node.parentNode.replaceChild(fragment, node);
-  });
-  return words;
-}
-function unwrapWords(root) {
-  root.querySelectorAll(".morph-word").forEach((word) => word.replaceWith(document.createTextNode(word.textContent)));
-  root.normalize();
-}
-
 function getClipFromRect(rect, radius) {
   return `inset(${rect.top}px ${window.innerWidth - rect.right}px ${window.innerHeight - rect.bottom}px ${rect.left}px round ${radius})`;
 }
 
 function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
   const forward = direction === "forward";
-  // Deliberately slower, with one continuous travel phase and a soft landing.
   const duration = 3100;
   const springEase = "cubic-bezier(.2,.82,.22,1)";
   const blurPeak = 3.8;
@@ -97,8 +65,6 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const animations = [];
   const hiddenOrigins = [];
-  const wordRoots = [];
-  const wordDuration = 2450;
   const stagedNodes = [];
   const matchedKeys = new Set();
   const sourceRect = originSurface.getBoundingClientRect();
@@ -114,45 +80,47 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     detailSurface.style.clipPath = forward ? originClip : fullFrame;
   }
 
-  // Outgoing overview begins moving immediately. On reverse, it remains
-  // concealed beneath the detail plane until the plane is almost home.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     surface.style.visibility = "visible";
     if (!forward) surface.style.translate = "0 30px";
   });
 
+  // Each matched element travels as one complete object, not as individual words.
   origins.forEach((origin, key) => {
     const destination = destinations.get(key);
     if (!destination) return;
-    const sourceWords = wrapWords(origin);
-    const destinationWords = wrapWords(destination);
-    wordRoots.push(origin, destination);
-    if (!sourceWords.length || !destinationWords.length) return;
     matchedKeys.add(key);
+    const from = origin.getBoundingClientRect();
+    const to = destination.getBoundingClientRect();
+    const dx = from.left - to.left;
+    const dy = from.top - to.top;
+    const sx = to.width ? from.width / to.width : 1;
+    const sy = to.height ? from.height / to.height : 1;
     origin.style.visibility = "hidden";
     hiddenOrigins.push(origin);
     destination.style.visibility = "visible";
-    destinationWords.forEach((word, index) => {
-      const sourceWord = sourceWords[Math.min(sourceWords.length - 1,
-        Math.round(index * (sourceWords.length - 1) / Math.max(destinationWords.length - 1, 1)))];
-      const from = sourceWord.getBoundingClientRect();
-      const to = word.getBoundingClientRect();
-      const dx = from.left - to.left, dy = from.top - to.top;
-      const sx = to.width ? from.width / to.width : 1;
-      const sy = to.height ? from.height / to.height : 1;
-      animations.push(word.animate([
-        { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(0px)", offset: 0 },
-        { transform: `translate3d(${dx * .52}px,${dy * .52}px,0) scale(${1 + (sx - 1) * .52},${1 + (sy - 1) * .52})`, filter: `blur(${blurPeak}px)`, offset: .58 },
-        { transform: "translate3d(0,0,0) scale(1.025)", filter: "blur(1.1px)", offset: .93 },
-        { transform: "translate3d(0,0,0) scale(1)", filter: "blur(0px)" },
-      ], { duration: wordDuration, delay: morphDelay + index * 72, easing: "cubic-bezier(.16,.78,.18,1)", fill: "both" }));
-    });
+    animations.push(destination.animate([
+      {
+        transform: \`translate3d(\${dx}px,\${dy}px,0) scale(\${sx},\${sy})\`,
+        transformOrigin: "top left",
+        filter: "blur(0px)",
+      },
+      {
+        transform: \`translate3d(\${dx * .52}px,\${dy * .52}px,0) scale(\${1 + (sx - 1) * .52},\${1 + (sy - 1) * .52})\`,
+        filter: \`blur(\${blurPeak}px)\`,
+        offset: .58,
+      },
+      { transform: "translate3d(0,0,0) scale(1.018)", filter: "blur(1px)", offset: .93 },
+      { transform: "translate3d(0,0,0) scale(1)", filter: "blur(0px)" },
+    ], {
+      duration: duration - morphDelay,
+      delay: morphDelay,
+      easing: "cubic-bezier(.16,.78,.18,1)",
+      fill: "both",
+    }));
   });
 
-    // The surface grows from the selected card. Its fill stays close to the
-  // card material, avoiding a blank/dark interstitial frame. Reverse contracts
-  // the same surface back onto the original card.
   if (detailSurface) {
     animations.push(detailSurface.animate(
       forward
@@ -164,43 +132,37 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
             { clipPath: fullFrame, backgroundColor: "rgb(21,25,18)" },
             { clipPath: destinationClip, backgroundColor: "rgb(23,26,22)" },
           ],
-      {
-        duration,
-        delay: forward ? 90 : 300,
-        easing: springEase,
-        fill: "both",
-      },
+      { duration, delay: forward ? 90 : 300, easing: springEase, fill: "both" },
     ));
   }
 
-  // Detail-only content enters only after the surface and shared elements
-  // have arrived. In reverse it moves down and clears first, before the
-  // shared elements begin travelling back to the card.
+  // Detail-only content enters and exits as whole elements, with no opacity fade.
   const unmatched = forward ? destinationSurface : originSurface;
   unmatched.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     if (node.dataset.morph && matchedKeys.has(node.dataset.morph)) return;
-    const words = wrapWords(node);
-    wordRoots.push(node);
     node.style.visibility = forward ? "hidden" : "visible";
     stagedNodes.push(node);
-    words.forEach((word, index) => {
-      animations.push(word.animate(
-        forward
-          ? [
-              { transform: "translate3d(0,22px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
-              { transform: "translate3d(0,22px,0)", filter: `blur(${blurPeak}px)`, visibility: "visible", offset: .05 },
-              { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
-            ]
-          : [
-              { transform: "translate3d(0,0,0)", filter: "blur(0px)", visibility: "visible" },
-              { transform: "translate3d(0,26px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
-            ],
-        { duration: 1650, delay: (forward ? 2350 : 0) + index * 58, easing: "cubic-bezier(.16,.78,.18,1)", fill: "both" },
-      ));
-    });
+    animations.push(node.animate(
+      forward
+        ? [
+            { transform: "translate3d(0,24px,0)", filter: \`blur(\${blurPeak}px)\`, visibility: "hidden" },
+            { transform: "translate3d(0,24px,0)", filter: \`blur(\${blurPeak}px)\`, visibility: "visible", offset: .06 },
+            { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
+          ]
+        : [
+            { transform: "translate3d(0,0,0)", filter: "blur(0px)", visibility: "visible" },
+            { transform: "translate3d(0,28px,0)", filter: \`blur(\${blurPeak}px)\`, visibility: "hidden" },
+          ],
+      {
+        duration: 1750,
+        delay: forward ? 1850 : 0,
+        easing: "cubic-bezier(.16,.78,.18,1)",
+        fill: "both",
+      },
+    ));
   });
 
-    pageSurfaces.forEach((surface) => {
+  pageSurfaces.forEach((surface) => {
     if (!surface) return;
     animations.push(surface.animate(
       forward
@@ -213,8 +175,8 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
             { translate: "0 0", filter: "blur(0px)" },
           ],
       {
-        duration: Math.round(duration * (forward ? 0.62 : 0.42)),
-        delay: forward ? 0 : Math.round(duration * 0.76),
+        duration: Math.round(duration * (forward ? .62 : .42)),
+        delay: forward ? 0 : Math.round(duration * .76),
         easing: springEase,
         fill: "both",
       },
@@ -225,7 +187,6 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     animations.forEach((animation) => animation.cancel());
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
     stagedNodes.forEach((node) => { node.style.visibility = ""; });
-    wordRoots.forEach(unwrapWords);
     pageSurfaces.forEach((surface) => {
       if (!surface) return;
       surface.style.removeProperty("filter");
@@ -245,6 +206,7 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     }
   });
 }
+
 function ProjectCard({ project, onOpen }) {
   const pointer = useRef({ x: 0, y: 0, time: 0 });
   const handlePointerMove = (event) => {
@@ -375,10 +337,7 @@ export default function App() {
       });
     }, { threshold: 0.08, rootMargin: "0px 0px -36px 0px" });
     elements.forEach((element, index) => {
-      element.style.setProperty("--reveal-delay", String(Math.min(index % 5, 4) * 42) + "ms");
-      if (!element.classList.contains("project-card")) {
-        wrapWords(element, false).forEach((word, wordIndex) => word.style.setProperty("--word-index", String(wordIndex)));
-      }
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 5, 4) * 42}ms`);
       observer.observe(element);
     });
     return () => observer.disconnect();
