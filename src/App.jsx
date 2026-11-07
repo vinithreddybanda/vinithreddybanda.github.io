@@ -102,6 +102,8 @@ function createMorphClone(source) {
     transformOrigin: "top left",
     filter: "none"
   });
+  clone.removeAttribute("id");
+  clone.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
   clone.setAttribute("aria-hidden", "true");
   document.body.appendChild(clone);
   return { clone, rect };
