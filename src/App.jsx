@@ -68,7 +68,7 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
   const clipped = getClipFromRect(clipRect, clipStyle.borderRadius);
   const full = "inset(0px 0px 0px 0px round 0px)";
   const animations = [];
-  const hiddenSources = [];
+  const hiddenNodes = [];
 
   clipSurface.style.visibility = "visible";
   clipSurface.style.pointerEvents = "none";
@@ -81,49 +81,63 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
   destinations.forEach((destination, key) => {
     const source = sources.get(key);
     if (!source) return;
-    const from = source.getBoundingClientRect();
-    const to = destination.getBoundingClientRect();
-    if (!from.width || !from.height || !to.width || !to.height) return;
-    const fromStyle = window.getComputedStyle(source);
-    const toStyle = window.getComputedStyle(destination);
-    animations.push(destination.animate([
+    const sourceRect = source.getBoundingClientRect();
+    const destinationRect = destination.getBoundingClientRect();
+    if (!sourceRect.width || !sourceRect.height || !destinationRect.width || !destinationRect.height) return;
+    const sourceStyle = window.getComputedStyle(source);
+    const destinationStyle = window.getComputedStyle(destination);
+    const travellingNode = direction === "forward" ? destination : source;
+    const hiddenNode = direction === "forward" ? source : destination;
+    const dx = direction === "forward"
+      ? sourceRect.left - destinationRect.left
+      : destinationRect.left - sourceRect.left;
+    const dy = direction === "forward"
+      ? sourceRect.top - destinationRect.top
+      : destinationRect.top - sourceRect.top;
+    const fromStyle = direction === "forward" ? sourceStyle : sourceStyle;
+    const toStyle = direction === "forward" ? destinationStyle : destinationStyle;
+    const fromWidth = direction === "forward" ? sourceRect.width : sourceRect.width;
+    const toWidth = direction === "forward" ? destinationRect.width : destinationRect.width;
+
+    animations.push(travellingNode.animate([
       {
-        transform: `translate3d(${from.left-to.left}px,${from.top-to.top}px,0)`,
-        width: `${from.width}px`,
+        transform: direction === "forward" ? `translate3d(${dx}px,${dy}px,0)` : "translate3d(0,0,0)",
+        width: `${fromWidth}px`,
         fontSize: fromStyle.fontSize,
         lineHeight: fromStyle.lineHeight,
         letterSpacing: fromStyle.letterSpacing,
         color: fromStyle.color,
         opacity: fromStyle.opacity,
-        filter: "blur(5px)",
+        filter: "blur(0px)",
       },
       {
-        transform: "translate3d(0,0,0)",
-        width: `${to.width}px`,
+        transform: direction === "forward" ? "translate3d(0,0,0)" : `translate3d(${dx}px,${dy}px,0)`,
+        width: `${toWidth}px`,
         fontSize: toStyle.fontSize,
         lineHeight: toStyle.lineHeight,
         letterSpacing: toStyle.letterSpacing,
         color: toStyle.color,
         opacity: toStyle.opacity,
-        filter: "blur(0px)",
+        filter: "blur(5px)",
       },
     ], { duration, easing, fill: "both" }));
-    hiddenSources.push(source);
+    hiddenNodes.push(hiddenNode);
   });
 
-  hiddenSources.forEach((node) => { node.style.visibility = "hidden"; });
+  hiddenNodes.forEach((node) => { node.style.visibility = "hidden"; });
   if (direction === "forward") sourceSurface.style.visibility = "hidden";
+  else destinationSurface.style.visibility = "hidden";
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
-    hiddenSources.forEach((node) => { node.style.visibility = ""; });
+    hiddenNodes.forEach((node) => { node.style.visibility = ""; });
     if (direction === "forward") sourceSurface.style.visibility = "";
+    else destinationSurface.style.visibility = "";
     clipSurface.style.visibility = direction === "forward" ? "visible" : "hidden";
     clipSurface.style.clipPath = direction === "forward" ? full : "";
     clipSurface.style.pointerEvents = "";
   });
 }
-
 function ProjectCard({ project, onOpen }) {
   const pointer = useRef({ x: 0, y: 0, time: 0 });
   const handlePointerMove = (event) => {
