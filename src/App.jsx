@@ -184,7 +184,9 @@ export default function App() {
   const [detailOpen, setDetailOpen] = useState(false);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
-  const detailPanel = useRef(null);\n  const mainSurface = useRef(null);\n  const sidebarSurface = useRef(null);
+  const detailPanel = useRef(null);
+  const mainSurface = useRef(null);
+  const sidebarSurface = useRef(null);
   const closing = useRef(false);
 
   const closeProject = () => {
