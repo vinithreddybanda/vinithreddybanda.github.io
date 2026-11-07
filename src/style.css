@@ -90,8 +90,8 @@ a,button{-webkit-tap-highlight-color:transparent}
   transform-origin:var(--scroll-origin,center);
   filter:blur(var(--scroll-blur,0px));
   transition:filter 90ms linear;
-  will-change:transform,filter;
 }
+.is-scroll-moving .main-area{will-change:transform,filter}
 @media(prefers-reduced-motion:reduce){
   .main-area{transform:none;filter:none;transition:none;will-change:auto}
 }
