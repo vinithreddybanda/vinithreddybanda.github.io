@@ -136,7 +136,14 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
           { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
           { transform: "translate3d(0,30px,0)", filter: "blur(" + blurPeak + "px)" },
         ];
-    node.style.visibility = "visible";
+    if (forward) {
+      frames[0].visibility = "hidden";
+      frames.splice(1, 0, { ...frames[0], visibility: "visible", offset: 0.02 });
+    } else {
+      frames[0].visibility = "visible";
+      frames[1].visibility = "hidden";
+    }
+    node.style.visibility = forward ? "hidden" : "visible";
     animations.push(node.animate(frames, {
       duration: forward ? Math.round(duration * 0.38) : Math.round(duration * 0.42),
       delay,
