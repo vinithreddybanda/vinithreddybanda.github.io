@@ -64,6 +64,7 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const animations = [];
   const hiddenOrigins = [];
+  const unmatchedNodes = [];
   const hiddenDestinations = [];
   let maxDistance = 0;
 
@@ -144,6 +145,7 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
       frames[1].visibility = "hidden";
     }
     node.style.visibility = forward ? "hidden" : "visible";
+    unmatchedNodes.push(node);
     animations.push(node.animate(frames, {
       duration: forward ? Math.round(duration * 0.38) : Math.round(duration * 0.42),
       delay,
@@ -173,6 +175,7 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
+    unmatchedNodes.forEach((node) => { node.style.visibility = ""; });
     pageSurfaces.forEach((surface) => {
       if (!surface) return;
       surface.style.removeProperty("filter");
