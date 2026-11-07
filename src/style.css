@@ -100,7 +100,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 /* Gesture elasticity: short, velocity-weighted squeeze with a damped settle. */
 .main-area{
   transform:translate3d(0,var(--scroll-shift,0px),0)
-    scaleX(calc(1 + var(--scroll-squeeze,0) * .16))
+    scaleX(calc(1 + var(--scroll-expand,0)))
     scaleY(calc(1 - var(--scroll-squeeze,0)))
     skewY(var(--scroll-skew,0deg));
   transform-origin:center;
