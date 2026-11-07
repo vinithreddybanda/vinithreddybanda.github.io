@@ -51,10 +51,10 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
-function wrapWords(root) {
+function wrapWords(root, includeMorph = true) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes = [];
-  while (walker.nextNode()) if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
+  while (walker.nextNode()) {\n    const node = walker.currentNode;\n    if (!node.nodeValue.trim()) continue;\n    if (!includeMorph && node.parentElement?.closest("[data-morph]")) continue;\n    nodes.push(node);\n  }
   const words = [];
   nodes.forEach((node) => {
     const fragment = document.createDocumentFragment();
