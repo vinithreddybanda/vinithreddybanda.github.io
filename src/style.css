@@ -201,23 +201,3 @@ a,button{-webkit-tap-highlight-color:transparent}
   .project-detail{visibility:hidden}
   .project-detail.is-open{visibility:visible}
 }
-
-
-/* Slow, word-led scroll reveals and continuous morph blur. */
-.morph-word{
-  display:inline-block;
-  transform-origin:50% 80%;
-  will-change:transform,filter;
-}
-.motion-reveal.is-inview .morph-word{
-  animation:word-rise 1550ms cubic-bezier(.16,.78,.18,1) both;
-  animation-delay:calc(var(--word-index,0) * 42ms + var(--reveal-delay,0ms));
-}
-@keyframes word-rise{
-  0%{transform:translate3d(0,18px,0);filter:blur(4px)}
-  58%{transform:translate3d(0,-1px,0);filter:blur(1.1px)}
-  100%{transform:translate3d(0,0,0);filter:blur(0)}
-}
-@media(prefers-reduced-motion:reduce){
-  .motion-reveal.is-inview .morph-word{animation:none;filter:none;transform:none}
-}
