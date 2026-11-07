@@ -61,8 +61,8 @@ a,button{-webkit-tap-highlight-color:transparent}
 .skill-tag{transition:background-color 200ms var(--ease-smooth),border-color 200ms var(--ease-smooth),color 200ms var(--ease-smooth),transform 260ms var(--ease-spring)}
 .skill-tag:hover{background:rgba(197,219,157,.07);border-color:rgba(197,219,157,.32);transform:translateY(-2px)}
 .orbit-one{animation:orbit-drift 13s ease-in-out infinite alternate}
-.orbit-two{animation:orbit-drift 17s ease-in-out infinite alternate-reverse}
-@keyframes orbit-drift{from{transform:rotate(-27deg) scale(.97)}to{transform:rotate(-18deg) scale(1.035)}}
+.orbit-two{animation:orbit-drift-two 17s ease-in-out infinite alternate-reverse}
+@keyframes orbit-drift{from{transform:rotate(-27deg) scale(.97)}to{transform:rotate(-18deg) scale(1.035)}}@keyframes orbit-drift-two{from{transform:rotate(48deg) scale(.97)}to{transform:rotate(57deg) scale(1.035)}}
 .motion-reveal.is-inview{animation:reveal-settle 620ms var(--ease-spring) both;animation-delay:var(--reveal-delay,0ms)}
 @keyframes reveal-settle{from{opacity:.72;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 .project-detail{transition:clip-path 680ms var(--ease-spring)}
