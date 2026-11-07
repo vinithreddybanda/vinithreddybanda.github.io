@@ -57,7 +57,6 @@ function getClipFromRect(rect, radius) {
 
 function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
   const forward = direction === "forward";
-  const easing = "linear";
   const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const shared = [];
@@ -80,111 +79,122 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     const dy = from.top - to.top;
     const sx = from.width / to.width;
     const sy = from.height / to.height;
-    longestTravel = Math.max(longestTravel, Math.hypot(dx, dy));
-    shared.push({ origin, destination, dx, dy, sx, sy });
+    const distance = Math.hypot(dx, dy);
+    longestTravel = Math.max(longestTravel, distance);
+    shared.push({ origin, destination, dx, dy, sx, sy, distance });
   });
 
-  // Scale duration with the longest journey, then run every layer on one clock.
-  const duration = 560 + Math.min(140, longestTravel * 0.12);
-  const blurPeak = `${Math.min(2.2, Math.max(1.05, longestTravel / 520)).toFixed(2)}px`;
+  // One longer spring, with a single acceleration phase and a continuous soft landing.
+  const duration = 680 + Math.min(180, longestTravel * 0.15);
+  const blurPeak = Math.min(9, Math.max(5.5, longestTravel / 95));
+  const spring = "cubic-bezier(.2,.72,.22,1)";
+  const launch = "cubic-bezier(.32,0,.7,.18)";
+  const settle = "cubic-bezier(.18,.82,.22,1)";
 
-  shared.forEach(({ origin, destination, dx, dy, sx, sy }) => {
+  // Hide the source card shell while its matching content travels from its exact geometry.
+  const sourceCard = forward ? originSurface.closest(".project-card") : null;
+  if (sourceCard) sourceCard.style.visibility = "hidden";
+
+  shared.forEach(({ origin, destination, dx, dy, sx, sy, distance }) => {
+    const localBlur = Math.min(2.5, blurPeak * 0.32);
+    const squashX = Math.min(1.045, 1 + distance / 9000);
+    const squashY = Math.max(0.955, 1 - distance / 10000);
     animations.push(destination.animate([
       {
-        transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
+        transform: "translate3d(" + dx + "px," + dy + "px,0) scale(" + sx + "," + sy + ")",
         transformOrigin: "top left",
         filter: "blur(0px)",
-        easing: "cubic-bezier(.38,0,.72,.18)",
+        easing: launch,
       },
       {
-        transform: `translate3d(${dx * 1.025}px,${dy * 1.025}px,0) scale(${sx * 0.985},${sy * 0.985})`,
-        filter: "blur(.15px)",
-        offset: 0.1,
-        easing: "cubic-bezier(.12,.88,.2,1)",
+        transform: "translate3d(" + dx * 0.76 + "px," + dy * 0.76 + "px,0) scale(" + (sx * 0.82 + 0.18) + "," + (sy * 0.82 + 0.18) + ")",
+        filter: "blur(" + localBlur + "px)",
+        offset: 0.18,
+        easing: spring,
       },
       {
-        transform: `translate3d(${dx * 0.13}px,${dy * 0.13}px,0) scale(${1 + (sx - 1) * 0.13},${1 + (sy - 1) * 0.13})`,
-        filter: `blur(${blurPeak})`,
-        offset: 0.68,
-        easing: "cubic-bezier(.2,1.35,.3,1)",
+        transform: "translate3d(" + dx * 0.12 + "px," + dy * 0.12 + "px,0) scale(" + (1 + (sx - 1) * 0.12) + "," + (1 + (sy - 1) * 0.12) + ")",
+        filter: "blur(" + blurPeak + "px)",
+        offset: 0.72,
+        easing: "cubic-bezier(.16,1.12,.3,1)",
       },
       {
-        transform: `translate3d(${dx * -0.026}px,${dy * -0.026}px,0) scale(1.035,1.035)`,
-        filter: "blur(.55px)",
-        offset: 0.86,
-        easing: "cubic-bezier(.25,.72,.25,1)",
+        transform: "translate3d(" + dx * -0.018 + "px," + dy * -0.018 + "px,0) scale(" + squashX + "," + squashY + ")",
+        filter: "blur(2.2px)",
+        offset: 0.88,
+        easing: settle,
       },
       {
-        transform: "translate3d(0.5px,0.5px,0) scale(.992,.992)",
-        filter: "blur(.12px)",
-        offset: 0.95,
-        easing: "cubic-bezier(.2,.8,.2,1)",
+        transform: "translate3d(0,0,0) scale(.996,1.006)",
+        filter: "blur(.65px)",
+        offset: 0.96,
+        easing: settle,
       },
       {
         transform: "translate3d(0,0,0) scale(1,1)",
         filter: "blur(0px)",
         offset: 1,
       },
-    ], { duration, easing, fill: "both" }));
+    ], { duration, easing: spring, fill: "both" }));
     hiddenOrigins.push(origin);
   });
 
-  // Details without a counterpart enter from above or leave below, in sync with the morph.
+  // Unmatched information enters upward or exits downward on the same clock.
   const unmatchedSurface = forward ? destinationSurface : originSurface;
   unmatchedSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     animations.push(node.animate(
       forward
         ? [
-            { translate: "0 -18px", filter: `blur(${blurPeak})`, easing: "cubic-bezier(.12,.88,.2,1)" },
+            { translate: "0 -30px", filter: "blur(" + blurPeak + "px)", easing: launch },
+            { translate: "0 5px", filter: "blur(1.2px)", offset: 0.78, easing: "cubic-bezier(.16,1.12,.3,1)" },
+            { translate: "0 -1px", filter: "blur(.2px)", offset: 0.94, easing: settle },
             { translate: "0 0", filter: "blur(0px)" },
           ]
         : [
-            { translate: "0 0", filter: "blur(0px)", easing: "cubic-bezier(.38,0,.72,.18)" },
-            { translate: "0 22px", filter: `blur(${blurPeak})` },
+            { translate: "0 0", filter: "blur(0px)", easing: launch },
+            { translate: "0 30px", filter: "blur(" + blurPeak + "px)" },
           ],
-      { duration, easing, fill: "both" },
+      { duration, easing: spring, fill: "both" },
     ));
   });
 
-  // Keep the overview's displaced resting position while the detail is open.
-  // The reverse morph measures from this exact position, preventing a first-frame jump.
+  // The overview and sidebar follow the same spring and retain the exact reverse origin.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     animations.push(surface.animate(
       forward
         ? [
-            { translate: "0 0", filter: "blur(0px)", easing: "cubic-bezier(.38,0,.72,.18)" },
-            { translate: "0 -5px", filter: "blur(.15px)", offset: 0.1, easing: "cubic-bezier(.12,.88,.2,1)" },
-            { translate: "0 48px", filter: `blur(${blurPeak})`, offset: 0.68, easing: "cubic-bezier(.2,1.35,.3,1)" },
-            { translate: "0 53px", filter: "blur(.55px)", offset: 0.86, easing: "cubic-bezier(.25,.72,.25,1)" },
-            { translate: "0 47px", filter: "blur(.12px)", offset: 0.95 },
+            { translate: "0 0", filter: "blur(0px)", easing: launch },
+            { translate: "0 -7px", filter: "blur(1px)", offset: 0.18, easing: spring },
+            { translate: "0 48px", filter: "blur(" + blurPeak + "px)", offset: 0.72, easing: "cubic-bezier(.16,1.12,.3,1)" },
+            { translate: "0 54px", filter: "blur(2.2px)", offset: 0.88, easing: settle },
+            { translate: "0 47px", filter: "blur(.65px)", offset: 0.96, easing: settle },
             { translate: "0 48px", filter: "blur(0px)", offset: 1 },
           ]
         : [
-            { translate: "0 48px", filter: "blur(0px)", easing: "cubic-bezier(.38,0,.72,.18)" },
-            { translate: "0 53px", filter: "blur(.15px)", offset: 0.1, easing: "cubic-bezier(.12,.88,.2,1)" },
-            { translate: "0 0", filter: `blur(${blurPeak})`, offset: 0.68, easing: "cubic-bezier(.2,1.35,.3,1)" },
-            { translate: "0 -5px", filter: "blur(.55px)", offset: 0.86, easing: "cubic-bezier(.25,.72,.25,1)" },
-            { translate: "0 1px", filter: "blur(.12px)", offset: 0.95 },
+            { translate: "0 48px", filter: "blur(0px)", easing: launch },
+            { translate: "0 54px", filter: "blur(1px)", offset: 0.18, easing: spring },
+            { translate: "0 0", filter: "blur(" + blurPeak + "px)", offset: 0.72, easing: "cubic-bezier(.16,1.12,.3,1)" },
+            { translate: "0 -7px", filter: "blur(2.2px)", offset: 0.88, easing: settle },
+            { translate: "0 1px", filter: "blur(.65px)", offset: 0.96, easing: settle },
             { translate: "0 0", filter: "blur(0px)", offset: 1 },
           ],
-      { duration, easing, fill: "both" },
+      { duration, easing: spring, fill: "both" },
     ));
   });
 
-  // The panel material resolves with the same clock, without fading its contents.
   if (detailSurface) {
     animations.push(detailSurface.animate(
       forward
         ? [
-            { backgroundColor: "rgba(21,25,18,0)", easing: "cubic-bezier(.2,.7,.25,1)" },
+            { backgroundColor: "rgba(21,25,18,0)", easing: spring },
             { backgroundColor: "rgb(21,25,18)" },
           ]
         : [
-            { backgroundColor: "rgb(21,25,18)", easing: "cubic-bezier(.2,.7,.25,1)" },
+            { backgroundColor: "rgb(21,25,18)", easing: spring },
             { backgroundColor: "rgba(21,25,18,0)" },
           ],
-      { duration, easing, fill: "both" },
+      { duration, easing: spring, fill: "both" },
     ));
   }
 
@@ -193,6 +203,7 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
+    if (sourceCard) sourceCard.style.visibility = "";
     pageSurfaces.forEach((surface) => {
       if (!surface) return;
       if (forward) surface.style.translate = "0 48px";
