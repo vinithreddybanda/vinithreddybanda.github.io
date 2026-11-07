@@ -56,20 +56,22 @@ function getClipFromRect(rect, radius) {
 }
 
 function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
-  const duration = 680;
-  const easing = "cubic-bezier(.16,1.14,.3,1)";
-  const blurPeak = "1.55px";
+  const duration = 760;
+  const easing = "cubic-bezier(.2,1.16,.28,1)";
+  const distance = Math.hypot(window.innerWidth, window.innerHeight);
+  const blurPeak = `${Math.min(2.1, Math.max(0.9, distance / 1050)).toFixed(2)}px`;
   const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const animations = [];
   const hiddenOrigins = [];
+  const forward = direction === "forward";
 
   if (detailSurface) {
     detailSurface.style.visibility = "visible";
     detailSurface.style.pointerEvents = "none";
   }
 
-  // Only the clicked object's matching details travel. The full page remains the motion canvas.
+  // Each shared detail is the same travelling element, measured from its real source.
   origins.forEach((origin, key) => {
     const destination = destinations.get(key);
     if (!destination) return;
@@ -81,6 +83,8 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     const dy = from.top - to.top;
     const sx = from.width / to.width;
     const sy = from.height / to.height;
+    const travel = Math.min(1, Math.hypot(dx, dy) / distance);
+    const peak = Math.min(2.1, Math.max(0.75, 0.75 + travel * 1.8));
     animations.push(destination.animate([
       {
         transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
@@ -88,14 +92,14 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
         filter: "blur(0px)",
       },
       {
-        transform: `translate3d(${dx * 0.18}px,${dy * 0.18}px,0) scale(${1 + (sx - 1) * 0.18},${1 + (sy - 1) * 0.18})`,
-        filter: `blur(${blurPeak})`,
-        offset: 0.72,
+        transform: `translate3d(${dx * 0.42}px,${dy * 0.42}px,0) scale(${1 + (sx - 1) * 0.42},${1 + (sy - 1) * 0.42})`,
+        filter: `blur(${peak.toFixed(2)}px)`,
+        offset: 0.68,
       },
       {
-        transform: "translate3d(-1px,-1px,0) scale(1.012,1.012)",
-        filter: "blur(.35px)",
-        offset: 0.91,
+        transform: "translate3d(-1px,-1px,0) scale(1.018,1.018)",
+        filter: "blur(.4px)",
+        offset: 0.9,
       },
       {
         transform: "translate3d(0,0,0) scale(1,1)",
@@ -105,41 +109,64 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     hiddenOrigins.push(origin);
   });
 
-  // Page-only details have no matching origin: they rise in and dissolve out in the same beat.
-  const detailEntering = direction === "forward" ? destinationSurface : originSurface;
-  detailEntering.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
+  // Unmatched details enter from above or leave downward. No opacity fade or re-creation.
+  const enteringSurface = forward ? destinationSurface : originSurface;
+  enteringSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     animations.push(node.animate(
-      direction === "forward"
+      forward
         ? [
-            { opacity: 0, transform: "translate3d(0,9px,0)", filter: `blur(${blurPeak})` },
-            { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
+            { translate: "0 30px", filter: `blur(${blurPeak})` },
+            { translate: "0 0", filter: "blur(0px)" },
           ]
         : [
-            { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
-            { opacity: 0, transform: "translate3d(0,9px,0)", filter: `blur(${blurPeak})` },
+            { translate: "0 0", filter: "blur(0px)" },
+            { translate: "0 30px", filter: `blur(${blurPeak})` },
           ],
       { duration, easing, fill: "both" },
     ));
   });
 
-  // Fade the complete overview, including its non-matching content, as one synchronized surface.
+  // The overview itself travels as one surface. It never fades away.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     animations.push(surface.animate(
-      direction === "forward" ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }],
-      { duration, easing: "cubic-bezier(.22,.68,0,1)", fill: "both" },
+      forward
+        ? [
+            { translate: "0 0", filter: "blur(0px)" },
+            { translate: "0 48px", filter: `blur(${blurPeak})` },
+          ]
+        : [
+            { translate: "0 48px", filter: `blur(${blurPeak})` },
+            { translate: "0 0", filter: "blur(0px)" },
+          ],
+      { duration, easing, fill: "both" },
     ));
   });
+
+  // The detail canvas grows from transparent to its resting material in the same beat.
+  if (detailSurface) {
+    animations.push(detailSurface.animate(
+      forward
+        ? [{ backgroundColor: "rgba(21,25,18,0)" }, { backgroundColor: "rgb(21,25,18)" }]
+        : [{ backgroundColor: "rgb(21,25,18)" }, { backgroundColor: "rgba(21,25,18,0)" }],
+      { duration, easing: "cubic-bezier(.28,.72,.24,1)", fill: "both" },
+    ));
+  }
 
   hiddenOrigins.forEach((node) => { node.style.visibility = "hidden"; });
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
-    pageSurfaces.forEach((surface) => { if (surface) surface.style.opacity = ""; });
+    pageSurfaces.forEach((surface) => {
+      if (!surface) return;
+      surface.style.removeProperty("translate");
+      surface.style.removeProperty("filter");
+    });
     if (detailSurface) {
-      detailSurface.style.visibility = direction === "backward" ? "hidden" : "visible";
-      detailSurface.style.pointerEvents = direction === "backward" ? "none" : "";
+      detailSurface.style.removeProperty("background-color");
+      detailSurface.style.visibility = forward ? "visible" : "hidden";
+      detailSurface.style.pointerEvents = forward ? "" : "none";
     }
   });
 }
