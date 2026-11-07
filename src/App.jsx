@@ -1,38 +1,215 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const projects = [
+  {
+    id: "careschedule",
+    number: "01",
+    name: "CareSchedule",
+    type: "Healthcare platform",
+    context: "Cognizant · Internship",
+    summary: "A clinic and hospital management platform built around reliable appointment operations.",
+    detail: "Designed a six-layer Clean Architecture with .NET, Entity Framework Core, SQL Server, and React. The platform includes 148 REST APIs, 32 controllers, 33 domain entities, and six role-based workflows.",
+    highlight: "Intelligent appointment slot generation",
+    highlightDetail: "Resolves provider availability, holidays, leave, blackout periods, and resource constraints before publishing appointments, helping prevent double-booking.",
+    stack: [".NET", "ASP.NET Core", "React", "EF Core", "SQL Server", "REST APIs"],
+    featured: true,
+  },
+  {
+    id: "journalai",
+    number: "02",
+    name: "JournalAI",
+    type: "AI-powered product",
+    context: "Personal project",
+    summary: "A journaling experience that turns written reflections into structured mood insights.",
+    detail: "Built with Next.js, TypeScript, Groq AI, and Supabase. The platform combines secure authentication with PostgreSQL persistence and a cloud deployment workflow.",
+    highlight: "End-to-end delivery pipeline",
+    highlightDetail: "Set up CI/CD workflows using GitHub Actions and Jenkins, with Docker and Kubernetes for testing, containerization, and deployment on Microsoft Azure.",
+    stack: ["Next.js", "TypeScript", "Supabase", "Docker", "Kubernetes", "Azure", "Jenkins"],
+  },
+  {
+    id: "activities",
+    number: "03",
+    name: "Activities for Discord",
+    type: "Android · Native integration",
+    context: "Personal project",
+    summary: "An Android app that gives users mobile control over Discord Rich Presence.",
+    detail: "Built an Android application that extends Rich Presence controls beyond the official Discord mobile client, using a native integration layer with the Discord Partner SDK.",
+    highlight: "Persistent native SDK sessions",
+    highlightDetail: "Implemented JNI integration for reliable real-time communication, alongside secure authentication, encrypted credential storage, image caching, and foreground/background services.",
+    stack: ["Android", "Java", "C++", "JNI", "Discord Partner SDK"],
+  },
+];
+
+const skillGroups = [
+  { label: "Languages", values: ["C#", "Java", "Kotlin", "TypeScript", "JavaScript", "SQL"] },
+  { label: "Frameworks", values: ["ASP.NET Core", ".NET", "EF Core", "React", "Next.js", "Node.js"] },
+  { label: "Data", values: ["SQL Server", "PostgreSQL", "MongoDB", "Supabase"] },
+  { label: "Cloud & delivery", values: ["Docker", "Kubernetes", "GitHub Actions", "Jenkins", "Azure"] },
+];
+
+function Arrow() {
+  return <span className="arrow" aria-hidden="true">↗</span>;
+}
+
+function ProjectCard({ project, onOpen }) {
+  return (
+    <button className={`project-card ${project.featured ? "project-card-featured" : ""}`} onClick={(event) => onOpen(project, event)} type="button">
+      <span className="project-card-top">
+        <span className="project-number">{project.number} / SELECTED WORK</span>
+        <span className="project-open" aria-hidden="true">↗</span>
+      </span>
+      <span className="project-name">{project.name}</span>
+      <span className="project-type">{project.type} <span>·</span> {project.context}</span>
+      <span className="project-summary">{project.summary}</span>
+      <span className="project-card-bottom">
+        <span>{project.stack.slice(0, 4).join("  ·  ")}</span>
+        <span className="view-project">Explore project <Arrow /></span>
+      </span>
+    </button>
+  );
+}
 
 export default function App() {
-  const [ready, setReady] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [origin, setOrigin] = useState({ x: "50vw", y: "50vh" });
+  const closeTimer = useRef(null);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setReady(true), 120);
-    return () => window.clearTimeout(timer);
-  }, []);
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  const openProject = (project, event) => {
+    window.clearTimeout(closeTimer.current);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX || rect.left + rect.width / 2;
+    const y = event.clientY || rect.top + rect.height / 2;
+    setOrigin({ x: `${x}px`, y: `${y}px` });
+    setSelectedProject(project);
+    setDetailOpen(false);
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => setDetailOpen(true)));
+  };
+
+  const closeProject = () => {
+    setDetailOpen(false);
+    closeTimer.current = window.setTimeout(() => setSelectedProject(null), 520);
+  };
 
   return (
-    <main className={`page ${ready ? "is-ready" : ""}`}>
-      <div className="ambient ambient-one" />
-      <div className="ambient ambient-two" />
+    <main className="dashboard">
+      <aside className="sidebar">
+        <a className="brand" href="#home" aria-label="Vinith, home">v<span>.</span></a>
+        <div className="sidebar-rule" />
+        <nav className="side-nav" aria-label="Portfolio sections">
+          <a className="side-link active" href="#home"><span>01</span> Overview</a>
+          <a className="side-link" href="#work"><span>02</span> Selected work</a>
+          <a className="side-link" href="#about"><span>03</span> About</a>
+          <a className="side-link" href="#contact"><span>04</span> Contact</a>
+        </nav>
+        <div className="sidebar-bottom">
+          <span className="availability-dot" />
+          <span>Open to opportunities</span>
+        </div>
+      </aside>
 
-      <nav className="topbar" aria-label="Main navigation">
-        <a className="wordmark" href="/" aria-label="Home">V<span>.</span></a>
-        <span className="status"><i /> A little space on the internet</span>
-      </nav>
+      <div className="main-area" id="home">
+        <header className="topbar">
+          <span className="breadcrumb">PORTFOLIO <span>/</span> OVERVIEW</span>
+          <a className="top-link" href="mailto:vinithreddybanda@gmail.com">LET'S TALK <Arrow /></a>
+        </header>
 
-      <section className="hero">
-        <p className="eyebrow">HELLO, WORLD</p>
-        <h1>Hello<span className="period">.</span><br /><span className="name">I'm Vinith.</span></h1>
-        <p className="intro">
-          A fresh start. A blank canvas. More soon.
-        </p>
-        <a className="github-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">
-          Find me on GitHub <span aria-hidden="true">↗</span>
-        </a>
-      </section>
+        <section className="intro-section">
+          <div className="intro-copy">
+            <p className="section-kicker"><span className="kicker-line" /> DEVELOPER / BUILDER</p>
+            <h1>Making<br /><span>things</span> work.</h1>
+            <p className="intro-description">I'm Vinith Reddy Banda, an Information Technology graduate who enjoys building useful software, exploring systems, and connecting ideas to implementation.</p>
+            <div className="intro-actions">
+              <a className="primary-action" href="#work">Explore my work <span>↓</span></a>
+              <a className="text-action" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub <Arrow /></a>
+            </div>
+          </div>
+          <div className="intro-aside">
+            <div className="orbit-mark" aria-hidden="true">
+              <div className="orbit orbit-one" /><div className="orbit orbit-two" />
+              <span className="orbit-core">V<span>.</span></span>
+              <span className="orbit-caption">BUILD / LEARN / REPEAT</span>
+            </div>
+            <div className="aside-note"><span>BASED IN</span><strong>India</strong></div>
+          </div>
+        </section>
 
-      <footer className="footer">
-        <span>© {new Date().getFullYear()} Vinith Reddy Banda</span>
-        <span>Built for what comes next.</span>
-      </footer>
+        <section className="metrics" aria-label="Highlights">
+          <div className="metric"><strong>03</strong><span>PROJECTS<br />IN FOCUS</span></div>
+          <div className="metric"><strong>148</strong><span>REST APIs<br />IN CARESCHEDULE</span></div>
+          <div className="metric"><strong>8.43</strong><span>B.E. CGPA<br />CBIT</span></div>
+          <div className="metric"><strong>9.74</strong><span>DIPLOMA CGPA<br />GOVT. POLYTECHNIC</span></div>
+        </section>
+
+        <section className="work-section" id="work">
+          <div className="section-heading">
+            <div><p className="section-kicker">A FEW THINGS I'VE BUILT</p><h2>Selected work<span>.</span></h2></div>
+            <span className="section-count">01 — 03</span>
+          </div>
+          <div className="project-grid">
+            {projects.map((project) => <ProjectCard key={project.id} project={project} onOpen={openProject} />)}
+          </div>
+        </section>
+
+        <section className="about-section" id="about">
+          <div className="about-main">
+            <p className="section-kicker">THE TOOLKIT</p>
+            <h2>Curious by nature.<br /><span>Practical by design.</span></h2>
+            <p className="about-copy">From backend architecture to mobile integrations and AI-powered products, I like understanding how the pieces fit together and making them work as one.</p>
+          </div>
+          <div className="skills-panel">
+            {skillGroups.map((group) => (
+              <div className="skill-row" key={group.label}>
+                <span className="skill-label">{group.label}</span>
+                <div className="skill-tags">{group.values.map((value) => <span className="skill-tag" key={value}>{value}</span>)}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="proof-section">
+          <div className="proof-column">
+            <p className="section-kicker">EDUCATION</p>
+            <div className="proof-item"><span className="proof-year">2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology <span>8.43 CGPA</span></p></div></div>
+            <div className="proof-item"><span className="proof-year">2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering <span>9.74 CGPA</span></p></div></div>
+          </div>
+          <div className="proof-column">
+            <p className="section-kicker">BEYOND THE BUILD</p>
+            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>IEEE Xplore research publication</strong><p>Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis · I3CTCON 2026</p></div></div>
+            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>Open-source Android app</strong><p>WhatsApp Status Saver, published on F-Droid</p></div></div>
+            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>6th place · COSC HackWeek</strong><p>Competitive coding challenge organized by CBIT Open Source Community</p></div></div>
+            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
+          </div>
+        </section>
+
+        <footer className="footer" id="contact">
+          <div><p className="section-kicker">HAVE SOMETHING IN MIND?</p><h2>Let's build<br /><span>something useful.</span></h2></div>
+          <div className="footer-contact">
+            <a href="mailto:vinithreddybanda@gmail.com">vinithreddybanda@gmail.com <Arrow /></a>
+            <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub <Arrow /></a>
+          </div>
+          <div className="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>DESIGNED TO KEEP EVOLVING.</span></div>
+        </footer>
+      </div>
+
+      {selectedProject && (
+        <section className={`project-detail ${detailOpen ? "is-open" : ""}`} style={{ "--origin-x": origin.x, "--origin-y": origin.y }} aria-modal="true" role="dialog" aria-labelledby="detail-title">
+          <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
+          <div className="detail-content">
+            <p className="section-kicker">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
+            <p className="detail-index">SELECTED WORK / {selectedProject.number}</p>
+            <h2 id="detail-title">{selectedProject.name}<span>.</span></h2>
+            <p className="detail-lead">{selectedProject.summary}</p>
+            <div className="detail-rule" />
+            <div className="detail-description"><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
+            <div className="detail-description"><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
+            <div className="detail-stack"><span>TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item) => <span className="skill-tag" key={item}>{item}</span>)}</div></div>
+          </div>
+          <div className="detail-footer"><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
+        </section>
+      )}
     </main>
   );
 }
