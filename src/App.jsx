@@ -54,12 +54,17 @@ function Arrow() {
 function wrapWords(root, includeMorph = true) {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes = [];
-  while (walker.nextNode()) {\n    const node = walker.currentNode;\n    if (!node.nodeValue.trim()) continue;\n    if (!includeMorph && node.parentElement?.closest("[data-morph]")) continue;\n    nodes.push(node);\n  }
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (!node.nodeValue.trim()) continue;
+    if (!includeMorph && node.parentElement?.closest("[data-morph]")) continue;
+    nodes.push(node);
+  }
   const words = [];
   nodes.forEach((node) => {
     const fragment = document.createDocumentFragment();
-    (node.nodeValue.match(/\\s+|[^\\s]+/g) || []).forEach((part) => {
-      if (/^\\s+$/.test(part)) fragment.appendChild(document.createTextNode(part));
+    (node.nodeValue.match(/\s+|[^\s]+/g) || []).forEach((part) => {
+      if (/^\s+$/.test(part)) fragment.appendChild(document.createTextNode(part));
       else {
         const span = document.createElement("span");
         span.className = "morph-word";
@@ -370,7 +375,10 @@ export default function App() {
       });
     }, { threshold: 0.08, rootMargin: "0px 0px -36px 0px" });
     elements.forEach((element, index) => {
-      element.style.setProperty("--reveal-delay", `${Math.min(index % 5, 4) * 42}ms`);
+      element.style.setProperty("--reveal-delay", String(Math.min(index % 5, 4) * 42) + "ms");
+      if (!element.classList.contains("project-card")) {
+        wrapWords(element, false).forEach((word, wordIndex) => word.style.setProperty("--word-index", String(wordIndex)));
+      }
       observer.observe(element);
     });
     return () => observer.disconnect();
