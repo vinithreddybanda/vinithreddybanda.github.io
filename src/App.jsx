@@ -91,6 +91,8 @@ export default function App() {
   const closeTimer = useRef(null);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
+  const detailPanel = useRef(null);
+  const sourceTitleRect = useRef(null);
 
   const closeProject = () => {
     setDetailOpen(false);
@@ -112,67 +114,48 @@ export default function App() {
 
   useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
-  // Scroll-velocity response: native scrolling stays in control; the visual layer
-  // briefly stretches and softens with swipe speed, then settles with a damped spring.
+  // Gesture energy drives a damped spring. Fast flicks compress the page;
+  // sustained swipes remain responsive until the gesture settles.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-
     const root = document.documentElement;
-    let previousY = window.scrollY;
-    let previousTime = performance.now();
-    let target = 0;
-    let strength = 0;
-    let direction = 0;
-    let frame = 0;
+    let previousY = window.scrollY, previousTime = performance.now();
+    let energy = 0, springVelocity = 0, direction = 0, frame = 0, intensity = 0;
 
     const render = () => {
-      strength += (target - strength) * 0.32;
-      target *= 0.76;
-      if (target < 0.002) target = 0;
-
-      root.style.setProperty("--scroll-blur", `${(strength * 1.05).toFixed(3)}px`);
-      root.style.setProperty("--scroll-stretch", (strength * 0.006).toFixed(4));
-      root.style.setProperty("--scroll-shift", `${(strength * 2.2).toFixed(2)}px`);
-      root.style.setProperty("--scroll-direction", String(direction));
-      root.style.setProperty("--scroll-origin", direction > 0 ? "top" : "bottom");
-
-      if (strength > 0.003 || target > 0.003) {
-        frame = window.requestAnimationFrame(render);
+      springVelocity += (energy - intensity) * 0.19;
+      springVelocity *= 0.76;
+      intensity = Math.max(0, Math.min(1, intensity + springVelocity));
+      energy *= 0.91;
+      if (energy < 0.004) energy = 0;
+      root.style.setProperty("--scroll-blur", `${(intensity * 2.15).toFixed(2)}px`);
+      root.style.setProperty("--scroll-squeeze", (intensity * 0.038).toFixed(4));
+      root.style.setProperty("--scroll-shift", `${(direction * intensity * 7).toFixed(2)}px`);
+      root.style.setProperty("--scroll-skew", `${(direction * intensity * 0.42).toFixed(2)}deg`);
+      if (intensity > 0.004 || energy > 0.004 || Math.abs(springVelocity) > 0.004) {
+        frame = requestAnimationFrame(render);
       } else {
-        strength = 0;
-        root.style.setProperty("--scroll-blur", "0px");
-        root.style.setProperty("--scroll-stretch", "0");
-        root.style.setProperty("--scroll-shift", "0px");
+        intensity = 0;
+        ["--scroll-blur","--scroll-squeeze","--scroll-shift","--scroll-skew"].forEach((name) => root.style.setProperty(name, "0"));
         root.classList.remove("is-scroll-moving");
         frame = 0;
       }
     };
-
     const onScroll = () => {
-      const now = performance.now();
-      const y = window.scrollY;
-      const elapsed = Math.max(now - previousTime, 8);
-      const delta = y - previousY;
-      previousY = y;
-      previousTime = now;
+      const now = performance.now(), y = window.scrollY;
+      const elapsed = Math.max(now - previousTime, 8), delta = y - previousY;
+      previousY = y; previousTime = now;
       if (Math.abs(delta) < 0.5) return;
-
       direction = Math.sign(delta);
       root.classList.add("is-scroll-moving");
-      const velocity = Math.abs(delta) / elapsed;
-      target = Math.min(velocity / 1.15, 1);
-      if (!frame) frame = window.requestAnimationFrame(render);
+      energy = Math.max(energy, Math.min(Math.abs(delta) / elapsed / 1.45, 1));
+      if (!frame) frame = requestAnimationFrame(render);
     };
-
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
-      if (frame) window.cancelAnimationFrame(frame);
-      root.style.removeProperty("--scroll-blur");
-      root.style.removeProperty("--scroll-stretch");
-      root.style.removeProperty("--scroll-shift");
-      root.style.removeProperty("--scroll-direction");
-      root.style.removeProperty("--scroll-origin");
+      if (frame) cancelAnimationFrame(frame);
+      ["--scroll-blur","--scroll-squeeze","--scroll-shift","--scroll-skew"].forEach((name) => root.style.removeProperty(name));
     };
   }, []);
 
@@ -199,12 +182,35 @@ export default function App() {
     window.clearTimeout(closeTimer.current);
     sourceButton.current = event.currentTarget;
     const rect = event.currentTarget.getBoundingClientRect();
+    sourceTitleRect.current = event.currentTarget.querySelector(".project-name")?.getBoundingClientRect() || rect;
     const x = event.clientX || rect.left + rect.width / 2;
     const y = event.clientY || rect.top + rect.height / 2;
     setOrigin({ x: `${x}px`, y: `${y}px` });
     setSelectedProject(project);
     setDetailOpen(false);
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => setDetailOpen(true)));
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      setDetailOpen(true);
+      window.requestAnimationFrame(() => {
+        const panel = detailPanel.current;
+        const title = panel?.querySelector("#detail-title");
+        const from = sourceTitleRect.current;
+        if (!panel || !title || !from) return;
+        const to = title.getBoundingClientRect();
+        const dx = from.left - to.left, dy = from.top - to.top;
+        const sx = Math.max(0.18, from.width / Math.max(to.width, 1));
+        const sy = Math.max(0.35, from.height / Math.max(to.height, 1));
+        title.animate([
+          { transform: `translate(${dx}px,${dy}px) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(9px)", opacity: 0.35 },
+          { transform: "translate(0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 }
+        ], { duration: 620, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" });
+        panel.querySelectorAll(".section-kicker,.detail-index,.detail-lead,.detail-rule,.detail-description,.detail-stack").forEach((element, index) => {
+          element.animate([
+            { opacity: 0, transform: "translate3d(0,22px,0)", filter: "blur(12px)" },
+            { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" }
+          ], { duration: 480, delay: 90 + index * 55, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" });
+        });
+      });
+    }));
   };
 
   return (
@@ -309,7 +315,7 @@ export default function App() {
       </div>
 
       {selectedProject && (
-        <section className={`project-detail ${detailOpen ? "is-open" : ""}`} style={{ "--origin-x": origin.x, "--origin-y": origin.y }} aria-modal="true" role="dialog" aria-labelledby="detail-title">
+        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} style={{ "--origin-x": origin.x, "--origin-y": origin.y }} aria-modal="true" role="dialog" aria-labelledby="detail-title">
           <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
             <p className="section-kicker">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
