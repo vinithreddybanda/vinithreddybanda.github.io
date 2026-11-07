@@ -57,33 +57,36 @@ function getClipFromRect(rect, radius) {
 
 function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
   const forward = direction === "forward";
-  const duration = 980;
-  const settle = "cubic-bezier(.2,1,.25,1)";
-  const blurPeak = 2.8;
+  // Deliberately slower, with one continuous travel phase and a soft landing.
+  const duration = 1680;
+  const springEase = "cubic-bezier(.2,.82,.22,1)";
+  const blurPeak = 4.2;
+  const morphDelay = forward ? 180 : 300;
   const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const animations = [];
   const hiddenOrigins = [];
-  const unmatchedNodes = [];
+  const stagedNodes = [];
   const matchedKeys = new Set();
-
   const sourceRect = originSurface.getBoundingClientRect();
   const destinationRect = destinationSurface.getBoundingClientRect();
-  const panelRect = detailSurface?.getBoundingClientRect();
   const fullFrame = "inset(0px 0px 0px 0px round 0px)";
+  const originClip = getClipFromRect(sourceRect, 8);
+  const destinationClip = getClipFromRect(destinationRect, 8);
 
   if (detailSurface) {
     detailSurface.style.visibility = "visible";
     detailSurface.style.pointerEvents = "none";
-    detailSurface.style.backgroundColor = "rgb(21,25,18)";
-    detailSurface.style.clipPath = forward ? getClipFromRect(sourceRect, 7) : fullFrame;
+    detailSurface.style.backgroundColor = "rgb(23,26,22)";
+    detailSurface.style.clipPath = forward ? originClip : fullFrame;
   }
 
-  // Keep the returning overview underneath the shrinking detail surface.
+  // Outgoing overview begins moving immediately. On reverse, it remains
+  // concealed beneath the detail plane until the plane is almost home.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     surface.style.visibility = "visible";
-    if (!forward) surface.style.translate = "0 34px";
+    if (!forward) surface.style.translate = "0 30px";
   });
 
   origins.forEach((origin, key) => {
@@ -99,8 +102,8 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     const sy = from.height / to.height;
     matchedKeys.add(key);
 
-    // One visible counterpart at a time. FLIP geometry keeps the content
-    // anchored to its real source position instead of fading between pages.
+    // Hide the source counterpart before the destination counterpart starts.
+    // Geometry, not opacity, carries the identity across the transition.
     origin.style.visibility = "hidden";
     hiddenOrigins.push(origin);
     destination.style.visibility = "visible";
@@ -113,79 +116,95 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
         offset: 0,
       },
       {
-        transform: `translate3d(${dx * 0.52}px,${dy * 0.52}px,0) scale(${1 + (sx - 1) * 0.52},${1 + (sy - 1) * 0.52})`,
+        transform: `translate3d(${dx * 0.58}px,${dy * 0.58}px,0) scale(${1 + (sx - 1) * 0.58},${1 + (sy - 1) * 0.58})`,
         filter: `blur(${blurPeak}px)`,
-        offset: 0.52,
+        offset: 0.56,
       },
       {
-        transform: "translate3d(0,0,0) scale(1.008,1.008)",
-        filter: "blur(1px)",
-        offset: 0.84,
+        transform: "translate3d(0,0,0) scale(1.018,1.018)",
+        filter: "blur(1.2px)",
+        offset: 0.91,
       },
       {
         transform: "translate3d(0,0,0) scale(1,1)",
         filter: "blur(0px)",
         offset: 1,
       },
-    ], { duration, easing: settle, fill: "both" }));
+    ], {
+      duration,
+      delay: morphDelay,
+      easing: springEase,
+      fill: "both",
+    }));
   });
 
-  // The detail surface itself grows out of the selected card, then resolves
-  // to the full viewport. Reverse uses the exact same geometry in reverse.
+  // The surface grows from the selected card. Its fill stays close to the
+  // card material, avoiding a blank/dark interstitial frame. Reverse contracts
+  // the same surface back onto the original card.
   if (detailSurface) {
-    const fromClip = forward ? getClipFromRect(sourceRect, 7) : fullFrame;
-    const toClip = forward ? fullFrame : getClipFromRect(destinationRect, 7);
     animations.push(detailSurface.animate(
-      [{ clipPath: fromClip }, { clipPath: toClip }],
-      { duration, easing: settle, fill: "both" },
+      forward
+        ? [
+            { clipPath: originClip, backgroundColor: "rgb(23,26,22)" },
+            { clipPath: fullFrame, backgroundColor: "rgb(21,25,18)" },
+          ]
+        : [
+            { clipPath: fullFrame, backgroundColor: "rgb(21,25,18)" },
+            { clipPath: destinationClip, backgroundColor: "rgb(23,26,22)" },
+          ],
+      {
+        duration,
+        delay: forward ? 90 : 300,
+        easing: springEase,
+        fill: "both",
+      },
     ));
   }
 
-  // Detail-only information waits for the shared identity morph. On the way
-  // back it departs first, moving down with a restrained velocity trail.
+  // Detail-only content enters only after the surface and shared elements
+  // have arrived. In reverse it moves down and clears first, before the
+  // shared elements begin travelling back to the card.
   const unmatched = forward ? destinationSurface : originSurface;
   unmatched.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     if (node.dataset.morph && matchedKeys.has(node.dataset.morph)) return;
     node.style.visibility = forward ? "hidden" : "visible";
-    unmatchedNodes.push(node);
+    stagedNodes.push(node);
     animations.push(node.animate(
       forward
         ? [
-            { transform: "translate3d(0,18px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
-            { transform: "translate3d(0,18px,0)", filter: `blur(${blurPeak}px)`, visibility: "visible", offset: 0.04 },
+            { transform: "translate3d(0,20px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
+            { transform: "translate3d(0,20px,0)", filter: `blur(${blurPeak}px)`, visibility: "visible", offset: 0.04 },
             { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
           ]
         : [
             { transform: "translate3d(0,0,0)", filter: "blur(0px)", visibility: "visible" },
-            { transform: "translate3d(0,22px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
+            { transform: "translate3d(0,24px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
           ],
       {
-        duration: Math.round(duration * 0.30),
-        delay: forward ? Math.round(duration * 0.70) : 0,
-        easing: settle,
+        duration: Math.round(duration * (forward ? 0.22 : 0.24)),
+        delay: forward ? Math.round(duration * 0.78) : 0,
+        easing: springEase,
         fill: "both",
       },
     ));
   });
 
-  // The overview leaves immediately. Returning content stays behind the
-  // opaque detail plane until the detail has nearly contracted to its origin.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     animations.push(surface.animate(
       forward
         ? [
             { translate: "0 0", filter: "blur(0px)" },
-            { translate: "0 34px", filter: "blur(2px)" },
+            { translate: "0 30px", filter: "blur(2.6px)" },
           ]
         : [
-            { translate: "0 34px", filter: "blur(2px)" },
+            { translate: "0 30px", filter: "blur(2.6px)" },
             { translate: "0 0", filter: "blur(0px)" },
           ],
       {
-        duration: Math.round(duration * 0.58),
-        delay: forward ? 0 : Math.round(duration * 0.70),
-        easing: settle,
+        duration: Math.round(duration * (forward ? 0.62 : 0.42)),
+        delay: forward ? 0 : Math.round(duration * 0.76),
+        easing: springEase,
         fill: "both",
       },
     ));
@@ -194,12 +213,12 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
-    unmatchedNodes.forEach((node) => { node.style.visibility = ""; });
+    stagedNodes.forEach((node) => { node.style.visibility = ""; });
     pageSurfaces.forEach((surface) => {
       if (!surface) return;
       surface.style.removeProperty("filter");
       if (forward) {
-        surface.style.translate = "0 34px";
+        surface.style.translate = "0 30px";
         surface.style.visibility = "hidden";
       } else {
         surface.style.removeProperty("translate");
