@@ -51,76 +51,94 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
-function copyComputedTree(source, clone) {
-  const originals = [source, ...source.querySelectorAll("*")];
-  const copies = [clone, ...clone.querySelectorAll("*")];
-  originals.forEach((node, index) => {
-    const copy = copies[index];
-    if (!copy) return;
-    const style = window.getComputedStyle(node);
-    for (let i = 0; i < style.length; i += 1) {
-      const property = style[i];
-      copy.style.setProperty(property, style.getPropertyValue(property));
-    }
-  });
+function getClipFromRect(rect, radius) {
+  return `inset(${rect.top}px ${window.innerWidth - rect.right}px ${window.innerHeight - rect.bottom}px ${rect.left}px round ${radius})`;
 }
 
-function animateProjectMorph(sourceSurface, destinationSurface) {
+function animateProjectMorph(sourceSurface, destinationSurface, direction = "forward") {
   const duration = 680;
-  const easing = "cubic-bezier(.18,.78,.18,1)";
-  const sources = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const from = sourceSurface.getBoundingClientRect();
-  const to = destinationSurface.getBoundingClientRect();
+  const easing = "cubic-bezier(.2,.72,.18,1)";
+  const sourceNodes = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+  const destinationNodes = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+  const sourceRect = sourceSurface.getBoundingClientRect();
+  const destinationRect = destinationSurface.getBoundingClientRect();
   const sourceStyle = window.getComputedStyle(sourceSurface);
-  const destinationStyle = window.getComputedStyle(destinationSurface);
-  const surface = document.createElement("div");
-  Object.assign(surface.style, {
-    position: "fixed", left: `${from.left}px`, top: `${from.top}px`,
-    width: `${from.width}px`, height: `${from.height}px`,
-    margin: "0", padding: "0", boxSizing: "border-box",
-    backgroundColor: sourceStyle.backgroundColor, border: sourceStyle.border,
-    borderRadius: sourceStyle.borderRadius, boxShadow: sourceStyle.boxShadow,
-    overflow: "hidden", pointerEvents: "none", zIndex: "2147483000",
-  });
-  document.body.appendChild(surface);
+  const startClip = getClipFromRect(sourceRect, sourceStyle.borderRadius);
+  const animations = [];
+  const hiddenSources = [];
 
-  const animations = [surface.animate([
-    { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: sourceStyle.borderRadius, border: sourceStyle.border, backgroundColor: sourceStyle.backgroundColor },
-    { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px`, borderRadius: destinationStyle.borderRadius, border: destinationStyle.border, backgroundColor: destinationStyle.backgroundColor },
-  ], { duration, easing, fill: "both" })];
-  const travelling = [];
+  destinationSurface.style.visibility = "visible";
+  destinationSurface.style.pointerEvents = "none";
+  destinationSurface.style.clipPath = direction === "forward" ? startClip : "inset(0px 0px 0px 0px round 0px)";
 
-  destinations.forEach((destination, key) => {
-    const source = sources.get(key);
+  const clipAnimation = destinationSurface.animate([
+    { clipPath: direction === "forward" ? startClip : "inset(0px 0px 0px 0px round 0px)" },
+    { clipPath: direction === "forward" ? "inset(0px 0px 0px 0px round 0px)" : startClip },
+  ], { duration, easing, fill: "both" });
+  animations.push(clipAnimation);
+
+  destinationNodes.forEach((destination, key) => {
+    const source = sourceNodes.get(key);
     if (!source) return;
-    const a = source.getBoundingClientRect();
-    const b = destination.getBoundingClientRect();
-    if (!a.width || !a.height || !b.width || !b.height) return;
-    const clone = source.cloneNode(true);
-    copyComputedTree(source, clone);
-    Object.assign(clone.style, {
-      position: "fixed", left: `${a.left}px`, top: `${a.top}px`,
-      width: `${a.width}px`, height: `${a.height}px`,
-      margin: "0", transform: "none", transformOrigin: "top left",
-      pointerEvents: "none", zIndex: "2147483001", willChange: "transform",
-    });
-    document.body.appendChild(clone);
-    travelling.push(clone);
-    animations.push(clone.animate([
-      { transform: "translate3d(0,0,0) scale(1,1)" },
-      { transform: `translate3d(${b.left-a.left}px,${b.top-a.top}px,0) scale(${b.width/a.width},${b.height/a.height})` },
-    ], { duration, easing, fill: "both" }));
+    const from = source.getBoundingClientRect();
+    const to = destination.getBoundingClientRect();
+    if (!from.width || !from.height || !to.width || !to.height) return;
+    const fromStyle = window.getComputedStyle(source);
+    const toStyle = window.getComputedStyle(destination);
+    const dx = from.left - to.left;
+    const dy = from.top - to.top;
+    const start = direction === "forward" ? {
+      transform: `translate3d(${dx}px,${dy}px,0)`,
+      width: `${from.width}px`,
+      fontSize: fromStyle.fontSize,
+      lineHeight: fromStyle.lineHeight,
+      letterSpacing: fromStyle.letterSpacing,
+      color: fromStyle.color,
+      opacity: fromStyle.opacity,
+      filter: "blur(5px)",
+    } : {
+      transform: "translate3d(0,0,0)",
+      width: `${to.width}px`,
+      fontSize: toStyle.fontSize,
+      lineHeight: toStyle.lineHeight,
+      letterSpacing: toStyle.letterSpacing,
+      color: toStyle.color,
+      opacity: toStyle.opacity,
+      filter: "blur(0px)",
+    };
+    const end = direction === "forward" ? {
+      transform: "translate3d(0,0,0)",
+      width: `${to.width}px`,
+      fontSize: toStyle.fontSize,
+      lineHeight: toStyle.lineHeight,
+      letterSpacing: toStyle.letterSpacing,
+      color: toStyle.color,
+      opacity: toStyle.opacity,
+      filter: "blur(0px)",
+    } : {
+      transform: `translate3d(${dx}px,${dy}px,0)`,
+      width: `${from.width}px`,
+      fontSize: fromStyle.fontSize,
+      lineHeight: fromStyle.lineHeight,
+      letterSpacing: fromStyle.letterSpacing,
+      color: fromStyle.color,
+      opacity: fromStyle.opacity,
+      filter: "blur(5px)",
+    };
+    animations.push(destination.animate([start, end], { duration, easing, fill: "both" }));
+    hiddenSources.push(source);
   });
 
+  hiddenSources.forEach((node) => { node.style.visibility = "hidden"; });
   sourceSurface.style.visibility = "hidden";
-  destinationSurface.style.visibility = "hidden";
+
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
-    travelling.forEach((node) => node.remove());
-    surface.remove();
+    hiddenSources.forEach((node) => { node.style.visibility = ""; });
     sourceSurface.style.visibility = "";
     destinationSurface.style.visibility = "";
+    destinationSurface.style.clipPath = "";
+    destinationSurface.style.pointerEvents = "";
   });
 }
 
@@ -177,7 +195,7 @@ export default function App() {
       sourceButton.current?.focus();
     };
     if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      animateProjectMorph(panel, source).then(finish);
+      animateProjectMorph(panel, source, "backward").then(finish);
     } else {
       finish();
     }
@@ -273,7 +291,7 @@ export default function App() {
         closeButton.current?.focus();
         return;
       }
-      animateProjectMorph(source, panel).then(() => {
+      animateProjectMorph(source, panel, "forward").then(() => {
         setDetailOpen(true);
         closing.current = false;
         closeButton.current?.focus();
