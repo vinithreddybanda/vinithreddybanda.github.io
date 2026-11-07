@@ -58,87 +58,69 @@ function getClipFromRect(rect, radius) {
 function animateProjectMorph(sourceSurface, destinationSurface, direction = "forward") {
   const duration = 680;
   const easing = "cubic-bezier(.2,.72,.18,1)";
-  const sourceNodes = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const destinationNodes = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+  const sources = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+  const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const sourceRect = sourceSurface.getBoundingClientRect();
   const destinationRect = destinationSurface.getBoundingClientRect();
-  const sourceStyle = window.getComputedStyle(sourceSurface);
-  const startClip = getClipFromRect(sourceRect, sourceStyle.borderRadius);
+  const clipSurface = direction === "forward" ? destinationSurface : sourceSurface;
+  const clipRect = direction === "forward" ? sourceRect : destinationRect;
+  const clipStyle = window.getComputedStyle(direction === "forward" ? sourceSurface : destinationSurface);
+  const clipped = getClipFromRect(clipRect, clipStyle.borderRadius);
+  const full = "inset(0px 0px 0px 0px round 0px)";
   const animations = [];
   const hiddenSources = [];
 
-  destinationSurface.style.visibility = "visible";
-  destinationSurface.style.pointerEvents = "none";
-  destinationSurface.style.clipPath = direction === "forward" ? startClip : "inset(0px 0px 0px 0px round 0px)";
+  clipSurface.style.visibility = "visible";
+  clipSurface.style.pointerEvents = "none";
+  clipSurface.style.clipPath = direction === "forward" ? clipped : full;
+  animations.push(clipSurface.animate([
+    { clipPath: direction === "forward" ? clipped : full },
+    { clipPath: direction === "forward" ? full : clipped },
+  ], { duration, easing, fill: "both" }));
 
-  const clipAnimation = destinationSurface.animate([
-    { clipPath: direction === "forward" ? startClip : "inset(0px 0px 0px 0px round 0px)" },
-    { clipPath: direction === "forward" ? "inset(0px 0px 0px 0px round 0px)" : startClip },
-  ], { duration, easing, fill: "both" });
-  animations.push(clipAnimation);
-
-  destinationNodes.forEach((destination, key) => {
-    const source = sourceNodes.get(key);
+  destinations.forEach((destination, key) => {
+    const source = sources.get(key);
     if (!source) return;
     const from = source.getBoundingClientRect();
     const to = destination.getBoundingClientRect();
     if (!from.width || !from.height || !to.width || !to.height) return;
     const fromStyle = window.getComputedStyle(source);
     const toStyle = window.getComputedStyle(destination);
-    const dx = from.left - to.left;
-    const dy = from.top - to.top;
-    const start = direction === "forward" ? {
-      transform: `translate3d(${dx}px,${dy}px,0)`,
-      width: `${from.width}px`,
-      fontSize: fromStyle.fontSize,
-      lineHeight: fromStyle.lineHeight,
-      letterSpacing: fromStyle.letterSpacing,
-      color: fromStyle.color,
-      opacity: fromStyle.opacity,
-      filter: "blur(5px)",
-    } : {
-      transform: "translate3d(0,0,0)",
-      width: `${to.width}px`,
-      fontSize: toStyle.fontSize,
-      lineHeight: toStyle.lineHeight,
-      letterSpacing: toStyle.letterSpacing,
-      color: toStyle.color,
-      opacity: toStyle.opacity,
-      filter: "blur(0px)",
-    };
-    const end = direction === "forward" ? {
-      transform: "translate3d(0,0,0)",
-      width: `${to.width}px`,
-      fontSize: toStyle.fontSize,
-      lineHeight: toStyle.lineHeight,
-      letterSpacing: toStyle.letterSpacing,
-      color: toStyle.color,
-      opacity: toStyle.opacity,
-      filter: "blur(0px)",
-    } : {
-      transform: `translate3d(${dx}px,${dy}px,0)`,
-      width: `${from.width}px`,
-      fontSize: fromStyle.fontSize,
-      lineHeight: fromStyle.lineHeight,
-      letterSpacing: fromStyle.letterSpacing,
-      color: fromStyle.color,
-      opacity: fromStyle.opacity,
-      filter: "blur(5px)",
-    };
-    animations.push(destination.animate([start, end], { duration, easing, fill: "both" }));
+    animations.push(destination.animate([
+      {
+        transform: `translate3d(${from.left-to.left}px,${from.top-to.top}px,0)`,
+        width: `${from.width}px`,
+        fontSize: fromStyle.fontSize,
+        lineHeight: fromStyle.lineHeight,
+        letterSpacing: fromStyle.letterSpacing,
+        color: fromStyle.color,
+        opacity: fromStyle.opacity,
+        filter: "blur(5px)",
+      },
+      {
+        transform: "translate3d(0,0,0)",
+        width: `${to.width}px`,
+        fontSize: toStyle.fontSize,
+        lineHeight: toStyle.lineHeight,
+        letterSpacing: toStyle.letterSpacing,
+        color: toStyle.color,
+        opacity: toStyle.opacity,
+        filter: "blur(0px)",
+      },
+    ], { duration, easing, fill: "both" }));
     hiddenSources.push(source);
   });
 
   hiddenSources.forEach((node) => { node.style.visibility = "hidden"; });
-  sourceSurface.style.visibility = "hidden";
+  if (direction === "forward") sourceSurface.style.visibility = "hidden";
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenSources.forEach((node) => { node.style.visibility = ""; });
-    sourceSurface.style.visibility = "";
-    destinationSurface.style.visibility = "";
-    destinationSurface.style.clipPath = "";
-    destinationSurface.style.pointerEvents = "";
+    if (direction === "forward") sourceSurface.style.visibility = "";
+    clipSurface.style.visibility = direction === "forward" ? "visible" : "hidden";
+    clipSurface.style.clipPath = direction === "forward" ? full : "";
+    clipSurface.style.pointerEvents = "";
   });
 }
 
