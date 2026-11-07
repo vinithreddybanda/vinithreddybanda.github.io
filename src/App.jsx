@@ -57,18 +57,32 @@ function getClipFromRect(rect, radius) {
 
 function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
   const forward = direction === "forward";
+  const duration = 820;
+  const travelEase = "cubic-bezier(.42,0,.18,1)";
+  const blurPeak = 11;
   const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const shared = [];
-  const hiddenOrigins = [];
   const animations = [];
-  let longestTravel = 0;
+  const hiddenOrigins = [];
+  const hiddenDestinations = [];
+  let maxDistance = 0;
 
   if (detailSurface) {
     detailSurface.style.visibility = "visible";
     detailSurface.style.pointerEvents = "none";
+    // The destination is an opaque plane from frame one. The outgoing page
+    // cannot show through it, so two page layouts are never composited together.
+    detailSurface.style.backgroundColor = "rgb(21,25,18)";
   }
 
+  // On reverse, restore the overview behind the still-opaque detail plane.
+  pageSurfaces.forEach((surface) => {
+    if (!surface) return;
+    surface.style.visibility = "visible";
+    if (!forward) surface.style.translate = "0 36px";
+  });
+
+  const shared = [];
   origins.forEach((origin, key) => {
     const destination = destinations.get(key);
     if (!destination) return;
@@ -79,136 +93,99 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     const dy = from.top - to.top;
     const sx = from.width / to.width;
     const sy = from.height / to.height;
-    const distance = Math.hypot(dx, dy);
-    longestTravel = Math.max(longestTravel, distance);
-    shared.push({ origin, destination, dx, dy, sx, sy, distance });
+    maxDistance = Math.max(maxDistance, Math.hypot(dx, dy));
+    shared.push({ origin, destination, dx, dy, sx, sy });
   });
 
-  // One longer spring, with a single acceleration phase and a continuous soft landing.
-  const duration = 680 + Math.min(180, longestTravel * 0.15);
-  const blurPeak = Math.min(9, Math.max(5.5, longestTravel / 95));
-  const spring = "cubic-bezier(.2,.72,.22,1)";
-  const launch = "cubic-bezier(.32,0,.7,.18)";
-  const settle = "cubic-bezier(.18,.82,.22,1)";
+  // Shared information is represented by one visible travelling instance.
+  // Its source counterpart is hidden before the first animation frame.
+  shared.forEach(({ origin, destination, dx, dy, sx, sy }) => {
+    const from = forward ? origin : destination;
+    const to = forward ? destination : origin;
+    const x = forward ? dx : -dx;
+    const y = forward ? dy : -dy;
+    const scaleX = forward ? sx : 1 / sx;
+    const scaleY = forward ? sy : 1 / sy;
+    from.style.visibility = "hidden";
+    hiddenOrigins.push(from);
+    to.style.visibility = "visible";
 
-  // Hide the source card shell while its matching content travels from its exact geometry.
-  const sourceCard = forward ? originSurface.closest(".project-card") : null;
-  if (sourceCard) sourceCard.style.visibility = "hidden";
-
-  shared.forEach(({ origin, destination, dx, dy, sx, sy, distance }) => {
-    const localBlur = Math.min(2.5, blurPeak * 0.32);
-    const squashX = Math.min(1.045, 1 + distance / 9000);
-    const squashY = Math.max(0.955, 1 - distance / 10000);
-    animations.push(destination.animate([
+    animations.push(to.animate([
       {
-        transform: "translate3d(" + dx + "px," + dy + "px,0) scale(" + sx + "," + sy + ")",
+        transform: "translate3d(" + x + "px," + y + "px,0) scale(" + scaleX + "," + scaleY + ")",
         transformOrigin: "top left",
         filter: "blur(0px)",
-        easing: launch,
+        easing: travelEase,
       },
       {
-        transform: "translate3d(" + dx * 0.76 + "px," + dy * 0.76 + "px,0) scale(" + (sx * 0.82 + 0.18) + "," + (sy * 0.82 + 0.18) + ")",
-        filter: "blur(" + localBlur + "px)",
-        offset: 0.18,
-        easing: spring,
-      },
-      {
-        transform: "translate3d(" + dx * 0.12 + "px," + dy * 0.12 + "px,0) scale(" + (1 + (sx - 1) * 0.12) + "," + (1 + (sy - 1) * 0.12) + ")",
+        transform: "translate3d(" + x * 0.52 + "px," + y * 0.52 + "px,0) scale(" + (1 + (scaleX - 1) * 0.52) + "," + (1 + (scaleY - 1) * 0.52) + ")",
         filter: "blur(" + blurPeak + "px)",
-        offset: 0.72,
-        easing: "cubic-bezier(.16,1.12,.3,1)",
-      },
-      {
-        transform: "translate3d(" + dx * -0.018 + "px," + dy * -0.018 + "px,0) scale(" + squashX + "," + squashY + ")",
-        filter: "blur(2.2px)",
-        offset: 0.88,
-        easing: settle,
-      },
-      {
-        transform: "translate3d(0,0,0) scale(.996,1.006)",
-        filter: "blur(.65px)",
-        offset: 0.96,
-        easing: settle,
+        offset: 0.5,
+        easing: "linear",
       },
       {
         transform: "translate3d(0,0,0) scale(1,1)",
         filter: "blur(0px)",
-        offset: 1,
       },
-    ], { duration, easing: spring, fill: "both" }));
-    hiddenOrigins.push(origin);
+    ], { duration, easing: travelEase, fill: "both" }));
   });
 
-  // Unmatched information enters upward or exits downward on the same clock.
-  const unmatchedSurface = forward ? destinationSurface : originSurface;
-  unmatchedSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
-    animations.push(node.animate(
-      forward
-        ? [
-            { translate: "0 -30px", filter: "blur(" + blurPeak + "px)", easing: launch },
-            { translate: "0 5px", filter: "blur(1.2px)", offset: 0.78, easing: "cubic-bezier(.16,1.12,.3,1)" },
-            { translate: "0 -1px", filter: "blur(.2px)", offset: 0.94, easing: settle },
-            { translate: "0 0", filter: "blur(0px)" },
-          ]
-        : [
-            { translate: "0 0", filter: "blur(0px)", easing: launch },
-            { translate: "0 30px", filter: "blur(" + blurPeak + "px)" },
-          ],
-      { duration, easing: spring, fill: "both" },
-    ));
+  // New destination-only content waits until the travelling content has arrived.
+  // On reverse, it starts leaving immediately, downward, before shared content moves.
+  const unmatched = forward ? destinationSurface : originSurface;
+  const matchedKeys = new Set(shared.map(({ origin, destination }) => (forward ? destination : origin).dataset.morph));
+  unmatched.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
+    if (node.dataset.morph && matchedKeys.has(node.dataset.morph)) return;
+    const delay = forward ? Math.round(duration * 0.62) : 0;
+    const frames = forward
+      ? [
+          { transform: "translate3d(0,-26px,0)", filter: "blur(" + blurPeak + "px)" },
+          { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
+        ]
+      : [
+          { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
+          { transform: "translate3d(0,30px,0)", filter: "blur(" + blurPeak + "px)" },
+        ];
+    node.style.visibility = "visible";
+    animations.push(node.animate(frames, {
+      duration: forward ? Math.round(duration * 0.38) : Math.round(duration * 0.42),
+      delay,
+      easing: travelEase,
+      fill: "both",
+    }));
   });
 
-  // The overview and sidebar follow the same spring and retain the exact reverse origin.
+  // The outgoing page leaves first. The incoming overview rises only behind
+  // the opaque detail plane, so it cannot collide visually with detail content.
   pageSurfaces.forEach((surface) => {
     if (!surface) return;
     animations.push(surface.animate(
       forward
         ? [
-            { translate: "0 0", filter: "blur(0px)", easing: launch },
-            { translate: "0 -7px", filter: "blur(1px)", offset: 0.18, easing: spring },
-            { translate: "0 48px", filter: "blur(" + blurPeak + "px)", offset: 0.72, easing: "cubic-bezier(.16,1.12,.3,1)" },
-            { translate: "0 54px", filter: "blur(2.2px)", offset: 0.88, easing: settle },
-            { translate: "0 47px", filter: "blur(.65px)", offset: 0.96, easing: settle },
-            { translate: "0 48px", filter: "blur(0px)", offset: 1 },
+            { translate: "0 0", filter: "blur(0px)" },
+            { translate: "0 36px", filter: "blur(" + blurPeak + "px)" },
           ]
         : [
-            { translate: "0 48px", filter: "blur(0px)", easing: launch },
-            { translate: "0 54px", filter: "blur(1px)", offset: 0.18, easing: spring },
-            { translate: "0 0", filter: "blur(" + blurPeak + "px)", offset: 0.72, easing: "cubic-bezier(.16,1.12,.3,1)" },
-            { translate: "0 -7px", filter: "blur(2.2px)", offset: 0.88, easing: settle },
-            { translate: "0 1px", filter: "blur(.65px)", offset: 0.96, easing: settle },
-            { translate: "0 0", filter: "blur(0px)", offset: 1 },
+            { translate: "0 36px", filter: "blur(" + blurPeak + "px)" },
+            { translate: "0 0", filter: "blur(0px)" },
           ],
-      { duration, easing: spring, fill: "both" },
+      { duration: forward ? Math.round(duration * 0.7) : Math.round(duration * 0.58), delay: forward ? 0 : Math.round(duration * 0.42), easing: travelEase, fill: "both" },
     ));
   });
-
-  if (detailSurface) {
-    animations.push(detailSurface.animate(
-      forward
-        ? [
-            { backgroundColor: "rgba(21,25,18,0)", easing: spring },
-            { backgroundColor: "rgb(21,25,18)" },
-          ]
-        : [
-            { backgroundColor: "rgb(21,25,18)", easing: spring },
-            { backgroundColor: "rgba(21,25,18,0)" },
-          ],
-      { duration, easing: spring, fill: "both" },
-    ));
-  }
-
-  hiddenOrigins.forEach((node) => { node.style.visibility = "hidden"; });
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
-    if (sourceCard) sourceCard.style.visibility = "";
     pageSurfaces.forEach((surface) => {
       if (!surface) return;
-      if (forward) surface.style.translate = "0 48px";
-      else surface.style.removeProperty("translate");
       surface.style.removeProperty("filter");
+      if (forward) {
+        surface.style.translate = "0 36px";
+        surface.style.visibility = "hidden";
+      } else {
+        surface.style.removeProperty("translate");
+        surface.style.visibility = "";
+      }
     });
     if (detailSurface) {
       detailSurface.style.removeProperty("background-color");
