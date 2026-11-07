@@ -93,32 +93,22 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     const dy = from.top - to.top;
     const sx = from.width / to.width;
     const sy = from.height / to.height;
-    maxDistance = Math.max(maxDistance, Math.hypot(dx, dy));
-    shared.push({ origin, destination, dx, dy, sx, sy });
-  });
 
-  // Shared information is represented by one visible travelling instance.
-  // Its source counterpart is hidden before the first animation frame.
-  shared.forEach(({ origin, destination, dx, dy, sx, sy }) => {
-    const from = forward ? origin : destination;
-    const to = forward ? destination : origin;
-    const x = forward ? dx : -dx;
-    const y = forward ? dy : -dy;
-    const scaleX = forward ? sx : 1 / sx;
-    const scaleY = forward ? sy : 1 / sy;
-    from.style.visibility = "hidden";
-    hiddenOrigins.push(from);
-    to.style.visibility = "visible";
+    // Always animate the destination node from the origin's measured geometry.
+    // The origin is hidden first, leaving exactly one visible instance in flight.
+    origin.style.visibility = "hidden";
+    hiddenOrigins.push(origin);
+    destination.style.visibility = "visible";
 
-    animations.push(to.animate([
+    animations.push(destination.animate([
       {
-        transform: "translate3d(" + x + "px," + y + "px,0) scale(" + scaleX + "," + scaleY + ")",
+        transform: "translate3d(" + dx + "px," + dy + "px,0) scale(" + sx + "," + sy + ")",
         transformOrigin: "top left",
         filter: "blur(0px)",
         easing: travelEase,
       },
       {
-        transform: "translate3d(" + x * 0.52 + "px," + y * 0.52 + "px,0) scale(" + (1 + (scaleX - 1) * 0.52) + "," + (1 + (scaleY - 1) * 0.52) + ")",
+        transform: "translate3d(" + dx * 0.5 + "px," + dy * 0.5 + "px,0) scale(" + (1 + (sx - 1) * 0.5) + "," + (1 + (sy - 1) * 0.5) + ")",
         filter: "blur(" + blurPeak + "px)",
         offset: 0.5,
         easing: "linear",
