@@ -180,3 +180,25 @@ a,button{-webkit-tap-highlight-color:transparent}
 .project-detail.is-closing .detail-stack{
   border-color:transparent;
 }
+
+
+/* The project surface is the travelling object; shared content travels with it. */
+.project-detail{
+  opacity:1;
+  transform:none;
+  filter:none;
+  transition:none;
+  visibility:hidden;
+  pointer-events:none;
+}
+.project-detail.is-open{
+  opacity:1;
+  transform:none;
+  filter:none;
+  visibility:visible;
+  pointer-events:auto;
+}
+@media(prefers-reduced-motion:reduce){
+  .project-detail{visibility:hidden}
+  .project-detail.is-open{visibility:visible}
+}
