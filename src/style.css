@@ -158,3 +158,25 @@ a,button{-webkit-tap-highlight-color:transparent}
   .project-detail{opacity:1;transform:none;filter:none;transition:none}
   .project-detail:not(.is-open){display:none}
 }
+
+
+/* Reverse morph keeps the detail elements themselves in motion. */
+.project-detail.is-closing{
+  background:transparent;
+  opacity:1;
+  transform:none;
+  filter:none;
+  pointer-events:none;
+  transition:none;
+}
+.project-detail.is-closing .detail-topbar,
+.project-detail.is-closing .detail-footer,
+.project-detail.is-closing .detail-rule,
+.project-detail.is-closing .detail-description,
+.project-detail.is-closing .detail-stack-label{
+  opacity:0;
+  transition:opacity 140ms ease-out;
+}
+.project-detail.is-closing .detail-stack{
+  border-color:transparent;
+}
