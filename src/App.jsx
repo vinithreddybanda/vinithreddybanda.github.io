@@ -102,13 +102,13 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     destination.style.visibility = "visible";
     animations.push(destination.animate([
       {
-        transform: \`translate3d(\${dx}px,\${dy}px,0) scale(\${sx},\${sy})\`,
+        transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
         transformOrigin: "top left",
         filter: "blur(0px)",
       },
       {
-        transform: \`translate3d(\${dx * .52}px,\${dy * .52}px,0) scale(\${1 + (sx - 1) * .52},\${1 + (sy - 1) * .52})\`,
-        filter: \`blur(\${blurPeak}px)\`,
+        transform: `translate3d(${dx * .52}px,${dy * .52}px,0) scale(${1 + (sx - 1) * .52},${1 + (sy - 1) * .52})`,
+        filter: `blur(${blurPeak}px)`,
         offset: .58,
       },
       { transform: "translate3d(0,0,0) scale(1.018)", filter: "blur(1px)", offset: .93 },
@@ -145,13 +145,13 @@ function animateProjectMorph(originSurface, destinationSurface, direction = "for
     animations.push(node.animate(
       forward
         ? [
-            { transform: "translate3d(0,24px,0)", filter: \`blur(\${blurPeak}px)\`, visibility: "hidden" },
-            { transform: "translate3d(0,24px,0)", filter: \`blur(\${blurPeak}px)\`, visibility: "visible", offset: .06 },
+            { transform: "translate3d(0,24px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
+            { transform: "translate3d(0,24px,0)", filter: `blur(${blurPeak}px)`, visibility: "visible", offset: .06 },
             { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
           ]
         : [
             { transform: "translate3d(0,0,0)", filter: "blur(0px)", visibility: "visible" },
-            { transform: "translate3d(0,28px,0)", filter: \`blur(\${blurPeak}px)\`, visibility: "hidden" },
+            { transform: "translate3d(0,28px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
           ],
       {
         duration: 1750,
