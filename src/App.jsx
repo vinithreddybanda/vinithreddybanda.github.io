@@ -51,6 +51,87 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
+function morphElements(root) {
+  return new Map([...root.querySelectorAll("[data-morph]")].map((element) => [element.dataset.morph, element]));
+}
+
+function animateSharedElements(sourceRoot, destinationRoot, animations) {
+  const sources = morphElements(sourceRoot);
+  const destinations = morphElements(destinationRoot);
+  destinations.forEach((destination, key) => {
+    const source = sources.get(key);
+    if (!source) return;
+    const from = source.getBoundingClientRect();
+    const to = destination.getBoundingClientRect();
+    const dx = from.left - to.left;
+    const dy = from.top - to.top;
+    const sx = from.width / Math.max(to.width, 1);
+    const sy = from.height / Math.max(to.height, 1);
+    animations.push(destination.animate([
+      { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(7px)", opacity: 0.55 },
+      { transform: "translate3d(0,0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 }
+    ], { duration: 620, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" }));
+  });
+}
+
+function copyComputedTree(source, clone) {
+  const computed = getComputedStyle(source);
+  for (let index = 0; index < computed.length; index += 1) {
+    const property = computed[index];
+    clone.style.setProperty(property, computed.getPropertyValue(property), computed.getPropertyPriority(property));
+  }
+  [...source.children].forEach((child, index) => {
+    if (clone.children[index]) copyComputedTree(child, clone.children[index]);
+  });
+}
+
+function createMorphClone(source) {
+  const rect = source.getBoundingClientRect();
+  const clone = source.cloneNode(true);
+  copyComputedTree(source, clone);
+  Object.assign(clone.style, {
+    position: "fixed",
+    left: `${rect.left}px`,
+    top: `${rect.top}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    margin: "0",
+    zIndex: "1000",
+    pointerEvents: "none",
+    transform: "none",
+    transformOrigin: "top left",
+    filter: "none"
+  });
+  clone.setAttribute("aria-hidden", "true");
+  document.body.appendChild(clone);
+  return { clone, rect };
+}
+
+function animateReverseMorph(sourceRoot, destinationRoot, clones) {
+  const sources = morphElements(sourceRoot);
+  const destinations = morphElements(destinationRoot);
+  destinations.forEach((destination, key) => {
+    const source = sources.get(key);
+    if (!source) return;
+    const { clone, rect } = createMorphClone(destination);
+    clones.push(clone);
+    const to = source.getBoundingClientRect();
+    const dx = to.left - rect.left;
+    const dy = to.top - rect.top;
+    const sx = to.width / Math.max(rect.width, 1);
+    const sy = to.height / Math.max(rect.height, 1);
+    const animation = clone.animate([
+      { transform: "translate3d(0,0,0) scale(1,1)", filter: "blur(0px)", opacity: 1 },
+      { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, filter: "blur(1px)", opacity: 1 }
+    ], { duration: 560, easing: "cubic-bezier(.22,.78,.2,1)", fill: "forwards" });
+    animation.finished.then(() => {
+      clone.remove();
+      const index = clones.indexOf(clone);
+      if (index !== -1) clones.splice(index, 1);
+    }).catch(() => clone.remove());
+  });
+}
+
 function ProjectCard({ project, onOpen }) {
   const pointer = useRef({ x: 0, y: 0, time: 0 });
   const handlePointerMove = (event) => {
@@ -73,11 +154,11 @@ function ProjectCard({ project, onOpen }) {
         <span className="project-number">{project.number} / SELECTED WORK</span>
         <span className="project-open" aria-hidden="true">↗</span>
       </span>
-      <span className="project-name">{project.name}</span>
-      <span className="project-type">{project.type} <span>·</span> {project.context}</span>
-      <span className="project-summary">{project.summary}</span>
+      <span className="project-name" data-morph="title">{project.name}</span>
+      <span className="project-type" data-morph="project-type">{project.type} <span>·</span> {project.context}</span>
+      <span className="project-summary" data-morph="summary">{project.summary}</span>
       <span className="project-card-bottom">
-        <span>{project.stack.slice(0, 4).join("  ·  ")}</span>
+        <span className="project-stack">{project.stack.slice(0, 4).map((item, index) => <span className="project-stack-item" data-morph={`stack-${index}`} key={item}>{item}</span>)}</span>
         <span className="view-project">Explore project <Arrow /></span>
       </span>
     </button>
@@ -87,19 +168,36 @@ function ProjectCard({ project, onOpen }) {
 export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [origin, setOrigin] = useState({ x: "50vw", y: "50vh" });
   const closeTimer = useRef(null);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
   const detailPanel = useRef(null);
-  const sourceTitleRect = useRef(null);
+  const openingAnimations = useRef([]);
+  const morphClones = useRef([]);
+  const closing = useRef(false);
+
+  const clearMorphClones = () => {
+    morphClones.current.forEach((clone) => clone.remove());
+    morphClones.current = [];
+  };
 
   const closeProject = () => {
+    if (!selectedProject || closing.current) return;
+    closing.current = true;
+    openingAnimations.current.forEach((animation) => animation.cancel());
+    openingAnimations.current = [];
+    const source = sourceButton.current;
+    const panel = detailPanel.current;
+    if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      animateReverseMorph(source, panel, morphClones.current);
+    }
     setDetailOpen(false);
     closeTimer.current = window.setTimeout(() => {
+      clearMorphClones();
       setSelectedProject(null);
+      closing.current = false;
       sourceButton.current?.focus();
-    }, 520);
+    }, 600);
   };
 
   useEffect(() => {
@@ -181,34 +279,25 @@ export default function App() {
 
   const openProject = (project, event) => {
     window.clearTimeout(closeTimer.current);
+    clearMorphClones();
+    openingAnimations.current.forEach((animation) => animation.cancel());
+    openingAnimations.current = [];
+    closing.current = false;
     sourceButton.current = event.currentTarget;
-    const rect = event.currentTarget.getBoundingClientRect();
-    sourceTitleRect.current = event.currentTarget.querySelector(".project-name")?.getBoundingClientRect() || rect;
-    const x = event.clientX || rect.left + rect.width / 2;
-    const y = event.clientY || rect.top + rect.height / 2;
-    setOrigin({ x: `${x}px`, y: `${y}px` });
     setSelectedProject(project);
     setDetailOpen(false);
     window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
       setDetailOpen(true);
       window.requestAnimationFrame(() => {
         const panel = detailPanel.current;
-        const title = panel?.querySelector("#detail-title");
-        const from = sourceTitleRect.current;
-        if (!panel || !title || !from || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        const to = title.getBoundingClientRect();
-        const dx = from.left - to.left, dy = from.top - to.top;
-        const sx = Math.max(0.18, from.width / Math.max(to.width, 1));
-        const sy = Math.max(0.35, from.height / Math.max(to.height, 1));
-        title.animate([
-          { transform: `translate(${dx}px,${dy}px) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(9px)", opacity: 0.35 },
-          { transform: "translate(0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 }
-        ], { duration: 620, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" });
-        panel.querySelectorAll(".section-kicker,.detail-index,.detail-lead,.detail-rule,.detail-description,.detail-stack").forEach((element, index) => {
-          element.animate([
-            { opacity: 0, transform: "translate3d(0,22px,0)", filter: "blur(12px)" },
+        const source = sourceButton.current;
+        if (!panel || !source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        animateSharedElements(source, panel, openingAnimations.current);
+        panel.querySelectorAll(".detail-index,.detail-rule,.detail-description,.detail-stack-label,[data-morph-extra]").forEach((element, index) => {
+          openingAnimations.current.push(element.animate([
+            { opacity: 0, transform: "translate3d(0,14px,0)", filter: "blur(7px)" },
             { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" }
-          ], { duration: 480, delay: 90 + index * 55, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" });
+          ], { duration: 460, delay: 70 + index * 48, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" }));
         });
       });
     }));
@@ -316,17 +405,17 @@ export default function App() {
       </div>
 
       {selectedProject && (
-        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} style={{ "--origin-x": origin.x, "--origin-y": origin.y }} aria-modal="true" role="dialog" aria-labelledby="detail-title">
+        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
           <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
-            <p className="section-kicker">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
+            <p className="section-kicker" data-morph="project-type">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
             <p className="detail-index">SELECTED WORK / {selectedProject.number}</p>
-            <h2 id="detail-title">{selectedProject.name}<span>.</span></h2>
-            <p className="detail-lead">{selectedProject.summary}</p>
+            <h2 id="detail-title" data-morph="title">{selectedProject.name}<span>.</span></h2>
+            <p className="detail-lead" data-morph="summary">{selectedProject.summary}</p>
             <div className="detail-rule" />
             <div className="detail-description"><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
             <div className="detail-description"><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
-            <div className="detail-stack"><span>TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item) => <span className="skill-tag" key={item}>{item}</span>)}</div></div>
+            <div className="detail-stack"><span className="detail-stack-label">TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item, index) => <span className="skill-tag" data-morph={index < 4 ? `stack-${index}` : undefined} data-morph-extra={index >= 4 ? "" : undefined} key={item}>{item}</span>)}</div></div>
           </div>
           <div className="detail-footer"><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
         </section>
