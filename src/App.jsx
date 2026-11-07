@@ -193,9 +193,6 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProject, detailOpen]);
 
-  useEffect(() => () => {
-  }, []);
-
   // Gesture energy drives a damped spring. Fast flicks compress the page;
   // sustained swipes remain responsive until the gesture settles.
   useEffect(() => {
