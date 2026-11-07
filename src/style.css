@@ -1,7 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap");
-
 :root {
-  font-family: "Manrope", sans-serif;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
   color: #f4f2ed;
   background: #101110;
   font-synthesis: none;
@@ -34,7 +32,6 @@ a { color: inherit; text-decoration: none; }
 .wordmark { font-size: 25px; font-weight: 800; letter-spacing: -.1em; }
 .wordmark span, .period { color: #b9d49a; }
 .status, .eyebrow, .footer {
-  font-family: "DM Mono", monospace;
   font-size: 10px;
   letter-spacing: .09em;
   color: #858a80;
