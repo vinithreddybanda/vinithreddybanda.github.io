@@ -155,30 +155,33 @@ export default function App() {
     const source = sourceButton.current;
     const panel = detailPanel.current;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     if (source && panel && !reduceMotion) {
       animateElementsBack(panel, source, openingAnimations.current, hiddenCardElements.current);
       setDetailClosing(true);
-      closeTimer.current = window.setTimeout(() => {
+      const reverseAnimations = [...openingAnimations.current];
+      Promise.all(reverseAnimations.map((animation) => animation.finished.catch(() => undefined))).then(() => {
+        // End the handoff in one frame: hide the travelling detail nodes,
+        // reveal their card destinations, and remove the detail layer together.
+        panel.querySelectorAll("[data-morph]").forEach((element) => {
+          element.style.visibility = "hidden";
+        });
+        restoreCardElements();
         setDetailOpen(false);
-        closeTimer.current = window.setTimeout(() => {
-          restoreCardElements();
-          setSelectedProject(null);
-          setDetailClosing(false);
-          closing.current = false;
-          sourceButton.current?.focus();
-        }, 40);
-      }, 560);
+        setSelectedProject(null);
+        setDetailClosing(false);
+        closing.current = false;
+        sourceButton.current?.focus();
+      });
       return;
     }
-    setDetailClosing(true);
+
+    restoreCardElements();
     setDetailOpen(false);
-    closeTimer.current = window.setTimeout(() => {
-      restoreCardElements();
-      setSelectedProject(null);
-      setDetailClosing(false);
-      closing.current = false;
-      sourceButton.current?.focus();
-    }, 40);
+    setSelectedProject(null);
+    setDetailClosing(false);
+    closing.current = false;
+    sourceButton.current?.focus();
   };
 
   useEffect(() => {
