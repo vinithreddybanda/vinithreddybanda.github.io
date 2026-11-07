@@ -55,95 +55,92 @@ function getClipFromRect(rect, radius) {
   return `inset(${rect.top}px ${window.innerWidth - rect.right}px ${window.innerHeight - rect.bottom}px ${rect.left}px round ${radius})`;
 }
 
-function animateProjectMorph(sourceSurface, destinationSurface, direction = "forward", companionSurfaces = []) {
-  const duration = 620;
-  const easing = "cubic-bezier(.2,.72,.18,1)";
-  const blurPeak = "2.15px";
-  const sources = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
+  const duration = 680;
+  const easing = "cubic-bezier(.16,1.14,.3,1)";
+  const blurPeak = "1.55px";
+  const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const animations = [];
-  const hiddenSources = [];
-  const surfaces = [sourceSurface, destinationSurface, ...companionSurfaces];
+  const hiddenOrigins = [];
 
-  destinationSurface.style.visibility = "visible";
-  destinationSurface.style.pointerEvents = "none";
+  if (detailSurface) {
+    detailSurface.style.visibility = "visible";
+    detailSurface.style.pointerEvents = "none";
+  }
 
-  // Matching content keeps its identity and travels between its real page positions.
-  sources.forEach((source, key) => {
+  // Only the clicked object's matching details travel. The full page remains the motion canvas.
+  origins.forEach((origin, key) => {
     const destination = destinations.get(key);
     if (!destination) return;
-    const from = source.getBoundingClientRect();
+    const from = origin.getBoundingClientRect();
     const to = destination.getBoundingClientRect();
     if (!from.width || !from.height || !to.width || !to.height) return;
+
     const dx = from.left - to.left;
     const dy = from.top - to.top;
     const sx = from.width / to.width;
     const sy = from.height / to.height;
-
     animations.push(destination.animate([
       {
         transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
         transformOrigin: "top left",
         filter: "blur(0px)",
       },
-      { filter: `blur(${blurPeak})`, offset: 0.5 },
+      {
+        transform: `translate3d(${dx * 0.18}px,${dy * 0.18}px,0) scale(${1 + (sx - 1) * 0.18},${1 + (sy - 1) * 0.18})`,
+        filter: `blur(${blurPeak})`,
+        offset: 0.72,
+      },
+      {
+        transform: "translate3d(-1px,-1px,0) scale(1.012,1.012)",
+        filter: "blur(.35px)",
+        offset: 0.91,
+      },
       {
         transform: "translate3d(0,0,0) scale(1,1)",
-        transformOrigin: "top left",
         filter: "blur(0px)",
       },
     ], { duration, easing, fill: "both" }));
-    hiddenSources.push(source);
+    hiddenOrigins.push(origin);
   });
 
-  // Unmatched destination details emerge upward; on reverse, those same details dissolve.
-  const enteringSurface = direction === "forward" ? destinationSurface : sourceSurface;
-  enteringSurface.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
+  // Page-only details have no matching origin: they rise in and dissolve out in the same beat.
+  const detailEntering = direction === "forward" ? destinationSurface : originSurface;
+  detailEntering.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
     animations.push(node.animate(
       direction === "forward"
         ? [
-            { opacity: 0, transform: "translate3d(0,10px,0)", filter: `blur(${blurPeak})` },
+            { opacity: 0, transform: "translate3d(0,9px,0)", filter: `blur(${blurPeak})` },
             { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
           ]
         : [
             { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
-            { opacity: 0, transform: "translate3d(0,10px,0)", filter: `blur(${blurPeak})` },
+            { opacity: 0, transform: "translate3d(0,9px,0)", filter: `blur(${blurPeak})` },
           ],
       { duration, easing, fill: "both" },
     ));
   });
 
-  // The complete overview and detail page exchange visibility together, not as a card wipe.
-  animations.push(
-    sourceSurface.animate(
-      direction === "forward" ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 1 }, { opacity: 0 }],
-      { duration, easing, fill: "both" },
-    ),
-    destinationSurface.animate(
-      direction === "forward" ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 0 }, { opacity: 1 }],
-      { duration, easing, fill: "both" },
-    ),
-  );
-  companionSurfaces.forEach((surface) => {
+  // Fade the complete overview, including its non-matching content, as one synchronized surface.
+  pageSurfaces.forEach((surface) => {
+    if (!surface) return;
     animations.push(surface.animate(
       direction === "forward" ? [{ opacity: 1 }, { opacity: 0 }] : [{ opacity: 0 }, { opacity: 1 }],
-      { duration, easing, fill: "both" },
+      { duration, easing: "cubic-bezier(.22,.68,0,1)", fill: "both" },
     ));
   });
 
-  hiddenSources.forEach((node) => { node.style.visibility = "hidden"; });
+  hiddenOrigins.forEach((node) => { node.style.visibility = "hidden"; });
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
-    hiddenSources.forEach((node) => { node.style.visibility = ""; });
-    surfaces.forEach((surface) => {
-      surface.style.opacity = "";
-      surface.style.transform = "";
-      surface.style.filter = "";
-    });
-    sourceSurface.style.visibility = direction === "backward" ? "hidden" : "";
-    destinationSurface.style.visibility = "visible";
-    destinationSurface.style.pointerEvents = "";
+    hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
+    pageSurfaces.forEach((surface) => { if (surface) surface.style.opacity = ""; });
+    if (detailSurface) {
+      detailSurface.style.visibility = direction === "backward" ? "hidden" : "visible";
+      detailSurface.style.pointerEvents = direction === "backward" ? "none" : "";
+    }
   });
 }
 function ProjectCard({ project, onOpen }) {
@@ -201,7 +198,7 @@ export default function App() {
       sourceButton.current?.focus();
     };
     if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      animateProjectMorph(panel, mainSurface.current, "backward", [sidebarSurface.current]).then(finish);
+      animateProjectMorph(panel, source, "backward", [mainSurface.current, sidebarSurface.current], panel).then(finish);
     } else {
       finish();
     }
@@ -297,7 +294,7 @@ export default function App() {
         closeButton.current?.focus();
         return;
       }
-      animateProjectMorph(mainSurface.current, panel, "forward", [sidebarSurface.current]).then(() => {
+      animateProjectMorph(source, panel, "forward", [mainSurface.current, sidebarSurface.current], panel).then(() => {
         setDetailOpen(true);
         closing.current = false;
         closeButton.current?.focus();
