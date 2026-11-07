@@ -121,6 +121,76 @@ Use only when the page's actual information architecture benefits from them:
 - Scroll storytelling: use sparingly, provide a natural reading path, and avoid pinning long sections on mobile.
 - Cursor-follow effects: optional enhancement only, never required for navigation or comprehension, and disable on touch/coarse pointers.
 
+
+## 6. Spatial continuity and origin-based morphing (signature interaction model)
+
+This is the preferred motion language for navigation and major state changes in this project. The interface should feel like one continuous, tangible space. A user action creates a point of origin; the next state grows out of that action and remains spatially connected to it.
+
+### Core rule: origin -> transformation -> destination
+- Every major transition should have a clear origin, a coherent transformation path, and a destination.
+- For pointer/touch activation, capture the actual interaction point when practical. Use it as the transform origin or reveal origin for the response.
+- If exact pointer coordinates are unavailable (keyboard activation, assistive technology, programmatic navigation), use the activated control's visual center or a logical shared-element anchor. Never make keyboard users receive a broken or unrelated transition.
+- The destination should visually emerge from, expand out of, or resolve from the source object. It must not feel like an unrelated screen being pushed over the top.
+- On reverse navigation, contract the destination back towards the original source/anchor when that source still exists. Preserve the relationship in navigation state when appropriate; do not guess stale DOM coordinates.
+- Morph geometry, scale, corner radius, clipping, position, and content hierarchy together where possible. A rectangle becoming a full-screen surface is a good example. Avoid a random zoom that merely enlarges the whole page.
+- Use shared-element transitions or FLIP-style geometry interpolation when a real object persists across states (for example, a selected card becoming its detail screen). Keep identity, image crop, title, and spatial position continuous.
+- Use the View Transitions API or a supported animation library only after checking current browser support, React integration, and the static Vite deployment constraints. Provide a graceful fallback.
+- Do not assume the browser or React automatically knows the clicked element's origin. Explicitly capture and manage the source element/geometry or pointer origin when required.
+- For route changes, coordinate the outgoing and incoming views so they read as one transformation. Avoid a full-page hard swap followed by an unrelated entrance effect.
+
+### Primary transitions: morph first, not slide/fade
+- Do not use generic horizontal/vertical slide-in or slide-out as the default page-navigation language.
+- Do not use fade-in/fade-out as the primary explanation for a page, modal, card detail, or major panel appearing. Opacity may support a morph to handle overlapping content, but geometry and spatial continuity must carry the transition.
+- Do not use a popup-like scale-from-center when the action originated from a specific control elsewhere. Anchor the expansion to that control or its shared element.
+- Avoid sudden appearance/disappearance. The source should visibly transform into the destination; the reverse should resolve back into the source.
+- Use simple fades or slides only for small secondary feedback where no meaningful spatial relationship exists, or when reduced motion is requested. They are not the signature navigation effect.
+- Keep the choreography legible: one primary morph, then only the minimum supporting content changes. Do not animate every descendant independently.
+
+### Touch and press should have physical feedback
+- On pointer/touch down, the activated surface should respond immediately at the contact point or across the surface with a subtle compression, not a delayed bounce.
+- On release, the surface should spring or ease into its next meaningful state. If activation is cancelled, it should recover to its resting geometry.
+- Keep compression restrained and consistent. Avoid exaggerated squashing, elastic wobble, or overshoot that makes controls feel unstable.
+- Use pointer capture and robust cancellation handling for custom gestures. Handle `pointercancel`, lost pointer capture, multi-touch, and interrupted navigation.
+- Do not hijack native button, link, text selection, input, or scrolling behavior. Gesture layers must not make controls harder to operate.
+- A tap should not require a long press. Motion must never delay the actual action or make the UI feel sluggish.
+
+### Swipe and drag continuity
+- When a swipe is an intended navigation gesture, the next/previous view should track the user's finger continuously during the drag. Its position, scale, clip, or shape should respond proportionally to gesture progress.
+- On release, settle into the destination or return to the origin based on a clear threshold and velocity model. Avoid snapping to a new page only after the finger lifts.
+- Support cancellation and reversal while the gesture is in progress. The user should feel in control of the transition.
+- Do not invent swipe navigation on ordinary pages where it conflicts with vertical scrolling, text selection, carousels, browser back gestures, or accessibility.
+- Define touch-action narrowly and only on the gesture surface. Preserve native vertical scroll whenever possible.
+- Provide equivalent visible buttons and keyboard navigation. Swipe must never be the only route to content.
+- Respect platform/browser edge-swipe navigation. Do not trap gestures at screen edges.
+
+### Full-viewport and immersive canvas
+- Treat the available viewport as the primary canvas. For immersive pages, major destination states, galleries, dashboards, and focused workflows, use the full available width and height intentionally.
+- Prefer viewport-aware sizing such as `100dvh` with safe-area insets where appropriate; account for mobile browser chrome, orientation changes, notches, and on-screen keyboards.
+- Do not default to a narrow centered max-width column or a small floating card when the task calls for an immersive full-screen experience.
+- Let backgrounds, major surfaces, imagery, and transitions reach the viewport edges when the design calls for it. Use full-bleed composition deliberately.
+- Full-screen does not mean stretching every paragraph or control edge-to-edge. Keep readable text measures, sensible content grids, safe margins, and clear hierarchy inside the full-screen canvas.
+- Avoid artificial empty gutters and excessive dead space. Use the whole screen with purposeful composition, not filler.
+- On small screens, keep primary actions reachable and respect safe areas. On large screens, use the extra space for composition and useful content rather than simply scaling everything up.
+- Overlays and detail states should occupy the intended screen area, with a clear close/back path and correct focus management. Do not make important content feel trapped in a tiny modal if a full-screen destination is more appropriate.
+
+### Implementation patterns and technical constraints
+- Prefer shared-element geometry transitions, FLIP (First, Last, Invert, Play), CSS transform-origin, clip-path/shape interpolation where supported, and the View Transitions API when it genuinely matches the experience.
+- For a click-origin reveal, calculate the origin relative to the destination surface and animate from that point. Keep the calculation resilient to scroll, resize, orientation changes, and transformed ancestors.
+- For shared-element transitions, use stable identity and deterministic transition names. Avoid duplicate names and stale references. Handle missing source/destination elements without throwing.
+- For swipe-driven transitions, use pointer events and gesture progress rather than a delayed after-the-fact animation. Keep rendering work lightweight during pointer movement.
+- Animate transform, clip, and opacity preferentially. Use layout interpolation only when needed, and measure for layout thrashing.
+- Ensure interrupted transitions can be cancelled or retargeted cleanly. Do not leave the interface in a half-scaled, clipped, or unclickable state.
+- Manage focus, document scroll position, history navigation, and screen-reader announcements alongside the visual transition. Motion must not break navigation semantics.
+- Test direct URL loads, browser back/forward, refresh, slow devices, reduced motion, and cases where the origin element is not mounted.
+- For React components, clean up animation controls, observers, event listeners, pointer capture, and temporary styles on unmount.
+- Never ship a transition that depends on one exact viewport size or one specific pointer coordinate.
+
+### Reduced-motion alternative
+- When `prefers-reduced-motion: reduce` is active, remove large morph travel, zoom, and gesture-following movement.
+- Preserve clear state continuity through immediate state changes, restrained shape/colour changes, and clear focus placement. Do not force a large origin morph on users who request reduced motion.
+- Keep all destinations, actions, and back paths available without animation.
+
+
 ## 7. Accessibility and reduced motion
 - Respect `prefers-reduced-motion: reduce` in CSS and JavaScript animation logic.
 - Reduced motion should remove large spatial movement, parallax, zoom, and scroll-linked travel. Preserve essential state feedback using instant changes, opacity, colour, or clear non-motion cues.
