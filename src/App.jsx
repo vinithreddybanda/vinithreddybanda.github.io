@@ -151,7 +151,7 @@ function ProjectCard({ project, onOpen }) {
   return (
     <button className={`project-card motion-reveal ${project.featured ? "project-card-featured" : ""}`} onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave} onClick={(event) => onOpen(project, event)} type="button">
       <span className="project-card-top">
-        <span className="project-number">{project.number} / SELECTED WORK</span>
+        <span className="project-number" data-morph="project-index">{project.number} / SELECTED WORK</span>
         <span className="project-open" aria-hidden="true">↗</span>
       </span>
       <span className="project-name" data-morph="title">{project.name}</span>
@@ -210,7 +210,7 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProject]);
 
-  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+  useEffect(() => () => {\n    window.clearTimeout(closeTimer.current);\n    morphClones.current.forEach((clone) => clone.remove());\n    openingAnimations.current.forEach((animation) => animation.cancel());\n  }, []);
 
   // Gesture energy drives a damped spring. Fast flicks compress the page;
   // sustained swipes remain responsive until the gesture settles.
@@ -293,7 +293,7 @@ export default function App() {
         const source = sourceButton.current;
         if (!panel || !source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         animateSharedElements(source, panel, openingAnimations.current);
-        panel.querySelectorAll(".detail-index,.detail-rule,.detail-description,.detail-stack-label,[data-morph-extra]").forEach((element, index) => {
+        panel.querySelectorAll(".detail-rule,.detail-description,.detail-stack-label,[data-morph-extra]").forEach((element, index) => {
           openingAnimations.current.push(element.animate([
             { opacity: 0, transform: "translate3d(0,14px,0)", filter: "blur(7px)" },
             { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" }
@@ -409,7 +409,7 @@ export default function App() {
           <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
             <p className="section-kicker" data-morph="project-type">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
-            <p className="detail-index">SELECTED WORK / {selectedProject.number}</p>
+            <p className="detail-index" data-morph="project-index">{selectedProject.number} / SELECTED WORK</p>
             <h2 id="detail-title" data-morph="title">{selectedProject.name}<span>.</span></h2>
             <p className="detail-lead" data-morph="summary">{selectedProject.summary}</p>
             <div className="detail-rule" />
