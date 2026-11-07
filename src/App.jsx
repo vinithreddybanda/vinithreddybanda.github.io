@@ -56,7 +56,7 @@ function getClipFromRect(rect, radius) {
 }
 
 function animateProjectMorph(sourceSurface, destinationSurface, direction = "forward") {
-  const duration = 680;
+  const duration = direction === "forward" ? 680 : 560;
   const easing = "cubic-bezier(.2,.72,.18,1)";
   const sources = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
   const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
@@ -81,58 +81,53 @@ function animateProjectMorph(sourceSurface, destinationSurface, direction = "for
   destinations.forEach((destination, key) => {
     const source = sources.get(key);
     if (!source) return;
-    const sourceRect = source.getBoundingClientRect();
-    const destinationRect = destination.getBoundingClientRect();
-    if (!sourceRect.width || !sourceRect.height || !destinationRect.width || !destinationRect.height) return;
+    const from = source.getBoundingClientRect();
+    const to = destination.getBoundingClientRect();
+    if (!from.width || !from.height || !to.width || !to.height) return;
     const sourceStyle = window.getComputedStyle(source);
     const destinationStyle = window.getComputedStyle(destination);
+    const sx = direction === "forward" ? from.width / to.width : to.width / from.width;
+    const sy = direction === "forward" ? from.height / to.height : to.height / from.height;
+    const dx = direction === "forward" ? from.left - to.left : to.left - from.left;
+    const dy = direction === "forward" ? from.top - to.top : to.top - from.top;
     const travellingNode = direction === "forward" ? destination : source;
     const hiddenNode = direction === "forward" ? source : destination;
-    const dx = direction === "forward"
-      ? sourceRect.left - destinationRect.left
-      : destinationRect.left - sourceRect.left;
-    const dy = direction === "forward"
-      ? sourceRect.top - destinationRect.top
-      : destinationRect.top - sourceRect.top;
-    const fromStyle = direction === "forward" ? sourceStyle : sourceStyle;
-    const toStyle = direction === "forward" ? destinationStyle : destinationStyle;
-    const fromWidth = direction === "forward" ? sourceRect.width : sourceRect.width;
-    const toWidth = direction === "forward" ? destinationRect.width : destinationRect.width;
+    const startColor = direction === "forward" ? sourceStyle.color : sourceStyle.color;
+    const endColor = direction === "forward" ? destinationStyle.color : destinationStyle.color;
 
     animations.push(travellingNode.animate([
       {
-        transform: direction === "forward" ? `translate3d(${dx}px,${dy}px,0)` : "translate3d(0,0,0)",
-        width: `${fromWidth}px`,
-        fontSize: fromStyle.fontSize,
-        lineHeight: fromStyle.lineHeight,
-        letterSpacing: fromStyle.letterSpacing,
-        color: fromStyle.color,
-        opacity: fromStyle.opacity,
+        transform: direction === "forward" ? `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})` : "translate3d(0,0,0) scale(1,1)",
+        transformOrigin: "top left",
+        color: startColor,
         filter: "blur(0px)",
       },
       {
-        transform: direction === "forward" ? "translate3d(0,0,0)" : `translate3d(${dx}px,${dy}px,0)`,
-        width: `${toWidth}px`,
-        fontSize: toStyle.fontSize,
-        lineHeight: toStyle.lineHeight,
-        letterSpacing: toStyle.letterSpacing,
-        color: toStyle.color,
-        opacity: toStyle.opacity,
-        filter: "blur(5px)",
+        transform: direction === "forward" ? "translate3d(0,0,0) scale(1,1)" : `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
+        transformOrigin: "top left",
+        color: endColor,
+        filter: "blur(4px)",
       },
     ], { duration, easing, fill: "both" }));
     hiddenNodes.push(hiddenNode);
   });
 
+  if (direction === "backward") {
+    sourceSurface.querySelectorAll("[data-morph-exit]").forEach((node, index) => {
+      animations.push(node.animate([
+        { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" },
+        { opacity: 0, transform: "translate3d(0,16px,0)", filter: "blur(8px)" },
+      ], { duration: 430, delay: Math.min(index * 24, 72), easing: "cubic-bezier(.22,.7,.2,1)", fill: "both" }));
+    });
+  }
+
   hiddenNodes.forEach((node) => { node.style.visibility = "hidden"; });
   if (direction === "forward") sourceSurface.style.visibility = "hidden";
-  else destinationSurface.style.visibility = "hidden";
 
   return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
     animations.forEach((animation) => animation.cancel());
     hiddenNodes.forEach((node) => { node.style.visibility = ""; });
     if (direction === "forward") sourceSurface.style.visibility = "";
-    else destinationSurface.style.visibility = "";
     clipSurface.style.visibility = direction === "forward" ? "visible" : "hidden";
     clipSurface.style.clipPath = direction === "forward" ? full : "";
     clipSurface.style.pointerEvents = "";
@@ -398,18 +393,18 @@ export default function App() {
 
       {selectedProject && (
         <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
-          <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
+          <div className="detail-topbar" data-morph-exit><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
             <p className="section-kicker" data-morph="project-type">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
             <p className="detail-index" data-morph="project-index">{selectedProject.number} / SELECTED WORK</p>
             <h2 id="detail-title" data-morph="title">{selectedProject.name}<span>.</span></h2>
             <p className="detail-lead" data-morph="summary">{selectedProject.summary}</p>
-            <div className="detail-rule" />
-            <div className="detail-description"><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
-            <div className="detail-description"><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
-            <div className="detail-stack"><span className="detail-stack-label">TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item, index) => <span className="skill-tag" data-morph={index < 4 ? `stack-${index}` : undefined} data-morph-extra={index >= 4 ? "" : undefined} key={item}>{item}</span>)}</div></div>
+            <div className="detail-rule" data-morph-exit />
+            <div className="detail-description" data-morph-exit><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
+            <div className="detail-description" data-morph-exit><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
+            <div className="detail-stack"><span className="detail-stack-label" data-morph-exit>TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item, index) => <span className="skill-tag" data-morph={index < 4 ? `stack-${index}` : undefined} data-morph-extra={index >= 4 ? "" : undefined} key={item}>{item}</span>)}</div></div>
           </div>
-          <div className="detail-footer"><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
+          <div className="detail-footer" data-morph-exit><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
         </section>
       )}
     </main>
