@@ -39,8 +39,10 @@ These instructions govern every code change in this repository. Follow them befo
 - Avoid gratuitous gradients, glass effects, parallax, cursor tricks, scroll hijacking, and animation for decoration alone. Visual polish must support usability.
 
 ## Motion and interaction
-- Read and follow [`.github/instructions/ui-motion.instructions.md`](.github/instructions/ui-motion.instructions.md) before implementing motion.
+- Read and follow [`.github/instructions/ui-motion.instructions.md`](.github/instructions/ui-motion.instructions.md) before implementing motion. Its spatial continuity/origin-based morphing and immersive full-viewport sections are mandatory for navigation and major state changes.
 - Motion must communicate hierarchy, continuity, feedback, spatial relationships, or state change. If its purpose cannot be explained, remove it.
+- The signature navigation language is origin-based morphing: interactions transform from the touched/activated object into the destination and reverse back to the source where possible. Do not default to generic slide-in/slide-out or fade-only page transitions.
+- Treat the viewport as the canvas for immersive destination states. Use full-bleed/full-viewport layouts when appropriate, while preserving readable content measures and safe areas.
 - Prefer transform and opacity for smooth animation. Avoid animating layout-heavy properties unless necessary.
 - Use consistent duration and easing tokens; choreograph a small number of elements rather than animating everything.
 - Use CSS transitions for simple state changes. Use the Web Animations API or a dedicated library only when the interaction complexity justifies it.
