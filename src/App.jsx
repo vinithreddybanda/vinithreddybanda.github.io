@@ -51,38 +51,76 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
-function morphElements(root) {
-  return new Map([...root.querySelectorAll("[data-morph]")].map((element) => [element.dataset.morph, element]));
-}
-
-function animateSharedElements(sourceRoot, destinationRoot, animations, options = {}) {
-  const sources = morphElements(sourceRoot);
-  const destinations = morphElements(destinationRoot);
-  destinations.forEach((destination, key) => {
-    const source = sources.get(key);
-    if (!source) return;
-    const from = source.getBoundingClientRect();
-    const to = destination.getBoundingClientRect();
-    const dx = from.left - to.left;
-    const dy = from.top - to.top;
-    const sx = from.width / Math.max(to.width, 1);
-    const sy = from.height / Math.max(to.height, 1);
-    animations.push(destination.animate([
-      { transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`, transformOrigin: "top left", filter: "blur(7px)", opacity: 0.55 },
-      { transform: "translate3d(0,0,0) scale(1,1)", transformOrigin: "top left", filter: "blur(0px)", opacity: 1 }
-    ], { duration: 620, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both", ...options }));
+function copyComputedTree(source, clone) {
+  const originals = [source, ...source.querySelectorAll("*")];
+  const copies = [clone, ...clone.querySelectorAll("*")];
+  originals.forEach((node, index) => {
+    const copy = copies[index];
+    if (!copy) return;
+    const style = window.getComputedStyle(node);
+    for (let i = 0; i < style.length; i += 1) {
+      const property = style[i];
+      copy.style.setProperty(property, style.getPropertyValue(property));
+    }
   });
 }
 
-function hideDetailChrome(panel) {
-  panel.style.background = "transparent";
-  panel.style.opacity = "1";
-  panel.style.transform = "none";
-  panel.style.filter = "none";
-  panel.style.transition = "none";
-  panel.style.pointerEvents = "none";
-  panel.querySelectorAll("[data-morph],.detail-topbar,.detail-footer,.detail-rule,.detail-description,.detail-stack-label").forEach((element) => {
-    element.style.visibility = "hidden";
+function animateProjectMorph(sourceSurface, destinationSurface) {
+  const duration = 680;
+  const easing = "cubic-bezier(.18,.78,.18,1)";
+  const sources = new Map([...sourceSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+  const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
+  const from = sourceSurface.getBoundingClientRect();
+  const to = destinationSurface.getBoundingClientRect();
+  const sourceStyle = window.getComputedStyle(sourceSurface);
+  const destinationStyle = window.getComputedStyle(destinationSurface);
+  const surface = document.createElement("div");
+  Object.assign(surface.style, {
+    position: "fixed", left: `${from.left}px`, top: `${from.top}px`,
+    width: `${from.width}px`, height: `${from.height}px`,
+    margin: "0", padding: "0", boxSizing: "border-box",
+    background: sourceStyle.backgroundColor, border: sourceStyle.border,
+    borderRadius: sourceStyle.borderRadius, boxShadow: sourceStyle.boxShadow,
+    overflow: "hidden", pointerEvents: "none", zIndex: "2147483000",
+  });
+  document.body.appendChild(surface);
+
+  const animations = [surface.animate([
+    { left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`, borderRadius: sourceStyle.borderRadius, border: sourceStyle.border },
+    { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px`, borderRadius: destinationStyle.borderRadius, border: destinationStyle.border },
+  ], { duration, easing, fill: "both" })];
+  const travelling = [];
+
+  destinations.forEach((destination, key) => {
+    const source = sources.get(key);
+    if (!source) return;
+    const a = source.getBoundingClientRect();
+    const b = destination.getBoundingClientRect();
+    if (!a.width || !a.height || !b.width || !b.height) return;
+    const clone = source.cloneNode(true);
+    copyComputedTree(source, clone);
+    Object.assign(clone.style, {
+      position: "fixed", left: `${a.left}px`, top: `${a.top}px`,
+      width: `${a.width}px`, height: `${a.height}px`,
+      margin: "0", transform: "none", transformOrigin: "top left",
+      pointerEvents: "none", zIndex: "2147483001", willChange: "transform",
+    });
+    document.body.appendChild(clone);
+    travelling.push(clone);
+    animations.push(clone.animate([
+      { transform: "translate3d(0,0,0) scale(1,1)" },
+      { transform: `translate3d(${b.left-a.left}px,${b.top-a.top}px,0) scale(${b.width/a.width},${b.height/a.height})` },
+    ], { duration, easing, fill: "both" }));
+  });
+
+  sourceSurface.style.visibility = "hidden";
+  destinationSurface.style.visibility = "hidden";
+  return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
+    animations.forEach((animation) => animation.cancel());
+    travelling.forEach((node) => node.remove());
+    surface.remove();
+    sourceSurface.style.visibility = "";
+    destinationSurface.style.visibility = "";
   });
 }
 
@@ -122,53 +160,27 @@ function ProjectCard({ project, onOpen }) {
 export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [detailClosing, setDetailClosing] = useState(false);
-  const closeTimer = useRef(null);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
   const detailPanel = useRef(null);
-  const openingAnimations = useRef([]);
-  const hiddenCardElements = useRef([]);
   const closing = useRef(false);
-
-  const restoreCardElements = () => {
-    hiddenCardElements.current.forEach(({ element, visibility }) => {
-      element.style.visibility = visibility;
-    });
-    hiddenCardElements.current = [];
-  };
 
   const closeProject = () => {
     if (!selectedProject || closing.current) return;
     closing.current = true;
-    openingAnimations.current.forEach((animation) => animation.cancel());
-    openingAnimations.current = [];
     const source = sourceButton.current;
     const panel = detailPanel.current;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (source && panel && !reduceMotion) {
-      // Reverse the forward morph itself: card nodes become the travelling
-      // elements, starting at the detail nodes' exact on-screen geometry.
-      hideDetailChrome(panel);
-      animateSharedElements(panel, source, openingAnimations.current);
-      const reverseAnimations = [...openingAnimations.current];
-      Promise.all(reverseAnimations.map((animation) => animation.finished.catch(() => undefined))).then(() => {
-        setDetailOpen(false);
-        setSelectedProject(null);
-        setDetailClosing(false);
-        closing.current = false;
-        sourceButton.current?.focus();
-      });
-      return;
+    const finish = () => {
+      setDetailOpen(false);
+      setSelectedProject(null);
+      closing.current = false;
+      sourceButton.current?.focus();
+    };
+    if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      animateProjectMorph(panel, source).then(finish);
+    } else {
+      finish();
     }
-
-    restoreCardElements();
-    setDetailOpen(false);
-    setSelectedProject(null);
-    setDetailClosing(false);
-    closing.current = false;
-    sourceButton.current?.focus();
   };
 
   useEffect(() => {
@@ -177,16 +189,11 @@ export default function App() {
       if (event.key === "Escape") closeProject();
     };
     window.addEventListener("keydown", handleKeyDown);
-    closeButton.current?.focus();
+    if (detailOpen) closeButton.current?.focus();
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedProject]);
+  }, [selectedProject, detailOpen]);
 
   useEffect(() => () => {
-    window.clearTimeout(closeTimer.current);
-    openingAnimations.current.forEach((animation) => animation.cancel());
-    hiddenCardElements.current.forEach(({ element, visibility }) => {
-      element.style.visibility = visibility;
-    });
   }, []);
 
   // Gesture energy drives a damped spring. Fast flicks compress the page;
@@ -255,30 +262,23 @@ export default function App() {
   }, []);
 
   const openProject = (project, event) => {
-    window.clearTimeout(closeTimer.current);
-    restoreCardElements();
-    openingAnimations.current.forEach((animation) => animation.cancel());
-    openingAnimations.current = [];
-    closing.current = false;
+    if (closing.current) return;
     sourceButton.current = event.currentTarget;
-    setDetailClosing(false);
     setSelectedProject(project);
     setDetailOpen(false);
-    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
-      setDetailOpen(true);
-      window.requestAnimationFrame(() => {
-        const panel = detailPanel.current;
-        const source = sourceButton.current;
-        if (!panel || !source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        animateSharedElements(source, panel, openingAnimations.current);
-        panel.querySelectorAll(".detail-rule,.detail-description,.detail-stack-label,[data-morph-extra]").forEach((element, index) => {
-          openingAnimations.current.push(element.animate([
-            { opacity: 0, transform: "translate3d(0,14px,0)", filter: "blur(7px)" },
-            { opacity: 1, transform: "translate3d(0,0,0)", filter: "blur(0px)" }
-          ], { duration: 460, delay: 70 + index * 48, easing: "cubic-bezier(.18,.78,.18,1)", fill: "both" }));
-        });
+    window.requestAnimationFrame(() => {
+      const panel = detailPanel.current;
+      const source = sourceButton.current;
+      if (!panel || !source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        setDetailOpen(true);
+        closeButton.current?.focus();
+        return;
+      }
+      animateProjectMorph(source, panel).then(() => {
+        setDetailOpen(true);
+        closeButton.current?.focus();
       });
-    }));
+    });
   };
 
   return (
@@ -383,7 +383,7 @@ export default function App() {
       </div>
 
       {selectedProject && (
-        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""} ${detailClosing ? "is-closing" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
+        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
           <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
             <p className="section-kicker" data-morph="project-type">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
