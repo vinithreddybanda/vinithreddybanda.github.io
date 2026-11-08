@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./NowPlaying.css";
 
 const STATUS_URL = "https://vinith-music-status.vinithreddy08-123.workers.dev/status";
+const POLL_INTERVAL_MS = 30_000;
 
 function normalizeUrl(value) {
   if (typeof value !== "string") return "";
@@ -18,9 +19,11 @@ function normalizeUrl(value) {
 function artworkUrl(artwork) {
   if (typeof artwork === "string") return normalizeUrl(artwork);
   if (!Array.isArray(artwork)) return "";
-  return [...artwork].reverse().find((item) => normalizeUrl(item?.url))?.url
-    ? normalizeUrl([...artwork].reverse().find((item) => normalizeUrl(item?.url)).url)
-    : "";
+  for (const item of [...artwork].reverse()) {
+    const url = normalizeUrl(item?.url);
+    if (url) return url;
+  }
+  return "";
 }
 
 function formatTime(value) {
@@ -36,42 +39,63 @@ export default function NowPlaying() {
 
   useEffect(() => {
     let active = true;
+    let inFlight = false;
     let controller;
 
     const refresh = async () => {
-      controller?.abort();
+      if (!active || inFlight) return;
+      inFlight = true;
       controller = new AbortController();
+      const timeout = window.setTimeout(() => controller?.abort(), 8_000);
+
       try {
-        const result = await fetch(STATUS_URL, {
+        const response = await fetch(STATUS_URL, {
           method: "GET",
           headers: { Accept: "application/json" },
           cache: "no-store",
           signal: controller.signal,
         });
-        if (!result.ok) throw new Error("Status request failed: " + result.status);
-        const data = await result.json();
-        if (!data || typeof data.isPlaying !== "boolean") throw new Error("Invalid music status response");
+        if (!response.ok) throw new Error("Status request failed: " + response.status);
+        const data = await response.json();
+        if (!data || typeof data.isPlaying !== "boolean") {
+          throw new Error("Invalid music status response");
+        }
         if (active) {
           setSnapshot(data);
           setConnection("online");
         }
       } catch (error) {
-        if (error.name !== "AbortError" && active) setConnection("offline");
+        if (active && error.name !== "AbortError") setConnection("offline");
+        else if (active && controller?.signal.aborted) setConnection("offline");
+      } finally {
+        window.clearTimeout(timeout);
+        inFlight = false;
       }
     };
 
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+
     refresh();
-    const interval = window.setInterval(() => {\n      if (document.visibilityState === "visible") refresh();\n    }, 2000);\n    const handleFocus = () => refresh();\n    document.addEventListener("visibilitychange", handleFocus);\n    window.addEventListener("focus", handleFocus);
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === "visible") refresh();
+    }, POLL_INTERVAL_MS);
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("focus", refresh);
+
     return () => {
       active = false;
       window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("focus", refresh);
       controller?.abort();
     };
   }, []);
 
   const track = snapshot?.track;
   const isPlaying = connection === "online" && snapshot?.isPlaying === true;
-  const hasTrack = connection === "online" && Boolean(track);
+  const hasTrack = Boolean(track);
   const image = artworkUrl(track?.artwork);
   const trackUrl = normalizeUrl(track?.url);
   const updated = formatTime(snapshot?.lastHeartbeat ?? snapshot?.updatedAt);
@@ -80,23 +104,59 @@ export default function NowPlaying() {
     <section className="now-playing" aria-label="Music status">
       <div className="now-playing-heading">
         <p className="eyebrow">FROM MY LISTENING SESSION</p>
-        <span className={"music-live-indicator " + (isPlaying ? "is-playing" : "")} aria-label={isPlaying ? "Currently playing" : "Not currently playing"} />
+        <span
+          className={"music-live-indicator " + (isPlaying ? "is-playing" : "")}
+          role="status"
+          aria-label={isPlaying ? "Currently playing" : "Not currently playing"}
+        />
       </div>
       <div className="now-playing-content">
         {image && hasTrack ? (
           <img className="now-playing-artwork" src={image} alt="" loading="lazy" />
         ) : (
-          <div className="now-playing-artwork now-playing-artwork-empty" aria-hidden="true"><span>♪</span></div>
+          <div className="now-playing-artwork now-playing-artwork-empty" aria-hidden="true">
+            <span>♪</span>
+          </div>
         )}
         <div className="now-playing-copy" aria-live="polite">
           <span className="now-playing-state">
-            {connection === "loading" ? "CONNECTING" : connection === "offline" ? "STATUS UNAVAILABLE" : isPlaying ? "NOW PLAYING" : hasTrack ? "LAST PLAYED" : "NOTHING PLAYING"}
+            {connection === "loading"
+              ? "CONNECTING"
+              : connection === "offline"
+                ? "STATUS UNAVAILABLE"
+                : isPlaying
+                  ? "NOW PLAYING"
+                  : hasTrack
+                    ? "LAST PLAYED"
+                    : "NOTHING PLAYING"}
           </span>
-          <strong>{hasTrack ? track.title || "Unknown track" : connection === "offline" ? "Music status is offline" : "No recent track"}</strong>
-          <span className="now-playing-artist">{hasTrack ? track.artist || "Unknown artist" : "SimpMusic · YouTube Music"}</span>
-          {hasTrack && updated && <span className="now-playing-time">{isPlaying ? "Updated" : "Last active"} at {updated}</span>}
+          <strong>
+            {hasTrack
+              ? track.title || "Unknown track"
+              : connection === "offline"
+                ? "Music status is offline"
+                : "No recent track"}
+          </strong>
+          <span className="now-playing-artist">
+            {hasTrack ? track.artist || "Unknown artist" : "SimpMusic · YouTube Music"}
+          </span>
+          {hasTrack && updated && (
+            <span className="now-playing-time">
+              {isPlaying ? "Updated" : "Last active"} at {updated}
+            </span>
+          )}
         </div>
-        {hasTrack && trackUrl ? <a className="now-playing-link" href={trackUrl} target="_blank" rel="noreferrer" aria-label="Open track in YouTube Music">↗</a> : null}
+        {hasTrack && trackUrl ? (
+          <a
+            className="now-playing-link"
+            href={trackUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open track in YouTube Music"
+          >
+            ↗
+          </a>
+        ) : null}
       </div>
     </section>
   );
