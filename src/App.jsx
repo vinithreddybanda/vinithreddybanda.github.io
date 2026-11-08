@@ -5,30 +5,30 @@ const projects = [
     number: "01",
     name: "CareSchedule",
     type: "Healthcare platform · Cognizant internship",
-    summary: "A clinic and hospital management platform built around reliable appointment operations.",
-    detail: "Designed a six-layer Clean Architecture with .NET, Entity Framework Core, SQL Server, and React. The platform includes 148 REST APIs, 32 controllers, 33 domain entities, and six role-based workflows.",
+    summary: "Healthcare runs on a thousand small decisions. CareSchedule brings those moving parts into one place, helping clinics and hospitals keep appointments organised and dependable.",
+    detail: "I approached the system from the inside out, shaping a six-layer Clean Architecture with .NET, Entity Framework Core, SQL Server, and React. That foundation grew into 148 REST APIs, 32 controllers, 33 domain entities, and six role-based workflows.",
     highlight: "Intelligent appointment slot generation",
-    highlightDetail: "Resolves provider availability, holidays, leave, blackout periods, and resource constraints before publishing appointments, helping prevent double-booking.",
+    highlightDetail: "Before an appointment can be offered, the system checks provider availability, holidays, leave, blackout periods, and resource constraints. The goal is simple: make a valid slot available without creating a double-booking.",
     stack: [".NET", "ASP.NET Core", "React", "EF Core", "SQL Server", "REST APIs"],
   },
   {
     number: "02",
     name: "JournalAI",
     type: "AI-powered product · Personal project",
-    summary: "A journaling experience that turns written reflections into structured mood insights.",
-    detail: "Built with Next.js, TypeScript, Groq AI, and Supabase. The platform combines secure authentication with PostgreSQL persistence and a cloud deployment workflow.",
+    summary: "A journal starts with a private thought. JournalAI explores what can happen next, turning written reflections into structured mood insights while keeping the experience centred on the person writing.",
+    detail: "I brought the product together with Next.js and TypeScript, using Groq AI to power the intelligence and Supabase for authentication and PostgreSQL persistence. The result is a full-stack product with a cloud deployment workflow.",
     highlight: "End-to-end delivery pipeline",
-    highlightDetail: "Set up CI/CD workflows using GitHub Actions and Jenkins, with Docker and Kubernetes for testing, containerization, and deployment on Microsoft Azure.",
+    highlightDetail: "The work did not stop when the features were built. I connected GitHub Actions and Jenkins, then used Docker and Kubernetes for testing and containerisation before deployment on Microsoft Azure.",
     stack: ["Next.js", "TypeScript", "Supabase", "Docker", "Kubernetes", "Azure", "Jenkins"],
   },
   {
     number: "03",
     name: "Activities for Discord",
     type: "Android · Native integration · Personal project",
-    summary: "An Android app that gives users mobile control over Discord Rich Presence.",
-    detail: "Built an Android application that extends Rich Presence controls beyond the official Discord mobile client, using a native integration layer with the Discord Partner SDK.",
+    summary: "Discord Rich Presence was built around desktop use. I wanted to make that status feel less tied to a computer, so I built an Android app that puts mobile controls in the user's hands.",
+    detail: "The app connects Android to Discord Rich Presence through a native integration layer and the Discord Partner SDK, extending those controls beyond the official mobile client.",
     highlight: "Persistent native SDK sessions",
-    highlightDetail: "Implemented JNI integration for reliable real-time communication, alongside secure authentication, encrypted credential storage, image caching, and foreground/background services.",
+    highlightDetail: "To keep the connection dependable, I implemented JNI for real-time communication, then built around it with secure authentication, encrypted credential storage, image caching, and foreground/background services.",
     stack: ["Android", "Java", "C++", "JNI", "Discord Partner SDK"],
   },
 ];
@@ -165,7 +165,7 @@ export default function App() {
         <p className="eyebrow">DEVELOPER / BUILDER <span>·</span> INDIA</p>
         <h1>Making things<br />work<span>.</span></h1>
         <div className="hero-bottom">
-          <p>I'm Vinith Reddy Banda, an Information Technology graduate who enjoys building useful software, exploring systems, and connecting ideas to implementation.</p>
+          <p>I'm Vinith Reddy Banda, an Information Technology graduate drawn to the space between an idea and a working product. I like finding out how systems fit together, getting into the details, and turning what I learn into software people can actually use.</p>
           <a className="text-link" href="#work">Explore my work ↓</a>
         </div>
       </section>
@@ -191,7 +191,7 @@ export default function App() {
         <div>
           <p className="eyebrow">A LITTLE ABOUT ME</p>
           <h2>Curious by nature.<br />Practical by design<span>.</span></h2>
-          <p className="about-copy">From backend architecture to mobile integrations and AI-powered products, I like understanding how the pieces fit together and making them work as one.</p>
+          <p className="about-copy">My path has moved through very different corners of software: designing backend systems for healthcare, connecting Android to native services, and exploring how AI can make a journal more insightful. Each project has taught me to look beyond the feature in front of me and understand the system holding it together.</p>
         </div>
         <div className="skills">
           {skillGroups.map((group) => (
@@ -211,9 +211,9 @@ export default function App() {
         </div>
         <div>
           <p className="eyebrow">BEYOND THE BUILD</p>
-          <div className="plain-item"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis · I3CTCON 2026</p></div></div>
-          <div className="plain-item"><span>↗</span><div><strong>Open-source Android app</strong><p>WhatsApp Status Saver, published on F-Droid</p></div></div>
-          <div className="plain-item"><span>↗</span><div><strong>6th place · COSC HackWeek</strong><p>Competitive coding challenge organized by CBIT Open Source Community</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>A research project exploring graph attention networks for analysing kinematic patterns in rehabilitation exercises · I3CTCON 2026</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>Open-source Android app</strong><p>Built for Android and distributed through F-Droid</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>6th place · COSC HackWeek</strong><p>A competitive programming challenge hosted by the CBIT Open Source Community</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
         </div>
       </section>
