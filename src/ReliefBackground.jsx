@@ -63,26 +63,22 @@ float cloth(vec2 uv){
 float surface(vec2 uv){return relief(uv)+cloth(uv);}
 void main(){
  vec2 uv=vUv;
- vec2 delta=(uv-uPointer)*vec2(uResolution.x/uResolution.y,1.);
- float distanceToCursor=length(delta);
- float reveal=1.-smoothstep(.12,.40,distanceToCursor);
  float h=surface(uv);
  float hx=surface(uv+vec2(.0015,0.))-surface(uv-vec2(.0015,0.));
  float hy=surface(uv+vec2(0.,.0015))-surface(uv-vec2(0.,.0015));
- vec3 n=normalize(vec3(-hx*115.,-hy*115.,1.));
- vec2 lightDelta=delta+vec2(.035,-.045);
- vec3 light=normalize(vec3(-lightDelta*3.2,0.72));
- float diffuse=max(dot(n,light),0.);
- float facing=pow(max(n.z,0.),5.);
- float grazing=pow(1.-max(dot(n,light),0.),2.);
- float grain=noise(uv*uResolution*.9)*.035+fbm(uv*520.)*.055;
- float highlight=exp(-dot(lightDelta,lightDelta)*34.);
- float cavity=smoothstep(.015,.16,h);
- float stoneLight=(.035+diffuse*.16+grazing*.035+facing*.018+cavity*.025+highlight*.055);
- stoneLight-=grain*.42;
- vec3 stone=vec3(max(stoneLight,0.))*reveal;
- float edge=1.-smoothstep(.24,.35,distanceToCursor);
- stone+=vec3(.008,.008,.008)*edge*(1.-reveal*.4);
+ vec3 normal=normalize(vec3(-hx*145.,-hy*145.,1.));
+ // A fixed, distant studio light reveals actual surface depth, never a cursor-following glow.
+ vec3 lightDirection=normalize(vec3(-.48,.62,.82));
+ float diffuse=max(dot(normal,lightDirection),0.);
+ float backFace=1.-max(dot(normal,lightDirection),0.);
+ float grazing=pow(backFace,5.);
+ vec3 viewDirection=vec3(0.,0.,1.);
+ vec3 halfVector=normalize(lightDirection+viewDirection);
+ float specular=pow(max(dot(normal,halfVector),0.),42.);
+ float cavity=smoothstep(.025,.19,h);
+ float grain=noise(uv*uResolution*.9)*.018+fbm(uv*520.)*.028;
+ float depthShade=clamp(.006+diffuse*.025+grazing*.012+specular*.035+cavity*.008-grain*.16,0.,.075);
+ vec3 stone=vec3(depthShade);
  gl_FragColor=vec4(stone,1.);
 }
 `;
