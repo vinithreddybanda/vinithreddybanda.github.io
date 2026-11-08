@@ -20,14 +20,15 @@ float relief(vec2 uv){
 }
 float cloth(vec2 uv){
  vec2 delta=(uv-uPointer)*vec2(1.75,1.);
- float d=length(delta);
- float speed=clamp(length(uVelocity)*22.,0.,1.);
- vec2 direction=normalize(uVelocity+vec2(.00001));
- float trailing=dot(delta,direction);
- float fold=sin(d*48.-uTime*5.5+trailing*13.)*exp(-d*7.5);
- float crossFold=sin(trailing*24.-uTime*3.)*exp(-d*5.2);
- float drape=exp(-d*8.5)*.075;
- return drape+speed*(fold*.028+crossFold*.012);
+ float speed=clamp(length(uVelocity)*24.,0.,1.);
+ vec2 direction=normalize(vec2(uVelocity.x*1.75,uVelocity.y)+vec2(.00001));
+ float along=dot(delta,direction);
+ float across=delta.x*direction.y-delta.y*direction.x;
+ float width=.004+speed*.009;
+ float ribbon=exp(-pow(across/width,2.))*exp(-pow((along+.105)/.13,2.));
+ float wave=sin(along*105.-uTime*5.)*exp(-abs(along)*8.);
+ float crossWave=sin(across*240.+along*24.)*exp(-abs(across)/(.012+speed*.012));
+ return speed*ribbon*(wave*.052+crossWave*.018);
 }
 void main(){vUv=uv;vec3 p=position;p.z+=(relief(uv)*.58+cloth(uv));gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}
 `;
@@ -52,33 +53,46 @@ float relief(vec2 uv){
 }
 float cloth(vec2 uv){
  vec2 delta=(uv-uPointer)*vec2(1.75,1.);
- float d=length(delta);
- float speed=clamp(length(uVelocity)*22.,0.,1.);
- vec2 direction=normalize(uVelocity+vec2(.00001));
- float trailing=dot(delta,direction);
- float fold=sin(d*48.-uTime*5.5+trailing*13.)*exp(-d*7.5);
- float crossFold=sin(trailing*24.-uTime*3.)*exp(-d*5.2);
- return exp(-d*8.5)*.075+speed*(fold*.028+crossFold*.012);
+ float speed=clamp(length(uVelocity)*24.,0.,1.);
+ vec2 direction=normalize(vec2(uVelocity.x*1.75,uVelocity.y)+vec2(.00001));
+ float along=dot(delta,direction);
+ float across=delta.x*direction.y-delta.y*direction.x;
+ float width=.004+speed*.009;
+ float ribbon=exp(-pow(across/width,2.))*exp(-pow((along+.105)/.13,2.));
+ float wave=sin(along*105.-uTime*5.)*exp(-abs(along)*8.);
+ float crossWave=sin(across*240.+along*24.)*exp(-abs(across)/(.012+speed*.012));
+ return speed*ribbon*(wave*.052+crossWave*.018);
 }
 float surface(vec2 uv){return relief(uv)+cloth(uv);}
 void main(){
  vec2 uv=vUv;
  float h=surface(uv);
- float hx=surface(uv+vec2(.0015,0.))-surface(uv-vec2(.0015,0.));
- float hy=surface(uv+vec2(0.,.0015))-surface(uv-vec2(0.,.0015));
- vec3 normal=normalize(vec3(-hx*145.,-hy*145.,1.));
- // A fixed, distant studio light reveals actual surface depth, never a cursor-following glow.
- vec3 lightDirection=normalize(vec3(-.48,.62,.82));
+ float hx=surface(uv+vec2(.0012,0.))-surface(uv-vec2(.0012,0.));
+ float hy=surface(uv+vec2(0.,.0012))-surface(uv-vec2(0.,.0012));
+ vec3 normal=normalize(vec3(-hx*190.,-hy*190.,1.));
+
+ // A narrow ribbon trails the pointer like air moving across a hanging curtain.
+ vec2 delta=(uv-uPointer)*vec2(uResolution.x/uResolution.y,1.);
+ vec2 direction=normalize(vec2(uVelocity.x*uResolution.x/uResolution.y,uVelocity.y)+vec2(.00001));
+ float along=dot(delta,direction);
+ float across=abs(delta.x*direction.y-delta.y*direction.x);
+ float speed=clamp(length(uVelocity)*24.,0.,1.);
+ float ribbonWidth=.0035+speed*.006;
+ float ribbonAcross=exp(-pow(across/ribbonWidth,2.));
+ float ribbonLength=smoothstep(-.30,-.24,along)*(1.-smoothstep(.012,.045,along));
+ float reveal=ribbonAcross*ribbonLength*speed;
+
+ // Directional grazing light reveals only the real raised and recessed surface.
+ vec3 lightDirection=normalize(vec3(-.62,.72,.58));
  float diffuse=max(dot(normal,lightDirection),0.);
- float backFace=1.-max(dot(normal,lightDirection),0.);
- float grazing=pow(backFace,5.);
- vec3 viewDirection=vec3(0.,0.,1.);
- vec3 halfVector=normalize(lightDirection+viewDirection);
- float specular=pow(max(dot(normal,halfVector),0.),42.);
- float cavity=smoothstep(.025,.19,h);
- float grain=noise(uv*uResolution*.9)*.018+fbm(uv*520.)*.028;
- float depthShade=clamp(.006+diffuse*.025+grazing*.012+specular*.035+cavity*.008-grain*.16,0.,.075);
- vec3 stone=vec3(depthShade);
+ float grazing=pow(1.-max(dot(normal,lightDirection),0.),4.);
+ vec3 halfVector=normalize(lightDirection+vec3(0.,0.,1.));
+ float specular=pow(max(dot(normal,halfVector),0.),34.);
+ float cavity=smoothstep(.018,.16,h);
+ float grain=noise(uv*uResolution*.9)*.012+fbm(uv*520.)*.018;
+ float reliefShade=clamp(.008+diffuse*.045+grazing*.018+specular*.045+cavity*.012-grain*.12,0.,.11);
+ float fineEdge=exp(-pow(across/(ribbonWidth*.42),2.))*ribbonLength*speed;
+ vec3 stone=vec3(reliefShade*reveal+fineEdge*.035);
  gl_FragColor=vec4(stone,1.);
 }
 `;
