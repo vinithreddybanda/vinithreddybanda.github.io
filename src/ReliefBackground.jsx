@@ -41,6 +41,7 @@ uniform vec2 uPointer;
 uniform vec2 uResolution;
 uniform vec2 uVelocity;
 uniform float uTime;
+uniform sampler2D uTrail;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<3;i++){v+=a*noise(p);p=p*2.03+17.1;a*=.5;}return v;}
@@ -48,23 +49,8 @@ void main(){
  vec2 uv=vUv;
  float h=vHeight;
  vec3 normal=normalize(vec3(-dFdx(vHeight)*190.,-dFdy(vHeight)*190.,1.));
- vec2 aspect=vec2(uResolution.x/uResolution.y,1.);
- vec2 delta=(uv-uPointer)*aspect;
- float speed=clamp(length(uVelocity)*18.,0.,1.);
- vec2 flow=normalize(uVelocity*aspect+vec2(.0001));
- float n1=fbm(uv*vec2(17.,13.)+vec2(uTime*.025,-uTime*.018));
- float n2=fbm(uv*vec2(39.,31.)-vec2(uTime*.017,uTime*.023));
- vec2 warp=vec2(n1-.5,n2-.5);
- vec2 q=delta+warp*.19;
- float along=dot(q,flow);
- float across=q.x*flow.y-q.y*flow.x;
- float diffusion=exp(-pow(along/.34,2.)-pow(across/.19,2.));
- float filaments=fbm(uv*vec2(82.,67.)+warp*5.);
- float brokenField=smoothstep(.30,.78,filaments);
- float wake=exp(-pow((along+.13)/.42,2.)-pow(across/.12,2.));
- float reveal=diffusion*(.22+brokenField*.92)+wake*speed*.28;
- reveal*=smoothstep(.001,.018,speed);
- reveal=clamp(reveal,0.,1.);
+ vec4 trail=texture2D(uTrail,uv);
+ float reveal=pow(clamp(trail.r,0.,1.),.72);
  vec3 lightDirection=normalize(vec3(-.62,.72,.58));
  float diffuse=max(dot(normal,lightDirection),0.);
  float grazing=pow(1.-max(dot(normal,lightDirection),0.),4.);
@@ -87,10 +73,17 @@ export default function ReliefBackground(){
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.25));
   renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;el.appendChild(renderer.domElement);
   const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(-1,1,1,-1,.1,10);camera.position.z=2.5;
-  const uniforms={uPointer:{value:new THREE.Vector2(.52,.58)},uVelocity:{value:new THREE.Vector2(0,0)},uResolution:{value:new THREE.Vector2(innerWidth,innerHeight)},uTime:{value:0}};
+  const trailCanvas=document.createElement("canvas");
+  trailCanvas.width=512;trailCanvas.height=512;
+  const trailCtx=trailCanvas.getContext("2d");
+  trailCtx.fillStyle="#000";trailCtx.fillRect(0,0,512,512);
+  const trailTexture=new THREE.CanvasTexture(trailCanvas);
+  trailTexture.minFilter=THREE.LinearFilter;trailTexture.magFilter=THREE.LinearFilter;
+  const uniforms={uPointer:{value:new THREE.Vector2(.52,.58)},uVelocity:{value:new THREE.Vector2(0,0)},uResolution:{value:new THREE.Vector2(innerWidth,innerHeight)},uTime:{value:0},uTrail:{value:trailTexture}};
   const geometry=new THREE.PlaneGeometry(2,2,256,256),material=new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms});
   scene.add(new THREE.Mesh(geometry,material));
   const target=new THREE.Vector2(.52,.58);
+  let lastTrailPoint=null;
   let frame=null;
   const clock=new THREE.Clock();
   const render=()=>{
@@ -101,6 +94,35 @@ export default function ReliefBackground(){
    uniforms.uVelocity.value.lerp(delta.multiplyScalar(60),.12);
    uniforms.uVelocity.value.multiplyScalar(.94);
    uniforms.uTime.value=clock.elapsedTime;
+   trailCtx.globalCompositeOperation="source-over";
+   trailCtx.fillStyle="rgba(0,0,0,0.045)";
+   trailCtx.fillRect(0,0,512,512);
+   const px=uniforms.uPointer.value.x*512;
+   const py=(1-uniforms.uPointer.value.y)*512;
+   if(lastTrailPoint){
+    const dx=px-lastTrailPoint.x,dy=py-lastTrailPoint.y;
+    const distance=Math.hypot(dx,dy);
+    if(distance>.15){
+     const angle=Math.atan2(dy,dx),speed=Math.min(1,distance/24);
+     trailCtx.globalCompositeOperation="lighter";
+     for(let i=0;i<4;i++){
+      const offset=(i-1.5)*3.8;
+      const ox=Math.cos(angle+Math.PI/2)*offset,oy=Math.sin(angle+Math.PI/2)*offset;
+      trailCtx.beginPath();
+      trailCtx.moveTo(lastTrailPoint.x+ox,lastTrailPoint.y+oy);
+      trailCtx.quadraticCurveTo((lastTrailPoint.x+px)*.5+ox+Math.sin(clock.elapsedTime*2+i)*2,(lastTrailPoint.y+py)*.5+oy+Math.cos(clock.elapsedTime*2+i)*2,px+ox,py+oy);
+      trailCtx.lineWidth=5+speed*8-i;
+      trailCtx.lineCap="round";
+      trailCtx.strokeStyle="rgba(255,255,255,"+(0.10+speed*.12)+")";
+      trailCtx.shadowColor="rgba(255,255,255,.7)";
+      trailCtx.shadowBlur=9+speed*7;
+      trailCtx.stroke();
+     }
+     trailCtx.shadowBlur=0;
+    }
+   }
+   lastTrailPoint={x:px,y:py};
+   trailTexture.needsUpdate=true;
    renderer.render(scene,camera);
    const moving=uniforms.uPointer.value.distanceToSquared(target)>.0000005;
    const fading=uniforms.uVelocity.value.lengthSq()>.00000008;
@@ -118,7 +140,7 @@ export default function ReliefBackground(){
   addEventListener("pointermove",move,{passive:true});
   addEventListener("resize",resize);
   renderer.render(scene,camera);
-  return()=>{cancelAnimationFrame(frame);removeEventListener("pointermove",move);removeEventListener("resize",resize);geometry.dispose();material.dispose();renderer.dispose();if(renderer.domElement.parentNode===el)el.removeChild(renderer.domElement);};
+  return()=>{cancelAnimationFrame(frame);removeEventListener("pointermove",move);removeEventListener("resize",resize);geometry.dispose();material.dispose();trailTexture.dispose();renderer.dispose();if(renderer.domElement.parentNode===el)el.removeChild(renderer.domElement);};
  },[]);
  return <div className="relief-background" ref={host} aria-hidden="true"/>;
 }
