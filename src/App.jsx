@@ -86,17 +86,6 @@ export default function App() {
     };
   }, []);
 
-  return () => {
-      window.removeEventListener("scroll", onScroll);
-      revealObserver.disconnect();
-      if (frame) cancelAnimationFrame(frame);
-      root.classList.remove("has-motion");
-      root.style.removeProperty("--velocity-blur");
-      root.style.removeProperty("--vintage-edge-blur");
-      root.style.removeProperty("--vintage-edge-opacity");
-    };
-  }, []);
-
   return (
     <>
       <main className="site-shell" id="home">
