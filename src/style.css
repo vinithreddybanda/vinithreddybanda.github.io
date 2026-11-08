@@ -274,3 +274,110 @@ html { scroll-padding-top: 28px; }
   .header-contact { font-size: clamp(10px, 2.8vw, 11px); }
   .header-contact { gap: 4px; padding: 9px 0 9px 8px; }
 }
+
+
+/* Header art direction: quiet editorial navigation that shares the page's
+   uppercase eyebrow language, restrained rules and generous vertical rhythm. */
+.site-header {
+  min-height: 82px;
+  height: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(14px, 3vw, 42px);
+  padding: 0;
+  border-bottom: 1px solid #202020;
+}
+.site-header .brand {
+  flex: 0 0 auto;
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -.095em;
+}
+.site-header nav {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 3.4vw, 48px);
+  min-width: 0;
+}
+.site-header nav a,
+.site-header .header-contact {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.site-header nav a {
+  color: #777;
+  padding: 12px 0;
+  transition: color 220ms ease;
+}
+.site-header nav a:hover,
+.site-header nav a:focus-visible { color: #f2f2f2; }
+.site-header .header-contact {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 11px 0;
+  color: #d8d8d8;
+  border: 0;
+  border-bottom: 1px solid #555;
+  transition: color 220ms ease, border-color 220ms ease;
+}
+.site-header .header-contact span {
+  color: #777;
+  transition: color 220ms ease, transform 220ms ease;
+}
+.site-header .header-contact:hover {
+  color: #fff;
+  border-color: #aaa;
+}
+.site-header .header-contact:hover span {
+  color: #fff;
+  transform: translate(2px, -2px);
+}
+@media (max-width: 760px) {
+  .site-header {
+    min-height: 76px;
+    gap: clamp(12px, 2.6vw, 22px);
+  }
+  .site-header .brand { font-size: 25px; }
+  .site-header nav { gap: clamp(13px, 3vw, 24px); }
+  .site-header nav a,
+  .site-header .header-contact {
+    font-size: 9px;
+    letter-spacing: .12em;
+  }
+  .site-header .header-contact { gap: 6px; }
+}
+@media (max-width: 430px) {
+  .site-header {
+    min-height: 70px;
+    gap: clamp(8px, 2vw, 12px);
+    padding: 0;
+  }
+  .site-header .brand { font-size: clamp(21px, 6vw, 24px); }
+  .site-header nav {
+    flex: 1 1 auto;
+    justify-content: center;
+    gap: clamp(9px, 2.7vw, 13px);
+  }
+  .site-header nav a,
+  .site-header .header-contact {
+    font-size: clamp(8px, 2.45vw, 9px);
+    letter-spacing: .09em;
+  }
+  .site-header nav a { padding: 10px 0; }
+  .site-header .header-contact {
+    gap: 4px;
+    padding: 10px 0;
+  }
+}
