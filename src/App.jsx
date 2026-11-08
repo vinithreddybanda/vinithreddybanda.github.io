@@ -63,13 +63,15 @@ function ProjectCard({ project }) {
 
 export default function App() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (motionPreference.matches) return;
 
     const root = document.documentElement;
     let previousY = window.scrollY;
     let previousTime = performance.now();
     let frameTime = previousTime;
-    let scrollVelocity = 0;
+    let velocity = 0;
+    let smoothedVelocity = 0;
     let blur = 0;
     let blurVelocity = 0;
     let drift = 0;
@@ -77,18 +79,23 @@ export default function App() {
     let frame = 0;
 
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
     const animate = (now) => {
-      const delta = Math.min((now - frameTime) / 1000, 0.032);
+      const delta = Math.min((now - frameTime) / 1000, 0.024);
       frameTime = now;
 
-      // Let the measured scroll impulse decay, then spring both visual channels
-      // back to rest. This keeps the effect continuous without a permanent RAF.
-      scrollVelocity *= Math.exp(-delta / 0.11);
-      const targetBlur = Math.min((Math.abs(scrollVelocity) / 1800) * 1.5, 1.5);
-      const targetDrift = clamp(-scrollVelocity * 0.002, -5, 5);
-      const stiffness = 220;
-      const damping = 29;
+      // Smooth noisy wheel/touch input, then let the visual response spring to rest.
+      const inputBlend = 1 - Math.exp(-delta / 0.045);
+      smoothedVelocity += (velocity - smoothedVelocity) * inputBlend;
+      velocity *= Math.exp(-delta / 0.14);
 
+      const speed = Math.abs(smoothedVelocity);
+      const targetBlur = Math.min((speed / 1500) * 2.1, 2.1);
+      const targetDrift = clamp(-smoothedVelocity * 0.0022, -6, 6);
+
+      // Slightly underdamped spring gives the blur and position a soft, controlled landing.
+      const stiffness = 210;
+      const damping = 23;
       blurVelocity += ((targetBlur - blur) * stiffness - blurVelocity * damping) * delta;
       blur += blurVelocity * delta;
       driftVelocity += ((targetDrift - drift) * stiffness - driftVelocity * damping) * delta;
@@ -98,14 +105,15 @@ export default function App() {
       root.style.setProperty("--scroll-drift", `${drift.toFixed(3)}px`);
 
       const settled =
-        Math.abs(scrollVelocity) < 0.5 &&
+        Math.abs(velocity) < 0.5 &&
+        Math.abs(smoothedVelocity) < 0.5 &&
         Math.abs(blur) < 0.008 &&
         Math.abs(blurVelocity) < 0.025 &&
         Math.abs(drift) < 0.02 &&
         Math.abs(driftVelocity) < 0.05;
 
       if (settled) {
-        blur = drift = blurVelocity = driftVelocity = scrollVelocity = 0;
+        velocity = smoothedVelocity = blur = blurVelocity = drift = driftVelocity = 0;
         root.style.setProperty("--scroll-blur", "0px");
         root.style.setProperty("--scroll-drift", "0px");
         root.classList.remove("is-scroll-moving");
@@ -119,7 +127,7 @@ export default function App() {
     const onScroll = () => {
       const now = performance.now();
       const elapsed = Math.max(now - previousTime, 8);
-      scrollVelocity = clamp(((window.scrollY - previousY) / elapsed) * 1000, -3200, 3200);
+      velocity = clamp(((window.scrollY - previousY) / elapsed) * 1000, -3600, 3600);
       previousY = window.scrollY;
       previousTime = now;
 
