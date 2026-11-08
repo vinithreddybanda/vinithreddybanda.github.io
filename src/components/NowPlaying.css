@@ -1,0 +1,25 @@
+.now-playing {
+  margin-top: clamp(76px, 9vw, 118px);
+  padding: 22px 0 24px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.now-playing-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.now-playing-heading .eyebrow { margin: 0; }
+.music-live-indicator { width: 7px; height: 7px; flex: 0 0 auto; background: #555; border-radius: 50% !important; }
+.music-live-indicator.is-playing { background: #b9e7bd; box-shadow: 0 0 12px rgba(185, 231, 189, .45); }
+.now-playing-content { display: flex; align-items: center; gap: 17px; margin-top: 20px; min-width: 0; }
+.now-playing-artwork { width: 62px; height: 62px; flex: 0 0 62px; object-fit: cover; background: #171717; }
+.now-playing-artwork-empty { display: grid; place-items: center; color: #777; font-size: 25px; }
+.now-playing-copy { display: grid; gap: 5px; min-width: 0; }
+.now-playing-state { color: #999; font-size: 9px; letter-spacing: .15em; }
+.now-playing-copy strong { overflow: hidden; color: #eee; font-size: 15px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.now-playing-artist, .now-playing-time { overflow: hidden; color: #888; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.now-playing-time { color: #666; }
+.now-playing-link { margin-left: auto; padding: 10px; color: #aaa; font-size: 18px; transition: color 200ms ease, transform 200ms ease; }
+.now-playing-link:hover { color: #fff; transform: translate(2px, -2px); }
+@media (max-width: 430px) {
+  .now-playing-content { gap: 12px; }
+  .now-playing-artwork { width: 54px; height: 54px; flex-basis: 54px; }
+  .now-playing-copy strong { font-size: 13px; }
+}
