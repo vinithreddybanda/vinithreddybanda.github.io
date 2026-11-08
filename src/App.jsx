@@ -123,7 +123,7 @@ function ProjectCard({ project, onOpen }) {
       <span className="project-type">{project.type} <span>·</span> {project.context}</span>
       <span className="project-summary">{project.summary}</span>
       <span className="project-card-bottom">
-        <span className="project-stack">{project.stack.slice(0, 4).map((item, index) => <span className="project-stack-item"`} key={item}>{item}</span>)}</span>
+        <span className="project-stack">{project.stack.slice(0, 4).map((item, index) => <span className="project-stack-item" key={item}>{item}</span>)}</span>
         <span className="view-project">Explore project <Arrow /></span>
       </span>
     </button>
