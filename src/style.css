@@ -150,3 +150,9 @@ html { scroll-padding-top: 28px; }
   .has-motion [data-reveal],
   .has-motion .reveal { opacity: 1; transform: none; }
 }
+
+
+/* Hard override: keep every UI surface strictly square-cornered. */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
