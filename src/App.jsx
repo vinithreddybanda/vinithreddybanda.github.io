@@ -80,47 +80,54 @@ export default function App() {
     revealItems.forEach((item) => revealObserver.observe(item));
     root.classList.add("has-motion");
 
-    // Restrained edge-only velocity blur. The page itself never gets filtered or transformed.
+    // Fast-scroll blur affects the full page; edge glass appears on every scroll.
     let previousY = window.scrollY;
     let previousTime = performance.now();
     let velocity = 0;
     let smoothSpeed = 0;
+    let lastScrollAt = 0;
     let frame = 0;
     let lastPaint = 0;
 
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-    const animateEdges = (now) => {
+    const animateMotion = (now) => {
       const elapsed = Math.min((now - lastPaint) / 1000, 0.05);
       lastPaint = now;
-      const blend = 1 - Math.exp(-elapsed / 0.075);
+      const blend = 1 - Math.exp(-elapsed / 0.065);
       smoothSpeed += (Math.abs(velocity) - smoothSpeed) * blend;
-      velocity *= Math.exp(-elapsed / 0.12);
+      velocity *= Math.exp(-elapsed / 0.11);
 
-      const intensity = clamp(smoothSpeed / 1250, 0, 1);
-      const blur = (intensity * 7.5).toFixed(2);
-      const opacity = (intensity * 0.96).toFixed(3);
-      root.style.setProperty("--edge-blur", `${blur}px`);
-      root.style.setProperty("--edge-opacity", opacity);
+      // Deliberate velocity threshold: slow scrolling remains perfectly sharp.
+      const fastScroll = clamp((smoothSpeed - 720) / 1050, 0, 1);
+      const pageBlur = (fastScroll * 2.8).toFixed(2);
+      // Vintage edge glass is independent of speed and lingers briefly after scrolling.
+      const edgeFade = clamp(1 - (now - lastScrollAt) / 360, 0, 1);
+      const edgeBlur = (edgeFade * 9).toFixed(2);
+      root.style.setProperty("--velocity-blur", `${pageBlur}px`);
+      root.style.setProperty("--vintage-edge-blur", `${edgeBlur}px`);
+      root.style.setProperty("--vintage-edge-opacity", (edgeFade * 0.92).toFixed(3));
 
-      if (Math.abs(velocity) < 4 && smoothSpeed < 5) {
-        root.style.setProperty("--edge-blur", "0px");
-        root.style.setProperty("--edge-opacity", "0");
+      if (Math.abs(velocity) < 4 && smoothSpeed < 5 && edgeFade <= 0) {
+        root.style.setProperty("--velocity-blur", "0px");
+        root.style.setProperty("--vintage-edge-blur", "0px");
+        root.style.setProperty("--vintage-edge-opacity", "0");
         frame = 0;
         return;
       }
-      frame = requestAnimationFrame(animateEdges);
+      frame = requestAnimationFrame(animateMotion);
     };
 
     const onScroll = () => {
       const now = performance.now();
       const elapsed = Math.max(now - previousTime, 8);
-      velocity = clamp(((window.scrollY - previousY) / elapsed) * 1000, -2800, 2800);
+      velocity = clamp(((window.scrollY - previousY) / elapsed) * 1000, -3200, 3200);
       previousY = window.scrollY;
       previousTime = now;
+      lastScrollAt = now;
       if (!frame) {
         lastPaint = now;
-        frame = requestAnimationFrame(animateEdges);
+        frame = requestAnimationFrame(animateMotion);
       }
     };
 
@@ -131,8 +138,9 @@ export default function App() {
       revealObserver.disconnect();
       if (frame) cancelAnimationFrame(frame);
       root.classList.remove("has-motion");
-      root.style.removeProperty("--edge-blur");
-      root.style.removeProperty("--edge-opacity");
+      root.style.removeProperty("--velocity-blur");
+      root.style.removeProperty("--vintage-edge-blur");
+      root.style.removeProperty("--vintage-edge-opacity");
     };
   }, []);
 
