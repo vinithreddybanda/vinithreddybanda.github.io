@@ -75,15 +75,6 @@ function clearSharedTransitionNames(card) {
   });
 }
 
-function startSharedTransition(update) {
-  if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    flushSync(update);
-    return Promise.resolve();
-  }
-  const transition = document.startViewTransition(() => flushSync(update));
-  return transition.finished.catch(() => undefined);
-}
-
 function ProjectCard({ project, onOpen }) {
   const pointer = useRef({ x: 0, y: 0, time: 0 });
   const handlePointerMove = (event) => {
@@ -160,8 +151,6 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProject, detailOpen]);
 
-  // Gesture energy drives a damped spring. Fast flicks compress the page;
-  // sustained swipes remain responsive until the gesture settles.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
     const root = document.documentElement;
