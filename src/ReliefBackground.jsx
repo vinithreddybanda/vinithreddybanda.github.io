@@ -68,28 +68,27 @@ float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<3;i++){v+=a*noise(p);p=p*2.03+17
 void main(){
  vec2 uv=vUv;
  float h=vHeight;
- vec3 normal=normalize(vec3(-dFdx(vHeight)*190.,-dFdy(vHeight)*190.,1.));
+ vec3 normal=normalize(vec3(-dFdx(vHeight)*260.,-dFdy(vHeight)*260.,1.));
  // Organic vertical wavefront: the relief grows upward, then softly dissolves.
- float cycle=mod(uTime*.105,1.55)-.22;
+ float cycle=mod(uTime*.09,1.65)-.18;
  float warp=(fbm(uv*vec2(8.,13.)+vec2(0.,uTime*.10))-.5)*.20;
  float front=cycle+warp;
  float behind=uv.y-front;
  float folds=sin(uv.x*13.+uv.y*8.+uTime*.42)*.018
              +sin(uv.x*27.-uv.y*5.-uTime*.27)*.009;
- float distanceField=behind+folds;
- float reveal=smoothstep(-.25,-.08,distanceField)
-             *(1.-smoothstep(.10,.34,distanceField));
- float edgeNoise=fbm(uv*vec2(23.,31.)+vec2(0.,uTime*.16));
- float burnEdge=1.-smoothstep(.012,.075,abs(distanceField+(edgeNoise-.5)*.045));
+ float distanceField=behind+folds+(fbm(uv*vec2(23.,31.)+vec2(0.,uTime*.16))-.5)*.055;
+ float reveal=(1.-smoothstep(-.025,.075,distanceField))
+             *(1.-smoothstep(1.12,1.42,cycle));
+ float burnEdge=1.-smoothstep(.008,.065,abs(distanceField));
  vec3 lightDirection=normalize(vec3(-.62,.72,.58));
  float diffuse=max(dot(normal,lightDirection),0.);
  float grazing=pow(1.-max(dot(normal,lightDirection),0.),4.);
  vec3 halfVector=normalize(lightDirection+vec3(0.,0.,1.));
  float specular=pow(max(dot(normal,halfVector),0.),34.);
  float cavity=smoothstep(.018,.16,h);
- float reliefShade=clamp(.006+diffuse*.11+grazing*.045+specular*.13+cavity*.035,0.,.22);
- float fineEdge=pow(max(0.,1.-abs(h)*8.),3.)*.035;
- float ember=burnEdge*reveal*.045;
+ float reliefShade=clamp(.012+diffuse*.22+grazing*.12+specular*.24+cavity*.065,0.,.38);
+ float fineEdge=pow(max(0.,1.-abs(h)*8.),3.)*.055;
+ float ember=burnEdge*reveal*.075;
  vec3 stone=vec3((reliefShade+fineEdge)*reveal+ember);
  gl_FragColor=vec4(stone,1.);
 }`;
