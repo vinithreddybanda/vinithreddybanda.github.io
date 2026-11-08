@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 
 const projects = [
   {
@@ -51,50 +52,36 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
-function animateProjectMorph(source, panel, direction = "forward") {
-  const opening = direction === "forward";
-  const duration = 850;
-  const rect = source.getBoundingClientRect();
-  const scaleX = rect.width / window.innerWidth;
-  const scaleY = rect.height / window.innerHeight;
-  const cardTransform = `translate3d(${rect.left}px, ${rect.top}px, 0) scale(${scaleX}, ${scaleY})`;
+const sharedTransitionNames = [
+  [".project-number", "project-index"],
+  [".project-name", "project-title"],
+  [".project-type", "project-type"],
+  [".project-summary", "project-summary"],
+  [".project-stack", "project-stack"],
+];
 
-  source.style.visibility = "hidden";
-  panel.style.visibility = "visible";
-  panel.style.pointerEvents = "none";
-  panel.style.transformOrigin = "top left";
-  panel.style.overflow = "hidden";
-
-  const animation = panel.animate(
-    opening
-      ? [
-          { transform: cardTransform, borderRadius: "8px", filter: "blur(0px)" },
-          { transform: "translate3d(0,0,0) scale(1)", borderRadius: "0px", filter: "blur(2px)", offset: 0.52 },
-          { transform: "translate3d(0,0,0) scale(1)", borderRadius: "0px", filter: "blur(0px)" },
-        ]
-      : [
-          { transform: "translate3d(0,0,0) scale(1)", borderRadius: "0px", filter: "blur(0px)" },
-          { transform: cardTransform, borderRadius: "8px", filter: "blur(2px)", offset: 0.48 },
-          { transform: cardTransform, borderRadius: "8px", filter: "blur(0px)" },
-        ],
-    {
-      duration,
-      easing: "cubic-bezier(.22,.68,.18,1)",
-      fill: "both",
-    },
-  );
-
-  return animation.finished.catch(() => undefined).finally(() => {
-    animation.cancel();
-    panel.style.removeProperty("transform");
-    panel.style.removeProperty("transform-origin");
-    panel.style.removeProperty("border-radius");
-    panel.style.removeProperty("filter");
-    panel.style.removeProperty("overflow");
-    panel.style.pointerEvents = opening ? "auto" : "none";
-    panel.style.visibility = opening ? "visible" : "hidden";
-    source.style.visibility = "";
+function setSharedTransitionNames(card) {
+  card.style.viewTransitionName = "project-surface";
+  sharedTransitionNames.forEach(([selector, name]) => {
+    const element = card.querySelector(selector);
+    if (element) element.style.viewTransitionName = name;
   });
+}
+
+function clearSharedTransitionNames(card) {
+  card.style.removeProperty("view-transition-name");
+  sharedTransitionNames.forEach(([selector]) => {
+    card.querySelector(selector)?.style.removeProperty("view-transition-name");
+  });
+}
+
+function startSharedTransition(update) {
+  if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    flushSync(update);
+    return Promise.resolve();
+  }
+  const transition = document.startViewTransition(() => flushSync(update));
+  return transition.finished.catch(() => undefined);
 }
 
 function ProjectCard({ project, onOpen }) {
@@ -135,25 +122,32 @@ export default function App() {
   const [detailOpen, setDetailOpen] = useState(false);
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
-  const detailPanel = useRef(null);
   const closing = useRef(false);
 
   const closeProject = () => {
     if (!selectedProject || closing.current) return;
     closing.current = true;
     const source = sourceButton.current;
-    const panel = detailPanel.current;
-    const finish = () => {
+    if (!source || !document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setDetailOpen(false);
       setSelectedProject(null);
       closing.current = false;
       sourceButton.current?.focus();
-    };
-    if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      animateProjectMorph(source, panel, "backward").then(finish);
-    } else {
-      finish();
+      return;
     }
+
+    const transition = document.startViewTransition(() => {
+      flushSync(() => {
+        setDetailOpen(false);
+        setSelectedProject(null);
+      });
+      setSharedTransitionNames(source);
+    });
+    transition.finished.catch(() => undefined).finally(() => {
+      clearSharedTransitionNames(source);
+      closing.current = false;
+      sourceButton.current?.focus();
+    });
   };
 
   useEffect(() => {
@@ -233,24 +227,28 @@ export default function App() {
 
   const openProject = (project, event) => {
     if (closing.current) return;
-    sourceButton.current = event.currentTarget;
+    const source = event.currentTarget;
+    sourceButton.current = source;
     closing.current = true;
-    setSelectedProject(project);
-    setDetailOpen(false);
-    window.requestAnimationFrame(() => {
-      const panel = detailPanel.current;
-      const source = sourceButton.current;
-      if (!panel || !source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+    if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setSelectedProject(project);
+      setDetailOpen(true);
+      closing.current = false;
+      return;
+    }
+
+    setSharedTransitionNames(source);
+    const transition = document.startViewTransition(() => {
+      flushSync(() => {
+        setSelectedProject(project);
         setDetailOpen(true);
-        closing.current = false;
-        closeButton.current?.focus();
-        return;
-      }
-      animateProjectMorph(source, panel, "forward").then(() => {
-        setDetailOpen(true);
-        closing.current = false;
-        closeButton.current?.focus();
       });
+      clearSharedTransitionNames(source);
+    });
+    transition.finished.catch(() => undefined).finally(() => {
+      closing.current = false;
+      closeButton.current?.focus();
     });
   };
 
@@ -356,19 +354,19 @@ export default function App() {
       </div>
 
       {selectedProject && (
-        <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
-          <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
+        <section style={{ viewTransitionName: "project-surface" }} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
+          <div className="detail-topbar" style={{ viewTransitionName: "detail-topbar" }}><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
-            <p className="section-kicker">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
-            <p className="detail-index">{selectedProject.number} / SELECTED WORK</p>
-            <h2 id="detail-title">{selectedProject.name}<span>.</span></h2>
-            <p className="detail-lead">{selectedProject.summary}</p>
-            <div className="detail-rule" />
-            <div className="detail-description"><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
-            <div className="detail-description"><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
-            <div className="detail-stack"><span className="detail-stack-label">TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item, index) => <span className="skill-tag"` : undefined} key={item}>{item}</span>)}</div></div>
+            <p className="section-kicker" style={{ viewTransitionName: "project-type" }}>{selectedProject.type} <span>·</span> {selectedProject.context}</p>
+            <p className="detail-index" style={{ viewTransitionName: "project-index" }}>{selectedProject.number} / SELECTED WORK</p>
+            <h2 id="detail-title" style={{ viewTransitionName: "project-title" }}>{selectedProject.name}<span>.</span></h2>
+            <p className="detail-lead" style={{ viewTransitionName: "project-summary" }}>{selectedProject.summary}</p>
+            <div className="detail-rule" style={{ viewTransitionName: "detail-rule" }} />
+            <div className="detail-description" style={{ viewTransitionName: "detail-overview" }}><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
+            <div className="detail-description" style={{ viewTransitionName: "detail-focus" }}><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
+            <div className="detail-stack"><span className="detail-stack-label" style={{ viewTransitionName: "detail-stack-label" }}>TECHNOLOGIES</span><div className="skill-tags" style={{ viewTransitionName: "project-stack" }}>{selectedProject.stack.map((item, index) => <span className="skill-tag" key={item}>{item}</span>)}</div></div>
           </div>
-          <div className="detail-footer"><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
+          <div className="detail-footer" style={{ viewTransitionName: "detail-footer" }}><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
         </section>
       )}
     </main>
