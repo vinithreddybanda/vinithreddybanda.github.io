@@ -109,75 +109,79 @@ a,button{-webkit-tap-highlight-color:transparent}
 }
 .is-scroll-moving .main-area{will-change:transform,filter}
 
-/* Project details resolve from the selected card's title, not a circular wipe. */
-.project-detail{
-  clip-path:none;
-  opacity:0;
-  transform:translate3d(0,12px,0) scale(.992);
-  filter:blur(8px);
-  pointer-events:none;
-  transition:opacity 300ms ease,transform 520ms cubic-bezier(.18,.78,.18,1),filter 300ms ease;
-}
-.project-detail.is-open{
-  clip-path:none;
-  opacity:1;
-  transform:translate3d(0,0,0) scale(1);
-  filter:blur(0);
-  pointer-events:auto;
-}
-#detail-title{transform-origin:top left;will-change:transform,filter,opacity}
-@media(prefers-reduced-motion:reduce){
-  .main-area{transform:none;filter:none;transition:none;will-change:auto}
-  .project-detail{opacity:1;transform:none;filter:none;transition:none}
-  #detail-title{will-change:auto}
-}
 
-
-/* Shared-content morphs: matching project information travels as one identity. */
-.project-stack{display:flex;flex-wrap:wrap;align-items:center;gap:3px 0;min-width:0}
-.project-stack-item{white-space:nowrap}
-.project-stack-item::after{content:"·";margin:0 7px;color:#5c6753}
-.project-stack-item:last-child::after{content:""}
-.project-detail{
-  clip-path:none;
-  opacity:0;
-  transform:translate3d(0,8px,0) scale(.997);
-  filter:blur(5px);
-  pointer-events:none;
-  transition:opacity 220ms ease,transform 280ms cubic-bezier(.22,.68,0,1),filter 220ms ease;
-}
-.project-detail.is-open{
-  opacity:1;
-  transform:translate3d(0,0,0) scale(1);
-  filter:blur(0);
-  pointer-events:auto;
-}
-#detail-title{transform-origin:top left}
-@media(prefers-reduced-motion:reduce){
-  .project-detail{opacity:1;transform:none;filter:none;transition:none}
-  .project-detail:not(.is-open){display:none}
-}
-
-
-/* Reverse morph keeps the detail elements themselves in motion. */
-
-
-
-/* One full-page surface morphs from and back to the selected card. */
+/* One browser-native shared-element transition for every page direction. */
 .project-detail{
   clip-path:none!important;
   opacity:1!important;
-  transform:none;
-  filter:none;
+  transform:none!important;
+  filter:none!important;
   transition:none!important;
-  visibility:hidden;
-  pointer-events:none;
-}
-.project-detail.is-open{
   visibility:visible;
   pointer-events:auto;
 }
+@supports (view-transition-name: none){
+  ::view-transition-group(*) {
+    animation-duration:780ms;
+    animation-timing-function:cubic-bezier(.2,.72,.18,1);
+  }
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation:none!important;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*){
+    animation-duration:780ms;
+    animation-timing-function:cubic-bezier(.2,.72,.18,1);
+    animation-fill-mode:both;
+    mix-blend-mode:normal;
+  }
+  ::view-transition-old(project-surface),
+  ::view-transition-new(project-surface),
+  ::view-transition-old(project-index),
+  ::view-transition-new(project-index),
+  ::view-transition-old(project-title),
+  ::view-transition-new(project-title),
+  ::view-transition-old(project-type),
+  ::view-transition-new(project-type),
+  ::view-transition-old(project-summary),
+  ::view-transition-new(project-summary),
+  ::view-transition-old(project-stack),
+  ::view-transition-new(project-stack){
+    animation-name:shared-velocity;
+  }
+  ::view-transition-old(detail-topbar),
+  ::view-transition-old(detail-rule),
+  ::view-transition-old(detail-overview),
+  ::view-transition-old(detail-focus),
+  ::view-transition-old(detail-stack-label),
+  ::view-transition-old(detail-footer){
+    animation-name:shared-exit;
+  }
+  ::view-transition-new(detail-topbar),
+  ::view-transition-new(detail-rule),
+  ::view-transition-new(detail-overview),
+  ::view-transition-new(detail-focus),
+  ::view-transition-new(detail-stack-label),
+  ::view-transition-new(detail-footer){
+    animation-name:shared-enter;
+  }
+}
+@keyframes shared-velocity{
+  0%,100%{filter:blur(0)}
+  50%{filter:blur(2.2px)}
+}
+@keyframes shared-enter{
+  0%{filter:blur(2.2px);transform:translate3d(0,14px,0)}
+  100%{filter:blur(0);transform:translate3d(0,0,0)}
+}
+@keyframes shared-exit{
+  0%{filter:blur(0);transform:translate3d(0,0,0)}
+  100%{filter:blur(2.2px);transform:translate3d(0,-14px,0)}
+}
 @media(prefers-reduced-motion:reduce){
-  .project-detail{visibility:hidden}
-  .project-detail.is-open{visibility:visible}
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*){animation:none!important}
 }
