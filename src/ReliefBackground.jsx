@@ -84,6 +84,7 @@ export default function ReliefBackground(){
   scene.add(new THREE.Mesh(geometry,material));
   const target=new THREE.Vector2(.52,.58);
   let lastTrailPoint=null;
+  let trailLife=0;
   let frame=null;
   const clock=new THREE.Clock();
   const render=()=>{
@@ -126,10 +127,12 @@ export default function ReliefBackground(){
    renderer.render(scene,camera);
    const moving=uniforms.uPointer.value.distanceToSquared(target)>.0000005;
    const fading=uniforms.uVelocity.value.lengthSq()>.00000008;
-   if(moving||fading) frame=requestAnimationFrame(render);
+   if(trailLife>0) trailLife--;
+   if(moving||fading||trailLife>0) frame=requestAnimationFrame(render);
   };
   const move=e=>{
    target.set(e.clientX/innerWidth,1-e.clientY/innerHeight);
+   trailLife=90;
    if(frame===null) frame=requestAnimationFrame(render);
   };
   const resize=()=>{
