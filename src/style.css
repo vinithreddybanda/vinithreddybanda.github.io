@@ -96,6 +96,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 }
 .project-card-slot{min-width:0;min-height:240px}
 .project-card-slot-featured{grid-row:span 2;min-height:493px}
+.project-card-slot-featured>.project-card{min-height:493px}
 .project-card-slot>.project-card{width:100%;height:100%}
 .project-card.is-expanded{
   position:fixed!important;
@@ -121,8 +122,8 @@ a,button{-webkit-tap-highlight-color:transparent}
   box-shadow:none!important;
 }
 .project-card.is-expanded:hover,.project-card.is-expanded:active{
-  transform:none!important;
-  box-shadow:none!important;
+  transform:none;
+  box-shadow:none;
 }
 .project-card.is-expanded::after{display:none}
 .project-detail-view{
