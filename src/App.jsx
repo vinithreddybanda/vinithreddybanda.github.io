@@ -136,8 +136,6 @@ export default function App() {
   const sourceButton = useRef(null);
   const closeButton = useRef(null);
   const detailPanel = useRef(null);
-  const mainSurface = useRef(null);
-  const sidebarSurface = useRef(null);
   const closing = useRef(false);
 
   const closeProject = () => {
