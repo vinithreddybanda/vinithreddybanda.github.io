@@ -1,3 +1,4 @@
+import ReliefBackground from "./ReliefBackground.jsx";
 import { useEffect } from "react";
 
 const projects = [
@@ -77,7 +78,9 @@ export default function App() {
   }, []);
 
   return (
-    <main className="site-shell" id="home">
+    <>
+      <ReliefBackground />
+      <main className="site-shell" id="home">
       <header className="site-header">
         <a className="brand" href="#home">vinith<span>.</span></a>
         <nav aria-label="Main navigation">
@@ -156,6 +159,7 @@ export default function App() {
         </div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>BUILT WITH CARE.</span></div>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }
