@@ -83,33 +83,6 @@ a,button{-webkit-tap-highlight-color:transparent}
 }
 
 
-/* Swipe-reactive material response. The effect is brief and velocity-driven. */
-.main-area{
-  transform:translate3d(0,calc(var(--scroll-direction,0) * var(--scroll-shift,0px)),0)
-    scaleY(calc(1 + var(--scroll-stretch,0)));
-  transform-origin:var(--scroll-origin,center);
-  filter:blur(var(--scroll-blur,0px));
-  transition:filter 90ms linear;
-}
-.is-scroll-moving .main-area{will-change:transform,filter}
-@media(prefers-reduced-motion:reduce){
-  .main-area{transform:none;filter:none;transition:none;will-change:auto}
-}
-
-
-/* Gesture elasticity: short, velocity-weighted squeeze with a damped settle. */
-.main-area{
-  transform:translate3d(0,var(--scroll-shift,0px),0)
-    scaleX(calc(1 + var(--scroll-expand,0)))
-    scaleY(calc(1 - var(--scroll-squeeze,0)))
-    skewY(var(--scroll-skew,0deg));
-  transform-origin:center;
-  filter:blur(var(--scroll-blur,0px));
-  transition:filter 70ms linear;
-}
-.is-scroll-moving .main-area{will-change:transform,filter}
-
-
 /* One browser-native shared-element transition for every page direction. */
 .project-detail{
   clip-path:none!important;
