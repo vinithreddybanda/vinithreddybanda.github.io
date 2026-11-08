@@ -41,7 +41,11 @@ a:focus-visible{outline:2px solid #aaa;outline-offset:5px}
 @media(max-width:760px){.site-header{min-height:68px}.site-header nav{gap:17px}.site-header nav a,.header-contact{font-size:11px}.hero{padding-top:105px}.hero h1{font-size:clamp(70px,15vw,112px)}.hero-bottom{align-items:start;flex-direction:column}.metrics{grid-template-columns:1fr 1fr;row-gap:22px}.metrics>div{padding:0 14px}.metrics>div:nth-child(odd){padding-left:0;border-right:1px solid var(--line)}.metrics>div:nth-child(even){border:0}.project-grid,.about-section,.background-section{grid-template-columns:1fr}.section{padding-top:85px}.about-section,.background-section{gap:38px}.site-footer{grid-template-columns:1fr;margin-top:85px}.footer-links{min-width:0;max-width:420px}}
 @media(max-width:430px){.site-header{flex-wrap:wrap;padding:17px 0;row-gap:15px}.site-header nav{order:3;width:100%;justify-content:space-between}.header-contact{margin-left:auto}.hero{padding-top:85px}.hero h1{font-size:68px}.project-card{padding:21px}.skill-row{grid-template-columns:1fr;gap:8px}.footer-bottom{flex-direction:column}}
 
-/* iOS-inspired edge glass: blur is confined to thin viewport bands. */
+/* Vintage edge glass remains speed-independent; page blur is velocity-driven. */
+.site-shell {
+  filter: blur(var(--velocity-blur, 0px));
+  transition: filter 70ms linear;
+}
 body::before,
 body::after {
   content: "";
@@ -49,24 +53,25 @@ body::after {
   left: 0;
   right: 0;
   z-index: 20;
-  height: clamp(64px, 12vh, 124px);
-  opacity: var(--edge-opacity, 0);
+  height: clamp(68px, 13vh, 138px);
+  opacity: var(--vintage-edge-opacity, 0);
   pointer-events: none;
-  backdrop-filter: blur(var(--edge-blur, 0px)) saturate(1.18);
-  -webkit-backdrop-filter: blur(var(--edge-blur, 0px)) saturate(1.18);
-  transition: opacity 150ms ease-out;
+  backdrop-filter: blur(var(--vintage-edge-blur, 0px)) saturate(1.16);
+  -webkit-backdrop-filter: blur(var(--vintage-edge-blur, 0px)) saturate(1.16);
+  transition: opacity 120ms ease-out;
 }
 body::before {
   top: 0;
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 18%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 18%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 16%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 16%, transparent 100%);
 }
 body::after {
   bottom: 0;
-  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 18%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 0%, #000 18%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 16%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, #000 16%, transparent 100%);
 }
 @media (prefers-reduced-motion: reduce) {
+  .site-shell { filter: none; }
   body::before, body::after { display: none; }
 }
 
