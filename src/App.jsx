@@ -1,26 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { flushSync } from "react-dom";
-
 const projects = [
   {
-    id: "careschedule",
     number: "01",
     name: "CareSchedule",
-    type: "Healthcare platform",
-    context: "Cognizant · Internship",
+    type: "Healthcare platform · Cognizant internship",
     summary: "A clinic and hospital management platform built around reliable appointment operations.",
     detail: "Designed a six-layer Clean Architecture with .NET, Entity Framework Core, SQL Server, and React. The platform includes 148 REST APIs, 32 controllers, 33 domain entities, and six role-based workflows.",
     highlight: "Intelligent appointment slot generation",
     highlightDetail: "Resolves provider availability, holidays, leave, blackout periods, and resource constraints before publishing appointments, helping prevent double-booking.",
     stack: [".NET", "ASP.NET Core", "React", "EF Core", "SQL Server", "REST APIs"],
-    featured: true,
   },
   {
-    id: "journalai",
     number: "02",
     name: "JournalAI",
-    type: "AI-powered product",
-    context: "Personal project",
+    type: "AI-powered product · Personal project",
     summary: "A journaling experience that turns written reflections into structured mood insights.",
     detail: "Built with Next.js, TypeScript, Groq AI, and Supabase. The platform combines secure authentication with PostgreSQL persistence and a cloud deployment workflow.",
     highlight: "End-to-end delivery pipeline",
@@ -28,11 +20,9 @@ const projects = [
     stack: ["Next.js", "TypeScript", "Supabase", "Docker", "Kubernetes", "Azure", "Jenkins"],
   },
   {
-    id: "activities",
     number: "03",
     name: "Activities for Discord",
-    type: "Android · Native integration",
-    context: "Personal project",
+    type: "Android · Native integration · Personal project",
     summary: "An Android app that gives users mobile control over Discord Rich Presence.",
     detail: "Built an Android application that extends Rich Presence controls beyond the official Discord mobile client, using a native integration layer with the Discord Partner SDK.",
     highlight: "Persistent native SDK sessions",
@@ -49,386 +39,107 @@ const skillGroups = [
 ];
 
 function Arrow() {
-  return <span className="arrow" aria-hidden="true">↗</span>;
+  return <span aria-hidden="true">↗</span>;
 }
 
-function ProjectCard({ project, selected, detailReady, onOpen, onClose, closeButton }) {
-  const pointer = useRef({ x: 0, time: 0 });
-  const handlePointerMove = (event) => {
-    if (selected || event.pointerType !== "mouse") return;
-    const now = performance.now();
-    const previous = pointer.current;
-    const elapsed = Math.max(now - previous.time, 1);
-    const dx = event.clientX - previous.x;
-    const velocity = Math.min(Math.abs(dx / elapsed) / 1.5, 1);
-    event.currentTarget.style.setProperty("--velocity-x", String(Math.sign(dx)));
-    event.currentTarget.style.setProperty("--velocity-strength", String(velocity));
-    pointer.current = { x: event.clientX, time: now };
-  };
-  const handleKeyDown = (event) => {
-    if (selected || (event.key !== "Enter" && event.key !== " ")) return;
-    event.preventDefault();
-    onOpen(project, event.currentTarget);
-  };
-
+function ProjectCard({ project }) {
   return (
-    <div className={"project-card-slot" + (project.featured ? " project-card-slot-featured" : "")}>
-      <div
-        className={"project-card" + (project.featured ? " project-card-featured" : "") + (selected ? " is-expanded" : "")}
-        role={selected ? "dialog" : "button"}
-        aria-modal={selected ? "true" : undefined}
-        aria-labelledby={selected ? "detail-title" : undefined}
-        aria-label={selected ? undefined : "Open " + project.name + " project details"}
-        tabIndex={selected ? -1 : 0}
-        onClick={(event) => { if (!selected) onOpen(project, event.currentTarget); }}
-        onKeyDown={handleKeyDown}
-        onPointerMove={handlePointerMove}
-        onPointerLeave={(event) => event.currentTarget.style.setProperty("--velocity-strength", "0")}
-      >
-        {selected ? (
-          <div className={"project-detail-view" + (detailReady ? " is-ready" : "")}>
-            <div className="detail-topbar">
-              <span className="brand detail-brand">v<span>.</span></span>
-              <span>PROJECT / {project.number}</span>
-              <button ref={closeButton} className="close-detail" onClick={onClose} type="button"><span>Close</span> ×</button>
-            </div>
-            <div className="detail-content">
-              <p className="section-kicker">{project.type} <span>·</span> {project.context}</p>
-              <p className="detail-index">{project.number} / SELECTED WORK</p>
-              <h2 id="detail-title">{project.name}<span>.</span></h2>
-              <p className="detail-lead">{project.summary}</p>
-              <div className="detail-rule" />
-              <div className="detail-description"><span>OVERVIEW</span><p>{project.detail}</p></div>
-              <div className="detail-description"><span>ENGINEERING FOCUS</span><div><strong>{project.highlight}</strong><p>{project.highlightDetail}</p></div></div>
-              <div className="detail-stack"><span className="detail-stack-label">TECHNOLOGIES</span><div className="skill-tags">{project.stack.map((item) => <span className="skill-tag" key={item}>{item}</span>)}</div></div>
-            </div>
-            <div className="detail-footer"><span>VINITH REDDY BANDA</span><button type="button" onClick={onClose}>Back to overview ↑</button></div>
-          </div>
-        ) : (
-          <>
-            <span className="project-card-top">
-              <span className="project-number">{project.number} / SELECTED WORK</span>
-              <span className="project-open" aria-hidden="true">↗</span>
-            </span>
-            <span className="project-name">{project.name}</span>
-            <span className="project-type">{project.type} <span>·</span> {project.context}</span>
-            <span className="project-summary">{project.summary}</span>
-            <span className="project-card-bottom">
-              <span className="project-stack">{project.stack.slice(0, 4).map((item) => <span className="project-stack-item" key={item}>{item}</span>)}</span>
-              <span className="view-project">Explore project <Arrow /></span>
-            </span>
-          </>
-        )}
+    <article className="project-card">
+      <p className="eyebrow">{project.number} / SELECTED WORK</p>
+      <h3>{project.name}</h3>
+      <p className="project-type">{project.type}</p>
+      <p className="project-summary">{project.summary}</p>
+      <div className="project-detail">
+        <p>{project.detail}</p>
+        <h4>{project.highlight}</h4>
+        <p>{project.highlightDetail}</p>
       </div>
-    </div>
+      <div className="tags">{project.stack.map((item) => <span className="tag" key={item}>{item}</span>)}</div>
+    </article>
   );
 }
 
-function prepareProjectSurface(element) {
-  const style = element.style;
-  style.position = "fixed";
-  style.inset = "0";
-  style.width = "100vw";
-  style.height = "100dvh";
-  style.minHeight = "100dvh";
-  style.maxHeight = "none";
-  style.margin = "0";
-  style.padding = "0";
-  style.zIndex = "100";
-  style.overflowY = "auto";
-  style.borderRadius = "0";
-  style.transformOrigin = "top left";
-  style.transition = "none";
-}
-
-function clearProjectSurface(element) {
-  [
-    "position", "inset", "top", "right", "bottom", "left", "width", "height",
-    "min-height", "max-height", "margin", "padding", "z-index", "overflow-y",
-    "border-radius", "transform-origin", "transform", "filter", "transition",
-    "background-color", "border-color", "border-width",
-  ].forEach((property) => element.style.removeProperty(property));
-}
-
-function animateProjectSurface(element, rect, opening, originBackground) {
-  if (!element || !element.animate) return Promise.resolve();
-  const scaleX = rect.width / window.innerWidth;
-  const scaleY = rect.height / window.innerHeight;
-  const cardTransform = "translate3d(" + rect.left + "px," + rect.top + "px,0) scale(" + scaleX + "," + scaleY + ")";
-  const fullTransform = "translate3d(0,0,0) scale(1,1)";
-  const fromBackground = opening ? originBackground : "#151912";
-  const toBackground = opening ? "#151912" : originBackground;
-  const keyframes = opening
-    ? [
-        { transform: cardTransform, borderRadius: "7px", filter: "blur(0px)", backgroundColor: fromBackground },
-        { transform: fullTransform, borderRadius: "0px", filter: "blur(1.8px)", backgroundColor: toBackground, offset: 0.58 },
-        { transform: fullTransform, borderRadius: "0px", filter: "blur(0px)", backgroundColor: toBackground },
-      ]
-    : [
-        { transform: fullTransform, borderRadius: "0px", filter: "blur(0px)", backgroundColor: fromBackground },
-        { transform: cardTransform, borderRadius: "7px", filter: "blur(1.8px)", backgroundColor: toBackground, offset: 0.52 },
-        { transform: cardTransform, borderRadius: "7px", filter: "blur(0px)", backgroundColor: toBackground },
-      ];
-  const animation = element.animate(keyframes, {
-    duration: 560,
-    easing: "cubic-bezier(.2,.82,.2,1)",
-    fill: "both",
-  });
-  return animation.finished.catch(() => undefined).finally(() => animation.cancel());
-}
-
 export default function App() {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [detailReady, setDetailReady] = useState(false);
-  const sourceButton = useRef(null);
-  const closeButton = useRef(null);
-  const originRect = useRef(null);
-  const originBackground = useRef("");
-  const bodyOverflow = useRef("");
-  const closing = useRef(false);
-
-  const closeProject = () => {
-    if (!selectedProject || closing.current) return;
-    closing.current = true;
-    const source = sourceButton.current;
-    const slot = source?.parentElement;
-    const rect = slot?.getBoundingClientRect() || originRect.current;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const finish = () => {
-      flushSync(() => {
-        setSelectedProject(null);
-        setDetailReady(false);
-      });
-      if (source) clearProjectSurface(source);
-      document.body.style.overflow = bodyOverflow.current;
-      closing.current = false;
-      sourceButton.current?.focus();
-    };
-
-    if (!source || !rect || reduceMotion) {
-      finish();
-      return;
-    }
-
-    flushSync(() => setDetailReady(false));
-    animateProjectSurface(source, rect, false, originBackground.current).finally(finish);
-  };
-
-  useEffect(() => {
-    if (!selectedProject) return undefined;
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") closeProject();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    if (detailReady) closeButton.current?.focus();
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedProject, detailReady]);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    const root = document.documentElement;
-    let previousY = window.scrollY, previousTime = performance.now();
-    let energy = 0, springVelocity = 0, direction = 0, frame = 0, intensity = 0;
-
-    const render = () => {
-      springVelocity += (energy - intensity) * 0.19;
-      springVelocity *= 0.76;
-      intensity = Math.max(0, Math.min(1, intensity + springVelocity));
-      energy *= 0.91;
-      if (energy < 0.004) energy = 0;
-      root.style.setProperty("--scroll-blur", `${(intensity * 2.15).toFixed(2)}px`);
-      root.style.setProperty("--scroll-squeeze", (intensity * 0.038).toFixed(4));
-      root.style.setProperty("--scroll-expand", (intensity * 0.006).toFixed(4));
-      root.style.setProperty("--scroll-shift", `${(direction * intensity * 7).toFixed(2)}px`);
-      root.style.setProperty("--scroll-skew", `${(direction * intensity * 0.42).toFixed(2)}deg`);
-      if (intensity > 0.004 || energy > 0.004 || Math.abs(springVelocity) > 0.004) {
-        frame = requestAnimationFrame(render);
-      } else {
-        intensity = 0;
-        ["--scroll-blur","--scroll-squeeze","--scroll-expand","--scroll-shift","--scroll-skew"].forEach((name) => root.style.setProperty(name, "0"));
-        root.classList.remove("is-scroll-moving");
-        frame = 0;
-      }
-    };
-    const onScroll = () => {
-      const now = performance.now(), y = window.scrollY;
-      const elapsed = Math.max(now - previousTime, 8), delta = y - previousY;
-      previousY = y; previousTime = now;
-      if (Math.abs(delta) < 0.5) return;
-      direction = Math.sign(delta);
-      root.classList.add("is-scroll-moving");
-      energy = Math.max(energy, Math.min(Math.abs(delta) / elapsed / 1.45, 1));
-      if (!frame) frame = requestAnimationFrame(render);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (frame) cancelAnimationFrame(frame);
-      ["--scroll-blur","--scroll-squeeze","--scroll-expand","--scroll-shift","--scroll-skew"].forEach((name) => root.style.removeProperty(name));
-    };
-  }, []);
-
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    if (!("IntersectionObserver" in window)) return undefined;
-    const elements = document.querySelectorAll(".motion-reveal");
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-inview");
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.08, rootMargin: "0px 0px -36px 0px" });
-    elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, []);
-
-  const openProject = (project, source) => {
-    if (closing.current || selectedProject) return;
-    closing.current = true;
-    sourceButton.current = source;
-    originRect.current = source.getBoundingClientRect();
-    originBackground.current = getComputedStyle(source).backgroundColor;
-    bodyOverflow.current = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    prepareProjectSurface(source);
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
-      flushSync(() => {
-        setSelectedProject(project);
-        setDetailReady(true);
-      });
-      closing.current = false;
-      closeButton.current?.focus();
-      return;
-    }
-
-    flushSync(() => {
-      setSelectedProject(project);
-      setDetailReady(false);
-    });
-    animateProjectSurface(source, originRect.current, true, originBackground.current).finally(() => {
-      setDetailReady(true);
-      closing.current = false;
-      closeButton.current?.focus();
-    });
-  };
-
   return (
-    <main className={"dashboard" + (selectedProject ? " is-project-open" : "")}>
-      <aside className="sidebar">
-        <a className="brand" href="#home" aria-label="Vinith, home">v<span>.</span></a>
-        <div className="sidebar-rule" />
-        <nav className="side-nav" aria-label="Portfolio sections">
-          <a className="side-link active" href="#home"><span>01</span> Overview</a>
-          <a className="side-link" href="#work"><span>02</span> Selected work</a>
-          <a className="side-link" href="#about"><span>03</span> About</a>
-          <a className="side-link" href="#contact"><span>04</span> Contact</a>
+    <main className="site-shell" id="home">
+      <header className="site-header">
+        <a className="brand" href="#home">vinith<span>.</span></a>
+        <nav aria-label="Main navigation">
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
         </nav>
-        <div className="sidebar-bottom">
-          <span className="availability-dot" />
-          <span>Open to opportunities</span>
+        <a className="header-contact" href="mailto:vinithreddybanda@gmail.com">Let's talk <Arrow /></a>
+      </header>
+
+      <section className="hero">
+        <p className="eyebrow">DEVELOPER / BUILDER <span>·</span> INDIA</p>
+        <h1>Making things<br />work<span>.</span></h1>
+        <div className="hero-bottom">
+          <p>I'm Vinith Reddy Banda, an Information Technology graduate who enjoys building useful software, exploring systems, and connecting ideas to implementation.</p>
+          <a className="text-link" href="#work">Explore my work ↓</a>
         </div>
-      </aside>
+      </section>
 
-      <div className="main-area" id="home">
-        <header className="topbar">
-          <span className="breadcrumb">PORTFOLIO <span>/</span> OVERVIEW</span>
-          <a className="top-link" href="mailto:vinithreddybanda@gmail.com">LET'S TALK <Arrow /></a>
-        </header>
+      <section className="metrics" aria-label="Highlights">
+        <div><strong>03</strong><span>PROJECTS</span></div>
+        <div><strong>148</strong><span>REST APIS</span></div>
+        <div><strong>8.43</strong><span>B.E. CGPA</span></div>
+        <div><strong>9.74</strong><span>DIPLOMA CGPA</span></div>
+      </section>
 
-        <section className="intro-section motion-reveal">
-          <div className="intro-copy">
-            <p className="section-kicker"><span className="kicker-line" /> DEVELOPER / BUILDER</p>
-            <h1>Making<br /><span>things</span> work.</h1>
-            <p className="intro-description">I'm Vinith Reddy Banda, an Information Technology graduate who enjoys building useful software, exploring systems, and connecting ideas to implementation.</p>
-            <div className="intro-actions">
-              <a className="primary-action" href="#work">Explore my work <span>↓</span></a>
-              <a className="text-action" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub <Arrow /></a>
+      <section className="section" id="work">
+        <div className="section-heading">
+          <p className="eyebrow">SELECTED WORK</p>
+          <h2>Things I've built<span>.</span></h2>
+        </div>
+        <div className="project-grid">
+          {projects.map((project) => <ProjectCard key={project.number} project={project} />)}
+        </div>
+      </section>
+
+      <section className="section about-section" id="about">
+        <div>
+          <p className="eyebrow">A LITTLE ABOUT ME</p>
+          <h2>Curious by nature.<br />Practical by design<span>.</span></h2>
+          <p className="about-copy">From backend architecture to mobile integrations and AI-powered products, I like understanding how the pieces fit together and making them work as one.</p>
+        </div>
+        <div className="skills">
+          {skillGroups.map((group) => (
+            <div className="skill-row" key={group.label}>
+              <span>{group.label}</span>
+              <div className="tags">{group.values.map((value) => <span className="tag" key={value}>{value}</span>)}</div>
             </div>
-          </div>
-          <div className="intro-aside">
-            <div className="orbit-mark" aria-hidden="true">
-              <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-              <span className="orbit-core">V<span>.</span></span>
-              <span className="orbit-caption">BUILD / LEARN / REPEAT</span>
-            </div>
-            <div className="aside-note"><span>BASED IN</span><strong>India</strong></div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </section>
 
-        <section className="metrics motion-reveal" aria-label="Highlights">
-          <div className="metric"><strong>03</strong><span>PROJECTS<br />IN FOCUS</span></div>
-          <div className="metric"><strong>148</strong><span>REST APIs<br />IN CARESCHEDULE</span></div>
-          <div className="metric"><strong>8.43</strong><span>B.E. CGPA<br />CBIT</span></div>
-          <div className="metric"><strong>9.74</strong><span>DIPLOMA CGPA<br />GOVT. POLYTECHNIC</span></div>
-        </section>
+      <section className="section background-section">
+        <div>
+          <p className="eyebrow">EDUCATION</p>
+          <div className="plain-item"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
+          <div className="plain-item"><span>2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering · 9.74 CGPA</p></div></div>
+        </div>
+        <div>
+          <p className="eyebrow">BEYOND THE BUILD</p>
+          <div className="plain-item"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis · I3CTCON 2026</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>Open-source Android app</strong><p>WhatsApp Status Saver, published on F-Droid</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>6th place · COSC HackWeek</strong><p>Competitive coding challenge organized by CBIT Open Source Community</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
+        </div>
+      </section>
 
-        <section className="work-section motion-reveal" id="work">
-          <div className="section-heading">
-            <div><p className="section-kicker">A FEW THINGS I'VE BUILT</p><h2>Selected work<span>.</span></h2></div>
-            <span className="section-count">01 — 03</span>
-          </div>
-          <div className="project-grid">
-            {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                selected={selectedProject?.id === project.id}
-                detailReady={detailReady}
-                onOpen={openProject}
-                onClose={closeProject}
-                closeButton={closeButton}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="about-section motion-reveal" id="about">
-          <div className="about-main">
-            <p className="section-kicker">THE TOOLKIT</p>
-            <h2>Curious by nature.<br /><span>Practical by design.</span></h2>
-            <p className="about-copy">From backend architecture to mobile integrations and AI-powered products, I like understanding how the pieces fit together and making them work as one.</p>
-          </div>
-          <div className="skills-panel">
-            {skillGroups.map((group) => (
-              <div className="skill-row" key={group.label}>
-                <span className="skill-label">{group.label}</span>
-                <div className="skill-tags">{group.values.map((value) => <span className="skill-tag" key={value}>{value}</span>)}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="proof-section motion-reveal">
-          <div className="proof-column">
-            <p className="section-kicker">EDUCATION</p>
-            <div className="proof-item"><span className="proof-year">2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology <span>8.43 CGPA</span></p></div></div>
-            <div className="proof-item"><span className="proof-year">2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering <span>9.74 CGPA</span></p></div></div>
-          </div>
-          <div className="proof-column">
-            <p className="section-kicker">BEYOND THE BUILD</p>
-            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>IEEE Xplore research publication</strong><p>Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis · I3CTCON 2026</p></div></div>
-            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>Open-source Android app</strong><p>WhatsApp Status Saver, published on F-Droid</p></div></div>
-            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>6th place · COSC HackWeek</strong><p>Competitive coding challenge organized by CBIT Open Source Community</p></div></div>
-            <div className="proof-item"><span className="proof-symbol">↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
-          </div>
-        </section>
-
-        <footer className="footer motion-reveal" id="contact">
-          <div><p className="section-kicker">HAVE SOMETHING IN MIND?</p><h2>Let's build<br /><span>something useful.</span></h2></div>
-          <div className="footer-contact">
-            <a href="mailto:vinithreddybanda@gmail.com">vinithreddybanda@gmail.com <Arrow /></a>
-            <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub <Arrow /></a>
-          </div>
-          <div className="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>DESIGNED TO KEEP EVOLVING.</span></div>
-        </footer>
-      </div>
-
-
+      <footer className="site-footer" id="contact">
+        <div>
+          <p className="eyebrow">HAVE SOMETHING IN MIND?</p>
+          <h2>Let's build something<br />useful<span>.</span></h2>
+        </div>
+        <div className="footer-links">
+          <a href="mailto:vinithreddybanda@gmail.com">vinithreddybanda@gmail.com <Arrow /></a>
+          <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub <Arrow /></a>
+        </div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>BUILT WITH CARE.</span></div>
+      </footer>
     </main>
   );
 }
