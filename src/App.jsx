@@ -98,8 +98,8 @@ export default function App() {
       velocity *= Math.exp(-elapsed / 0.12);
 
       const intensity = clamp(smoothSpeed / 1250, 0, 1);
-      const blur = (intensity * 3.2).toFixed(2);
-      const opacity = (intensity * 0.82).toFixed(3);
+      const blur = (intensity * 7.5).toFixed(2);
+      const opacity = (intensity * 0.96).toFixed(3);
       root.style.setProperty("--edge-blur", `${blur}px`);
       root.style.setProperty("--edge-opacity", opacity);
 
