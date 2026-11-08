@@ -221,9 +221,9 @@ export default function App() {
       if (event.key === "Escape") closeProject();
     };
     window.addEventListener("keydown", handleKeyDown);
-    if (detailOpen) closeButton.current?.focus();
+    if (detailReady) closeButton.current?.focus();
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedProject, detailOpen]);
+  }, [selectedProject, detailReady]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
