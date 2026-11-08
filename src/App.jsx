@@ -68,6 +68,11 @@ export default function App() {
 
     const root = document.documentElement;
     const revealItems = document.querySelectorAll("[data-reveal], .reveal");
+    const textItems = document.querySelectorAll(
+      "h1, h2, h3, h4, p, .metrics strong, .metrics span, .tag, .skill-row > span, .plain-item > span, .footer-bottom span"
+    );
+    textItems.forEach((item) => item.classList.add("text-reveal"));
+
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         entry.target.classList.toggle("is-visible", entry.isIntersecting);
@@ -78,6 +83,7 @@ export default function App() {
     });
 
     revealItems.forEach((item) => revealObserver.observe(item));
+    textItems.forEach((item) => revealObserver.observe(item));
     root.classList.add("has-motion");
 
     return () => {
