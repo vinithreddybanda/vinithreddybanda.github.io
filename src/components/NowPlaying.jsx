@@ -3,10 +3,24 @@ import "./NowPlaying.css";
 
 const STATUS_URL = "https://vinith-music-status.vinithreddy08-123.workers.dev/status";
 
+function normalizeUrl(value) {
+  if (typeof value !== "string") return "";
+  const markdownLink = value.match(/^\s*\[[^\]]*\]\((https?:\/\/[^\s)]+)\)\s*$/);
+  const candidate = (markdownLink?.[1] ?? value).trim();
+  try {
+    const url = new URL(candidate);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
 function artworkUrl(artwork) {
-  if (typeof artwork === "string") return artwork;
+  if (typeof artwork === "string") return normalizeUrl(artwork);
   if (!Array.isArray(artwork)) return "";
-  return [...artwork].reverse().find((item) => typeof item?.url === "string")?.url ?? "";
+  return [...artwork].reverse().find((item) => normalizeUrl(item?.url))?.url
+    ? normalizeUrl([...artwork].reverse().find((item) => normalizeUrl(item?.url)).url)
+    : "";
 }
 
 function formatTime(value) {
@@ -59,6 +73,7 @@ export default function NowPlaying() {
   const isPlaying = connection === "online" && snapshot?.isPlaying === true;
   const hasTrack = connection === "online" && Boolean(track);
   const image = artworkUrl(track?.artwork);
+  const trackUrl = normalizeUrl(track?.url);
   const updated = formatTime(snapshot?.lastHeartbeat ?? snapshot?.updatedAt);
 
   return (
@@ -81,7 +96,7 @@ export default function NowPlaying() {
           <span className="now-playing-artist">{hasTrack ? track.artist || "Unknown artist" : "SimpMusic · YouTube Music"}</span>
           {hasTrack && updated && <span className="now-playing-time">{isPlaying ? "Updated" : "Last active"} at {updated}</span>}
         </div>
-        {hasTrack && track.url ? <a className="now-playing-link" href={track.url} target="_blank" rel="noreferrer" aria-label="Open track in YouTube Music">↗</a> : null}
+        {hasTrack && trackUrl ? <a className="now-playing-link" href={trackUrl} target="_blank" rel="noreferrer" aria-label="Open track in YouTube Music">↗</a> : null}
       </div>
     </section>
   );
