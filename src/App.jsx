@@ -51,159 +51,49 @@ function Arrow() {
   return <span className="arrow" aria-hidden="true">↗</span>;
 }
 
-function getClipFromRect(rect, radius) {
-  return `inset(${rect.top}px ${window.innerWidth - rect.right}px ${window.innerHeight - rect.bottom}px ${rect.left}px round ${radius})`;
-}
+function animateProjectMorph(source, panel, direction = "forward") {
+  const opening = direction === "forward";
+  const duration = 850;
+  const rect = source.getBoundingClientRect();
+  const scaleX = rect.width / window.innerWidth;
+  const scaleY = rect.height / window.innerHeight;
+  const cardTransform = `translate3d(${rect.left}px, ${rect.top}px, 0) scale(${scaleX}, ${scaleY})`;
 
-function animateProjectMorph(originSurface, destinationSurface, direction = "forward", pageSurfaces = [], detailSurface) {
-  const forward = direction === "forward";
-  const duration = 3100;
-  const springEase = "cubic-bezier(.2,.82,.22,1)";
-  const blurPeak = 3.8;
-  const morphDelay = forward ? 260 : 320;
-  const origins = new Map([...originSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const destinations = new Map([...destinationSurface.querySelectorAll("[data-morph]")].map((node) => [node.dataset.morph, node]));
-  const animations = [];
-  const hiddenOrigins = [];
-  const stagedNodes = [];
-  const matchedKeys = new Set();
-  const sourceRect = originSurface.getBoundingClientRect();
-  const destinationRect = destinationSurface.getBoundingClientRect();
-  const fullFrame = "inset(0px 0px 0px 0px round 0px)";
-  const originClip = getClipFromRect(sourceRect, 8);
-  const destinationClip = getClipFromRect(destinationRect, 8);
+  source.style.visibility = "hidden";
+  panel.style.visibility = "visible";
+  panel.style.pointerEvents = "none";
+  panel.style.transformOrigin = "top left";
+  panel.style.overflow = "hidden";
 
-  if (detailSurface) {
-    detailSurface.style.visibility = "visible";
-    detailSurface.style.pointerEvents = "none";
-    detailSurface.style.backgroundColor = "rgb(23,26,22)";
-    detailSurface.style.clipPath = forward ? originClip : fullFrame;
-  }
-
-  pageSurfaces.forEach((surface) => {
-    if (!surface) return;
-    surface.style.visibility = "visible";
-    if (!forward) surface.style.translate = "0 30px";
-  });
-
-  // Each matched element travels as one complete object, not as individual words.
-  origins.forEach((origin, key) => {
-    const destination = destinations.get(key);
-    if (!destination) return;
-    matchedKeys.add(key);
-    const from = origin.getBoundingClientRect();
-    const to = destination.getBoundingClientRect();
-    const dx = from.left - to.left;
-    const dy = from.top - to.top;
-    const sx = to.width ? from.width / to.width : 1;
-    const sy = to.height ? from.height / to.height : 1;
-    origin.style.visibility = "hidden";
-    hiddenOrigins.push(origin);
-    destination.style.visibility = "visible";
-    animations.push(destination.animate([
-      {
-        transform: `translate3d(${dx}px,${dy}px,0) scale(${sx},${sy})`,
-        transformOrigin: "top left",
-        filter: "blur(0px)",
-      },
-      {
-        transform: `translate3d(${dx * .52}px,${dy * .52}px,0) scale(${1 + (sx - 1) * .52},${1 + (sy - 1) * .52})`,
-        filter: `blur(${blurPeak}px)`,
-        offset: .58,
-      },
-      { transform: "translate3d(0,0,0) scale(1.018)", filter: "blur(1px)", offset: .93 },
-      { transform: "translate3d(0,0,0) scale(1)", filter: "blur(0px)" },
-    ], {
-      duration: duration - morphDelay,
-      delay: morphDelay,
-      easing: "cubic-bezier(.16,.78,.18,1)",
+  const animation = panel.animate(
+    opening
+      ? [
+          { transform: cardTransform, borderRadius: "8px", filter: "blur(0px)" },
+          { transform: "translate3d(0,0,0) scale(1)", borderRadius: "0px", filter: "blur(2px)", offset: 0.52 },
+          { transform: "translate3d(0,0,0) scale(1)", borderRadius: "0px", filter: "blur(0px)" },
+        ]
+      : [
+          { transform: "translate3d(0,0,0) scale(1)", borderRadius: "0px", filter: "blur(0px)" },
+          { transform: cardTransform, borderRadius: "8px", filter: "blur(2px)", offset: 0.48 },
+          { transform: cardTransform, borderRadius: "8px", filter: "blur(0px)" },
+        ],
+    {
+      duration,
+      easing: "cubic-bezier(.22,.68,.18,1)",
       fill: "both",
-    }));
-  });
+    },
+  );
 
-  if (detailSurface) {
-    animations.push(detailSurface.animate(
-      forward
-        ? [
-            { clipPath: originClip, backgroundColor: "rgb(23,26,22)" },
-            { clipPath: fullFrame, backgroundColor: "rgb(21,25,18)" },
-          ]
-        : [
-            { clipPath: fullFrame, backgroundColor: "rgb(21,25,18)" },
-            { clipPath: destinationClip, backgroundColor: "rgb(23,26,22)" },
-          ],
-      { duration, delay: forward ? 90 : 300, easing: springEase, fill: "both" },
-    ));
-  }
-
-  // Detail-only content enters and exits as whole elements, with no opacity fade.
-  const unmatched = forward ? destinationSurface : originSurface;
-  unmatched.querySelectorAll("[data-morph-enter], [data-morph-extra]").forEach((node) => {
-    if (node.dataset.morph && matchedKeys.has(node.dataset.morph)) return;
-    node.style.visibility = forward ? "hidden" : "visible";
-    stagedNodes.push(node);
-    animations.push(node.animate(
-      forward
-        ? [
-            { transform: "translate3d(0,24px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
-            { transform: "translate3d(0,24px,0)", filter: `blur(${blurPeak}px)`, visibility: "visible", offset: .06 },
-            { transform: "translate3d(0,0,0)", filter: "blur(0px)" },
-          ]
-        : [
-            { transform: "translate3d(0,0,0)", filter: "blur(0px)", visibility: "visible" },
-            { transform: "translate3d(0,28px,0)", filter: `blur(${blurPeak}px)`, visibility: "hidden" },
-          ],
-      {
-        duration: 1750,
-        delay: forward ? 1850 : 0,
-        easing: "cubic-bezier(.16,.78,.18,1)",
-        fill: "both",
-      },
-    ));
-  });
-
-  pageSurfaces.forEach((surface) => {
-    if (!surface) return;
-    animations.push(surface.animate(
-      forward
-        ? [
-            { translate: "0 0", filter: "blur(0px)" },
-            { translate: "0 30px", filter: "blur(2.6px)" },
-          ]
-        : [
-            { translate: "0 30px", filter: "blur(2.6px)" },
-            { translate: "0 0", filter: "blur(0px)" },
-          ],
-      {
-        duration: Math.round(duration * (forward ? .62 : .42)),
-        delay: forward ? 0 : Math.round(duration * .76),
-        easing: springEase,
-        fill: "both",
-      },
-    ));
-  });
-
-  return Promise.all(animations.map((animation) => animation.finished.catch(() => undefined))).finally(() => {
-    animations.forEach((animation) => animation.cancel());
-    hiddenOrigins.forEach((node) => { node.style.visibility = ""; });
-    stagedNodes.forEach((node) => { node.style.visibility = ""; });
-    pageSurfaces.forEach((surface) => {
-      if (!surface) return;
-      surface.style.removeProperty("filter");
-      if (forward) {
-        surface.style.translate = "0 30px";
-        surface.style.visibility = "hidden";
-      } else {
-        surface.style.removeProperty("translate");
-        surface.style.visibility = "";
-      }
-    });
-    if (detailSurface) {
-      detailSurface.style.removeProperty("background-color");
-      detailSurface.style.removeProperty("clip-path");
-      detailSurface.style.visibility = forward ? "visible" : "hidden";
-      detailSurface.style.pointerEvents = forward ? "" : "none";
-    }
+  return animation.finished.catch(() => undefined).finally(() => {
+    animation.cancel();
+    panel.style.removeProperty("transform");
+    panel.style.removeProperty("transform-origin");
+    panel.style.removeProperty("border-radius");
+    panel.style.removeProperty("filter");
+    panel.style.removeProperty("overflow");
+    panel.style.pointerEvents = opening ? "auto" : "none";
+    panel.style.visibility = opening ? "visible" : "hidden";
+    source.style.visibility = "";
   });
 }
 
@@ -226,14 +116,14 @@ function ProjectCard({ project, onOpen }) {
   return (
     <button className={`project-card motion-reveal ${project.featured ? "project-card-featured" : ""}`} onPointerMove={handlePointerMove} onPointerLeave={handlePointerLeave} onClick={(event) => onOpen(project, event)} type="button">
       <span className="project-card-top">
-        <span className="project-number" data-morph="project-index">{project.number} / SELECTED WORK</span>
+        <span className="project-number">{project.number} / SELECTED WORK</span>
         <span className="project-open" aria-hidden="true">↗</span>
       </span>
-      <span className="project-name" data-morph="title">{project.name}</span>
-      <span className="project-type" data-morph="project-type">{project.type} <span>·</span> {project.context}</span>
-      <span className="project-summary" data-morph="summary">{project.summary}</span>
+      <span className="project-name">{project.name}</span>
+      <span className="project-type">{project.type} <span>·</span> {project.context}</span>
+      <span className="project-summary">{project.summary}</span>
       <span className="project-card-bottom">
-        <span className="project-stack">{project.stack.slice(0, 4).map((item, index) => <span className="project-stack-item" data-morph={`stack-${index}`} key={item}>{item}</span>)}</span>
+        <span className="project-stack">{project.stack.slice(0, 4).map((item, index) => <span className="project-stack-item"`} key={item}>{item}</span>)}</span>
         <span className="view-project">Explore project <Arrow /></span>
       </span>
     </button>
@@ -262,7 +152,7 @@ export default function App() {
       sourceButton.current?.focus();
     };
     if (source && panel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      animateProjectMorph(panel, source, "backward", [mainSurface.current, sidebarSurface.current], panel).then(finish);
+      animateProjectMorph(source, panel, "backward").then(finish);
     } else {
       finish();
     }
@@ -358,7 +248,7 @@ export default function App() {
         closeButton.current?.focus();
         return;
       }
-      animateProjectMorph(source, panel, "forward", [mainSurface.current, sidebarSurface.current], panel).then(() => {
+      animateProjectMorph(source, panel, "forward").then(() => {
         setDetailOpen(true);
         closing.current = false;
         closeButton.current?.focus();
@@ -368,7 +258,7 @@ export default function App() {
 
   return (
     <main className="dashboard">
-      <aside ref={sidebarSurface} className="sidebar">
+      <aside className="sidebar">
         <a className="brand" href="#home" aria-label="Vinith, home">v<span>.</span></a>
         <div className="sidebar-rule" />
         <nav className="side-nav" aria-label="Portfolio sections">
@@ -383,7 +273,7 @@ export default function App() {
         </div>
       </aside>
 
-      <div ref={mainSurface} className="main-area" id="home">
+      <div className="main-area" id="home">
         <header className="topbar">
           <span className="breadcrumb">PORTFOLIO <span>/</span> OVERVIEW</span>
           <a className="top-link" href="mailto:vinithreddybanda@gmail.com">LET'S TALK <Arrow /></a>
@@ -469,18 +359,18 @@ export default function App() {
 
       {selectedProject && (
         <section ref={detailPanel} className={`project-detail ${detailOpen ? "is-open" : ""}`} aria-modal="true" role="dialog" aria-labelledby="detail-title">
-          <div className="detail-topbar" data-morph-enter><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
+          <div className="detail-topbar"><span className="brand detail-brand">v<span>.</span></span><span>PROJECT / {selectedProject.number}</span><button ref={closeButton} className="close-detail" onClick={closeProject} type="button"><span>Close</span> ×</button></div>
           <div className="detail-content">
-            <p className="section-kicker" data-morph="project-type">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
-            <p className="detail-index" data-morph="project-index">{selectedProject.number} / SELECTED WORK</p>
-            <h2 id="detail-title" data-morph="title">{selectedProject.name}<span>.</span></h2>
-            <p className="detail-lead" data-morph="summary">{selectedProject.summary}</p>
-            <div className="detail-rule" data-morph-enter />
-            <div className="detail-description" data-morph-enter><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
-            <div className="detail-description" data-morph-enter><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
-            <div className="detail-stack"><span className="detail-stack-label" data-morph-enter>TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item, index) => <span className="skill-tag" data-morph={index < 4 ? `stack-${index}` : undefined} data-morph-extra={index >= 4 ? "" : undefined} key={item}>{item}</span>)}</div></div>
+            <p className="section-kicker">{selectedProject.type} <span>·</span> {selectedProject.context}</p>
+            <p className="detail-index">{selectedProject.number} / SELECTED WORK</p>
+            <h2 id="detail-title">{selectedProject.name}<span>.</span></h2>
+            <p className="detail-lead">{selectedProject.summary}</p>
+            <div className="detail-rule" />
+            <div className="detail-description"><span>OVERVIEW</span><p>{selectedProject.detail}</p></div>
+            <div className="detail-description"><span>ENGINEERING FOCUS</span><div><strong>{selectedProject.highlight}</strong><p>{selectedProject.highlightDetail}</p></div></div>
+            <div className="detail-stack"><span className="detail-stack-label">TECHNOLOGIES</span><div className="skill-tags">{selectedProject.stack.map((item, index) => <span className="skill-tag"` : undefined} key={item}>{item}</span>)}</div></div>
           </div>
-          <div className="detail-footer" data-morph-enter><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
+          <div className="detail-footer"><span>VINITH REDDY BANDA</span><button type="button" onClick={closeProject}>Back to overview ↑</button></div>
         </section>
       )}
     </main>
