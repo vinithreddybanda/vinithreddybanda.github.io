@@ -61,7 +61,7 @@ export default function NowPlaying() {
     };
 
     refresh();
-    const interval = window.setInterval(refresh, 30000);
+    const interval = window.setInterval(() => {\n      if (document.visibilityState === "visible") refresh();\n    }, 2000);\n    const handleFocus = () => refresh();\n    document.addEventListener("visibilitychange", handleFocus);\n    window.addEventListener("focus", handleFocus);
     return () => {
       active = false;
       window.clearInterval(interval);
