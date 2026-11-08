@@ -160,40 +160,20 @@ a,button{-webkit-tap-highlight-color:transparent}
 
 
 /* Reverse morph keeps the detail elements themselves in motion. */
-.project-detail.is-closing{
-  background:transparent;
-  opacity:1;
-  transform:none;
-  filter:none;
-  pointer-events:none;
-  transition:none;
-}
-.project-detail.is-closing .detail-topbar,
-.project-detail.is-closing .detail-footer,
-.project-detail.is-closing .detail-rule,
-.project-detail.is-closing .detail-description,
-.project-detail.is-closing .detail-stack-label{
-  opacity:0;
-  transition:opacity 140ms ease-out;
-}
-.project-detail.is-closing .detail-stack{
-  border-color:transparent;
-}
 
 
-/* The project surface is the travelling object; shared content travels with it. */
+
+/* One full-page surface morphs from and back to the selected card. */
 .project-detail{
-  opacity:1;
+  clip-path:none!important;
+  opacity:1!important;
   transform:none;
   filter:none;
-  transition:none;
+  transition:none!important;
   visibility:hidden;
   pointer-events:none;
 }
 .project-detail.is-open{
-  opacity:1;
-  transform:none;
-  filter:none;
   visibility:visible;
   pointer-events:auto;
 }
