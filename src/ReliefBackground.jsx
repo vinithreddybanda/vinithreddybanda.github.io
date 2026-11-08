@@ -15,7 +15,7 @@ float relief(vec2 uv){
  float leaves=smoothstep(.68,.96,sin(p.x*34.+sin(p.y*15.)*2.)*cos(p.y*27.))*(1.-smoothstep(.1,.95,abs(p.x)));
  return stone+veins*.022+branches*.20+leaves*.10;
 }
-void main(){vUv=uv;vec3 p=position;p.z+=relief(uv)*.42;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}
+void main(){vUv=uv;vec3 p=position;p.z+=relief(uv)*.58;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}
 `;
 
 const fragmentShader = `
@@ -35,17 +35,27 @@ float relief(vec2 uv){
  return stone+veins*.022+branches*.20+leaves*.10;
 }
 void main(){
- vec2 uv=vUv;float h=relief(uv);
- float hx=relief(uv+vec2(.0018,0.))-relief(uv-vec2(.0018,0.));
- float hy=relief(uv+vec2(0.,.0018))-relief(uv-vec2(0.,.0018));
- vec3 n=normalize(vec3(-hx*38.,-hy*38.,1.));
- vec3 light=normalize(vec3((uPointer.x-.5)*2.8,(uPointer.y-.5)*2.,1.6));
+ vec2 uv=vUv;
+ vec2 delta=(uv-uPointer)*vec2(uResolution.x/uResolution.y,1.);
+ float distanceToCursor=length(delta);
+ float reveal=1.-smoothstep(.10,.34,distanceToCursor);
+ float h=relief(uv);
+ float hx=relief(uv+vec2(.0015,0.))-relief(uv-vec2(.0015,0.));
+ float hy=relief(uv+vec2(0.,.0015))-relief(uv-vec2(0.,.0015));
+ vec3 n=normalize(vec3(-hx*115.,-hy*115.,1.));
+ vec2 lightDelta=delta+vec2(.035,-.045);
+ vec3 light=normalize(vec3(-lightDelta*3.2,0.72));
  float diffuse=max(dot(n,light),0.);
- float rim=pow(1.-max(n.z,0.),2.);
- float grain=noise(uv*uResolution*.72)*.045+fbm(uv*390.)*.08;
- float pool=exp(-length((uv-uPointer)*vec2(1.,.8))*3.);
- vec3 stone=vec3(.105,.105,.10)+vec3(.11,.108,.10)*diffuse*.95+vec3(.10,.095,.085)*rim+vec3(.045)*smoothstep(-.03,.24,h)+vec3(.10,.095,.08)*pool*diffuse*.55;
- stone-=vec3(grain);float vignette=1.-smoothstep(.18,.95,length((uv-.5)*vec2(.9,.8)));stone*=.60+vignette*.40;
+ float facing=pow(max(n.z,0.),5.);
+ float grazing=pow(1.-max(dot(n,light),0.),2.);
+ float grain=noise(uv*uResolution*.9)*.035+fbm(uv*520.)*.055;
+ float highlight=exp(-dot(lightDelta,lightDelta)*34.);
+ float cavity=smoothstep(.015,.16,h);
+ float stoneLight=(.035+diffuse*.16+grazing*.035+facing*.018+cavity*.025+highlight*.055);
+ stoneLight-=grain*.42;
+ vec3 stone=vec3(max(stoneLight,0.))*reveal;
+ float edge=1.-smoothstep(.24,.35,distanceToCursor);
+ stone+=vec3(.008,.008,.008)*edge*(1.-reveal*.4);
  gl_FragColor=vec4(stone,1.);
 }
 `;
