@@ -69,48 +69,60 @@ export default function App() {
     let previousY = window.scrollY;
     let previousTime = performance.now();
     let frameTime = previousTime;
-    let velocity = 0;
+    let scrollVelocity = 0;
     let blur = 0;
     let blurVelocity = 0;
     let drift = 0;
     let driftVelocity = 0;
     let frame = 0;
-    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const animate = (now) => {
       const delta = Math.min((now - frameTime) / 1000, 0.032);
       frameTime = now;
-      velocity *= Math.exp(-delta / 0.095);
-      const targetBlur = Math.min(Math.abs(velocity) * 0.42, 1.65);
-      const targetDrift = clamp(-velocity * 1.8, -4, 4);
 
-      blurVelocity += ((targetBlur - blur) * 190 - blurVelocity * 25) * delta;
+      // Let the measured scroll impulse decay, then spring both visual channels
+      // back to rest. This keeps the effect continuous without a permanent RAF.
+      scrollVelocity *= Math.exp(-delta / 0.11);
+      const targetBlur = Math.min((Math.abs(scrollVelocity) / 1800) * 1.5, 1.5);
+      const targetDrift = clamp(-scrollVelocity * 0.002, -5, 5);
+      const stiffness = 220;
+      const damping = 29;
+
+      blurVelocity += ((targetBlur - blur) * stiffness - blurVelocity * damping) * delta;
       blur += blurVelocity * delta;
-      driftVelocity += ((targetDrift - drift) * 190 - driftVelocity * 25) * delta;
+      driftVelocity += ((targetDrift - drift) * stiffness - driftVelocity * damping) * delta;
       drift += driftVelocity * delta;
 
       root.style.setProperty("--scroll-blur", `${Math.max(0, blur).toFixed(3)}px`);
       root.style.setProperty("--scroll-drift", `${drift.toFixed(3)}px`);
 
-      if (Math.abs(velocity) < 0.008 && Math.abs(blur) < 0.008 &&
-          Math.abs(blurVelocity) < 0.008 && Math.abs(drift) < 0.02 &&
-          Math.abs(driftVelocity) < 0.02) {
-        blur = drift = blurVelocity = driftVelocity = velocity = 0;
+      const settled =
+        Math.abs(scrollVelocity) < 0.5 &&
+        Math.abs(blur) < 0.008 &&
+        Math.abs(blurVelocity) < 0.025 &&
+        Math.abs(drift) < 0.02 &&
+        Math.abs(driftVelocity) < 0.05;
+
+      if (settled) {
+        blur = drift = blurVelocity = driftVelocity = scrollVelocity = 0;
         root.style.setProperty("--scroll-blur", "0px");
         root.style.setProperty("--scroll-drift", "0px");
         root.classList.remove("is-scroll-moving");
         frame = 0;
         return;
       }
+
       frame = requestAnimationFrame(animate);
     };
 
     const onScroll = () => {
       const now = performance.now();
       const elapsed = Math.max(now - previousTime, 8);
-      velocity = clamp((window.scrollY - previousY) / elapsed, -4, 4);
+      scrollVelocity = clamp(((window.scrollY - previousY) / elapsed) * 1000, -3200, 3200);
       previousY = window.scrollY;
       previousTime = now;
+
       root.classList.add("is-scroll-moving");
       if (!frame) {
         frameTime = now;
