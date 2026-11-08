@@ -70,92 +70,19 @@ export default function App() {
     const revealItems = document.querySelectorAll("[data-reveal], .reveal");
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        // Toggle in both directions so elements leave and re-enter as you scroll.
         entry.target.classList.toggle("is-visible", entry.isIntersecting);
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
+    }, {
+      threshold: 0.08,
+      rootMargin: "0px 0px -24px 0px",
+    });
+
     revealItems.forEach((item) => revealObserver.observe(item));
     root.classList.add("has-motion");
-    let previousY = window.scrollY;
-    let previousTime = performance.now();
-    let frameTime = previousTime;
-    let velocity = 0;
-    let smoothedVelocity = 0;
-    let blur = 0;
-    let blurVelocity = 0;
-    let drift = 0;
-    let driftVelocity = 0;
-    let frame = 0;
 
-    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-    const animate = (now) => {
-      const delta = Math.min((now - frameTime) / 1000, 0.024);
-      frameTime = now;
-
-      // Smooth noisy wheel/touch input, then let the visual response spring to rest.
-      const inputBlend = 1 - Math.exp(-delta / 0.045);
-      smoothedVelocity += (velocity - smoothedVelocity) * inputBlend;
-      velocity *= Math.exp(-delta / 0.14);
-
-      const speed = Math.abs(smoothedVelocity);
-      const targetBlur = Math.min((speed / 1500) * 2.1, 2.1);
-      const targetDrift = clamp(-smoothedVelocity * 0.0022, -6, 6);
-
-      // Slightly underdamped spring gives the blur and position a soft, controlled landing.
-      const stiffness = 210;
-      const damping = 23;
-      blurVelocity += ((targetBlur - blur) * stiffness - blurVelocity * damping) * delta;
-      blur += blurVelocity * delta;
-      driftVelocity += ((targetDrift - drift) * stiffness - driftVelocity * damping) * delta;
-      drift += driftVelocity * delta;
-
-      root.style.setProperty("--scroll-blur", `${Math.max(0, blur).toFixed(3)}px`);
-      root.style.setProperty("--scroll-drift", `${drift.toFixed(3)}px`);
-
-      const settled =
-        Math.abs(velocity) < 0.5 &&
-        Math.abs(smoothedVelocity) < 0.5 &&
-        Math.abs(blur) < 0.008 &&
-        Math.abs(blurVelocity) < 0.025 &&
-        Math.abs(drift) < 0.02 &&
-        Math.abs(driftVelocity) < 0.05;
-
-      if (settled) {
-        velocity = smoothedVelocity = blur = blurVelocity = drift = driftVelocity = 0;
-        root.style.setProperty("--scroll-blur", "0px");
-        root.style.setProperty("--scroll-drift", "0px");
-        root.classList.remove("is-scroll-moving");
-        frame = 0;
-        return;
-      }
-
-      frame = requestAnimationFrame(animate);
-    };
-
-    const onScroll = () => {
-      const now = performance.now();
-      const elapsed = Math.max(now - previousTime, 8);
-      velocity = clamp(((window.scrollY - previousY) / elapsed) * 1000, -3600, 3600);
-      previousY = window.scrollY;
-      previousTime = now;
-
-      root.classList.add("is-scroll-moving");
-      if (!frame) {
-        frameTime = now;
-        frame = requestAnimationFrame(animate);
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", onScroll);
       revealObserver.disconnect();
       root.classList.remove("has-motion");
-      if (frame) cancelAnimationFrame(frame);
-      root.classList.remove("is-scroll-moving");
-      root.style.removeProperty("--scroll-blur");
-      root.style.removeProperty("--scroll-drift");
     };
   }, []);
 
