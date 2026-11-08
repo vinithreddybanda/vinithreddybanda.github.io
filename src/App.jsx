@@ -44,9 +44,9 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, index }) {
   return (
-    <article className="project-card">
+    <article className="project-card reveal" style={{ "--reveal-delay": `${index * 90}ms` }}>
       <p className="eyebrow">{project.number} / SELECTED WORK</p>
       <h3>{project.name}</h3>
       <p className="project-type">{project.type}</p>
@@ -67,6 +67,16 @@ export default function App() {
     if (motionPreference.matches) return;
 
     const root = document.documentElement;
+    const revealItems = document.querySelectorAll("[data-reveal], .reveal");
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -48px 0px" });
+    revealItems.forEach((item) => revealObserver.observe(item));
+    root.classList.add("has-motion");
     let previousY = window.scrollY;
     let previousTime = performance.now();
     let frameTime = previousTime;
@@ -141,6 +151,8 @@ export default function App() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
+      revealObserver.disconnect();
+      root.classList.remove("has-motion");
       if (frame) cancelAnimationFrame(frame);
       root.classList.remove("is-scroll-moving");
       root.style.removeProperty("--scroll-blur");
@@ -151,7 +163,7 @@ export default function App() {
   return (
     <>
       <main className="site-shell" id="home">
-      <header className="site-header">
+      <header className="site-header" data-reveal="up">
         <a className="brand" href="#home">vinith<span>.</span></a>
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
@@ -162,32 +174,32 @@ export default function App() {
       </header>
 
       <section className="hero">
-        <p className="eyebrow">DEVELOPER / BUILDER <span>·</span> INDIA</p>
-        <h1>Making things<br />work<span>.</span></h1>
-        <div className="hero-bottom">
+        <p className="eyebrow hero-kicker" data-reveal="up">DEVELOPER / BUILDER <span>·</span> INDIA</p>
+        <h1 className="hero-title" data-reveal="up">Making things<br />work<span>.</span></h1>
+        <div className="hero-bottom" data-reveal="up">
           <p>I'm Vinith Reddy Banda, an Information Technology graduate drawn to the space between an idea and a working product. I like finding out how systems fit together, getting into the details, and turning what I learn into software people can actually use.</p>
           <a className="text-link" href="#work">Explore my work ↓</a>
         </div>
       </section>
 
-      <section className="metrics" aria-label="Highlights">
+      <section className="metrics" aria-label="Highlights" data-reveal="up">
         <div><strong>03</strong><span>PROJECTS</span></div>
         <div><strong>148</strong><span>REST APIS</span></div>
         <div><strong>8.43</strong><span>B.E. CGPA</span></div>
         <div><strong>9.74</strong><span>DIPLOMA CGPA</span></div>
       </section>
 
-      <section className="section" id="work">
+      <section className="section" id="work" data-reveal="up">
         <div className="section-heading">
           <p className="eyebrow">SELECTED WORK</p>
           <h2>Things I've built<span>.</span></h2>
         </div>
         <div className="project-grid">
-          {projects.map((project) => <ProjectCard key={project.number} project={project} />)}
+          {projects.map((project, index) => <ProjectCard key={project.number} project={project} index={index} />)}
         </div>
       </section>
 
-      <section className="section about-section" id="about">
+      <section className="section about-section" id="about" data-reveal="up">
         <div>
           <p className="eyebrow">A LITTLE ABOUT ME</p>
           <h2>Curious by nature.<br />Practical by design<span>.</span></h2>
@@ -203,7 +215,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="section background-section">
+      <section className="section background-section" data-reveal="up">
         <div>
           <p className="eyebrow">EDUCATION</p>
           <div className="plain-item"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
@@ -218,7 +230,7 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="site-footer" id="contact">
+      <footer className="site-footer" id="contact" data-reveal="up">
         <div>
           <p className="eyebrow">HAVE SOMETHING IN MIND?</p>
           <h2>Let's build something<br />useful<span>.</span></h2>
