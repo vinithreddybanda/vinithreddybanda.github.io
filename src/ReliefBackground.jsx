@@ -10,14 +10,51 @@ uniform float uTime;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.03+17.1;a*=.5;}return v;}
+float flower(vec2 p, float scale, float phase){
+ p*=scale;
+ float r=length(p), a=atan(p.y,p.x)+phase;
+ float petals=0.;
+ for(int ring=0;ring<4;ring++){
+  float k=float(ring);
+  float count=5.+k*3.;
+  float angle=6.2831853/count;
+  float aa=mod(a+k*.47+3.1415926,angle)-angle*.5;
+  float rr=r-(.10+k*.105);
+  float petal=exp(-pow(aa/(angle*.39),2.)*1.8-pow(rr/.105,2.)*1.5);
+  petals=max(petals,petal*(1.-k*.13));
+ }
+ float heart=exp(-r*r*95.);
+ float folds=sin(a*18.+r*48.)*.012*exp(-r*3.);
+ return petals*.19+heart*.13+folds;
+}
+float leaf(vec2 p,float angle,float size){
+ float c=cos(angle),s=sin(angle);
+ p=mat2(c,s,-s,c)*p;
+ float body=exp(-pow(p.x/(size*.24),2.)*1.3-pow(p.y/size,2.)*2.2);
+ float ridge=exp(-pow(p.x/(size*.055),2.)*1.2-pow(p.y/size,2.)*1.6);
+ float veins=sin(p.y*115.)*exp(-abs(p.x)*20.-abs(p.y)*3.)*.018;
+ return body*.16+ridge*.07+veins;
+}
 float relief(vec2 uv){
- vec2 p=(uv-.5)*vec2(1.7,1.);
- float stone=fbm(p*8.)*.13+fbm(p*23.)*.035;
- float veins=pow(max(0.,1.-abs(sin(p.x*19.+sin(p.y*8.)*1.8+fbm(p*5.)*4.))),22.);
- float branches=0.;
- for(int i=0;i<4;i++){float fi=float(i),x=p.x+(fi-1.5)*.34;float c=p.y-(.18*sin(x*4.2+fi*1.7)+(fi-1.5)*.12);float trunk=1.-smoothstep(.012,.042,abs(c));float a=1.-smoothstep(.009,.026,abs(c-(x-(fi-1.5)*.34)*.72));float b=1.-smoothstep(.009,.026,abs(c+(x-(fi-1.5)*.34)*.72));branches=max(branches,max(trunk,max(a,b))*(1.-smoothstep(0.,.95,abs(x))));}
- float leaves=smoothstep(.68,.96,sin(p.x*34.+sin(p.y*15.)*2.)*cos(p.y*27.))*(1.-smoothstep(.1,.95,abs(p.x)));
- return stone+veins*.022+branches*.20+leaves*.10;
+ vec2 p=(uv-.5)*vec2(1.8,1.05);
+ float h=fbm(p*13.)*.012+fbm(p*31.)*.004;
+ // A sculpted botanical arrangement: three layered roses, curling stems and embossed leaves.
+ h+=flower(p-vec2(-.43,.08),1.55,.2);
+ h+=flower(p-vec2(.02,-.22),1.18,1.1)*.88;
+ h+=flower(p-vec2(.48,.23),1.38,2.2)*.82;
+ float stem1=abs(p.y-(.23*sin(p.x*3.4)-.12));
+ float stem2=abs(p.y-(-.20*sin(p.x*3.1+.8)+.16));
+ float stems=(1.-smoothstep(.012,.035,stem1))*.095+(1.-smoothstep(.009,.029,stem2))*.075;
+ h+=stems;
+ h+=leaf(p-vec2(-.60,-.18),-.55,.20);
+ h+=leaf(p-vec2(-.18,.30),.75,.19);
+ h+=leaf(p-vec2(.23,.28),-.8,.22);
+ h+=leaf(p-vec2(.62,-.08),2.4,.19);
+ h+=leaf(p-vec2(.08,-.42),2.0,.16);
+ // Fine chisel marks and recessed channels give the surface a carved, not printed, finish.
+ float grain=fbm(p*78.)-.5;
+ h+=grain*.006;
+ return h;
 }
 float cloth(vec2 uv){
  vec2 aspect=vec2(1.75,1.);
