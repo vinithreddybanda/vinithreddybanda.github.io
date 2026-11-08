@@ -19,16 +19,16 @@ float relief(vec2 uv){
  return stone+veins*.022+branches*.20+leaves*.10;
 }
 float cloth(vec2 uv){
- vec2 delta=(uv-uPointer)*vec2(1.75,1.);
- float speed=clamp(length(uVelocity)*24.,0.,1.);
- vec2 direction=normalize(vec2(uVelocity.x*1.75,uVelocity.y)+vec2(.00001));
- float along=dot(delta,direction);
- float across=delta.x*direction.y-delta.y*direction.x;
- float width=.004+speed*.009;
- float ribbon=exp(-pow(across/width,2.))*exp(-pow((along+.105)/.13,2.));
- float wave=sin(along*105.-uTime*5.)*exp(-abs(along)*8.);
- float crossWave=sin(across*240.+along*24.)*exp(-abs(across)/(.012+speed*.012));
- return speed*ribbon*(wave*.052+crossWave*.018);
+ vec2 aspect=vec2(1.75,1.);
+ vec2 d=(uv-uPointer)*aspect;
+ float speed=clamp(length(uVelocity)*18.,0.,1.);
+ float radius=length(d);
+ float influence=exp(-radius*radius*34.);
+ float wake=exp(-length(d+uVelocity*vec2(1.75,1.)*.10)*18.)*speed;
+ float turbulence=fbm(uv*vec2(34.,22.)+uTime*.12);
+ float ripple=sin(radius*72.-uTime*3.2+turbulence*5.)*exp(-radius*8.);
+ float folds=sin((d.x+d.y*.7)*48.+turbulence*8.)*sin((d.y-d.x*.4)*31.);
+ return (influence*(ripple*.018+folds*.009)+wake*folds*.018);
 }
 void main(){vUv=uv;vec3 p=position;p.z+=(relief(uv)*.58+cloth(uv));gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}
 `;
@@ -52,16 +52,16 @@ float relief(vec2 uv){
  return stone+veins*.022+branches*.20+leaves*.10;
 }
 float cloth(vec2 uv){
- vec2 delta=(uv-uPointer)*vec2(1.75,1.);
- float speed=clamp(length(uVelocity)*24.,0.,1.);
- vec2 direction=normalize(vec2(uVelocity.x*1.75,uVelocity.y)+vec2(.00001));
- float along=dot(delta,direction);
- float across=delta.x*direction.y-delta.y*direction.x;
- float width=.004+speed*.009;
- float ribbon=exp(-pow(across/width,2.))*exp(-pow((along+.105)/.13,2.));
- float wave=sin(along*105.-uTime*5.)*exp(-abs(along)*8.);
- float crossWave=sin(across*240.+along*24.)*exp(-abs(across)/(.012+speed*.012));
- return speed*ribbon*(wave*.052+crossWave*.018);
+ vec2 aspect=vec2(1.75,1.);
+ vec2 d=(uv-uPointer)*aspect;
+ float speed=clamp(length(uVelocity)*18.,0.,1.);
+ float radius=length(d);
+ float influence=exp(-radius*radius*34.);
+ float wake=exp(-length(d+uVelocity*vec2(1.75,1.)*.10)*18.)*speed;
+ float turbulence=fbm(uv*vec2(34.,22.)+uTime*.12);
+ float ripple=sin(radius*72.-uTime*3.2+turbulence*5.)*exp(-radius*8.);
+ float folds=sin((d.x+d.y*.7)*48.+turbulence*8.)*sin((d.y-d.x*.4)*31.);
+ return (influence*(ripple*.018+folds*.009)+wake*folds*.018);
 }
 float surface(vec2 uv){return relief(uv)+cloth(uv);}
 void main(){
@@ -71,16 +71,18 @@ void main(){
  float hy=surface(uv+vec2(0.,.0012))-surface(uv-vec2(0.,.0012));
  vec3 normal=normalize(vec3(-hx*190.,-hy*190.,1.));
 
- // A narrow ribbon trails the pointer like air moving across a hanging curtain.
+ // Organic cursor reveal: an irregular pool of grazing light, not a spotlight or beam.
  vec2 delta=(uv-uPointer)*vec2(uResolution.x/uResolution.y,1.);
- vec2 direction=normalize(vec2(uVelocity.x*uResolution.x/uResolution.y,uVelocity.y)+vec2(.00001));
- float along=dot(delta,direction);
- float across=abs(delta.x*direction.y-delta.y*direction.x);
- float speed=clamp(length(uVelocity)*24.,0.,1.);
- float ribbonWidth=.0035+speed*.006;
- float ribbonAcross=exp(-pow(across/ribbonWidth,2.));
- float ribbonLength=smoothstep(-.30,-.24,along)*(1.-smoothstep(.012,.045,along));
- float reveal=ribbonAcross*ribbonLength*speed;
+ float speed=clamp(length(uVelocity)*18.,0.,1.);
+ float fieldNoise=fbm(uv*vec2(38.,26.)+uTime*.035);
+ float edgeNoise=fbm(uv*vec2(72.,48.)-uTime*.025);
+ float radius=length(delta);
+ float organicRadius=.205+(fieldNoise-.5)*.075+(edgeNoise-.5)*.035;
+ float reveal=smoothstep(organicRadius,.035,radius);
+ reveal*=smoothstep(.0,.055,speed)+.22;
+ float wake=exp(-length(delta+uVelocity*vec2(uResolution.x/uResolution.y,1.)*.12)*13.);
+ reveal=max(reveal,wake*speed*.58);
+ reveal=clamp(reveal,0.,1.);
 
  // Directional grazing light reveals only the real raised and recessed surface.
  vec3 lightDirection=normalize(vec3(-.62,.72,.58));
@@ -90,9 +92,9 @@ void main(){
  float specular=pow(max(dot(normal,halfVector),0.),34.);
  float cavity=smoothstep(.018,.16,h);
  float grain=noise(uv*uResolution*.9)*.012+fbm(uv*520.)*.018;
- float reliefShade=clamp(.008+diffuse*.045+grazing*.018+specular*.045+cavity*.012-grain*.12,0.,.11);
- float fineEdge=exp(-pow(across/(ribbonWidth*.42),2.))*ribbonLength*speed;
- vec3 stone=vec3(reliefShade*reveal+fineEdge*.035);
+ float reliefShade=clamp(.006+diffuse*.085+grazing*.035+specular*.10+cavity*.025-grain*.12,0.,.18);
+ float fineEdge=pow(max(0.,1.-abs(h)*8.),3.)*reveal*.12;
+ vec3 stone=vec3(reliefShade*reveal+fineEdge);
  gl_FragColor=vec4(stone,1.);
 }
 `;
