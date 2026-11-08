@@ -78,8 +78,8 @@ void main(){
  float edgeNoise=fbm(uv*vec2(72.,48.)-uTime*.025);
  float radius=length(delta);
  float organicRadius=.205+(fieldNoise-.5)*.075+(edgeNoise-.5)*.035;
- float reveal=smoothstep(organicRadius,.035,radius);
- reveal*=smoothstep(.0,.055,speed)+.22;
+ float reveal=1.-smoothstep(.035,organicRadius,radius);
+ reveal*=smoothstep(.001,.025,speed);
  float wake=exp(-length(delta+uVelocity*vec2(uResolution.x/uResolution.y,1.)*.12)*13.);
  reveal=max(reveal,wake*speed*.58);
  reveal=clamp(reveal,0.,1.);
