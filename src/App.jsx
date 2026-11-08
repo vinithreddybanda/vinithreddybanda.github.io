@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import NowPlaying from "./components/NowPlaying.jsx";
 
 const projects = [
   {
@@ -161,6 +162,8 @@ export default function App() {
           <div className="plain-item"><span>↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
         </div>
       </section>
+
+      <NowPlaying />
 
       <footer className="site-footer" id="contact" data-reveal="up">
         <div>
