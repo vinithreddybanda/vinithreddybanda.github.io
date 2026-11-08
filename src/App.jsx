@@ -68,13 +68,12 @@ export default function App() {
 
     const root = document.documentElement;
     const revealItems = document.querySelectorAll("[data-reveal], .reveal");
-    const revealObserver = new IntersectionObserver((entries, observer) => {
+    const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
+        // Toggle in both directions so elements leave and re-enter as you scroll.
+        entry.target.classList.toggle("is-visible", entry.isIntersecting);
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -48px 0px" });
+    }, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
     revealItems.forEach((item) => revealObserver.observe(item));
     root.classList.add("has-motion");
     let previousY = window.scrollY;
@@ -207,7 +206,7 @@ export default function App() {
         </div>
         <div className="skills">
           {skillGroups.map((group) => (
-            <div className="skill-row" key={group.label}>
+            <div className="skill-row reveal" key={group.label}>
               <span>{group.label}</span>
               <div className="tags">{group.values.map((value) => <span className="tag" key={value}>{value}</span>)}</div>
             </div>
@@ -218,12 +217,12 @@ export default function App() {
       <section className="section background-section" data-reveal="up">
         <div>
           <p className="eyebrow">EDUCATION</p>
-          <div className="plain-item"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
-          <div className="plain-item"><span>2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering · 9.74 CGPA</p></div></div>
+          <div className="plain-item reveal"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
+          <div className="plain-item reveal"><span>2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering · 9.74 CGPA</p></div></div>
         </div>
         <div>
           <p className="eyebrow">BEYOND THE BUILD</p>
-          <div className="plain-item"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>A research project exploring graph attention networks for analysing kinematic patterns in rehabilitation exercises · I3CTCON 2026</p></div></div>
+          <div className="plain-item reveal"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>A research project exploring graph attention networks for analysing kinematic patterns in rehabilitation exercises · I3CTCON 2026</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>Open-source Android app</strong><p>Built for Android and distributed through F-Droid</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>6th place · COSC HackWeek</strong><p>A competitive programming challenge hosted by the CBIT Open Source Community</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
