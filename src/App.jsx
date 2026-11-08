@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const projects = [
   {
     number: "01",
@@ -60,6 +62,20 @@ function ProjectCard({ project }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    const root = document.documentElement;
+    const updateRelief = (event) => {
+      root.style.setProperty("--pointer-x", `${event.clientX}px`);
+      root.style.setProperty("--pointer-y", `${event.clientY}px`);
+    };
+
+    if (window.matchMedia("(pointer: fine)").matches) {
+      window.addEventListener("pointermove", updateRelief, { passive: true });
+    }
+
+    return () => window.removeEventListener("pointermove", updateRelief);
+  }, []);
+
   return (
     <main className="site-shell" id="home">
       <header className="site-header">
