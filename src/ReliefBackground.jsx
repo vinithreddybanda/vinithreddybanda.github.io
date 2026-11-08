@@ -71,17 +71,24 @@ void main(){
  float hy=surface(uv+vec2(0.,.0012))-surface(uv-vec2(0.,.0012));
  vec3 normal=normalize(vec3(-hx*190.,-hy*190.,1.));
 
- // Organic cursor reveal: an irregular pool of grazing light, not a spotlight or beam.
- vec2 delta=(uv-uPointer)*vec2(uResolution.x/uResolution.y,1.);
+ // Diffused, domain-warped light field. No circular boundary or cursor-shaped hotspot.
+ vec2 aspect=vec2(uResolution.x/uResolution.y,1.);
+ vec2 delta=(uv-uPointer)*aspect;
  float speed=clamp(length(uVelocity)*18.,0.,1.);
- float fieldNoise=fbm(uv*vec2(38.,26.)+uTime*.035);
- float edgeNoise=fbm(uv*vec2(72.,48.)-uTime*.025);
- float radius=length(delta);
- float organicRadius=.205+(fieldNoise-.5)*.075+(edgeNoise-.5)*.035;
- float reveal=1.-smoothstep(.035,organicRadius,radius);
- reveal*=smoothstep(.001,.025,speed);
- float wake=exp(-length(delta+uVelocity*vec2(uResolution.x/uResolution.y,1.)*.12)*13.);
- reveal=max(reveal,wake*speed*.58);
+ vec2 flow=normalize(uVelocity*aspect+vec2(.0001));
+ float n1=fbm(uv*vec2(17.,13.)+vec2(uTime*.025,-uTime*.018));
+ float n2=fbm(uv*vec2(39.,31.)-vec2(uTime*.017,uTime*.023));
+ vec2 warp=vec2(n1-.5,n2-.5);
+ vec2 q=delta+warp*.19;
+ float along=dot(q,flow);
+ float across=q.x*flow.y-q.y*flow.x;
+ float diffusion=exp(-pow(along/ .34,2.)-pow(across/.19,2.));
+ float filaments=fbm(uv*vec2(82.,67.)+warp*5.);
+ float cellular=fbm(uv*vec2(145.,112.)-warp*8.);
+ float brokenField=smoothstep(.30,.78,filaments*.72+cellular*.28);
+ float wake=exp(-pow((along+.13)/.42,2.)-pow(across/.12,2.));
+ float reveal=diffusion*(.22+brokenField*.92)+wake*speed*.28;
+ reveal*=smoothstep(.001,.018,speed);
  reveal=clamp(reveal,0.,1.);
 
  // Directional grazing light reveals only the real raised and recessed surface.
