@@ -156,3 +156,46 @@ html { scroll-padding-top: 28px; }
 *, *::before, *::after {
   border-radius: 0 !important;
 }
+
+
+/* Keep the navigation on one line at every viewport width. */
+.site-header {
+  flex-wrap: nowrap;
+  gap: clamp(8px, 2vw, 24px);
+  min-width: 0;
+}
+.brand,
+.header-contact,
+.site-header nav {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.site-header nav {
+  gap: clamp(10px, 2.1vw, 30px);
+}
+@media (max-width: 430px) {
+  .site-header {
+    flex-wrap: nowrap;
+    padding: 17px 0;
+    gap: 8px;
+  }
+  .site-header nav {
+    order: initial;
+    width: auto;
+    flex: 1 1 auto;
+    justify-content: center;
+    gap: clamp(8px, 2.5vw, 17px);
+    min-width: 0;
+  }
+  .site-header nav a,
+  .header-contact {
+    font-size: clamp(9px, 2.7vw, 11px);
+  }
+  .brand {
+    font-size: clamp(19px, 5vw, 25px);
+  }
+  .header-contact {
+    gap: 5px;
+    margin-left: 0;
+  }
+}
