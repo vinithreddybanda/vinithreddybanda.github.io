@@ -59,7 +59,3 @@ if (!reducedMotion) {
 
   window.addEventListener("pagehide", () => context.revert(), { once: true });
 }
-
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => ScrollTrigger.getAll().forEach((trigger) => trigger.kill()));
-}
