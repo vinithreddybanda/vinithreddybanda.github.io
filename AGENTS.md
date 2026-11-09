@@ -6,7 +6,7 @@ This repository is the source of truth for vinithreddybanda.github.io. Follow th
 
 Build one coherent, editorial portfolio with an Apple-quality interaction finish:
 
-- **Visual character:** precise, minimal, high-contrast, editorial, calm, and tactile. Use a near-black canvas, warm off-white text, restrained neutral surfaces, and one cool blue accent. Keep the existing black-first identity unless the owner explicitly changes it.
+- **Visual character:** nature-led, editorial, calm, tactile, and high-contrast. Use deep forest green, moss and fern accents, warm limestone backgrounds, and muted botanical neutrals. Photography and organic tonal depth provide atmosphere; avoid literal leaf motifs, decorative dots, and noisy textures.
 - **Geometry:** use a strict grid, deliberate alignment, and predominantly square corners. Use a 4px radius only where a control needs it. Never turn the interface into a collection of pills or rounded cards.
 - **Typography:** use Geist Sans for all interface and body typography. Use Instrument Serif Italic only for a small number of editorial emphasis moments. Use a clear type scale, tight display tracking, readable body measure, and consistent line-height. Do not add decorative handwriting fonts.
 - **Translucency:** use a restrained iOS-style material only for the fixed navigation and true overlays. The navigation is clear at the top of the page and gains backdrop blur only after content scrolls behind it. Never leave the header permanently blurred. Never apply blur to every card or section.
