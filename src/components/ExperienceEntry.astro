@@ -7,7 +7,7 @@ const { item } = Astro.props;
 <article class="experience-entry" data-reveal>
   <div class="experience-period"><span>{item.period}</span><small>{item.location}</small></div>
   <div class="experience-main">
-    <div class="experience-heading"><div><h3>{item.role}</h3><p>{item.company}</p></div><span>01</span></div>
+    <div class="experience-heading"><div><h3>{item.role}</h3><p>{item.company}</p></div></div>
     <p class="experience-summary">{item.summary}</p>
     <ul class="experience-highlights">{item.highlights.map((highlight) => <li>{highlight}</li>)}</ul>
     <div class="tag-list">{item.stack.map((tag) => <span>{tag}</span>)}</div>
