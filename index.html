@@ -405,7 +405,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
   <script>
-    (() => {
+    document.addEventListener("DOMContentLoaded", () => {
       const header = document.getElementById("site-header");
       const year = document.getElementById("year");
       year.textContent = new Date().getFullYear();
@@ -443,7 +443,7 @@
         });
       });
       window.addEventListener("pagehide", () => context.revert(), { once: true });
-    })();
+    });
   </script>
 </body>
 </html>
