@@ -1,22 +1,454 @@
+---
+const projects = [
+  {
+    number: "01",
+    name: "CareSchedule",
+    kind: "Healthcare platform",
+    description: "A clinic operations platform built around the realities of care. Intelligent appointment slots resolve provider availability, holidays, leave and resource constraints before a booking is published.",
+    stack: [".NET", "React", "SQL Server", "Entity Framework Core"],
+    note: "148 REST APIs · 32 controllers · 6 role based workflows",
+    tone: "care",
+  },
+  {
+    number: "02",
+    name: "JournalAI",
+    kind: "AI journaling",
+    description: "A private space for reflection that turns journal entries into structured mood insights, supported by a cloud ready architecture and automated delivery pipeline.",
+    stack: ["Next.js", "TypeScript", "Supabase", "Azure", "Docker"],
+    note: "AI powered reflection · CI and CD · Kubernetes",
+    tone: "journal",
+  },
+  {
+    number: "03",
+    name: "Activities for Discord",
+    kind: "Android engineering",
+    description: "An Android application that brings full mobile control of Discord Rich Presence through a native integration layer, persistent SDK sessions and secure credential storage.",
+    stack: ["Android", "Java", "C++", "JNI", "Discord Partner SDK"],
+    note: "Native integration · Background services · Encrypted storage",
+    tone: "discord",
+  },
+];
+const skills = [
+  ["Languages", "C#", "Java", "Kotlin", "TypeScript", "JavaScript", "SQL"],
+  ["Engineering", "ASP.NET Core", ".NET", "React", "Next.js", "Node.js", "Entity Framework Core"],
+  ["Data", "SQL Server", "PostgreSQL", "MongoDB", "Supabase"],
+  ["Cloud", "Azure", "Docker", "Kubernetes", "GitHub Actions", "Jenkins"],
+];
+---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hello</title>
+    <meta name="theme-color" content="#10100f" />
+    <meta name="description" content="Vinith Reddy Banda is a software engineer building thoughtful products across full stack engineering, Android and applied AI." />
+    <meta property="og:title" content="Vinith Reddy Banda — Software Engineer" />
+    <meta property="og:description" content="Building thoughtful software with clarity, craft and curiosity." />
+    <title>Vinith Reddy Banda — Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
     <style>
+      :root {
+        color-scheme: dark;
+        --bg: #10100f;
+        --surface: #171715;
+        --surface-2: #1d1d1a;
+        --text: #f0eee8;
+        --muted: #a09e96;
+        --faint: #68675f;
+        --line: rgba(240,238,232,.12);
+        --accent: #c8b99f;
+        --accent-ink: #171511;
+        --serif: "Instrument Serif", Georgia, serif;
+        --sans: "DM Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+        --mono: "DM Mono", ui-monospace, monospace;
+        --ease: cubic-bezier(.2,.75,.25,1);
+        --gutter: clamp(22px, 6vw, 92px);
+        --max: 1440px;
+      }
+      [data-theme="light"] {
+        color-scheme: light;
+        --bg: #eeede8;
+        --surface: #f6f5f0;
+        --surface-2: #e7e5de;
+        --text: #171714;
+        --muted: #66645d;
+        --faint: #8d8a81;
+        --line: rgba(23,23,20,.14);
+        --accent: #75634b;
+        --accent-ink: #f6f5f0;
+      }
       * { box-sizing: border-box; }
-      html, body { width: 100%; min-height: 100%; margin: 0; }
-      body {
-        min-height: 100svh;
-        display: grid;
-        place-items: center;
-        background: #fff;
-        color: #111;
-        font: 500 clamp(2.5rem, 8vw, 5rem)/1 system-ui, sans-serif;
-        letter-spacing: -0.07em;
+      html { scroll-behavior: smooth; scroll-padding-top: 90px; background: var(--bg); }
+      body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; transition: background .45s ease, color .45s ease; }
+      a { color: inherit; text-decoration: none; }
+      button { color: inherit; font: inherit; }
+      ::selection { background: var(--accent); color: var(--accent-ink); }
+      .shell { width: min(100%, var(--max)); margin-inline: auto; padding-inline: var(--gutter); }
+      .mono { font: 11px/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+      .muted { color: var(--muted); }
+      .topbar { position: fixed; z-index: 20; inset: 0 0 auto; transition: background .35s ease, border-color .35s ease, backdrop-filter .35s ease; border-bottom: 1px solid transparent; }
+      .topbar.scrolled { background: color-mix(in srgb, var(--bg) 76%, transparent); border-color: var(--line); backdrop-filter: blur(18px) saturate(135%); -webkit-backdrop-filter: blur(18px) saturate(135%); }
+      .nav { height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+      .wordmark { font-size: 14px; font-weight: 600; letter-spacing: -.045em; }
+      .nav-right { display: flex; align-items: center; gap: clamp(16px, 3vw, 38px); }
+      .nav-links { display: flex; align-items: center; gap: clamp(15px, 2.6vw, 32px); }
+      .nav-links a { font-size: 12px; color: var(--muted); transition: color .25s ease; }
+      .nav-links a:hover, .nav-links a:focus-visible { color: var(--text); }
+      .theme-toggle { width: 38px; height: 38px; border: 1px solid var(--line); background: transparent; border-radius: 50%; display: grid; place-items: center; cursor: pointer; transition: transform .3s var(--ease), background .3s ease; }
+      .theme-toggle:hover { transform: rotate(18deg); background: var(--surface-2); }
+      .theme-toggle svg { width: 15px; height: 15px; }
+      .hero { min-height: min(920px, 100svh); min-height: max(760px, 100svh); display: flex; align-items: center; position: relative; isolation: isolate; overflow: clip; padding-top: 100px; }
+      .hero::before { content: ""; position: absolute; z-index: -2; width: min(78vw, 1050px); aspect-ratio: 1; right: -20%; top: -18%; border-radius: 50%; background: radial-gradient(circle, rgba(176,151,115,.13), rgba(176,151,115,.035) 38%, transparent 68%); filter: blur(12px); pointer-events: none; }
+      .hero::after { content: ""; position: absolute; z-index: -1; inset: 0; opacity: .16; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E"); mix-blend-mode: soft-light; }
+      .hero-inner { width: 100%; padding-block: 100px 110px; position: relative; }
+      .hero-kicker { display: flex; align-items: center; gap: 14px; color: var(--muted); margin-bottom: clamp(30px, 5vh, 58px); }
+      .hero-kicker::before { content: ""; width: 34px; height: 1px; background: var(--accent); }
+      h1 { max-width: 1050px; margin: 0; font-size: clamp(64px, 11.3vw, 164px); line-height: .83; letter-spacing: -.095em; font-weight: 500; }
+      h1 .line { display: block; }
+      h1 .serif { font-family: var(--serif); font-weight: 400; font-style: italic; letter-spacing: -.055em; color: var(--accent); padding-left: clamp(36px, 10vw, 150px); }
+      .hero-bottom { display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-top: clamp(46px, 8vh, 92px); }
+      .hero-intro { max-width: 390px; color: var(--muted); font-size: clamp(15px, 1.35vw, 18px); line-height: 1.7; }
+      .hero-intro strong { color: var(--text); font-weight: 500; }
+      .hero-aside { display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 12px; }
+      .scroll-cue { display: flex; align-items: center; gap: 12px; }
+      .scroll-cue span:last-child { width: 46px; height: 1px; background: var(--line); position: relative; overflow: hidden; }
+      .scroll-cue span:last-child::after { content: ""; position: absolute; inset: 0; background: var(--accent); transform: translateX(-100%); animation: scan 2.4s var(--ease) infinite; }
+      @keyframes scan { 55%,100% { transform: translateX(100%); } }
+      .hero-index { position: absolute; right: var(--gutter); top: 44%; color: var(--faint); writing-mode: vertical-rl; transform: translateY(-50%); }
+      .section { padding-block: clamp(100px, 14vw, 190px); border-top: 1px solid var(--line); }
+      .section-head { display: grid; grid-template-columns: 1fr 2fr; gap: 36px; margin-bottom: clamp(48px, 8vw, 100px); }
+      .eyebrow { color: var(--accent); padding-top: 10px; }
+      .section-title { margin: 0; font-size: clamp(40px, 6.2vw, 82px); line-height: .98; letter-spacing: -.075em; font-weight: 500; max-width: 850px; }
+      .section-title em { font-family: var(--serif); font-weight: 400; color: var(--accent); }
+      .about-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(40px, 10vw, 150px); align-items: start; }
+      .about-copy { max-width: 670px; font-size: clamp(19px, 2.2vw, 29px); line-height: 1.5; letter-spacing: -.035em; }
+      .about-copy p { margin: 0 0 24px; }
+      .about-copy .soft { color: var(--muted); }
+      .about-facts { border-top: 1px solid var(--line); }
+      .fact { padding: 20px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 20px; font-size: 13px; }
+      .fact span:first-child { color: var(--muted); }
+      .fact span:last-child { text-align: right; }
+      .projects { border-top: 1px solid var(--line); }
+      .project { display: grid; grid-template-columns: 90px minmax(0, 1fr) minmax(240px, .7fr); gap: clamp(24px, 5vw, 70px); padding-block: 42px; border-bottom: 1px solid var(--line); align-items: start; }
+      .project-number { color: var(--faint); padding-top: 8px; }
+      .project-main h3 { margin: 0 0 18px; font-size: clamp(32px, 4.5vw, 58px); line-height: 1; letter-spacing: -.07em; font-weight: 500; transition: color .3s ease; }
+      .project:hover h3 { color: var(--accent); }
+      .project-main p { max-width: 600px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.75; }
+      .project-meta { padding-top: 8px; }
+      .project-kind { color: var(--accent); margin-bottom: 22px; }
+      .project-note { color: var(--muted); font-size: 12px; line-height: 1.7; margin-bottom: 24px; }
+      .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+      .tag { border: 1px solid var(--line); border-radius: 100px; padding: 7px 10px; color: var(--muted); font-size: 10px; }
+      .project-art { grid-column: 2 / 4; margin-top: 18px; min-height: 230px; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; background: var(--surface); }
+      .art-care { background: radial-gradient(ellipse at 50% 120%, rgba(145,164,146,.24), transparent 58%), var(--surface); }
+      .art-journal { background: radial-gradient(ellipse at 70% 0%, rgba(178,145,112,.22), transparent 55%), var(--surface); }
+      .art-discord { background: radial-gradient(ellipse at 35% 80%, rgba(117,131,185,.2), transparent 55%), var(--surface); }
+      .art-window { width: min(74%, 610px); border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 76%, transparent); box-shadow: 0 24px 80px rgba(0,0,0,.13); padding: 22px; transform: perspective(1000px) rotateX(5deg) rotateY(-7deg); transition: transform .8s var(--ease); }
+      .project:hover .art-window { transform: perspective(1000px) rotateX(0) rotateY(0) translateY(-5px); }
+      .window-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--line); color: var(--muted); font: 10px var(--mono); }
+      .window-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding-top: 18px; }
+      .window-tile { min-height: 66px; background: var(--surface-2); padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+      .window-tile b { font-size: 18px; font-weight: 500; letter-spacing: -.06em; }
+      .window-tile span { color: var(--muted); font: 9px var(--mono); }
+      .art-word { font: clamp(42px, 9vw, 110px)/.9 var(--serif); font-style: italic; letter-spacing: -.04em; color: var(--accent); }
+      .art-caption { position: absolute; bottom: 18px; left: 20px; color: var(--faint); }
+      .experience { display: grid; grid-template-columns: 1fr 2fr; gap: 36px; padding-block: 28px; border-top: 1px solid var(--line); }
+      .experience:last-child { border-bottom: 1px solid var(--line); }
+      .experience-date { color: var(--muted); }
+      .experience h3 { margin: 0 0 8px; font-size: 23px; letter-spacing: -.045em; font-weight: 500; }
+      .experience p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+      .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 80px; }
+      .skill-group { border-top: 1px solid var(--line); padding-top: 18px; }
+      .skill-group h3 { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin: 0 0 20px; }
+      .skill-list { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+      .skill-list span { font-size: clamp(17px, 2vw, 23px); letter-spacing: -.045em; }
+      .recognition { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+      .recognition-item { background: var(--bg); padding: clamp(24px, 4vw, 46px); min-height: 190px; }
+      .recognition-item .mono { color: var(--accent); }
+      .recognition-item h3 { font-size: clamp(20px, 2.5vw, 28px); line-height: 1.15; letter-spacing: -.05em; font-weight: 500; margin: 24px 0 12px; }
+      .recognition-item p { color: var(--muted); font-size: 13px; line-height: 1.65; margin: 0; }
+      .contact { padding-block: clamp(110px, 17vw, 220px); text-align: center; }
+      .contact h2 { max-width: 1000px; margin: 0 auto 42px; font-size: clamp(58px, 10.5vw, 142px); line-height: .88; letter-spacing: -.09em; font-weight: 500; }
+      .contact h2 em { color: var(--accent); font-family: var(--serif); font-weight: 400; }
+      .contact-link { display: inline-flex; align-items: center; gap: 14px; padding: 17px 23px; background: var(--accent); color: var(--accent-ink); border-radius: 100px; font-size: 13px; transition: transform .3s var(--ease); }
+      .contact-link:hover { transform: translateY(-4px); }
+      .contact-link span { font-size: 18px; }
+      footer { border-top: 1px solid var(--line); padding-block: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 11px; }
+      .footer-links { display: flex; gap: 22px; }
+      .footer-links a:hover { color: var(--text); }
+      .reveal { opacity: 0; transform: translateY(24px); filter: blur(5px); transition: opacity .85s var(--ease), transform .85s var(--ease), filter .85s var(--ease); }
+      .reveal.in-view { opacity: 1; transform: translateY(0); filter: blur(0); }
+      .delay-1 { transition-delay: .08s; } .delay-2 { transition-delay: .16s; } .delay-3 { transition-delay: .24s; }
+      @media (max-width: 760px) {
+        .nav { height: 66px; }
+        .nav-links { gap: 14px; }
+        .nav-links a { font-size: 11px; }
+        .nav-links a:nth-child(2) { display: none; }
+        .hero { min-height: 790px; min-height: 100svh; }
+        .hero-index { display: none; }
+        .hero-bottom { align-items: start; flex-direction: column; gap: 28px; }
+        .hero-aside { width: 100%; justify-content: space-between; }
+        .section-head { grid-template-columns: 1fr; gap: 20px; }
+        .about-grid { grid-template-columns: 1fr; gap: 52px; }
+        .project { grid-template-columns: 36px minmax(0,1fr); gap: 16px; }
+        .project-meta { grid-column: 2; padding-top: 0; }
+        .project-art { grid-column: 1 / -1; min-height: 190px; }
+        .experience { grid-template-columns: 1fr; gap: 12px; }
+        .skills-grid { gap: 38px 24px; }
+        footer { align-items: flex-start; flex-direction: column; }
+      }
+      @media (max-width: 460px) {
+        .nav-right { gap: 12px; }
+        .nav-links { gap: 12px; }
+        .nav-links a:nth-child(3) { display: none; }
+        h1 { font-size: clamp(58px, 17vw, 82px); }
+        h1 .serif { padding-left: 24px; }
+        .window-content { gap: 6px; }
+        .window-tile { min-height: 56px; padding: 8px; }
+        .window-tile b { font-size: 15px; }
+        .recognition { grid-template-columns: 1fr; }
+        .skills-grid { grid-template-columns: 1fr; }
+        .footer-links { flex-wrap: wrap; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+        .reveal { opacity: 1; transform: none; filter: none; }
       }
     </style>
   </head>
-  <body>Hello</body>
+  <body>
+    <header class="topbar" id="topbar">
+      <div class="shell nav">
+        <a class="wordmark" href="#top" aria-label="Vinith Reddy Banda home">VRB</a>
+        <div class="nav-right">
+          <nav class="nav-links" aria-label="Main navigation">
+            <a href="#about">About</a>
+            <a href="#work">Selected work</a>
+            <a href="#experience">Experience</a>
+            <a href="#contact">Contact</a>
+          </nav>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch theme">
+            <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="shell hero-inner">
+          <div class="hero-kicker mono reveal">Software engineer · Building with intention</div>
+          <h1 class="reveal delay-1">
+            <span class="line">Vinith Reddy</span>
+            <span class="line serif">Banda</span>
+          </h1>
+          <div class="hero-bottom reveal delay-2">
+            <p class="hero-intro">I build <strong>thoughtful software</strong> across full stack engineering, Android and applied AI. Interested in the details that make technology feel effortless.</p>
+            <div class="hero-aside">
+              <span class="mono">Scroll to explore</span>
+              <span class="scroll-cue"><span class="mono">01 / 06</span><span></span></span>
+            </div>
+          </div>
+          <span class="hero-index mono">Independent thinking · considered execution</span>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div class="eyebrow mono">A little about me</div>
+            <h2 class="section-title">Curiosity into craft. <em>Ideas into things.</em></h2>
+          </div>
+          <div class="about-grid">
+            <div class="about-copy reveal">
+              <p>I am a software engineer and Information Technology graduate in the making at Chaitanya Bharati Institute of Technology.</p>
+              <p class="soft">My work moves between reliable backend systems, considered interfaces and experiments with intelligent software. I enjoy understanding a problem deeply, then building the simplest thing that solves it well.</p>
+            </div>
+            <div class="about-facts reveal delay-1">
+              <div class="fact"><span>Education</span><span>CBIT · B.E. Information Technology</span></div>
+              <div class="fact"><span>Graduation</span><span>2026</span></div>
+              <div class="fact"><span>Academic score</span><span>8.43 CGPA</span></div>
+              <div class="fact"><span>Earlier study</span><span>Diploma · Computer Engineering</span></div>
+              <div class="fact"><span>Diploma score</span><span>9.74 CGPA</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="work">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div class="eyebrow mono">Selected work · 2025—2026</div>
+            <h2 class="section-title">Made to work. <em>Built to matter.</em></h2>
+          </div>
+          <div class="projects">
+            {projects.map((project) => (
+              <article class="project reveal">
+                <div class="project-number mono">{project.number}</div>
+                <div class="project-main">
+                  <h3>{project.name}</h3>
+                  <p>{project.description}</p>
+                </div>
+                <div class="project-meta">
+                  <div class="project-kind mono">{project.kind}</div>
+                  <div class="project-note">{project.note}</div>
+                  <div class="tags">{project.stack.map((item) => <span class="tag">{item}</span>)}</div>
+                </div>
+                <div class:list={["project-art", `art-${project.tone}`]} aria-hidden="true">
+                  {project.tone === "care" ? (
+                    <div class="art-window">
+                      <div class="window-top"><span>CARESCHEDULE</span><span>CLINIC OVERVIEW</span></div>
+                      <div class="window-content">
+                        <div class="window-tile"><span>APPOINTMENTS</span><b>148</b></div>
+                        <div class="window-tile"><span>WORKFLOWS</span><b>06</b></div>
+                        <div class="window-tile"><span>CONTROLLERS</span><b>32</b></div>
+                      </div>
+                    </div>
+                  ) : project.tone === "journal" ? (
+                    <div class="art-word">A quieter mind</div>
+                  ) : (
+                    <div class="art-word">Presence, anywhere</div>
+                  )}
+                  <span class="art-caption mono">{project.number} — {project.name}</span>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="experience">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div class="eyebrow mono">Where I have worked</div>
+            <h2 class="section-title">Learning by <em>building.</em></h2>
+          </div>
+          <article class="experience reveal">
+            <div class="experience-date mono">FEB 2026 — MAY 2026</div>
+            <div>
+              <h3>Cognizant Technology Solutions</h3>
+              <p class="muted" style="margin-bottom:12px">.NET Full Stack Intern</p>
+              <p>Developed CareSchedule, a healthcare management platform for clinics and hospitals. Built across a six layer Clean Architecture using .NET, Entity Framework Core, SQL Server and React, with 148 REST APIs and six role based workflows. Created an intelligent appointment slot engine that accounts for provider availability, leave, holidays and resource constraints.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="capabilities">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div class="eyebrow mono">The toolkit</div>
+            <h2 class="section-title">A broad set of tools. <em>A focused way of thinking.</em></h2>
+          </div>
+          <div class="skills-grid">
+            {skills.map(([group, ...items], index) => (
+              <div class:list={["skill-group", "reveal", index % 2 ? "delay-1" : ""]}>
+                <h3>{group}</h3>
+                <div class="skill-list">{items.map((item) => <span>{item}</span>)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="recognition">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div class="eyebrow mono">Beyond the build</div>
+            <h2 class="section-title">Research, open source <em>and community.</em></h2>
+          </div>
+          <div class="recognition">
+            <article class="recognition-item reveal">
+              <span class="mono">Research · 2026</span>
+              <h3>IEEE Xplore publication</h3>
+              <p>Co-authored “Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis”, published at I3CTCON 2026 and indexed in IEEE Xplore.</p>
+            </article>
+            <article class="recognition-item reveal delay-1">
+              <span class="mono">Open source</span>
+              <h3>WhatsApp Status Saver</h3>
+              <p>Published an open source Android application on the official F-Droid repository.</p>
+            </article>
+            <article class="recognition-item reveal">
+              <span class="mono">Competition</span>
+              <h3>Sixth place · COSC HackWeek</h3>
+              <p>Placed sixth in the competitive coding challenge organised by CBIT Open Source Community with GeeksforGeeks.</p>
+            </article>
+            <article class="recognition-item reveal delay-1">
+              <span class="mono">Community</span>
+              <h3>Event coordination</h3>
+              <p>Volunteered as an event coordinator for a college idea presentation event, assisting more than twenty participants.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <div class="shell">
+          <div class="eyebrow mono reveal" style="margin-bottom:34px">Have something in mind?</div>
+          <h2 class="reveal delay-1">Let's make<br /><em>something meaningful.</em></h2>
+          <a class="contact-link reveal delay-2" href="mailto:vinithreddybanda@gmail.com">Start a conversation <span>↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="shell">
+      <span>© {new Date().getFullYear()} Vinith Reddy Banda</span>
+      <div class="footer-links">
+        <a href="mailto:vinithreddybanda@gmail.com">Email</a>
+        <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      </div>
+      <span>Designed with intention</span>
+    </footer>
+
+    <script>
+      const root = document.documentElement;
+      const toggle = document.querySelector("#themeToggle");
+      const icon = document.querySelector("#themeIcon");
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      const preferredTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      const setTheme = (theme) => {
+        root.dataset.theme = theme;
+        const light = theme === "light";
+        toggle.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme");
+        metaTheme.setAttribute("content", light ? "#eeede8" : "#10100f");
+        icon.innerHTML = light
+          ? '<path d="M20.2 15.1A8.5 8.5 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/>'
+          : '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>';
+      };
+      setTheme(savedTheme || preferredTheme);
+      toggle.addEventListener("click", () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        setTheme(next);
+        localStorage.setItem("portfolio-theme", next);
+      });
+
+      const topbar = document.querySelector("#topbar");
+      let ticking = false;
+      const updateHeader = () => {
+        topbar.classList.toggle("scrolled", window.scrollY > 24);
+        ticking = false;
+      };
+      window.addEventListener("scroll", () => {
+        if (!ticking) {
+          window.requestAnimationFrame(updateHeader);
+          ticking = true;
+        }
+      }, { passive: true });
+      updateHeader();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+      document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    </script>
+  </body>
 </html>
