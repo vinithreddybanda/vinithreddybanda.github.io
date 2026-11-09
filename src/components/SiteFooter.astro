@@ -3,23 +3,9 @@ import { profile } from "@data/portfolio";
 ---
 <footer class="site-footer" id="contact">
   <div class="container">
-    <p class="eyebrow" data-reveal>Have a project or opportunity?</p>
-    <h2 class="contact-title" data-reveal>Let’s make<br />something <em>matter.</em></h2>
-    <div class="contact-row" data-reveal>
-      <div>
-        <p class="contact-label">Get in touch</p>
-        <a class="contact-email" href={`mailto:${profile.email}`}>{profile.email}<span aria-hidden="true">↗</span></a>
-      </div>
-      <p class="contact-note">Open to thoughtful conversations about software, collaboration, and opportunities.</p>
-    </div>
-    <div class="footer-bottom">
-      <span>© {new Date().getFullYear()} {profile.name}</span>
-      <div class="footer-links">
-        <a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-        <a href={`mailto:${profile.email}`}>Email ↗</a>
-        <a href="#top">Back to top ↑</a>
-      </div>
-    </div>
+    <span class="chapter-index" data-reveal>06 / THE NEXT CHAPTER</span>
+    <h2 class="contact-title" data-reveal>Have a good<br />problem? <em>Let’s talk.</em></h2>
+    <div class="contact-row" data-reveal><div><p class="contact-label">A direct line</p><a class="contact-email" href={`mailto:${profile.email}`}>{profile.email}<span>↗</span></a></div><p class="contact-note">Open to thoughtful work, interesting problems, and good people to build with.</p></div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} {profile.name}</span><div class="footer-links"><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href={`mailto:${profile.email}`}>Email ↗</a><a href="#top">Back to top ↑</a></div></div>
   </div>
 </footer>
