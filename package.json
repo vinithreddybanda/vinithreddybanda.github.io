@@ -1,23 +1,11 @@
 {
-  "name": "vinithreddybanda-portfolio",
+  "name": "vinithreddybanda.github.io",
   "private": true,
-  "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "check": "astro check"
+    "build": "astro build"
   },
   "dependencies": {
-    "gsap": "^3.13.0"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.4",
-    "astro": "^6.0.0",
-    "tailwindcss": "^4.1.17",
-    "typescript": "^5.8.3",
-    "@tailwindcss/postcss": "^4.1.17",
-    "postcss": "^8.5.6"
+    "astro": "^6.0.0"
   }
 }
