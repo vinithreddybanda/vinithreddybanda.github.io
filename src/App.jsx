@@ -69,7 +69,7 @@ export default function App() {
 
     const root = document.documentElement;
     const revealItems = document.querySelectorAll(
-      "[data-reveal], .reveal, .metrics, .section-heading, .now-playing, .site-footer, .footer-links a"
+      ".site-header, .hero > .eyebrow, .hero > h1, .hero > .hero-bottom, .metrics > div, .section-heading > *, .project-card, .about-section > div, .skill-row, .background-section > div > .eyebrow, .plain-item, .now-playing, .site-footer > div"
     );
 
     const revealObserver = new IntersectionObserver((entries) => {
@@ -81,8 +81,11 @@ export default function App() {
       rootMargin: "0px 0px -24px 0px",
     });
 
-    revealItems.forEach((item) => revealObserver.observe(item));
     root.classList.add("has-motion");
+    revealItems.forEach((item) => {
+      item.classList.add("scroll-blur");
+      revealObserver.observe(item);
+    });
 
     return () => {
       revealObserver.disconnect();
