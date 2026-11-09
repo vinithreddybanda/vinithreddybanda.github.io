@@ -56,7 +56,7 @@ main, .site-footer { margin-left: var(--rail); }
 .garden-coordinate { left: var(--gutter); }
 .garden-scroll { right: var(--gutter); writing-mode: vertical-rl; bottom: 42px; }
 
-.opening-note { position: relative; overflow: hidden; padding: var(--section-space) var(--gutter); background: var(--paper); }
+.opening-note { position: relative; overflow: hidden; padding: var(--section-space) 0; background: var(--paper); }
 .opening-inner { display: grid; grid-template-columns: .6fr 1.4fr; column-gap: 60px; align-items: start; }
 .eyebrow { margin: 0; color: var(--moss); font-size: 9px; font-weight: 700; letter-spacing: .17em; }
 .opening-inner .eyebrow { padding-top: 14px; }
@@ -145,7 +145,7 @@ main, .site-footer { margin-left: var(--rail); }
 .currently p { margin: 0; color: var(--muted); font-size: 11px; text-align: right; }
 .about-focus { margin: 38px 0 0; color: var(--moss); font: italic 21px var(--serif); }
 
-.site-footer { padding: var(--section-space) var(--gutter) 24px; background: var(--forest); color: #f2f0e5; }
+.site-footer { padding: var(--section-space) 0 24px; background: var(--forest); color: #f2f0e5; }
 .footer-inner { max-width: var(--content); }
 .footer-inner .eyebrow { color: #bac8aa; }
 .footer-inner h2 { margin-top: 30px; font-size: clamp(58px, 9vw, 118px); }
