@@ -127,9 +127,9 @@
     .project {
       display: grid; grid-template-columns: 70px minmax(0, 1fr) 190px;
       gap: 26px; padding: 32px 0 35px; border-bottom: 1px solid var(--line);
-      transition: padding .3s var(--ease);
+      transition: transform .3s var(--ease);
     }
-    .project:hover { padding-inline: 10px; }
+    .project:hover { transform: translateX(5px); }
     .project-index { padding-top: 8px; color: var(--subtle); font-size: 10px; letter-spacing: .1em; }
     .project-main h3 { margin: 0; font-size: clamp(25px, 3.4vw, 38px); font-weight: 500; letter-spacing: -.055em; line-height: 1.15; }
     .project-main p { max-width: 650px; margin: 13px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
