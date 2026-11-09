@@ -1,0 +1,118 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import SectionHeading from "@components/SectionHeading.astro";
+import ProjectCard from "@components/ProjectCard.astro";
+import ExperienceEntry from "@components/ExperienceEntry.astro";
+import { profile, projects, experience, skills, education, recognition } from "@data/portfolio";
+---
+<BaseLayout>
+  <section class="hero" id="top">
+    <div class="container hero-inner">
+      <div class="hero-topline" data-hero-top>
+        <p class="eyebrow">Software developer <span>·</span> {profile.location}</p>
+        <div class="hero-status"><span class="status-dot" aria-hidden="true"></span> Building across web, Android & AI</div>
+      </div>
+      <h1 class="hero-title" data-hero-title>
+        <span class="line">I build</span>
+        <span class="line">software with</span>
+        <span class="line"><em>purpose.</em></span>
+      </h1>
+      <div class="hero-bottom" data-hero-bottom>
+        <p class="hero-intro">I’m <strong>{profile.name}</strong>, a software developer focused on full-stack engineering, native Android, and dependable product experiences.</p>
+        <div class="hero-facts" aria-label="Selected milestones">
+          <div class="hero-fact"><strong>148</strong><span>REST APIs contributed</span></div>
+          <div class="hero-fact"><strong>6</strong><span>Role-based workflows</span></div>
+          <div class="hero-fact"><strong>IEEE</strong><span>Research publication</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="signal-strip" aria-label="Areas of focus">
+    <div class="container signal-track">
+      <span>Full-stack engineering</span><span>Android systems</span><span>AI products</span><span>Cloud delivery</span><span>Open source</span>
+    </div>
+  </div>
+
+  <section class="section" id="work">
+    <div class="container">
+      <SectionHeading index="01" eyebrow="Selected work" title="Built with" accent="intent." intro="A closer look at products and systems I’ve worked on, from AI-assisted journaling to native mobile integrations." />
+      <div class="project-list">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="container">
+      <SectionHeading index="02" eyebrow="Professional experience" title="Engineering in" accent="practice." intro="Working on real product constraints taught me to think beyond individual features and design for the system as a whole." />
+      <div class="experience-list">
+        {experience.map((item) => <ExperienceEntry item={item} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <SectionHeading index="03" eyebrow="A little about me" title="Curious about the" accent="details." />
+      <div class="about-grid">
+        <p class="about-statement" data-reveal>Thoughtful interfaces. Reliable systems. Software that <em>earns its place.</em></p>
+        <div data-reveal>
+          <p class="about-copy">{profile.summary}</p>
+          <p class="about-copy">My work moves between backend architecture, frontend interfaces, Android internals, and cloud delivery. I enjoy understanding how the pieces fit together: how an API behaves under real constraints, how native layers communicate, and how a product stays dependable after it ships.</p>
+        </div>
+      </div>
+      <div class="principles" data-reveal>
+        <div class="principle"><span>01 / THINK</span><strong>Understand the problem first.</strong></div>
+        <div class="principle"><span>02 / BUILD</span><strong>Keep the architecture deliberate.</strong></div>
+        <div class="principle"><span>03 / SHIP</span><strong>Care about what happens in production.</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <div class="container">
+      <SectionHeading index="04" eyebrow="Tools of the trade" title="Technical" accent="toolkit." intro="A practical mix of languages, frameworks, data platforms, and delivery tools used across projects and professional work." />
+      <div class="skills-grid">
+        {skills.map((group) => (
+          <article class="skill-group" data-reveal>
+            <h3>{group.title}</h3>
+            <div class="skill-items">{group.items.map((item) => <span>{item}</span>)}</div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="education">
+    <div class="container">
+      <SectionHeading index="05" eyebrow="The foundations" title="Education &" accent="learning." />
+      <div class="education-list">
+        {education.map((item) => (
+          <article class="education-entry" data-reveal>
+            <span class="education-period">{item.period}</span>
+            <div><h3>{item.institution}</h3><p>{item.qualification}</p></div>
+            <span class="education-result">{item.result}</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="recognition">
+    <div class="container">
+      <SectionHeading index="06" eyebrow="Beyond the code" title="Research &" accent="recognition." intro="Research, open-source releases, certifications, and community work that sit alongside the engineering." />
+      <div class="recognition-grid">
+        {recognition.map((item, index) => (
+          <article class="recognition-entry" data-reveal>
+            <span class="recognition-number">{String(index + 1).padStart(2, "0")}</span>
+            <div><h3>{item.title}</h3><p>{item.description}</p></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <script>
+    import "../scripts/motion";
+  </script>
+</BaseLayout>
