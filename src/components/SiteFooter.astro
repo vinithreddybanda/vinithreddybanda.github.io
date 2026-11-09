@@ -1,10 +1,11 @@
+---
 import { profile } from "@data/portfolio";
 ---
 <footer class="site-footer" id="contact">
-  <div class="footer-inner">
-    <p class="eyebrow">HAVE SOMETHING IN MIND?</p>
-    <h2>Let's make<br /><em>it happen.</em></h2>
-    <a class="footer-email" href={`mailto:${profile.email}`}>{profile.email} <span>↗</span></a>
-    <div class="footer-bottom"><span>© {new Date().getFullYear()} {profile.name}</span><div class="footer-links"><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="#top">Back to top ↑</a></div></div>
+  <div class="container">
+    <p class="contact-label">HAVE SOMETHING IN MIND?</p>
+    <h2 class="contact-title">Let’s make<br />it <em>matter.</em></h2>
+    <div class="contact-row"><div><p class="contact-label">GET IN TOUCH</p><a class="contact-email" href={`mailto:${profile.email}`}>{profile.email}<span> ↗</span></a></div><p class="contact-note">Open to interesting problems, good teams and thoughtful work.</p></div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} {profile.name}</span><div class="footer-links"><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href={`mailto:${profile.email}`}>Email ↗</a><a href="#top">Back to top ↑</a></div></div>
   </div>
 </footer>
