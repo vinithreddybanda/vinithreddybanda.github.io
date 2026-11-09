@@ -381,3 +381,107 @@ html { scroll-padding-top: 28px; }
     padding: 10px 0;
   }
 }
+
+/* Unified glass + scroll treatment */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, .72);
+  -webkit-backdrop-filter: blur(22px) saturate(125%);
+  backdrop-filter: blur(22px) saturate(125%);
+  border-bottom-color: rgba(255, 255, 255, .12);
+}
+
+.metrics,
+.project-card,
+.skill-row,
+.plain-item,
+.now-playing {
+  background: rgba(255, 255, 255, .025);
+  -webkit-backdrop-filter: blur(18px) saturate(115%);
+  backdrop-filter: blur(18px) saturate(115%);
+  border-color: rgba(255, 255, 255, .10);
+}
+
+.metrics {
+  padding: 18px 0;
+  border: 1px solid rgba(255, 255, 255, .10);
+}
+
+.project-card {
+  background: rgba(18, 18, 18, .68);
+  border: 1px solid rgba(255, 255, 255, .10);
+}
+
+.project-card:hover {
+  background: rgba(27, 27, 27, .78);
+  border-color: rgba(255, 255, 255, .22);
+}
+
+.skill-row {
+  padding: 17px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  background: rgba(255, 255, 255, .025);
+}
+
+.plain-item {
+  padding: 17px 14px;
+  border: 1px solid rgba(255, 255, 255, .07);
+  background: rgba(255, 255, 255, .018);
+}
+
+.plain-item:hover {
+  padding-left: 20px;
+  border-color: rgba(255, 255, 255, .20);
+}
+
+.now-playing {
+  padding: 22px 18px 24px;
+  border: 1px solid rgba(255, 255, 255, .10);
+  background: rgba(255, 255, 255, .025);
+}
+
+.site-footer {
+  border-top-color: rgba(255, 255, 255, .14);
+}
+
+.has-motion [data-reveal],
+.has-motion .reveal {
+  filter: blur(12px);
+  transform: translate3d(0, 20px, 0) scale(.995);
+  transition:
+    opacity 620ms cubic-bezier(.2,.75,.25,1),
+    filter 760ms cubic-bezier(.2,.75,.25,1),
+    transform 760ms cubic-bezier(.2,.75,.25,1);
+}
+
+.has-motion [data-reveal].is-visible,
+.has-motion .reveal.is-visible {
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.has-motion .text-reveal {
+  transition:
+    opacity 620ms cubic-bezier(.2,.75,.25,1),
+    filter 760ms cubic-bezier(.2,.75,.25,1),
+    transform 760ms cubic-bezier(.2,.75,.25,1);
+}
+
+@media (max-width: 760px) {
+  .metrics { padding: 16px 0; }
+  .skill-row { padding: 14px; }
+  .plain-item { padding: 15px 11px; }
+  .now-playing { padding-inline: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-motion [data-reveal],
+  .has-motion .reveal,
+  .has-motion .text-reveal {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
