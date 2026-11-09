@@ -1,89 +1,64 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import ProjectCard from "@components/ProjectCard.astro";
 import ExperienceEntry from "@components/ExperienceEntry.astro";
 import { profile, projects, experience, skills, education, recognition } from "@data/portfolio";
 ---
 <BaseLayout>
   <section class="hero" id="top">
-    <div class="container hero-inner">
-      <div class="hero-kicker" data-hero-top>
-        <span class="eyebrow">Independent mind. Systems thinker.</span>
-        <span class="availability"><i></i> Open to what’s next</span>
-      </div>
-      <h1 class="hero-title" data-hero-title>
-        <span class="hero-line">I make</span>
-        <span class="hero-line">complex things</span>
-        <span class="hero-line"><em>work.</em></span>
-      </h1>
-      <div class="hero-bottom" data-hero-bottom>
-        <p class="hero-intro">I’m <strong>${profile.name}</strong>. I build software across backend systems, Android, and AI, with a soft spot for the details most people never see.</p>
-        <a class="scroll-cue" href="#work"><span>Scroll to explore</span><i>↓</i></a>
-      </div>
-      <div class="hero-index" aria-hidden="true"><span>PORTFOLIO / 2026</span><span>17°N — 78°E</span></div>
+    <div class="hero-noise" aria-hidden="true"></div>
+    <div class="hero-top"><a class="hero-wordmark" href="#top">vinith<span>®</span></a><span class="hero-location">HYDERABAD, INDIA · AVAILABLE WORLDWIDE</span></div>
+    <div class="hero-main">
+      <p class="hero-intro" data-hero-intro>Developer by practice.<br />Curious by default.</p>
+      <h1 class="hero-title" data-hero-title>Building<br /><span>what's</span> <i>next.</i></h1>
+      <div class="hero-bottom" data-hero-bottom><p>I’m <strong>${profile.name}</strong>, a software developer exploring the space between thoughtful engineering and products people actually love using.</p><a href="#work" class="hero-scroll">SCROLL A LITTLE <span>↘</span></a></div>
     </div>
+    <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-sticker">IDEAS<br />INTO<br /><b>REALITY</b> ✳</div>
+    <div class="hero-side-note">SOFTWARE / PEOPLE / POSSIBILITY</div>
   </section>
 
-  <div class="ticker" aria-label="Areas of work">
-    <div class="ticker-track"><span>BACKEND SYSTEMS</span><b>✳</b><span>ANDROID</span><b>✳</b><span>ARTIFICIAL INTELLIGENCE</span><b>✳</b><span>PRODUCT ENGINEERING</span><b>✳</b><span>BACKEND SYSTEMS</span><b>✳</b><span>ANDROID</span><b>✳</b><span>ARTIFICIAL INTELLIGENCE</span><b>✳</b><span>PRODUCT ENGINEERING</span></div>
-  </div>
+  <section class="intro-strip"><p>Not here to collect tech stacks.<br /><span>Here to make useful things happen.</span></p><div class="intro-marquee" aria-hidden="true"><div>BUILD · BREAK · LEARN · REPEAT · BUILD · BREAK · LEARN · REPEAT · </div></div></section>
 
-  <section class="section work-section" id="work">
-    <div class="container">
-      <div class="chapter-heading" data-reveal>
-        <div><span class="chapter-index">01 / SELECTED WORK</span><h2>Not just code.<br /><em>Things that do things.</em></h2></div>
-        <p>Three builds. Three different rabbit holes. Each one taught me something worth keeping.</p>
+  <section class="work-section" id="work">
+    <div class="section-lead"><p class="eyebrow">A FEW THINGS I’VE MADE</p><h2>Proof of<br /><em>curiosity.</em></h2><p class="section-aside">Different problems.<br />Different rabbit holes.<br />Same urge to build.</p></div>
+    {projects.map((project, index) => <article class:list={["project", `project-${project.visual}`]} data-project>
+      <div class="project-visual" aria-hidden="true">
+        <span class="project-visual-word">{index === 0 ? "feel." : index === 1 ? "online." : "yours."}</span>
+        <span class="project-visual-mark">{index === 0 ? "✳" : index === 1 ? "◉" : "↗"}</span>
+        {index === 0 && <div class="visual-orb visual-orb-a"></div>}
+        {index === 1 && <div class="visual-orb visual-orb-b"></div>}
+        {index === 2 && <div class="visual-orb visual-orb-c"></div>}
+        <span class="visual-caption">{index === 0 ? "AI / JOURNALING" : index === 1 ? "ANDROID / DISCORD" : "ANDROID / OPEN SOURCE"}</span>
       </div>
-      <div class="project-list">
-        {projects.map((project) => <ProjectCard project={project} />)}
+      <div class="project-info">
+        <div class="project-topline"><span>0{index + 1}</span><span>{project.type}</span></div>
+        <div><p class="project-hook">{project.hook}</p><h3>{project.name}</h3><p class="project-description">{project.description}</p></div>
+        <div class="project-bottom"><p>{project.stack.slice(0,5).join(" · ")}</p><a href={project.link ?? "#"} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a></div>
       </div>
-    </div>
+    </article>)}
   </section>
 
-  <section class="section experience-section" id="experience">
-    <div class="container">
-      <div class="chapter-heading" data-reveal>
-        <div><span class="chapter-index">02 / IN THE REAL WORLD</span><h2>Where ideas<br /><em>meet constraints.</em></h2></div>
-        <p>Shipping software changes the questions you ask. Reliability, edge cases, and what happens after launch start to matter.</p>
-      </div>
-      <div class="experience-list">{experience.map((item) => <ExperienceEntry item={item} />)}</div>
-    </div>
+  <section class="experience-section" id="experience">
+    <div class="experience-heading"><p class="eyebrow">REAL-WORLD PATCH NOTES</p><h2>Learning by<br /><em>shipping.</em></h2></div>
+    <div class="experience-list">{experience.map((item) => <ExperienceEntry item={item} />)}</div>
   </section>
 
-  <section class="section approach-section" id="approach">
-    <div class="container">
-      <div class="chapter-heading" data-reveal>
-        <div><span class="chapter-index">03 / THE APPROACH</span><h2>Curiosity is the<br /><em>starting point.</em></h2></div>
-        <p>I like understanding the whole machine: the interface, the API, the infrastructure, and the tiny decisions connecting them.</p>
-      </div>
-      <div class="approach-lines">
-        <article data-reveal><span>01</span><h3>Look closer.</h3><p>Understand the problem before reaching for a framework.</p></article>
-        <article data-reveal><span>02</span><h3>Make it make sense.</h3><p>Prefer clear architecture over clever complexity.</p></article>
-        <article data-reveal><span>03</span><h3>Finish the job.</h3><p>Care about the edge cases, the release, and the people using it.</p></article>
-      </div>
-    </div>
+  <section class="manifesto-section" id="approach">
+    <div class="manifesto-top"><p class="eyebrow">THE WAY I SEE IT</p><span>NO SHORTCUTS. JUST CURIOSITY.</span></div>
+    <h2 data-manifesto>Good software<br />should feel <i>obvious.</i><br /><span>Getting there isn't.</span></h2>
+    <div class="manifesto-bottom"><p>I enjoy the whole puzzle: understanding a problem, choosing the right tools, building the thing, and caring enough to make the details work.</p><div class="manifesto-symbol">✳</div></div>
   </section>
 
-  <section class="section toolkit-section" id="toolkit">
-    <div class="container">
-      <div class="toolkit-top" data-reveal><div><span class="chapter-index">04 / THE TOOLKIT</span><h2>Tools change.<br /><em>Thinking compounds.</em></h2></div><p>A working set, not a collection of buzzwords.</p></div>
-      <div class="toolkit-groups">
-        {skills.map((group) => <div class="toolkit-group" data-reveal><span>{group.title}</span><p>{group.items.join("  ·  ")}</p></div>)}
-      </div>
-    </div>
+  <section class="skills-section" id="toolkit">
+    <div class="skills-heading"><p class="eyebrow">CURRENTLY IN MY TOOLBOX</p><h2>Things I<br /><em>speak.</em></h2></div>
+    <div class="skills-cloud">{skills.map((group, i) => <div class="skill-row" data-reveal><span>{group.title}</span><p>{group.items.map((item) => <b>{item}</b>)}</p></div>)}</div>
   </section>
 
-  <section class="section proof-section" id="background">
-    <div class="container">
-      <div class="proof-grid">
-        <div data-reveal><span class="chapter-index">05 / THE FOUNDATION</span><h2>Built on<br /><em>learning.</em></h2>
-          <div class="education-list">{education.map((item) => <article class="education-entry"><span>{item.period}</span><div><h3>{item.institution}</h3><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}</div>
-        </div>
-        <div data-reveal><span class="chapter-index">A FEW MILESTONES</span><div class="recognition-list">{recognition.map((item) => <article><h3>{item.title}</h3><p>{item.description}</p>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer">Explore publication ↗</a>}</article>)}</div></div>
-      </div>
+  <section class="background-section" id="background">
+    <div class="background-title"><p class="eyebrow">THE BACKSTORY</p><h2>Still in<br /><em>progress.</em></h2></div>
+    <div class="background-content">
+      <div class="education-list"><h3>EDUCATION</h3>{education.map((item) => <article><span>{item.period}</span><div><b>{item.institution}</b><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}</div>
+      <div class="recognition-list"><h3>OUTSIDE THE BUILD LOG</h3>{recognition.map((item) => <article><div><b>{item.title}</b><p>{item.description}</p></div>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer">↗</a>}</article>)}</div>
     </div>
   </section>
-  <script>
-    import "../scripts/motion";
-  </script>
+  <script>import "../scripts/motion";</script>
 </BaseLayout>
