@@ -65,67 +65,45 @@ function ProjectCard({ project }) {
 export default function App() {
   useLayoutEffect(() => {
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (motionPreference.matches || !("IntersectionObserver" in window)) return;
+    if (motionPreference.matches) return;
 
     const root = document.documentElement;
     const revealItems = document.querySelectorAll(
       ".site-header, .hero > *, .metrics > div, .section-heading > *, .project-card, .about-section > div:first-child, .skill-row, .background-section > div > .eyebrow, .plain-item, .now-playing, .site-footer > *"
     );
 
-    // Enable the reveal styles before the browser paints the first frame.
+    revealItems.forEach((item) => item.classList.add("scroll-blur"));
+
+    // Native view timelines track scroll progress in both directions. This
+    // avoids observer threshold chatter and transform-induced re-entry flicker.
+    if (CSS.supports("animation-timeline: view()")) {
+      root.classList.add("has-scroll-timeline");
+      return () => {
+        root.classList.remove("has-scroll-timeline");
+        revealItems.forEach((item) => item.classList.remove("scroll-blur"));
+      };
+    }
+
+    // Older browsers get a stable one-time reveal. Never toggle an element
+    // out again: doing so with an observer can make it flicker at the threshold.
+    if (!("IntersectionObserver" in window)) return;
+
     root.classList.add("has-motion");
-    const enteredItems = new WeakSet();
-
-    revealItems.forEach((item, index) => {
-      item.classList.add("scroll-blur");
-      item.classList.remove("is-visible", "exit-up", "exit-down");
-      item.style.setProperty("--reveal-delay", `${Math.min(index * 28, 280)}ms`);
-    });
-
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const item = entry.target;
-
-        if (entry.isIntersecting) {
-          enteredItems.add(item);
-          item.classList.remove("exit-up", "exit-down");
-          item.classList.add("is-visible");
-          return;
-        }
-
-        // Ignore the observer's initial off-screen report. Only animate an
-        // element out after it has actually entered the viewport once.
-        if (!enteredItems.has(item)) return;
-
-        item.classList.remove("is-visible");
-        if (entry.boundingClientRect.bottom <= 0) {
-          item.classList.add("exit-up");
-          item.classList.remove("exit-down");
-        } else {
-          item.classList.add("exit-down");
-          item.classList.remove("exit-up");
-        }
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
       });
     }, {
-      threshold: 0.12,
-      rootMargin: "0px 0px -40px 0px",
+      threshold: 0.08,
+      rootMargin: "0px 0px -8% 0px",
     });
 
     revealItems.forEach((item) => revealObserver.observe(item));
 
-    // Stagger only the opening reveal. Later scroll reveals stay responsive.
-    const delayReset = window.setTimeout(() => {
-      revealItems.forEach((item) => item.style.removeProperty("--reveal-delay"));
-    }, 1400);
-
     return () => {
       revealObserver.disconnect();
-      window.clearTimeout(delayReset);
       root.classList.remove("has-motion");
-      revealItems.forEach((item) => {
-        item.classList.remove("scroll-blur", "is-visible", "exit-up", "exit-down");
-        item.style.removeProperty("--reveal-delay");
-      });
+      revealItems.forEach((item) => item.classList.remove("scroll-blur", "is-visible"));
     };
   }, []);
 
