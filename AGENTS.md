@@ -2,23 +2,23 @@
 
 This repository is the source of truth for vinithreddybanda.github.io. Read this file before changing pages, components, styles, motion or dependencies. Keep the portfolio original, accessible and fast.
 
-## Current design brief: iOS Botanical
+## Current design brief: Botanical editorial
 
-- Experience: a calm, daylight botanical environment with the tactility of a well-made iOS interface. Soft sage, mist, warm white, living greens, gentle sunlight and translucent surfaces.
-- Composition: rounded immersive garden opening, floating glass navigation, spacious introduction, alternating project feature rows, quiet closing statement and deep green contact ending.
-- Typography: one coherent system font stack throughout. No decorative serif pairing, unrelated font families or arbitrary typefaces. Express hierarchy through size, weight, tracking and whitespace.
-- Navigation: floating translucent top bar with restrained blur. It gains opacity as the page moves beneath it. No side rail.
-- Projects: full-bleed immersive chapters, one atmospheric scene per project. No photo grids, device mockup collages, cards or tiled project thumbnails. Use original CSS geometry, light fields, orbital forms and flowing ribbons to evoke each project's idea without pretending they are screenshots.
-- Content: concise introduction, three selected projects, current role and contact. No résumé dump, skill inventory, education table or certificate wall.
-- Nature: botanical imagery and original CSS/SVG artwork as a designed environment, not generic wallpaper. Keep text readable.
-- iOS cues: rounded geometry, fine translucent borders, soft layered shadows, restrained backdrop blur, quiet state changes and clear touch targets. Avoid making every element a pill.
+- Experience: a calm, daylight botanical environment with soft sage, mist, warm white, living greens and gentle sunlight.
+- Composition: a restrained floating navigation, one welcoming garden hero, spacious editorial introduction, a consistent open project index, a quiet closing thought and a deep green contact ending.
+- Projects: use a repeatable editorial row structure with project number, category, title, short description, link and a small original CSS illustration. No project cards, tiled thumbnails, photo grids, full-screen project scenes or device mockup collages.
+- Typography: one coherent system font stack. Express hierarchy through fluid type, weight, tracking and whitespace. No decorative serif pairing or unrelated font families.
+- Content: concise introduction, selected projects, current role and contact. Avoid résumé dumps, filler labels and generic availability claims.
+- Language: avoid dot separators and status-dot labels. Use natural phrases and botanical vocabulary sparingly. Do not use "available for work" or location badges.
+- Responsiveness: fluid widths, clamp-based type and spacing, content-driven heights and explicit layouts for compact phones, tablets and wide windows. Never force desktop compositions into tiny mobile panels.
+- Nature: botanical imagery and original CSS/SVG details should feel integrated, not decorative clutter. Keep text readable.
 
 ## Motion system
-- GSAP + ScrollTrigger with native browser scrolling.
+- Native browser scrolling remains in control.
 - Hero image has restrained scroll-linked parallax.
-- Text and feature rows reveal once with opacity, small vertical offset and brief bounded blur-to-clear. Never continuously animate blur.
-- Floating navigation uses stable backdrop blur; animate opacity/background/shadow, not blur radius.
-- Animate transforms and opacity for scroll-scrubbed effects. No animated layout properties.
+- Content reveals once with opacity, a small vertical offset and brief bounded blur-to-clear.
+- Floating navigation keeps stable backdrop blur. Animate opacity/background/shadow, not blur radius.
+- Animate transforms and opacity for scroll-linked effects. No animated layout properties.
 - Respect prefers-reduced-motion. Content remains visible without JavaScript.
 - Avoid per-element scroll listeners, unbounded RAF loops and wheel/touch interception.
 - Keep one GSAP context and revert it on page hide.

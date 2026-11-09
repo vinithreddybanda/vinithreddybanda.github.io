@@ -5,53 +5,79 @@ import { projects, experience } from "@data/portfolio";
 <BaseLayout>
   <section class="hero-wrap" id="top">
     <div class="hero-scene" data-hero-scene>
-      <div class="hero-photo" data-hero-photo></div><div class="hero-wash"></div><div class="hero-grain"></div>
-      <div class="hero-orbit hero-orbit--one" aria-hidden="true"></div><div class="hero-orbit hero-orbit--two" aria-hidden="true"></div>
+      <div class="hero-photo" data-hero-photo></div>
+      <div class="hero-shade"></div>
       <div class="hero-content">
-        <div class="hero-kicker" data-hero-in><span class="status-dot"></span> AVAILABLE FOR GOOD IDEAS <span class="kicker-location">BASED IN INDIA</span></div>
-        <h1 data-hero-in>Growing ideas<br /><span>into useful things.</span></h1>
-        <div class="hero-bottom" data-hero-in><p>I'm Vinith, a software developer who cares about how things work and how they feel.</p><a class="round-link" href="#work"><span>Explore work</span><i>↘</i></a></div>
+        <p class="eyebrow hero-eyebrow" data-hero-in>A thoughtful approach to making things</p>
+        <h1 data-hero-in>Growing good<br /><em>ideas into life.</em></h1>
+        <div class="hero-bottom" data-hero-in>
+          <p>I’m Vinith, a software developer drawn to useful ideas, thoughtful details and technology that feels natural.</p>
+          <a class="text-link hero-link" href="#work">Wander through my work <span aria-hidden="true">↘</span></a>
+        </div>
       </div>
-      <div class="hero-caption"><span>01 / A PLACE TO BEGIN</span><span>TAKE A BREATH. LOOK AROUND.</span></div>
+      <div class="hero-foot"><span>MADE WITH CURIOSITY</span><span>A LITTLE SPACE TO THINK</span></div>
+      <span class="hero-leaf hero-leaf--one" aria-hidden="true"></span>
+      <span class="hero-leaf hero-leaf--two" aria-hidden="true"></span>
     </div>
-    <div class="hero-note" data-reveal><span class="note-spark">✳</span><p>Good software should feel considered, calm and a little bit alive.</p><span class="note-index">A PERSONAL PRACTICE</span></div>
+    <div class="hero-note" data-reveal>
+      <span class="note-flower" aria-hidden="true">✳</span>
+      <p>Good software should feel considered, calm and a little bit alive.</p>
+      <span class="note-caption">A PERSONAL PRINCIPLE</span>
+    </div>
   </section>
 
-  <section class="intro-section section-pad" id="about">
-    <div class="section-marker" data-reveal><span>01</span><span>THE PERSON BEHIND THE WORK</span></div>
-    <div class="intro-grid"><h2 data-reveal>Curiosity is<br />my <span>compass.</span></h2><div class="intro-copy" data-reveal>
-      <p class="intro-lead">I like making technology feel less complicated and more human.</p>
-      <p>From backend systems to Android and applied AI, I enjoy the whole process: understanding a problem, finding its shape, and polishing the details until everything feels right.</p>
-      <div class="now-line"><span class="now-pulse"></span><div><small>CURRENTLY</small><strong>{experience[0].role}</strong><span>{experience[0].company}</span></div></div>
-    </div></div>
-    <div class="botanical-mark" aria-hidden="true"><svg viewBox="0 0 420 220" fill="none"><path d="M18 200C116 175 171 112 214 15M214 15C178 29 151 56 154 91C191 86 214 54 214 15ZM214 15C243 45 276 51 306 35C288 4 251 0 214 15ZM214 15C223 76 262 104 306 96C302 56 266 25 214 15ZM214 15C169 91 178 147 219 169C248 125 239 70 214 15ZM214 15C269 99 330 117 371 87C342 48 278 31 214 15Z" stroke="currentColor" stroke-width="1.4"/><path d="M18 200C136 169 220 150 398 202" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+  <section class="intro-section section-shell" id="about">
+    <div class="section-heading" data-reveal><span class="section-number">01</span><span class="eyebrow">A LITTLE ABOUT ME</span></div>
+    <div class="intro-grid">
+      <h2 data-reveal>Curiosity is<br />a good place<br /><em>to begin.</em></h2>
+      <div class="intro-copy" data-reveal>
+        <p class="intro-lead">I enjoy making technology feel a little more human.</p>
+        <p>From backend systems to Android and applied AI, I like understanding how things fit together, finding a simpler way through, and giving the small details the same care as the big ideas.</p>
+        <div class="current-work">
+          <span class="current-stem" aria-hidden="true"></span>
+          <div><span class="eyebrow">AT THE MOMENT</span><strong>{experience[0].role}</strong><span>{experience[0].company}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="botanical-sketch" aria-hidden="true">
+      <svg viewBox="0 0 260 180" fill="none"><path d="M18 165C83 135 123 95 157 18M157 18C118 27 97 51 101 79C132 76 154 49 157 18ZM157 18C188 42 217 43 239 25C222 0 188 0 157 18ZM157 18C174 67 205 85 234 72C226 41 196 22 157 18ZM157 18C128 77 133 118 165 137C189 103 180 59 157 18Z" stroke="currentColor" stroke-width="1.2"/><path d="M18 165C87 139 151 132 245 160" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    </div>
   </section>
 
   <section class="work-section" id="work">
-    <div class="work-heading section-pad"><div class="section-marker" data-reveal><span>02</span><span>SELECTED WORK</span></div><div class="work-title-row"><h2 data-reveal>Ideas, given<br /><span>room to grow.</span></h2><p data-reveal>Three different problems.<br />Three things made with care.</p></div></div>
-    <div class="project-chapters">
-      {projects.map((project, index) => <article class:list={["project-chapter", "project-chapter--" + project.visual]} data-project-scene>
-        <div class="chapter-atmosphere" aria-hidden="true">
-          <div class="chapter-haze"></div>
-          {project.visual === "journal" && <div class="journal-world"><div class="journal-halo journal-halo--one"></div><div class="journal-halo journal-halo--two"></div><div class="journal-orbit"></div><div class="journal-seed"><span>J</span></div><div class="journal-trail"></div><div class="world-grain"></div></div>}
-          {project.visual === "discord" && <div class="signal-world"><div class="signal-ring signal-ring--one"></div><div class="signal-ring signal-ring--two"></div><div class="signal-ring signal-ring--three"></div><div class="signal-beacon"><span></span></div><div class="signal-pulse"></div><div class="signal-stars"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="world-grain"></div></div>}
-          {project.visual === "status" && <div class="memory-world"><div class="memory-ribbon memory-ribbon--one"></div><div class="memory-ribbon memory-ribbon--two"></div><div class="memory-ribbon memory-ribbon--three"></div><div class="memory-orb"></div><div class="memory-glint"></div><div class="world-grain"></div></div>}
+    <div class="section-shell work-intro">
+      <div class="section-heading" data-reveal><span class="section-number">02</span><span class="eyebrow">A FEW THINGS I’VE MADE</span></div>
+      <div class="work-heading">
+        <h2 data-reveal>Things made<br /><em>with care.</em></h2>
+        <p data-reveal>Different ideas, shaped into useful little experiences. Each one taught me something worth keeping.</p>
+      </div>
+    </div>
+    <div class="project-list">
+      {projects.map((project, index) => <article class:list={["project-row", "project-row--" + project.visual]} data-project-row>
+        <div class="project-meta"><span class="project-index">0{index + 1}</span><span class="project-kind">{project.visual === "journal" ? "AI AND WELLBEING" : project.visual === "discord" ? "ANDROID AND CONNECTIVITY" : "ANDROID AND PRIVACY"}</span></div>
+        <div class="project-main">
+          <div class="project-copy">
+            <h3>{project.name}</h3>
+            <p class="project-hook">{project.hook}</p>
+            <p class="project-description">{project.description}</p>
+            <a class="text-link project-link" href={project.link} target="_blank" rel="noopener noreferrer"><span>{project.linkLabel}</span><span aria-hidden="true">↗</span></a>
+          </div>
+          <div class:list={["project-art", "project-art--" + project.visual]} aria-hidden="true">
+            {project.visual === "journal" && <><span class="art-orbit art-orbit--a"></span><span class="art-orbit art-orbit--b"></span><span class="art-seed"><i>j</i></span><span class="art-sprout"></span></>}
+            {project.visual === "discord" && <><span class="art-signal art-signal--a"></span><span class="art-signal art-signal--b"></span><span class="art-signal art-signal--c"></span><span class="art-beacon"></span></>}
+            {project.visual === "status" && <><span class="art-loop art-loop--a"></span><span class="art-loop art-loop--b"></span><span class="art-loop art-loop--c"></span><span class="art-orb"></span></>}
+          </div>
         </div>
-        <div class="chapter-top"><span>0{index + 1} <i> / </i> 03</span><span>{project.visual === "journal" ? "A QUIETER KIND OF CLARITY" : project.visual === "discord" ? "PRESENCE WITHOUT BORDERS" : "A SMALL PIECE OF PRIVACY"}</span></div>
-        <div class="chapter-copy">
-          <div class="chapter-label">{project.visual === "journal" ? "AI · PERSONAL WELLBEING" : project.visual === "discord" ? "ANDROID · CONNECTIVITY" : "ANDROID · PRIVACY"}</div>
-          <h3>{project.name}</h3>
-          <p class="chapter-hook">{project.hook}</p>
-          <p class="chapter-description">{project.description}</p>
-          <a class="chapter-link" href={project.link} target="_blank" rel="noopener noreferrer"><span>{project.linkLabel}</span><i>↗</i></a>
-        </div>
-        <div class="chapter-foot"><span>VINITH REDDY BANDA</span><span>SCROLL TO EXPLORE <i>↓</i></span></div>
       </article>)}
     </div>
   </section>
 
-  <section class="closing-section section-pad"><div class="closing-bloom" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="section-marker" data-reveal><span>03</span><span>WHAT I BELIEVE</span></div>
-    <div class="closing-content" data-reveal><p>Build with care.<br /><span>Leave things better.</span></p><div class="closing-aside">The best details are often the quiet ones. The ones you notice because nothing gets in your way.</div></div>
+  <section class="closing-section section-shell">
+    <div class="section-heading" data-reveal><span class="section-number">03</span><span class="eyebrow">A THOUGHT TO LEAVE WITH</span></div>
+    <div class="closing-content" data-reveal>
+      <h2>Build with care.<br /><em>Leave room to grow.</em></h2>
+      <p>The best details are often the quiet ones. The ones that make everything feel a little more effortless.</p>
+    </div>
+    <span class="closing-flower" aria-hidden="true">✳</span>
   </section>
 </BaseLayout>

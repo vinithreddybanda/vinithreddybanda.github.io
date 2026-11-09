@@ -5,19 +5,19 @@ description: Mandatory visual and motion system for the Vinith Reddy Banda portf
 
 # Portfolio UI/UX system
 
-Read root AGENTS.md first. Follow the iOS Botanical brief. This is a new visual system, not an extension of the previous forest-photo and side-rail concept.
+Read root AGENTS.md first. Follow the Botanical editorial brief.
 
 ## Visual direction
 - Calm daylight botanical atmosphere, soft sage, warm white, mist and layered greens.
-- Native iOS cues: floating translucent top navigation, restrained glass blur, fine borders, rounded geometry, soft depth and generous touch targets.
-- One system font stack throughout. Do not pair unrelated fonts or introduce a decorative serif.
-- Hero: rounded garden scene with clear hierarchy, legible overlay and compact supporting glass note.
-- Projects: open alternating feature rows with custom illustrative artwork. Never use card grids or fake screenshots.
-- Keep copy concise. No résumé dump or filler labels.
+- Floating translucent navigation with restrained blur and clear touch targets.
+- One coherent system font stack. Use fluid type, weight and whitespace for hierarchy.
+- Hero: welcoming garden image, readable text, restrained botanical line details.
+- Projects: consistent open editorial rows with number, category, title, description, link and small original illustration. Never use immersive full-screen scenes, project cards, photo grids or fake screenshots.
+- Keep copy concise and natural. Avoid status dots, availability badges, location callouts and dot separators.
 
 ## Motion direction
 - Native scrolling remains in control.
-- One GSAP context and ScrollTrigger for restrained hero parallax and one-shot section reveals.
+- One GSAP context and ScrollTrigger for restrained hero parallax and one-shot content reveals.
 - Reveal blur is brief and bounded to entering content only. Never animate backdrop-filter or continuously scrub filter blur.
 - Animate transform and opacity for scroll-linked motion.
 - Respect reduced motion and ensure content is visible without JavaScript.
