@@ -28,3 +28,7 @@
 .site-header .nav-links .nav-cta{padding:10px 16px;border-radius:40px;background:var(--ink);color:white}
 .site-header .nav-links .nav-cta:hover{background:var(--blue);color:white}
 @media(max-width:600px){.site-header{padding:9px 12px}.site-header .nav-shell{min-height:48px;padding:0 15px}.site-header .nav-links{gap:12px}.site-header .nav-links a{font-size:10px}.site-header .nav-links a:nth-child(2){display:none}.site-header .nav-links .nav-cta{padding:8px 12px}}
+
+.experience-intro{max-width:1400px;margin:0 auto 70px}
+.experience-intro h2{margin:20px 0 0;font:700 clamp(62px,9vw,120px)/.8 var(--display);letter-spacing:-.1em}
+.experience-intro h2 em{font-family:Georgia,serif;font-weight:400;color:var(--blue)}
