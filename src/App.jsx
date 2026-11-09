@@ -101,9 +101,13 @@ export default function App() {
 
     root.classList.add("has-motion");
     revealItems.forEach((item, index) => {
-      item.classList.add("scroll-blur", "is-visible");
+      item.classList.add("scroll-blur");
       item.style.setProperty("--reveal-delay", `${Math.min(index * 28, 420)}ms`);
       revealObserver.observe(item);
+    });
+
+    requestAnimationFrame(() => {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
     });
 
     return () => {
