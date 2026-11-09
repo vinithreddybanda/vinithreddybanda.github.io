@@ -65,20 +65,33 @@ function ProjectCard({ project, index }) {
 export default function App() {
   useEffect(() => {
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (motionPreference.matches) return;
+    if (motionPreference.matches || !("IntersectionObserver" in window)) return;
 
     const root = document.documentElement;
     const revealItems = document.querySelectorAll(
-      ".site-header, .hero > .eyebrow, .hero > h1, .hero > .hero-bottom, .metrics > div, .section-heading > *, .project-card, .about-section > div, .skill-row, .background-section > div > .eyebrow, .plain-item, .now-playing, .site-footer > div"
+      "[data-reveal], .site-header, .hero > *, .metrics > div, .section-heading > *, .project-card, .about-section > *, .skill-row, .plain-item, .now-playing, .site-footer > *"
     );
 
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        entry.target.classList.toggle("is-visible", entry.isIntersecting);
+        const item = entry.target;
+        if (entry.isIntersecting) {
+          item.classList.remove("exit-up", "exit-down");
+          item.classList.add("is-visible");
+        } else {
+          item.classList.remove("is-visible");
+          if (entry.boundingClientRect.bottom <= 0) {
+            item.classList.add("exit-up");
+            item.classList.remove("exit-down");
+          } else {
+            item.classList.add("exit-down");
+            item.classList.remove("exit-up");
+          }
+        }
       });
     }, {
       threshold: 0.08,
-      rootMargin: "0px 0px -24px 0px",
+      rootMargin: "0px 0px -32px 0px",
     });
 
     root.classList.add("has-motion");
