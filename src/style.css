@@ -469,6 +469,15 @@ a:focus-visible {
   transform: translate3d(0, 0, 0);
 }
 
+/* The sticky header is intentionally excluded from scroll-linked reveals. */
+.has-scroll-timeline .site-header {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  animation: none;
+  will-change: auto;
+}
+
 .has-scroll-timeline .scroll-blur {
   opacity: 1;
   animation-name: scroll-linked-reveal;
