@@ -25,8 +25,8 @@ export const projects = [
     ],
     stack: ["Next.js", "TypeScript", "Supabase", "Groq AI", "Docker", "Kubernetes", "Azure"],
     visual: "journal",
-    link: null,
-    linkLabel: "Product overview",
+    link: "https://github.com/vinithreddybanda/journalai",
+    linkLabel: "View project",
   },
   {
     number: "02",
