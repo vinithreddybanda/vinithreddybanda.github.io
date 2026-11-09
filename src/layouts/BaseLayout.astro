@@ -3,47 +3,17 @@ import "../styles/global.css";
 import SiteHeader from "@components/SiteHeader.astro";
 import SiteFooter from "@components/SiteFooter.astro";
 import { profile } from "@data/portfolio";
-
-interface Props {
-  title?: string;
-  description?: string;
-}
-
-const {
-  title = `${profile.name} — Software Developer`,
-  description = profile.intro,
-} = Astro.props;
+interface Props { title?: string; description?: string; }
+const { title = `${profile.name} — Software Developer`, description = profile.intro } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 ---
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#090a0c" />
-    <meta name="description" content={description} />
-    <meta name="author" content={profile.name} />
-    <meta name="color-scheme" content="dark" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;550;600;650;700&family=Instrument+Serif:ital@0;1&display=swap"
-      rel="stylesheet"
-    />
-    <title>{title}</title>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090a0c" /><meta name="description" content={description} /><meta name="author" content={profile.name} /><meta name="color-scheme" content="dark" />
+    <meta property="og:type" content="website" /><meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:url" content={canonicalURL} />
+    <link rel="canonical" href={canonicalURL} /><link rel="icon" type="image/svg+xml" href="/favicon.svg" /><title>{title}</title>
   </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <SiteHeader />
-    <main id="main">
-      <slot />
-    </main>
-    <SiteFooter />
-  </body>
+  <body><div class="scroll-progress" data-scroll-progress></div><a class="skip-link" href="#main">Skip to content</a><SiteHeader /><main id="main"><slot /></main><SiteFooter /></body>
 </html>
