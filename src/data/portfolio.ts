@@ -126,6 +126,7 @@ export const recognition = [
     title: "IEEE research publication",
     description:
       "Published “Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis” at the 2026 IEEE International Conference for Convergence in Computing Technology (I3CTCON), indexed in IEEE Xplore.",
+    link: "https://doi.org/10.1109/I3CTCON68242.2026.11507447",
   },
   {
     title: "COSC HackWeek Challenge",
