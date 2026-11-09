@@ -144,21 +144,21 @@ export default function App() {
 
       <section className="hero">
         <p className="eyebrow hero-kicker">DEVELOPER / BUILDER <span>·</span> INDIA</p>
-        <h1 className="hero-title" data-reveal="up">Making things<br />work<span>.</span></h1>
-        <div className="hero-bottom" data-reveal="up">
+        <h1 className="hero-title">Making things<br />work<span>.</span></h1>
+        <div className="hero-bottom">
           <p>I'm Vinith Reddy Banda, an Information Technology graduate drawn to the space between an idea and a working product. I like finding out how systems fit together, getting into the details, and turning what I learn into software people can actually use.</p>
           <a className="text-link" href="#work">Explore my work ↓</a>
         </div>
       </section>
 
-      <section className="metrics" aria-label="Highlights" data-reveal="up">
+      <section className="metrics" aria-label="Highlights">
         <div><strong>03</strong><span>PROJECTS</span></div>
         <div><strong>148</strong><span>REST APIS</span></div>
         <div><strong>8.43</strong><span>B.E. CGPA</span></div>
         <div><strong>9.74</strong><span>DIPLOMA CGPA</span></div>
       </section>
 
-      <section className="section" id="work" data-reveal="up">
+      <section className="section" id="work">
         <div className="section-heading">
           <p className="eyebrow">SELECTED WORK</p>
           <h2>Things I've built<span>.</span></h2>
@@ -168,7 +168,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="section about-section" id="about" data-reveal="up">
+      <section className="section about-section" id="about">
         <div>
           <p className="eyebrow">A LITTLE ABOUT ME</p>
           <h2>Curious by nature.<br />Practical by design<span>.</span></h2>
@@ -184,15 +184,15 @@ export default function App() {
         </div>
       </section>
 
-      <section className="section background-section" data-reveal="up">
+      <section className="section background-section">
         <div>
           <p className="eyebrow">EDUCATION</p>
           <div className="plain-item"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
-          <div className="plain-item reveal"><span>2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering · 9.74 CGPA</p></div></div>
+          <div className="plain-item"><span>2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering · 9.74 CGPA</p></div></div>
         </div>
         <div>
           <p className="eyebrow">BEYOND THE BUILD</p>
-          <div className="plain-item reveal"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>A research project exploring graph attention networks for analysing kinematic patterns in rehabilitation exercises · I3CTCON 2026</p></div></div>
+          <div className="plain-item"><span>↗</span><div><strong>IEEE Xplore research publication</strong><p>A research project exploring graph attention networks for analysing kinematic patterns in rehabilitation exercises · I3CTCON 2026</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>Open-source Android app</strong><p>Built for Android and distributed through F-Droid</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>6th place · COSC HackWeek</strong><p>A competitive programming challenge hosted by the CBIT Open Source Community</p></div></div>
           <div className="plain-item"><span>↗</span><div><strong>MongoDB Node.js Certification</strong><p>MongoDB University · Web Development 101, Pupilfirst</p></div></div>
@@ -201,7 +201,7 @@ export default function App() {
 
       <NowPlaying />
 
-      <footer className="site-footer" id="contact" data-reveal="up">
+      <footer className="site-footer" id="contact">
         <div>
           <p className="eyebrow">HAVE SOMETHING IN MIND?</p>
           <h2>Let's build something<br />useful<span>.</span></h2>
