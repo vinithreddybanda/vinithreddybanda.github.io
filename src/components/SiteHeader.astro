@@ -1,8 +1,7 @@
 ---
 import { profile } from "@data/portfolio";
 ---
-<aside class="site-rail" data-site-rail aria-label="Site navigation">
-  <a class="rail-brand" href="#top" aria-label={profile.name}>v.</a>
-  <nav class="rail-nav"><a href="#work"><span>01</span> WORK</a><a href="#about"><span>02</span> ABOUT</a><a href="#contact"><span>03</span> CONTACT</a></nav>
-  <span class="rail-foot">INDEPENDENTLY<br />CURIOUS</span>
-</aside>
+<header class="floating-nav" data-floating-nav>
+  <a class="nav-brand" href="#top" aria-label={profile.name}><span class="brand-mark">v</span><span class="brand-name">vinith reddy banda</span></a>
+  <nav aria-label="Main navigation"><a href="#about">About</a><a href="#work">Work</a><a class="nav-contact" href="#contact">Let's talk <span>↗</span></a></nav>
+</header>
