@@ -4,60 +4,36 @@ import ExperienceEntry from "@components/ExperienceEntry.astro";
 import { profile, projects, experience, skills, education, recognition } from "@data/portfolio";
 ---
 <BaseLayout>
-  <section class="hero" id="top">
-    <div class="hero-noise" aria-hidden="true"></div>
-    <div class="hero-top"><a class="hero-wordmark" href="#top">vinith<span>®</span></a><span class="hero-location">HYDERABAD, INDIA · AVAILABLE WORLDWIDE</span></div>
-    <div class="hero-main">
-      <p class="hero-intro" data-hero-intro>Developer by practice.<br />Curious by default.</p>
-      <h1 class="hero-title" data-hero-title>Building<br /><span>what's</span> <i>next.</i></h1>
-      <div class="hero-bottom" data-hero-bottom><p>I’m <strong>${profile.name}</strong>, a software developer exploring the space between thoughtful engineering and products people actually love using.</p><a href="#work" class="hero-scroll">SCROLL A LITTLE <span>↘</span></a></div>
+  <section class="hero section-wrap" id="top">
+    <div class="hero-copy">
+      <p class="overline"><span class="status-dot"></span> SOFTWARE DEVELOPER · INDIA</p>
+      <h1>Thoughtful<br />software, <em>made</em><br />with purpose.</h1>
+      <p class="hero-description">I’m {profile.name}. I build across backend systems, Android, and AI, turning complex problems into useful, dependable products.</p>
+      <div class="hero-actions"><a class="button button-dark" href="#work">Explore my work <span>↗</span></a><a class="text-link" href="#contact">Get in touch</a></div>
     </div>
-    <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-sticker">IDEAS<br />INTO<br /><b>REALITY</b> ✳</div>
-    <div class="hero-side-note">SOFTWARE / PEOPLE / POSSIBILITY</div>
+    <div class="hero-art" aria-label="Abstract gradient artwork"><div class="art-glow"></div><div class="art-disc"></div><div class="art-orbit"></div><span class="art-monogram">VB</span><span class="art-caption">DESIGNING · BUILDING · LEARNING</span></div>
+    <a class="scroll-cue" href="#work" aria-label="Scroll to selected work"><span></span> SCROLL TO EXPLORE</a>
   </section>
-
-  <section class="intro-strip"><p>Not here to collect tech stacks.<br /><span>Here to make useful things happen.</span></p><div class="intro-marquee" aria-hidden="true"><div>BUILD · BREAK · LEARN · REPEAT · BUILD · BREAK · LEARN · REPEAT · </div></div></section>
-
-  <section class="work-section" id="work">
-    <div class="section-lead"><p class="eyebrow">A FEW THINGS I’VE MADE</p><h2>Proof of<br /><em>curiosity.</em></h2><p class="section-aside">Different problems.<br />Different rabbit holes.<br />Same urge to build.</p></div>
-    {projects.map((project, index) => <article class:list={["project", `project-${project.visual}`]} data-project>
-      <div class="project-visual" aria-hidden="true">
-        <span class="project-visual-word">{index === 0 ? "feel." : index === 1 ? "online." : "yours."}</span>
-        <span class="project-visual-mark">{index === 0 ? "✳" : index === 1 ? "◉" : "↗"}</span>
-        {index === 0 && <div class="visual-orb visual-orb-a"></div>}
-        {index === 1 && <div class="visual-orb visual-orb-b"></div>}
-        {index === 2 && <div class="visual-orb visual-orb-c"></div>}
-        <span class="visual-caption">{index === 0 ? "AI / JOURNALING" : index === 1 ? "ANDROID / DISCORD" : "ANDROID / OPEN SOURCE"}</span>
-      </div>
-      <div class="project-info">
-        <div class="project-topline"><span>0{index + 1}</span><span>{project.type}</span></div>
-        <div><p class="project-hook">{project.hook}</p><h3>{project.name}</h3><p class="project-description">{project.description}</p></div>
-        <div class="project-bottom"><p>{project.stack.slice(0,5).join(" · ")}</p><a href={project.link ?? "#"} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a></div>
-      </div>
-    </article>)}
+  <section class="work-section section-wrap" id="work">
+    <div class="section-heading"><div><p class="overline">SELECTED WORK</p><h2>Built with <em>intent.</em></h2></div><p>A selection of projects across AI, Android, and open source.</p></div>
+    <div class="project-list">{projects.map((project, index) => <article class:list={["project-panel", `project-${project.visual}`]} data-reveal>
+      <div class="project-copy"><span class="project-index">0{index + 1} / 0{projects.length}</span><p class="project-type">{project.type}</p><h3>{project.name}</h3><p class="project-description">{project.description}</p><div class="project-stack">{project.stack.slice(0, 5).map((item) => <span>{item}</span>)}</div><a class="project-link" href={project.link} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a></div>
+      <div class="project-art" aria-hidden="true"><div class="project-art-shape"></div><span class="project-art-name">{project.visual === "journal" ? "journal" : project.visual === "discord" ? "connect" : "offline"}</span><span class="project-art-symbol">{index === 0 ? "✳" : index === 1 ? "◌" : "↗"}</span></div>
+    </article>)}</div>
   </section>
-
-  <section class="experience-section" id="experience">
-    <div class="experience-intro"><p class="eyebrow">REAL-WORLD PATCH NOTES</p><h2>Learning by<br /><em>shipping.</em></h2></div>
+  <section class="experience-section section-wrap" id="experience">
+    <div class="section-heading"><div><p class="overline">EXPERIENCE</p><h2>Learning through <em>doing.</em></h2></div><p>Working with real teams, real constraints, and real users.</p></div>
     <div class="experience-list">{experience.map((item) => <ExperienceEntry item={item} />)}</div>
   </section>
-
-  <section class="manifesto-section" id="approach">
-    <div class="manifesto-top"><p class="eyebrow">THE WAY I SEE IT</p><span>NO SHORTCUTS. JUST CURIOSITY.</span></div>
-    <h2 data-manifesto>Good software<br />should feel <i>obvious.</i><br /><span>Getting there isn't.</span></h2>
-    <div class="manifesto-bottom"><p>I enjoy the whole puzzle: understanding a problem, choosing the right tools, building the thing, and caring enough to make the details work.</p><div class="manifesto-symbol">✳</div></div>
+  <section class="skills-section section-wrap" id="skills">
+    <div class="section-heading"><div><p class="overline">TECHNICAL SKILLS</p><h2>My <em>toolkit.</em></h2></div><p>Tools I use to design, build, ship, and maintain software.</p></div>
+    <div class="skills-list">{skills.map((group) => <div class="skill-group" data-reveal><h3>{group.title}</h3><div>{group.items.map((item) => <span>{item}</span>)}</div></div>)}</div>
   </section>
-
-  <section class="skills-section" id="toolkit">
-    <div class="skills-heading"><p class="eyebrow">CURRENTLY IN MY TOOLBOX</p><h2>Things I<br /><em>speak.</em></h2></div>
-    <div class="skills-cloud">{skills.map((group, i) => <div class="skill-row" data-reveal><span>{group.title}</span><p>{group.items.map((item) => <b>{item}</b>)}</p></div>)}</div>
-  </section>
-
-  <section class="background-section" id="background">
-    <div class="background-title"><p class="eyebrow">THE BACKSTORY</p><h2>Still in<br /><em>progress.</em></h2></div>
-    <div class="background-content">
-      <div class="education-list"><h3>EDUCATION</h3>{education.map((item) => <article><span>{item.period}</span><div><b>{item.institution}</b><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}</div>
-      <div class="recognition-list"><h3>OUTSIDE THE BUILD LOG</h3>{recognition.map((item) => <article><div><b>{item.title}</b><p>{item.description}</p></div>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer">↗</a>}</article>)}</div>
+  <section class="about-section section-wrap" id="about">
+    <div class="section-heading"><div><p class="overline">A LITTLE BACKGROUND</p><h2>Beyond the <em>code.</em></h2></div><p>Education, research, and a few milestones along the way.</p></div>
+    <div class="about-columns">
+      <div class="about-block"><h3>EDUCATION</h3>{education.map((item) => <article class="about-entry" data-reveal><span>{item.period}</span><div><h4>{item.institution}</h4><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}</div>
+      <div class="about-block"><h3>RECOGNITION & MORE</h3>{recognition.map((item) => <article class="recognition-entry" data-reveal><div><h4>{item.title}</h4><p>{item.description}</p></div>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label="Read details">↗</a>}</article>)}</div>
     </div>
   </section>
   <script>import "../scripts/motion";</script>
