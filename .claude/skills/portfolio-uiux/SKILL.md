@@ -9,7 +9,7 @@ This skill is mandatory for all visual work in this repository. Read the root `A
 
 ## Design north star
 
-Create a quiet, precise, editorial portfolio with iOS-level interaction polish, not an imitation of iOS chrome. The page stays black-first, typography-led, and structurally crisp. Use Geist Sans throughout, with Instrument Serif Italic reserved for editorial emphasis. Use warm white text and one cool blue accent. Keep geometry square and layouts disciplined.
+Create a quiet, precise, nature-led editorial portfolio with iOS-level interaction polish, not an imitation of iOS chrome. Use deep forest green, moss and fern accents, warm limestone backgrounds, and muted botanical neutrals. Photography and organic tonal depth provide atmosphere; avoid literal leaf motifs, decorative dots, and noisy textures. Use Geist Sans throughout, with Instrument Serif Italic reserved for editorial emphasis. Keep geometry disciplined and layouts spacious.
 
 The iOS material treatment belongs only on the fixed navigation and overlays. The navigation begins transparent. It becomes subtly translucent with backdrop blur only after the page has scrolled beneath it. It must not look blurred on initial load. Never apply a blur filter to moving content.
 
@@ -29,8 +29,8 @@ Use the MCP's available tool names and profile mapping from its installed docume
 ## Canonical visual rules
 
 - **Typography:** Geist Sans is the sole interface and body family. Instrument Serif Italic is the sole editorial accent. Establish a fluid type scale with `clamp()`; use consistent tracking and line-height.
-- **Color:** near-black page canvas, warm off-white primary text, restrained neutral secondary text, and one cool blue accent. Keep contrast accessible.
-- **Layout:** use a consistent max-width container, shared spacing scale, stable grid, and deliberate section rhythm. Favor open space over decorative panels.
+- **Color:** deep forest green, moss and fern accents, warm limestone backgrounds, and muted botanical neutrals. Keep contrast accessible.
+- **Layout:** use a consistent max-width container, shared spacing scale, stable grid, generous section padding, and deliberate editorial rhythm. Favor open space over decorative panels.
 - **Surfaces:** use solid surfaces for ordinary content. Use translucent material only for the navigation and overlays that need to sit above scrolling content.
 - **Corners:** 4px maximum radius for ordinary controls and surfaces. No pill UI.
 - **Icons:** use one consistent stroke weight and optical size. Icons support labels; they do not replace essential text.
