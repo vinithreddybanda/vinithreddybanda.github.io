@@ -4,46 +4,54 @@ import ExperienceEntry from "@components/ExperienceEntry.astro";
 import { profile, projects, experience, skills, education, recognition } from "@data/portfolio";
 ---
 <BaseLayout>
-  <section class="hero section-wrap" id="top">
-    <div class="hero-top"><span class="availability"><i></i> Available for opportunities</span><span class="hero-location">Based in {profile.location}</span></div>
-    <div class="hero-main">
-      <p class="hero-kicker">HELLO, I'M</p>
-      <h1>Vinith Reddy<br /><em>Banda.</em></h1>
-      <div class="hero-bottom">
-        <p class="hero-role">Software developer <span>·</span> Full-stack, Android & AI</p>
-        <p class="hero-description">{profile.intro}</p>
-        <div class="hero-actions"><a class="button button-primary" href="#work">View selected work <span>↗</span></a><a class="quiet-link" href="#contact">Get in touch</a></div>
-      </div>
+  <section class="hero page-shell" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="availability"></span> Based in India · Available for opportunities</p>
+      <h1>Hi, I’m Vinith.<br />I make <em>software</em><br />that feels right.</h1>
+      <p class="hero-description">Developer working across backend, Android and AI. I care about the details that make software useful, reliable and a pleasure to use.</p>
+      <div class="hero-actions"><a class="primary-button" href="#work">Explore my work <span>↗</span></a><a class="quiet-link" href="#contact">Say hello</a></div>
     </div>
-    <div class="hero-rule"><span>Engineering with care.</span><span>Scroll to explore ↓</span></div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="visual-orb orb-one"></div><div class="visual-orb orb-two"></div>
+      <div class="visual-tile"><span>vb.</span><small>BUILDING<br />WITH CARE</small></div>
+      <div class="visual-glint"></div>
+    </div>
+    <a class="scroll-hint" href="#work">Scroll to explore <span>↓</span></a>
   </section>
 
-  <section class="work-section section-wrap" id="work">
-    <div class="section-heading"><div><p class="eyebrow">01 / SELECTED WORK</p><h2>Things I've <em>built.</em></h2></div><p class="section-note">A few projects I've worked on, from AI products to native Android.</p></div>
+  <section class="work-section page-shell" id="work">
+    <div class="section-intro"><div><p class="eyebrow">A FEW THINGS I’VE MADE</p><h2>Selected <em>work.</em></h2></div><p>Small details. Real problems.<br />Thoughtful engineering.</p></div>
     <div class="project-list">
-      {projects.map((project, index) => <article class="project-row" data-reveal>
-        <div class="project-number">0{index + 1}</div>
-        <div class="project-main"><p class="project-type">{project.type}</p><h3>{project.name}</h3><p class="project-description">{project.description}</p><div class="project-stack">{project.stack.slice(0, 5).map((item) => <span>{item}</span>)}</div></div>
-        <a class="project-open" href={project.link} target="_blank" rel="noopener noreferrer" aria-label={project.linkLabel + ": " + project.name}>↗</a>
+      {projects.map((project, index) => <article class:list={["project-row", `project-${project.visual}`]} data-reveal>
+        <div class="project-copy">
+          <span class="project-count">0{index + 1}</span>
+          <p class="project-kind">{project.type}</p>
+          <h3>{project.name}</h3>
+          <p class="project-description">{project.description}</p>
+          <div class="project-tools">{project.stack.slice(0, 5).join(" · ")}</div>
+          <a class="project-link" href={project.link} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a>
+        </div>
+        <div class="project-visual" aria-hidden="true"><div class="project-symbol">{index === 0 ? "✳" : index === 1 ? "◒" : "↗"}</div><div class="project-word">{project.visual === "journal" ? "journal" : project.visual === "discord" ? "connect" : "offline"}</div><div class="project-glass"></div></div>
       </article>)}
     </div>
   </section>
 
-  <section class="experience-section section-wrap" id="experience">
-    <div class="section-heading"><div><p class="eyebrow">02 / EXPERIENCE</p><h2>Where I've <em>worked.</em></h2></div><p class="section-note">Learning from teams, real products, and practical engineering constraints.</p></div>
+  <section class="experience-section page-shell" id="experience">
+    <div class="section-intro"><div><p class="eyebrow">WHERE I’VE BEEN</p><h2>Experience.</h2></div><p>Learning by building<br />with real teams.</p></div>
     <div class="experience-list">{experience.map((item) => <ExperienceEntry item={item} />)}</div>
   </section>
 
-  <section class="skills-section section-wrap" id="skills">
-    <div class="section-heading"><div><p class="eyebrow">03 / TOOLKIT</p><h2>What I <em>work with.</em></h2></div><p class="section-note">The languages, frameworks, and tools I use to make software.</p></div>
-    <div class="skills-list">{skills.map((group) => <div class="skill-group" data-reveal><h3>{group.title}</h3><div>{group.items.map((item) => <span>{item}</span>)}</div></div>)}</div>
+  <section class="skills-section page-shell" id="skills">
+    <div class="section-intro"><div><p class="eyebrow">WHAT I WORK WITH</p><h2>My <em>toolkit.</em></h2></div><p>A practical set of tools<br />for turning ideas into products.</p></div>
+    <div class="skills-list">{skills.map((group) => <div class="skill-row" data-reveal><h3>{group.title}</h3><p>{group.items.join("  ·  ")}</p></div>)}</div>
   </section>
 
-  <section class="about-section section-wrap" id="about">
-    <div class="section-heading"><div><p class="eyebrow">04 / BACKGROUND</p><h2>A little <em>about me.</em></h2></div><p class="section-note">Education, research, and a few milestones.</p></div>
+  <section class="about-section page-shell" id="about">
+    <div class="section-intro"><div><p class="eyebrow">A LITTLE MORE</p><h2>Beyond the <em>build.</em></h2></div><p>Education, research<br />and a few milestones.</p></div>
     <div class="about-columns">
-      <div class="about-block"><h3>EDUCATION</h3>{education.map((item) => <article class="about-entry" data-reveal><span>{item.period}</span><div><h4>{item.institution}</h4><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}</div>
-      <div class="about-block"><h3>RECOGNITION</h3>{recognition.map((item) => <article class="recognition-entry" data-reveal><div><h4>{item.title}</h4><p>{item.description}</p></div>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label="Read details">↗</a>}</article>)}</div>
+      <div class="about-block"><h3>Education</h3>{education.map((item) => <article class="about-entry" data-reveal><span>{item.period}</span><div><h4>{item.institution}</h4><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}</div>
+      <div class="about-block"><h3>Recognition</h3>{recognition.map((item) => <article class="recognition-entry" data-reveal><div><h4>{item.title}</h4><p>{item.description}</p></div>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label="Read details">↗</a>}</article>)}</div>
     </div>
   </section>
+  <script>import "../scripts/motion";</script>
 </BaseLayout>
