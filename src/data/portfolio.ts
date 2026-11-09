@@ -8,7 +8,7 @@ export const profile = {
   intro:
     "I build software across the stack, from thoughtful interfaces and backend systems to native Android integrations and cloud delivery.",
   summary:
-    "An Information Technology graduate with a systems-first approach to product engineering. I enjoy turning complex requirements into software that feels clear, reliable, and useful.",
+    "An Information Technology student and developer with a systems-first approach to product engineering. I enjoy turning complex requirements into software that feels clear, reliable, and useful.",
 };
 
 export const projects = [
