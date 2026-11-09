@@ -8,7 +8,7 @@ This repository is the source of truth for vinithreddybanda.github.io. Read this
 - Composition: rounded immersive garden opening, floating glass navigation, spacious introduction, alternating project feature rows, quiet closing statement and deep green contact ending.
 - Typography: one coherent system font stack throughout. No decorative serif pairing, unrelated font families or arbitrary typefaces. Express hierarchy through size, weight, tracking and whitespace.
 - Navigation: floating translucent top bar with restrained blur. It gains opacity as the page moves beneath it. No side rail.
-- Projects: open feature rows, not cards or a tiled grid. CSS artwork is illustrative interface art, never described as actual product screenshots.
+- Projects: full-bleed immersive chapters, one atmospheric scene per project. No photo grids, device mockup collages, cards or tiled project thumbnails. Use original CSS geometry, light fields, orbital forms and flowing ribbons to evoke each project's idea without pretending they are screenshots.
 - Content: concise introduction, three selected projects, current role and contact. No résumé dump, skill inventory, education table or certificate wall.
 - Nature: botanical imagery and original CSS/SVG artwork as a designed environment, not generic wallpaper. Keep text readable.
 - iOS cues: rounded geometry, fine translucent borders, soft layered shadows, restrained backdrop blur, quiet state changes and clear touch targets. Avoid making every element a pill.

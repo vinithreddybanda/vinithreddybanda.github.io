@@ -28,18 +28,24 @@ import { projects, experience } from "@data/portfolio";
   </section>
 
   <section class="work-section" id="work">
-    <div class="work-heading section-pad"><div class="section-marker" data-reveal><span>02</span><span>SELECTED WORK</span></div><div class="work-title-row"><h2 data-reveal>Made with<br /><span>intention.</span></h2><p data-reveal>A few experiments, useful tools<br />and ideas brought to life.</p></div></div>
-    <div class="project-list">
-      {projects.map((project, index) => <article class:list={["project-row", "project-row--" + project.visual]} data-project>
-        <div class="project-visual" aria-hidden="true">
-          {project.visual === "journal" && <div class="journal-art"><div class="journal-glow"></div><div class="journal-sheet"><span>JOURNAL / 08:42</span><strong>Make space<br />for <i>yourself.</i></strong><div class="journal-lines"><i></i><i></i><i></i></div><small>ONE DAY AT A TIME</small></div><div class="journal-sun"></div></div>}
-          {project.visual === "discord" && <div class="presence-art"><div class="presence-ring presence-ring--outer"></div><div class="presence-ring presence-ring--inner"></div><div class="presence-core"><span>ON</span><strong>LINE</strong></div><div class="presence-wave">{Array.from({length:17}, (_, i) => <i style={`--bar:${18 + ((i * 17) % 46)}px`}></i>)}</div><span class="presence-label">A LITTLE SIGNAL, EVERYWHERE</span></div>}
-          {project.visual === "status" && <div class="status-art"><div class="status-window status-window--a"><i></i></div><div class="status-window status-window--b"><i></i></div><div class="status-window status-window--c"><i></i></div><div class="status-sun"></div><span>KEEP WHAT MATTERS CLOSE.</span></div>}
+    <div class="work-heading section-pad"><div class="section-marker" data-reveal><span>02</span><span>SELECTED WORK</span></div><div class="work-title-row"><h2 data-reveal>Ideas, given<br /><span>room to grow.</span></h2><p data-reveal>Three different problems.<br />Three things made with care.</p></div></div>
+    <div class="project-chapters">
+      {projects.map((project, index) => <article class:list={["project-chapter", "project-chapter--" + project.visual]} data-project-scene>
+        <div class="chapter-atmosphere" aria-hidden="true">
+          <div class="chapter-haze"></div>
+          {project.visual === "journal" && <div class="journal-world"><div class="journal-halo journal-halo--one"></div><div class="journal-halo journal-halo--two"></div><div class="journal-orbit"></div><div class="journal-seed"><span>J</span></div><div class="journal-trail"></div><div class="world-grain"></div></div>}
+          {project.visual === "discord" && <div class="signal-world"><div class="signal-ring signal-ring--one"></div><div class="signal-ring signal-ring--two"></div><div class="signal-ring signal-ring--three"></div><div class="signal-beacon"><span></span></div><div class="signal-pulse"></div><div class="signal-stars"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="world-grain"></div></div>}
+          {project.visual === "status" && <div class="memory-world"><div class="memory-ribbon memory-ribbon--one"></div><div class="memory-ribbon memory-ribbon--two"></div><div class="memory-ribbon memory-ribbon--three"></div><div class="memory-orb"></div><div class="memory-glint"></div><div class="world-grain"></div></div>}
         </div>
-        <div class="project-info"><div class="project-meta"><span>0{index + 1}</span><span>{project.visual === "journal" ? "AI / PERSONAL WELLBEING" : project.visual === "discord" ? "ANDROID / CONNECTIVITY" : "ANDROID / PRIVACY"}</span></div>
-          <h3>{project.name}</h3><p class="project-hook">{project.hook}</p><p class="project-description">{project.description}</p>
-          <a class="text-link" href={project.link} target="_blank" rel="noopener noreferrer">{project.linkLabel}<span>↗</span></a>
+        <div class="chapter-top"><span>0{index + 1} <i> / </i> 03</span><span>{project.visual === "journal" ? "A QUIETER KIND OF CLARITY" : project.visual === "discord" ? "PRESENCE WITHOUT BORDERS" : "A SMALL PIECE OF PRIVACY"}</span></div>
+        <div class="chapter-copy">
+          <div class="chapter-label">{project.visual === "journal" ? "AI · PERSONAL WELLBEING" : project.visual === "discord" ? "ANDROID · CONNECTIVITY" : "ANDROID · PRIVACY"}</div>
+          <h3>{project.name}</h3>
+          <p class="chapter-hook">{project.hook}</p>
+          <p class="chapter-description">{project.description}</p>
+          <a class="chapter-link" href={project.link} target="_blank" rel="noopener noreferrer"><span>{project.linkLabel}</span><i>↗</i></a>
         </div>
+        <div class="chapter-foot"><span>VINITH REDDY BANDA</span><span>SCROLL TO EXPLORE <i>↓</i></span></div>
       </article>)}
     </div>
   </section>
