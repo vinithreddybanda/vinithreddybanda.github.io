@@ -50,7 +50,8 @@ img { display: block; max-width: 100%; }
 .hero { position: relative; min-height: min(900px, 100svh); min-height: max(720px, 100svh); overflow: clip; display: flex; align-items: center; background: var(--forest-deep); color: var(--paper-light); }
 .hero-image, .hero-shade { position: absolute; inset: 0; }
 .hero-image { overflow: hidden; }
-.hero-image img { width: 100%; height: 100%; object-fit: cover; object-position: center 54%; transform: scale(1.08); filter: saturate(.72) brightness(.72); }
+.hero-image:before { content: ""; position: absolute; inset: -28px; z-index: 0; background: url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2400&q=88") center 54% / cover; filter: blur(18px); opacity: .34; transform: scale(1.06); }
+.hero-image img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; object-position: center 54%; transform: scale(1.08); filter: saturate(.72) brightness(.72); }
 .hero-shade { background: linear-gradient(90deg, #0d1c14e8 0%, #13251bbf 44%, #17291f54 100%), linear-gradient(0deg, #101d16a8 0%, transparent 44%); }
 .hero-content { position: relative; z-index: 1; padding-top: 130px; padding-bottom: 112px; }
 .hero-overline, .section-index { margin: 0; font-size: 9px; font-weight: 650; letter-spacing: .16em; }
