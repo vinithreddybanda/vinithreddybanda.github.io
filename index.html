@@ -31,6 +31,18 @@
       --ease: cubic-bezier(.22, 1, .36, 1);
       --container: 1160px;
       --gutter: clamp(22px, 5.6vw, 84px);
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 48px;
+      --space-8: 64px;
+      --section-space: clamp(88px, 10vw, 136px);
+      --section-heading-gap: clamp(36px, 5vw, 60px);
+      --content-gap: clamp(20px, 3vw, 32px);
+      --motion-duration: .68s;
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: auto; scroll-padding-top: 92px; background: var(--bg); }
@@ -94,7 +106,7 @@
     main { overflow: clip; }
     .hero { min-height: min(850px, 100svh); display: flex; align-items: center; padding: 150px 0 112px; }
     .hero-inner { width: 100%; }
-    .hero-topline { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: clamp(40px, 8vh, 86px); }
+    .hero-topline { display: flex; justify-content: space-between; align-items: center; gap: var(--space-5); margin-bottom: clamp(40px, 8vh, 86px); }
     .availability { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 11px; }
     .availability-dot { width: 6px; height: 6px; border-radius: 50%; background: #a4c6a7; box-shadow: 0 0 13px rgba(164,198,167,.5); }
     .hero-title {
@@ -111,15 +123,15 @@
     }
     .hero-bottom {
       display: flex; justify-content: space-between; align-items: flex-end;
-      gap: 32px; margin-top: clamp(44px, 8vh, 86px);
+      gap: var(--content-gap); margin-top: clamp(44px, 8vh, 86px);
       padding-top: 23px; border-top: 1px solid var(--line);
     }
     .hero-description { max-width: 390px; margin: 0; color: #b6b8bf; font-size: clamp(15px, 1.55vw, 18px); line-height: 1.65; }
     .hero-description strong { color: var(--text); font-weight: 500; }
     .hero-meta { display: flex; gap: clamp(22px, 4vw, 56px); color: var(--muted); font-size: 10px; letter-spacing: .04em; }
     .hero-meta span { display: block; margin-bottom: 5px; color: var(--subtle); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
-    .section { padding: clamp(92px, 12vw, 156px) 0; border-top: 1px solid var(--line); }
-    .section-heading { display: grid; grid-template-columns: 1fr minmax(240px, 390px); align-items: end; gap: 30px; margin-bottom: 62px; }
+    .section { padding: var(--section-space) 0; border-top: 1px solid var(--line); }
+    .section-heading { display: grid; grid-template-columns: 1fr minmax(240px, 390px); align-items: end; gap: var(--content-gap); margin-bottom: var(--section-heading-gap); }
     .section-title { margin: 18px 0 0; font-size: clamp(42px, 6.5vw, 76px); font-weight: 500; letter-spacing: -.075em; line-height: .98; }
     .section-title em { color: var(--accent); font-family: var(--serif); font-weight: 400; }
     .section-intro { max-width: 360px; margin: 0 0 3px auto; color: var(--muted); font-size: 13px; line-height: 1.8; }
@@ -191,7 +203,7 @@
       .hero-title { font-size: clamp(58px, 13vw, 100px); }
       .hero-bottom { align-items: flex-start; flex-direction: column; }
       .hero-meta { width: 100%; justify-content: space-between; }
-      .section-heading { grid-template-columns: 1fr; gap: 22px; margin-bottom: 42px; }
+      .section-heading { grid-template-columns: 1fr; gap: var(--space-5); margin-bottom: var(--space-7); }
       .section-intro { margin: 0; }
       .project { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
       .project-side { grid-column: 2; flex-direction: row; align-items: center; text-align: left; }
@@ -426,9 +438,18 @@
 
       gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
-        gsap.fromTo(".hero-enter",
+        const entrance = gsap.timeline({ defaults: { ease: "power3.out" } });
+        entrance.fromTo(".hero-topline",
           { autoAlpha: 0, y: 18 },
-          { autoAlpha: 1, y: 0, duration: .72, stagger: .09, ease: "power3.out", clearProps: "transform,opacity,visibility" }
+          { autoAlpha: 1, y: 0, duration: .7 }
+        ).fromTo(".hero-title .line",
+          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 1, y: 0, duration: .82, stagger: .12 },
+          "-=.42"
+        ).fromTo(".hero-bottom",
+          { autoAlpha: 0, y: 18 },
+          { autoAlpha: 1, y: 0, duration: .72 },
+          "-=.48"
         );
 
         gsap.utils.toArray(".reveal").forEach((element) => {
@@ -437,7 +458,7 @@
             {
               autoAlpha: 1, y: 0, duration: .68, ease: "power3.out",
               clearProps: "transform,opacity,visibility",
-              scrollTrigger: { trigger: element, start: "top 88%", once: true }
+              scrollTrigger: { trigger: element, start: "top 88%", once: true, invalidateOnRefresh: true }
             }
           );
         });
