@@ -1,68 +1,24 @@
 ---
 interface Props {
   project: {
-    number: string;
-    name: string;
-    type: string;
-    description: string;
-    details: string[];
-    stack: string[];
-    visual: string;
-    link: string | null;
-    linkLabel: string;
+    number: string; name: string; type: string; hook: string; description: string;
+    details: string[]; stack: string[]; visual: string; link: string | null; linkLabel: string;
   };
 }
 const { project } = Astro.props;
 ---
-<article class="project-row" data-reveal>
-  <div class="project-number">{project.number}<span> / 03</span></div>
+<article class:list={["project-scene", `project-scene--${project.visual}`]} data-reveal>
+  <div class="project-art" aria-hidden="true">
+    {project.visual === "journal" && <div class="journal-ui"><div class="art-topline"><span>JOURNAL / 001</span><span>● PRIVATE</span></div><div class="journal-date">A moment, understood.</div><div class="journal-title">Make room for<br /><i>clarity.</i></div><div class="journal-rule"></div><div class="journal-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="journal-caption">MOOD INSIGHTS / AI-ASSISTED</div></div>}
+    {project.visual === "discord" && <div class="discord-ui"><div class="discord-orb"><span>◉</span></div><div class="waveform">{Array.from({ length: 23 }, (_, i) => <i style={`--bar:${((i * 17) % 37) + 12}px`}></i>)}</div><div class="discord-caption">ANDROID × DISCORD / CONNECTED</div></div>}
+    {project.visual === "status" && <div class="status-ui"><div class="status-phone"><div class="status-screen"><div class="status-camera"></div><div class="status-sun"></div><div class="status-horizon"></div><div class="status-land"></div><div class="status-screen-copy">Keep the<br /><i>moments.</i></div></div></div><span class="status-stamp">F-DROID<br />OPEN SOURCE</span></div>}
+  </div>
   <div class="project-copy">
-    <p class="project-type">{project.type}</p>
+    <div class="project-meta"><span>{project.number} / 03</span><span>{project.type}</span></div>
+    <p class="project-hook">{project.hook}</p>
     <h3>{project.name}</h3>
     <p class="project-description">{project.description}</p>
-    <ul class="project-details">
-      {project.details.map((detail) => <li>{detail}</li>)}
-    </ul>
-    <div class="tag-list" aria-label="Technologies">
-      {project.stack.map((item) => <span>{item}</span>)}
-    </div>
-    {project.link && (
-      <a class="text-link project-link" href={project.link} target="_blank" rel="noopener noreferrer">
-        {project.linkLabel}<span aria-hidden="true">↗</span>
-      </a>
-    )}
-  </div>
-  <div class:list={["project-art", `project-art--${project.visual}`]} aria-hidden="true">
-    {project.visual === "journal" && (
-      <div class="journal-ui">
-        <div class="art-topline"><span>JOURNAL / 001</span><span>●</span></div>
-        <div class="journal-date">Today, in focus</div>
-        <div class="journal-title">A little more<br /><i>clarity.</i></div>
-        <div class="journal-rule"></div>
-        <div class="journal-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <div class="journal-caption">MOOD INSIGHT · GENERATED</div>
-      </div>
-    )}
-    {project.visual === "discord" && (
-      <div class="discord-ui">
-        <div class="discord-orb"><span>◉</span></div>
-        <div class="waveform">{Array.from({ length: 23 }, (_, i) => <i style={`--bar:${((i * 17) % 37) + 12}px`}></i>)}</div>
-        <div class="discord-caption">PRESENCE / CONNECTED</div>
-      </div>
-    )}
-    {project.visual === "status" && (
-      <div class="status-ui">
-        <div class="status-phone">
-          <div class="status-screen">
-            <div class="status-camera"></div>
-            <div class="status-sun"></div>
-            <div class="status-horizon"></div>
-            <div class="status-land"></div>
-            <div class="status-screen-copy">Your moments.<br /><i>Saved.</i></div>
-          </div>
-        </div>
-        <span class="status-stamp">F-DROID<br />OPEN SOURCE</span>
-      </div>
-    )}
+    <ul class="project-details">{project.details.map((detail) => <li>{detail}</li>)}</ul>
+    <div class="project-footer"><div class="tag-list">{project.stack.map((item) => <span>{item}</span>)}</div>{project.link && <a class="text-link" href={project.link} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a>}</div>
   </div>
 </article>
