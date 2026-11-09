@@ -467,3 +467,29 @@ html { scroll-padding-top: 28px; }
     transition: none;
   }
 }
+
+
+/* Safety override: content must never disappear if scroll observation is delayed
+   or unavailable. The blur remains visible as a soft focus, then clears on entry. */
+.has-motion [data-reveal],
+.has-motion .reveal,
+.has-motion .scroll-reveal,
+.has-motion .scroll-blur {
+  opacity: 1 !important;
+}
+.has-motion .scroll-blur {
+  filter: blur(7px);
+  transform: translate3d(0, 8px, 0);
+}
+.has-motion .scroll-blur.is-visible {
+  filter: blur(0);
+  transform: translate3d(0, 0, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .has-motion .scroll-blur,
+  .has-motion .scroll-blur.is-visible {
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+}
