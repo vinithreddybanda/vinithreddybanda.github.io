@@ -1,100 +1,53 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import ExperienceEntry from "@components/ExperienceEntry.astro";
-import { projects, experience, skills, education, recognition } from "@data/portfolio";
+import { projects, experience } from "@data/portfolio";
 ---
 <BaseLayout>
-  <section class="hero" id="top">
-    <div class="hero-image" aria-hidden="true">
-      <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2400&q=88" alt="" fetchpriority="high" />
-    </div>
-    <div class="hero-shade" aria-hidden="true"></div>
-    <div class="hero-content container">
-      <p class="hero-overline" data-reveal><span class="overline-mark"></span> SOFTWARE DEVELOPER · INDIA</p>
-      <h1 data-reveal>Rooted in curiosity.<br /><em>Built with intent.</em></h1>
-      <div class="hero-bottom" data-reveal>
-        <p class="hero-intro">I’m Vinith. I build thoughtful software across backend systems, Android and AI, with a focus on the details that make technology feel effortless.</p>
-        <a class="hero-link" href="#work">Explore selected work <span>↘</span></a>
+  <section class="garden" id="top" aria-label="A walk through a forest">
+    <div class="garden-stage">
+      <div class="forest-world" data-forest-world>
+        <div class="forest-layer forest-layer--far"><img src="https://images.pexels.com/photos/30858644/pexels-photo-30858644.jpeg?auto=compress&cs=tinysrgb&w=2400" alt="" fetchpriority="high" /></div>
+        <div class="forest-layer forest-layer--focus" data-camera="focus"><img src="https://images.pexels.com/photos/30858644/pexels-photo-30858644.jpeg?auto=compress&cs=tinysrgb&w=2400" alt="" /></div>
+        <div class="forest-light" aria-hidden="true"></div>
+        <svg class="forest-foreground" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+          <defs><linearGradient id="leafTone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7f9c63"/><stop offset="1" stop-color="#182c20"/></linearGradient><filter id="leafSoft"><feGaussianBlur stdDeviation="5"/></filter></defs>
+          <g fill="url(#leafTone)" filter="url(#leafSoft)" opacity=".9">
+            <path d="M-80 1000 C70 830 100 620 10 420 C180 540 250 740 110 1000Z"/><path d="M0 1000 C140 800 260 710 340 520 C330 760 240 920 180 1000Z"/><path d="M1600 1000 C1450 800 1510 610 1600 390 C1430 520 1360 760 1480 1000Z"/><path d="M1600 1000 C1450 850 1320 760 1260 560 C1280 780 1370 930 1440 1000Z"/><path d="M-40 160 C140 80 260 130 370 260 C190 230 90 250 -40 340Z"/><path d="M1640 180 C1480 80 1360 150 1250 280 C1430 240 1530 270 1640 360Z"/>
+          </g>
+          <g fill="#9bb17a" opacity=".34"><ellipse cx="125" cy="700" rx="130" ry="28" transform="rotate(-35 125 700)"/><ellipse cx="230" cy="810" rx="150" ry="32" transform="rotate(-20 230 810)"/><ellipse cx="1480" cy="700" rx="150" ry="30" transform="rotate(34 1480 700)"/><ellipse cx="1370" cy="820" rx="160" ry="34" transform="rotate(20 1370 820)"/></g>
+        </svg>
+        <div class="forest-haze" aria-hidden="true"></div><canvas class="wind-canvas" aria-hidden="true"></canvas><div class="forest-vignette" aria-hidden="true"></div>
       </div>
-      <div class="hero-caption"><span>16° 30' N&nbsp; / &nbsp;80° 38' E</span><span>DESIGNING WITH PURPOSE</span></div>
-    </div>
-    <a class="hero-scroll" href="#work" aria-label="Scroll to selected work"><span></span> SCROLL TO EXPLORE</a>
-  </section>
-
-  <section class="intro-section section-pad container" data-reveal>
-    <p class="section-index">01 / A NOTE</p>
-    <div class="intro-copy">
-      <h2>Good software should feel <em>considered.</em></h2>
-      <p>I’m drawn to the space where engineering meets experience. From dependable backend systems to small Android utilities, I enjoy turning complex ideas into clear, useful products.</p>
-    </div>
-  </section>
-
-  <section class="work-section section-pad" id="work">
-    <div class="container">
-      <div class="section-heading" data-reveal>
-        <div><p class="section-index">02 / SELECTED WORK</p><h2>Things grown<br />from <em>ideas.</em></h2></div>
-        <p class="section-aside">A few projects shaped by curiosity, care and a healthy amount of iteration.</p>
+      <div class="garden-copy container">
+        <p class="garden-eyebrow" data-intro>VINITH REDDY BANDA <span>SOFTWARE DEVELOPER</span></p>
+        <h1 data-intro>I build things<br /><em>that take root.</em></h1>
+        <div class="garden-bottom" data-intro><p>Thoughtful software, made with curiosity and care.</p><a href="#work" class="garden-cta">Wander through <span>↓</span></a></div>
       </div>
-      <div class="project-list">
-        {projects.map((project, index) => <article class="project-row" data-reveal>
-          <div class:list={["project-art", `project-art--${project.visual}`]} aria-hidden="true">
-            <div class="art-atmosphere"></div>
-            <div class="art-object"><span>{project.visual === "journal" ? "J." : project.visual === "discord" ? "◌" : "↗"}</span></div>
-            <p class="art-caption">{project.type}</p>
-            <span class="art-index">0{index + 1}</span>
-          </div>
-          <div class="project-copy">
-            <p class="project-meta"><span>0{index + 1} / 0{projects.length}</span><span>{project.type}</span></p>
-            <h3>{project.name}</h3>
-            <p class="project-hook">{project.hook}</p>
-            <p class="project-description">{project.description}</p>
-            <p class="project-stack">{project.stack.join("  ·  ")}</p>
-            <a class="text-link" href={project.link} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a>
-          </div>
-        </article>)}
-      </div>
+      <p class="garden-coordinate" aria-hidden="true">A LITTLE SPACE TO THINK AND MAKE</p><p class="garden-scroll" aria-hidden="true">SCROLL TO WANDER</p>
     </div>
   </section>
-
-  <section class="experience-section section-pad">
-    <div class="container">
-      <div class="section-heading" data-reveal>
-        <div><p class="section-index">03 / THE JOURNEY</p><h2>Learning by<br /><em>doing.</em></h2></div>
-        <p class="section-aside">Working with real constraints, real people and real-world systems.</p>
-      </div>
-      <div class="experience-list">{experience.map((item) => <ExperienceEntry item={item} />)}</div>
-    </div>
+  <section class="opening-note" aria-label="Introduction">
+    <div class="opening-inner container" data-reveal><p class="eyebrow">A CREATIVE PRACTICE</p><h2>Curiosity is the<br /><em>starting point.</em></h2><p class="opening-description">I’m a software developer drawn to the details behind useful products. I work across backend engineering, Android and AI, always looking for a simpler, more thoughtful way to solve a problem.</p></div>
+    <span class="opening-leaf" aria-hidden="true">✳</span>
   </section>
-
-  <section class="capabilities-section section-pad">
-    <div class="container">
-      <div class="section-heading" data-reveal>
-        <div><p class="section-index">04 / THE TOOLSHED</p><h2>Tools of the<br /><em>trade.</em></h2></div>
-        <p class="section-aside">A practical toolkit, always growing with the problems worth solving.</p>
-      </div>
-      <div class="skills-list">
-        {skills.map((group) => <div class="skill-row" data-reveal><h3>{group.title}</h3><p>{group.items.join("  /  ")}</p></div>)}
-      </div>
-    </div>
-  </section>
-
-  <section class="about-section section-pad">
-    <div class="container">
-      <div class="section-heading" data-reveal>
-        <div><p class="section-index">05 / ROOTS & REACH</p><h2>Always<br /><em>growing.</em></h2></div>
-        <p class="section-aside">The learning, research and milestones behind the work.</p>
-      </div>
-      <div class="about-grid">
-        <div class="about-column" data-reveal>
-          <h3>Education</h3>
-          {education.map((item) => <article class="about-entry"><span>{item.period}</span><div><h4>{item.institution}</h4><p>{item.qualification}</p></div><strong>{item.result}</strong></article>)}
+  <section class="work-section" id="work">
+    <div class="work-intro container" data-reveal><p class="eyebrow">A FEW THINGS I’VE MADE</p><h2>Work that<br /><em>has a purpose.</em></h2><p>Small collection. Real problems. Plenty of learning.</p></div>
+    <div class="project-journey">
+      {projects.map((project, index) => <article class:list={["project-story", "project-story--" + project.visual]} data-project>
+        <div class="project-scene" aria-hidden="true"><div class="scene-glow"></div>
+          {project.visual === "journal" && <div class="journal-composition">
+            <div class="journal-page journal-page--left"><span class="journal-date">MONDAY, 08:42</span><span class="journal-rule"></span><strong>Today feels<br /><em>like a fresh start.</em></strong><p>A quiet place to put thoughts into words.</p><span class="journal-signature">JOURNALAI</span></div>
+            <div class="journal-page journal-page--right"><span class="journal-date">YOUR WEEK IN FEELINGS</span><div class="mood-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="mood-caption">A little more clarity, every day.</span></div><span class="journal-orbit">01</span>
+          </div>}
+          {project.visual === "discord" && <div class="device-composition"><div class="phone-device"><div class="phone-island"></div><div class="phone-screen"><span class="phone-time">9:41</span><div class="discord-emblem">D</div><span class="phone-label">NOW PLAYING</span><strong>Vinith is around</strong><p>Connected from Android</p><div class="presence-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="phone-foot">DISCORD PRESENCE</span></div></div><span class="device-word">PRESENCE, UNTETHERED.</span></div>}
+          {project.visual === "status" && <div class="status-composition"><div class="status-photo status-photo--one"></div><div class="status-photo status-photo--two"></div><div class="status-photo status-photo--three"></div><div class="status-phone"><div class="status-phone-top"></div><div class="status-phone-grid"><i></i><i></i><i></i><i></i></div><span>YOUR MEDIA. YOUR DEVICE.</span></div><span class="status-word">KEPT CLOSE.</span></div>}
+          <span class="scene-number">0{index + 1}</span><span class="scene-name">{project.name}</span>
         </div>
-        <div class="about-column" data-reveal>
-          <h3>Recognition</h3>
-          {recognition.map((item) => <article class="recognition-entry"><div><h4>{item.title}</h4><p>{item.description}</p></div>{item.link && <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label={`Read more about ${item.title}`}>↗</a>}</article>)}
-        </div>
-      </div>
+        <div class="project-caption container" data-reveal><div class="project-heading"><span class="project-index">0{index + 1} / SELECTED WORK</span><h3>{project.name}</h3><p>{project.hook}</p></div><div class="project-summary"><p>{project.description}</p><a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link">{project.linkLabel} <span>↗</span></a></div></div>
+      </article>)}
     </div>
   </section>
-  <script>import "../scripts/motion";</script>
+  <section class="about-section" id="about">
+    <div class="about-inner container"><div class="about-heading" data-reveal><p class="eyebrow">A LITTLE ABOUT ME</p><h2>Good work grows<br />from <em>good questions.</em></h2></div><div class="about-copy" data-reveal><p>I enjoy working where engineering meets experience: understanding the problem, shaping the system and caring about the last small detail.</p><div class="currently"><span>RIGHT NOW</span><strong>{experience[0].role}</strong><p>{experience[0].company}</p></div><p class="about-focus">Backend systems. Native Android. Applied AI.</p></div></div>
+  </section>
 </BaseLayout>

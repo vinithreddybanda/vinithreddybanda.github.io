@@ -2,17 +2,10 @@
 import { profile } from "@data/portfolio";
 ---
 <footer class="site-footer" id="contact">
-  <div class="container footer-inner">
-    <p class="section-index">06 / THE NEXT CHAPTER</p>
-    <p class="footer-kicker">HAVE A GOOD THING GROWING?</p>
-    <h2>Let’s make<br /><em>something matter.</em></h2>
-    <div class="footer-contact">
-      <p>Open to interesting problems, thoughtful teams and ideas worth building.</p>
-      <a class="footer-email" href={`mailto:${profile.email}`}>{profile.email}<span>↗</span></a>
-    </div>
-    <div class="footer-bottom">
-      <span>© {new Date().getFullYear()} {profile.name}</span>
-      <div class="footer-links"><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="#top">Back to canopy ↑</a></div>
-    </div>
+  <div class="footer-inner container">
+    <p class="eyebrow">THE NEXT GOOD THING STARTS SOMEWHERE</p>
+    <h2>Have a good<br /><em>idea growing?</em></h2>
+    <div class="footer-action"><p>I’m always glad to meet thoughtful people building useful things.</p><a href={`mailto:${profile.email}`} class="footer-email">{profile.email} <span>↗</span></a></div>
+    <div class="footer-base"><span>© {new Date().getFullYear()} {profile.name}</span><div><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="#top">Back to the beginning ↑</a></div></div>
   </div>
 </footer>
