@@ -130,19 +130,23 @@ export const recognition = [
   },
   {
     title: "COSC HackWeek Challenge",
+    link: undefined,
     description:
       "Secured 6th place in a week-long competitive coding event organized by CBIT Open Source Community in collaboration with GeeksforGeeks.",
   },
   {
     title: "MongoDB Node.js Certification",
+    link: undefined,
     description: "Completed the MongoDB Node.js Developer Path through MongoDB University.",
   },
   {
     title: "Web Development 101",
+    link: undefined,
     description: "Completed the Pupilfirst web development certification.",
   },
   {
     title: "Community volunteering",
+    link: undefined,
     description:
       "Coordinated a college Idea Presentation event, managing and assisting more than 20 participants.",
   },
