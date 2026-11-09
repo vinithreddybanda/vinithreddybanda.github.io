@@ -2,58 +2,41 @@
 
 This repository is the source of truth for vinithreddybanda.github.io. Follow this file before changing any page, component, style, animation, or dependency. The portfolio is an original work. Awwwards references are research evidence, never templates to copy.
 
-## One design direction
+## Experience direction
 
-Build one coherent, editorial portfolio with an Apple-quality interaction finish:
+The portfolio is an immersive botanical walk, not a résumé with a green palette.
 
-- **Visual character:** nature-led, editorial, calm, tactile, and high-contrast. Use deep forest green, moss and fern accents, warm limestone backgrounds, and muted botanical neutrals. Photography and organic tonal depth provide atmosphere; avoid literal leaf motifs, decorative dots, and noisy textures.
-- **Geometry:** use a strict grid, deliberate alignment, and predominantly square corners. Use a 4px radius only where a control needs it. Never turn the interface into a collection of pills or rounded cards.
-- **Typography:** use Geist Sans for all interface and body typography. Use Instrument Serif Italic only for a small number of editorial emphasis moments. Use a clear type scale, tight display tracking, readable body measure, and consistent line-height. Do not add decorative handwriting fonts.
-- **Translucency:** use a restrained iOS-style material only for the fixed navigation and true overlays. The navigation is clear at the top of the page and gains backdrop blur only after content scrolls behind it. Never leave the header permanently blurred. Never apply blur to every card or section.
-- **Motion:** use GSAP with ScrollTrigger for scroll choreography. Use CSS transitions for simple hover and focus feedback. All reveal motion follows one pattern: opacity 0 to 1 and translateY(18px) to 0, with one shared easing curve and a short stagger. Elements enter once, remain visible, and never jump or disappear unexpectedly during reverse scrolling.
-- **Scroll:** retain native browser scrolling. Do not replace it with a smooth-scroll library or custom wheel/touch interception.
-- **Responsive behavior:** design mobile deliberately, not as a compressed desktop. Keep touch targets at least 44px and preserve readable type and content order.
+- **Story:** enter a forest, discover a small collection of work, meet the developer, then reach out. Keep the narrative short. Do not publish the full résumé, skill inventories, education tables, or certification lists on the home page.
+- **Visual character:** cinematic forest photography, deep evergreen shadows, warm limestone, moss and fern tones, soft atmospheric light. Avoid generic forest wallpaper, decorative dots, slash-separated labels, pill tags, and card grids.
+- **Hero:** a layered forest scene with a clear focal path, blurred distant atmosphere, softly defocused foreground foliage, parallax depth planes, scroll-scrubbed camera push, and restrained wind-driven leaf movement. Blur is static depth-of-field, never an animated CSS filter.
+- **Projects:** no cards. Use full-width editorial project scenes with large visual compositions, generous breathing room, concise copy and one clear link. Custom CSS product visualisations must not pretend to be real product screenshots.
+- **Navigation:** use the slim side rail on desktop and compact top rail on mobile. Do not revert to a conventional horizontal pill header.
+- **Content:** show the strongest three projects, one concise current-work note, a short introduction and contact details. No skill list, education table, or award catalogue on the home page.
+- **Motion:** GSAP + ScrollTrigger for camera choreography and one-shot reveals. Use a small canvas for falling leaves. Preserve native scrolling and keep animation subtle, intentional and performant.
 
-## Hard implementation rules
+## Engineering rules
 
-1. Read the existing implementation before editing. Preserve working content, routing, metadata, accessibility, and deployment behavior.
-2. Use the Awwwards MCP configured in `.mcp.json` before making substantial visual decisions. Research references, inspect their screenshots and design DNA, and study actual motion evidence. Do not invent a reference's behavior from a thumbnail.
-3. Use one reference-led design direction. Do not present multiple themes, competing variants, optional design systems, or choose-your-own implementation paths.
-4. Keep design tokens centralized. Define colors, type, spacing, radii, shadows, easing, and durations once. Components must consume those tokens.
-5. Keep shared navigation, buttons, links, section headings, cards, and reveal behavior consistent across the whole site. A global behavior change must be applied and verified across every relevant element.
-6. Animate only `transform` and `opacity` for reveals. Do not animate layout properties. Never use `transition: all`. Never animate `filter: blur()` or `backdrop-filter`; do not create blur-heavy scroll effects.
-7. Do not attach scroll listeners to every element. Use one shared observer/GSAP context with proper cleanup. Avoid forced synchronous layout, repeated measurements, large shadow stacks, and unnecessary state updates.
-8. Respect `prefers-reduced-motion`. Reduced-motion users receive the same content and hierarchy without non-essential movement.
-9. Every interactive element must have visible keyboard focus, semantic markup, and an accessible name. Maintain WCAG AA contrast.
-10. Do not add a dependency for a visual effect that can be implemented cleanly with the existing stack. Do not introduce a second animation system.
-11. Do not leave dead CSS, duplicate selectors, unused components, placeholder content, or scattered one-off overrides. Keep files organized by responsibility.
-12. Do not change the live page merely to demonstrate a design system. Implement the requested page work only after the design foundation is coherent.
+1. Read actual source files and the deployment workflow before editing.
+2. Use the configured Awwwards MCP and the awwwards-inspiration and awwwards-motion-study Claude skills before substantial visual decisions. Search actual sites, inspect design DNA, capture real motion evidence, and cite findings in the design brief. Never claim an MCP call happened if the server is unavailable in the current environment.
+3. Keep tokens centralized. Do not append override patches or duplicate selectors.
+4. Use one GSAP context and ScrollTrigger. Clean up on page hide. Animate transforms and opacity only. Never animate blur, backdrop-filter, layout dimensions or margins.
+5. Keep native browser scrolling. Do not add Lenis or wheel/touch interception unless a measured reference and clear user benefit justify it.
+6. Respect prefers-reduced-motion; content must remain visible when JS is disabled.
+7. Keep canvas pixel ratio capped, pause it outside the viewport, and reduce particle count on mobile.
+8. Preserve semantic HTML, keyboard access, focus states, metadata and GitHub Pages deployment.
+9. Verify 320px mobile, tablet and desktop; test scroll down/up, camera scrub, navigation, links, and reduced motion.
+10. Run npm run check and npm run build. Fix errors before committing.
 
-## Required build sequence
+## Awwwards workflow
 
-1. Inspect the repository tree, package scripts, current page, and deployment workflow.
-2. Use Awwwards MCP to search a focused set of award-winning portfolio references. Inspect the strongest matches and produce one evidence-backed design direction.
-3. Capture full-page structure for the chosen reference and inspect actual motion before writing animation code.
-4. Write or update the single source of truth for design tokens and component behavior.
-5. Implement one page section at a time. Finish and verify each section before moving on.
-6. Test desktop and mobile, initial page load, scrolling in both directions, navigation state, hover, keyboard focus, and reduced motion.
-7. Run the repository's build and checks. Fix all errors and visual regressions before committing.
-8. Summarize exactly what changed, what was tested, and any remaining limitation.
+The repository registers the MCP server in .mcp.json as npx -y awwwards-mcp. Claude Code must load that server and the local skills in .claude/skills/awwwards-inspiration and .claude/skills/awwwards-motion-study. Search 2–3 focused references, inspect screenshots and design DNA, capture motion before authoring scroll animation, and form one original design brief. Never copy another creator's site or media.
 
-## Required quality gates
+## Quality gates
 
-- No horizontal overflow at mobile widths.
-- No content hidden behind fixed navigation.
-- No permanent header blur at the top of the page.
-- No flicker, flash of hidden content, repeated reveal, or scroll-direction jump.
-- No choppy scrolling, blur animation, layout animation, or unbounded animation loop.
-- Consistent type, spacing, grid, corner geometry, and motion across every section.
-- Build and deployment configuration remain valid.
-
-## Source attribution
-
-The Awwwards research workflow is informed by:
-- https://github.com/INSANE0777/Awwwards-mcp
-- https://github.com/INSANE0777/awwwards-skills
-
-Use those projects as research tooling and workflow references. Do not copy showcased websites, proprietary assets, or another creator's complete visual identity.
+- No horizontal overflow at 320px.
+- No project cards or résumé-style data dumps.
+- No slash or dot separators used as filler.
+- No permanent blurred navigation.
+- No hidden content flash, repeated reveal, or scroll-direction jump.
+- No blur animation, unbounded RAF loop, or canvas work while off-screen.
+- The full build passes before deployment.

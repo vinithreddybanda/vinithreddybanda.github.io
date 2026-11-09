@@ -1,43 +1,36 @@
 # Vinith Reddy Banda · Portfolio
 
-A fast, accessible, static portfolio built with Astro.
+An immersive, nature-led developer portfolio built with Astro.
+
+## Experience
+
+The home page is designed as a short walk through a forest: a layered cinematic hero, three selected project stories, a concise introduction and a direct contact section. It intentionally avoids résumé-style skill inventories, education tables, and project-card grids.
 
 ## Stack
 
-- Astro 6 for component-driven static rendering
-- TypeScript for structured content and safer changes
-- Tailwind CSS 4 through the official Vite plugin
-- GSAP + ScrollTrigger for restrained page and scroll choreography
-- GitHub Pages for hosting and GitHub Actions for deployment
+- Astro 6 and TypeScript
+- Tailwind CSS 4
+- GSAP + ScrollTrigger for scroll choreography
+- Canvas 2D for lightweight wind-driven leaves
+- GitHub Pages and GitHub Actions
 
 ## Local development
 
-```sh
+~~~sh
 npm install
 npm run dev
-```
+~~~
 
 ## Quality checks
 
-```sh
+~~~sh
 npm run check
 npm run build
 npm run preview
-```
+~~~
 
-The production site is generated in `dist/`. GitHub Actions builds the site and deploys that directory to GitHub Pages.
+## Awwwards research
 
-## Project structure
+The repository configures the Awwwards MCP server in .mcp.json. Claude Code should use it with the local awwwards-inspiration and awwwards-motion-study skills before substantial visual or motion changes. The skills guide evidence-led reference selection, design DNA inspection, motion recording, and build verification.
 
-```
-src/
-  components/   Shared navigation, section headings, project and experience entries, footer
-  data/         Portfolio content and structured project information
-  layouts/      Shared document shell and metadata
-  pages/        Astro routes
-  scripts/      GSAP motion behavior
-  styles/       Global design tokens and responsive styling
-public/         Static assets
-```
-
-Motion follows one shared reveal pattern, uses transform and opacity only, respects reduced-motion preferences, and leaves native scrolling intact.
+The Awwwards MCP and skills are research tools. This portfolio remains an original design and must not copy other creators' layouts, assets, or complete visual identities.
