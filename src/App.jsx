@@ -72,9 +72,14 @@ export default function App() {
       "[data-reveal], .site-header, .hero > *, .metrics > div, .section-heading > *, .project-card, .about-section > *, .skill-row, .plain-item, .now-playing, .site-footer > *"
     );
 
+    // Let the whole page perform one coordinated opening reveal before
+    // viewport-based enter/exit handling takes over.
+    const openingUntil = performance.now() + 950;
+
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const item = entry.target;
+        if (performance.now() < openingUntil && !entry.isIntersecting) return;
         if (entry.isIntersecting) {
           item.classList.remove("exit-up", "exit-down");
           item.classList.add("is-visible");
@@ -95,8 +100,9 @@ export default function App() {
     });
 
     root.classList.add("has-motion");
-    revealItems.forEach((item) => {
-      item.classList.add("scroll-blur");
+    revealItems.forEach((item, index) => {
+      item.classList.add("scroll-blur", "is-visible");
+      item.style.setProperty("--reveal-delay", `${Math.min(index * 28, 420)}ms`);
       revealObserver.observe(item);
     });
 
