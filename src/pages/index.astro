@@ -28,7 +28,7 @@ import { projects, experience } from "@data/portfolio";
   </section>
   <section class="opening-note" aria-label="Introduction">
     <div class="opening-inner container" data-reveal><p class="eyebrow">A CREATIVE PRACTICE</p><h2>Curiosity is the<br /><em>starting point.</em></h2><p class="opening-description">I’m a software developer drawn to the details behind useful products. I work across backend engineering, Android and AI, always looking for a simpler, more thoughtful way to solve a problem.</p></div>
-    <span class="opening-leaf" aria-hidden="true">✳</span>
+    
   </section>
   <section class="work-section" id="work">
     <div class="work-intro container" data-reveal><p class="eyebrow">A FEW THINGS I’VE MADE</p><h2>Work that<br /><em>has a purpose.</em></h2><p>Small collection. Real problems. Plenty of learning.</p></div>
@@ -43,7 +43,7 @@ import { projects, experience } from "@data/portfolio";
           {project.visual === "status" && <div class="status-composition"><div class="status-photo status-photo--one"></div><div class="status-photo status-photo--two"></div><div class="status-photo status-photo--three"></div><div class="status-phone"><div class="status-phone-top"></div><div class="status-phone-grid"><i></i><i></i><i></i><i></i></div><span>YOUR MEDIA. YOUR DEVICE.</span></div><span class="status-word">KEPT CLOSE.</span></div>}
           <span class="scene-number">0{index + 1}</span><span class="scene-name">{project.name}</span>
         </div>
-        <div class="project-caption container" data-reveal><div class="project-heading"><span class="project-index">0{index + 1} / SELECTED WORK</span><h3>{project.name}</h3><p>{project.hook}</p></div><div class="project-summary"><p>{project.description}</p><a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link">{project.linkLabel} <span>↗</span></a></div></div>
+        <div class="project-caption container" data-reveal><div class="project-heading"><span class="project-index">PROJECT 0{index + 1}</span><h3>{project.name}</h3><p>{project.hook}</p></div><div class="project-summary"><p>{project.description}</p><a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link">{project.linkLabel} <span>↗</span></a></div></div>
       </article>)}
     </div>
   </section>

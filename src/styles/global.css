@@ -27,7 +27,7 @@ img { display: block; max-width: 100%; }
 .rail-nav a:hover { opacity: 1; }
 .rail-foot { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 7px; line-height: 1.7; letter-spacing: .15em; opacity: .68; text-align: center; }
 .site-rail.is-scrolled { color: var(--forest); background: #f2f0e5ed; }
-main { margin-left: var(--rail); }
+main, .site-footer { margin-left: var(--rail); }
 
 .garden { position: relative; height: 176svh; background: var(--forest-deep); color: #f5f2e8; }
 .garden-stage { position: sticky; top: 0; height: 100svh; min-height: 650px; overflow: hidden; isolation: isolate; }
@@ -63,7 +63,7 @@ main { margin-left: var(--rail); }
 .opening-inner h2, .work-intro h2, .about-heading h2, .footer-inner h2 { margin: 0; font-size: clamp(50px, 7vw, 92px); font-weight: 500; line-height: .98; letter-spacing: -.08em; }
 .opening-inner h2 em, .work-intro h2 em, .about-heading h2 em, .footer-inner h2 em { color: var(--moss); font: italic 400 1em/1.05 var(--serif); letter-spacing: -.06em; }
 .opening-description { grid-column: 2; max-width: 540px; margin: 32px 0 0; color: var(--muted); font-size: 14px; line-height: 2; }
-.opening-leaf { position: absolute; right: 8%; bottom: 5%; color: #dce1cf; font: 200px/1 var(--serif); transform: rotate(-22deg); pointer-events: none; }
+
 
 .work-section { padding: var(--section-space) 0 0; background: #e4e5d7; }
 .work-intro { display: grid; grid-template-columns: .6fr 1.4fr; column-gap: 60px; align-items: start; margin-bottom: 85px; }
@@ -181,7 +181,7 @@ main { margin-left: var(--rail); }
   .opening-inner .eyebrow, .work-intro .eyebrow { padding-top: 0; }
   .opening-description, .work-intro>p:last-child { grid-column: 1; }
   .opening-description { margin-top: 8px; }
-  .opening-leaf { right: -20px; bottom: 0; font-size: 130px; }
+
   .work-intro { margin-bottom: 55px; }
   .project-story { padding-bottom: 85px; }
   .project-scene { height: 520px; }
