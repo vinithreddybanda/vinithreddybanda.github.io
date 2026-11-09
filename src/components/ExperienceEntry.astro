@@ -1,0 +1,28 @@
+---
+interface Props {
+  item: {
+    period: string;
+    role: string;
+    company: string;
+    location: string;
+    summary: string;
+    highlights: string[];
+    stack: string[];
+  };
+}
+const { item } = Astro.props;
+---
+<article class="experience-entry" data-reveal>
+  <div class="experience-period">{item.period}<span>{item.location}</span></div>
+  <div class="experience-main">
+    <div class="experience-heading">
+      <div><h3>{item.role}</h3><p>{item.company}</p></div>
+      <span class="experience-index">01</span>
+    </div>
+    <p class="experience-summary">{item.summary}</p>
+    <ul class="experience-highlights">
+      {item.highlights.map((highlight) => <li>{highlight}</li>)}
+    </ul>
+    <div class="tag-list">{item.stack.map((item) => <span>{item}</span>)}</div>
+  </div>
+</article>
