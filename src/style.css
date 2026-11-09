@@ -24,7 +24,6 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  --background: #000;
   --surface: #101010;
   --line: #242424;
   --muted: #888;
