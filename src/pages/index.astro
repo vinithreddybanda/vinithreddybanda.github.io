@@ -1,20 +1,20 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ExperienceEntry from "@components/ExperienceEntry.astro";
-import { profile, projects, experience, skills, education, recognition } from "@data/portfolio";
+import { projects, experience, skills, education, recognition } from "@data/portfolio";
 ---
 <BaseLayout>
   <section class="hero page-shell" id="top">
     <div class="hero-copy">
-      <p class="eyebrow"><span class="availability"></span> Based in India · Available for opportunities</p>
+      <p class="eyebrow">Based in India · Available for opportunities</p>
       <h1>Hi, I’m Vinith.<br />I make <em>software</em><br />that feels right.</h1>
       <p class="hero-description">Developer working across backend, Android and AI. I care about the details that make software useful, reliable and a pleasure to use.</p>
       <div class="hero-actions"><a class="primary-button" href="#work">Explore my work <span>↗</span></a><a class="quiet-link" href="#contact">Say hello</a></div>
     </div>
     <div class="hero-visual" aria-hidden="true">
-      <div class="visual-orb orb-one"></div><div class="visual-orb orb-two"></div>
+      
       <div class="visual-tile"><span>vb.</span><small>BUILDING<br />WITH CARE</small></div>
-      <div class="visual-glint"></div>
+      
     </div>
     <a class="scroll-hint" href="#work">Scroll to explore <span>↓</span></a>
   </section>
@@ -24,14 +24,14 @@ import { profile, projects, experience, skills, education, recognition } from "@
     <div class="project-list">
       {projects.map((project, index) => <article class:list={["project-row", `project-${project.visual}`]} data-reveal>
         <div class="project-copy">
-          <span class="project-count">0{index + 1}</span>
+          <span class="project-count">0{index + 1} / 0{projects.length}</span>
           <p class="project-kind">{project.type}</p>
           <h3>{project.name}</h3>
           <p class="project-description">{project.description}</p>
           <div class="project-tools">{project.stack.slice(0, 5).join(" · ")}</div>
           <a class="project-link" href={project.link} target="_blank" rel="noopener noreferrer">{project.linkLabel} <span>↗</span></a>
         </div>
-        <div class="project-visual" aria-hidden="true"><div class="project-symbol">{index === 0 ? "✳" : index === 1 ? "◒" : "↗"}</div><div class="project-word">{project.visual === "journal" ? "journal" : project.visual === "discord" ? "connect" : "offline"}</div><div class="project-glass"></div></div>
+        <div class="project-visual" aria-hidden="true"><div class="project-word">{project.visual === "journal" ? "journal" : project.visual === "discord" ? "connect" : "offline"}</div><div class="project-glass"></div></div>
       </article>)}
     </div>
   </section>
