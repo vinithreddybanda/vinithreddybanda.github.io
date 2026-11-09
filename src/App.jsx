@@ -45,9 +45,9 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
-function ProjectCard({ project, index }) {
+function ProjectCard({ project }) {
   return (
-    <article className="project-card reveal" style={{ "--reveal-delay": `${index * 90}ms` }}>
+    <article className="project-card">
       <p className="eyebrow">{project.number} / SELECTED WORK</p>
       <h3>{project.name}</h3>
       <p className="project-type">{project.type}</p>
@@ -132,7 +132,7 @@ export default function App() {
   return (
     <>
       <main className="site-shell" id="home">
-      <header className="site-header" data-reveal="up">
+      <header className="site-header">
         <a className="brand" href="#home">vinith<span>.</span></a>
         <nav aria-label="Main navigation">
           <a href="#work">Work</a>
@@ -143,7 +143,7 @@ export default function App() {
       </header>
 
       <section className="hero">
-        <p className="eyebrow hero-kicker" data-reveal="up">DEVELOPER / BUILDER <span>·</span> INDIA</p>
+        <p className="eyebrow hero-kicker">DEVELOPER / BUILDER <span>·</span> INDIA</p>
         <h1 className="hero-title" data-reveal="up">Making things<br />work<span>.</span></h1>
         <div className="hero-bottom" data-reveal="up">
           <p>I'm Vinith Reddy Banda, an Information Technology graduate drawn to the space between an idea and a working product. I like finding out how systems fit together, getting into the details, and turning what I learn into software people can actually use.</p>
@@ -164,7 +164,7 @@ export default function App() {
           <h2>Things I've built<span>.</span></h2>
         </div>
         <div className="project-grid">
-          {projects.map((project, index) => <ProjectCard key={project.number} project={project} index={index} />)}
+          {projects.map((project) => <ProjectCard key={project.number} project={project} />)}
         </div>
       </section>
 
@@ -176,7 +176,7 @@ export default function App() {
         </div>
         <div className="skills">
           {skillGroups.map((group) => (
-            <div className="skill-row reveal" key={group.label}>
+            <div className="skill-row" key={group.label}>
               <span>{group.label}</span>
               <div className="tags">{group.values.map((value) => <span className="tag" key={value}>{value}</span>)}</div>
             </div>
@@ -187,7 +187,7 @@ export default function App() {
       <section className="section background-section" data-reveal="up">
         <div>
           <p className="eyebrow">EDUCATION</p>
-          <div className="plain-item reveal"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
+          <div className="plain-item"><span>2026</span><div><strong>Chaitanya Bharati Institute of Technology</strong><p>B.E. · Information Technology · 8.43 CGPA</p></div></div>
           <div className="plain-item reveal"><span>2023</span><div><strong>Government Polytechnic, Warangal</strong><p>Diploma · Computer Engineering · 9.74 CGPA</p></div></div>
         </div>
         <div>
