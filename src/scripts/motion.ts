@@ -7,6 +7,7 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matc
 const header = document.querySelector<HTMLElement>("[data-site-header]");
 
 if (header) {
+  if (window.scrollY > 28) header.classList.add("is-scrolled");
   ScrollTrigger.create({
     start: 28,
     onEnter: () => header.classList.add("is-scrolled"),
