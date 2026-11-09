@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import NowPlaying from "./components/NowPlaying.jsx";
 
 const projects = [
@@ -63,56 +63,69 @@ function ProjectCard({ project, index }) {
 }
 
 export default function App() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (motionPreference.matches || !("IntersectionObserver" in window)) return;
 
     const root = document.documentElement;
     const revealItems = document.querySelectorAll(
-      "[data-reveal], .site-header, .hero > *, .metrics > div, .section-heading > *, .project-card, .about-section > *, .skill-row, .plain-item, .now-playing, .site-footer > *"
+      ".site-header, .hero > *, .metrics > div, .section-heading > *, .project-card, .about-section > div:first-child, .skill-row, .background-section > div > .eyebrow, .plain-item, .now-playing, .site-footer > *"
     );
 
-    // Let the whole page perform one coordinated opening reveal before
-    // viewport-based enter/exit handling takes over.
-    const openingUntil = performance.now() + 950;
+    // Enable the reveal styles before the browser paints the first frame.
+    root.classList.add("has-motion");
+    const enteredItems = new WeakSet();
+
+    revealItems.forEach((item, index) => {
+      item.classList.add("scroll-blur");
+      item.classList.remove("is-visible", "exit-up", "exit-down");
+      item.style.setProperty("--reveal-delay", `${Math.min(index * 28, 280)}ms`);
+    });
 
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const item = entry.target;
-        if (performance.now() < openingUntil && !entry.isIntersecting) return;
+
         if (entry.isIntersecting) {
+          enteredItems.add(item);
           item.classList.remove("exit-up", "exit-down");
           item.classList.add("is-visible");
+          return;
+        }
+
+        // Ignore the observer's initial off-screen report. Only animate an
+        // element out after it has actually entered the viewport once.
+        if (!enteredItems.has(item)) return;
+
+        item.classList.remove("is-visible");
+        if (entry.boundingClientRect.bottom <= 0) {
+          item.classList.add("exit-up");
+          item.classList.remove("exit-down");
         } else {
-          item.classList.remove("is-visible");
-          if (entry.boundingClientRect.bottom <= 0) {
-            item.classList.add("exit-up");
-            item.classList.remove("exit-down");
-          } else {
-            item.classList.add("exit-down");
-            item.classList.remove("exit-up");
-          }
+          item.classList.add("exit-down");
+          item.classList.remove("exit-up");
         }
       });
     }, {
-      threshold: 0.08,
-      rootMargin: "0px 0px -32px 0px",
+      threshold: 0.12,
+      rootMargin: "0px 0px -40px 0px",
     });
 
-    root.classList.add("has-motion");
-    revealItems.forEach((item, index) => {
-      item.classList.add("scroll-blur");
-      item.style.setProperty("--reveal-delay", `${Math.min(index * 28, 420)}ms`);
-      revealObserver.observe(item);
-    });
+    revealItems.forEach((item) => revealObserver.observe(item));
 
-    requestAnimationFrame(() => {
-      revealItems.forEach((item) => item.classList.add("is-visible"));
-    });
+    // Stagger only the opening reveal. Later scroll reveals stay responsive.
+    const delayReset = window.setTimeout(() => {
+      revealItems.forEach((item) => item.style.removeProperty("--reveal-delay"));
+    }, 1400);
 
     return () => {
       revealObserver.disconnect();
+      window.clearTimeout(delayReset);
       root.classList.remove("has-motion");
+      revealItems.forEach((item) => {
+        item.classList.remove("scroll-blur", "is-visible", "exit-up", "exit-down");
+        item.style.removeProperty("--reveal-delay");
+      });
     };
   }, []);
 
