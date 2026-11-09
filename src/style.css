@@ -631,6 +631,7 @@ a:focus-visible {
     filter: none;
     transform: none;
     transition: none;
+    animation: none;
     will-change: auto;
   }
 }
