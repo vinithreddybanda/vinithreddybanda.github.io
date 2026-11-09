@@ -15,3 +15,22 @@
 @media(max-width:760px){:root{--gutter:25px}.hero{min-height:680px;padding-top:125px}.hero-main{padding:85px 0 70px}.hero h1{font-size:clamp(66px,13vw,100px)}.hero-bottom{grid-template-columns:1fr;gap:13px;margin-left:0}.hero-actions{grid-column:1}.section-heading{align-items:flex-start;flex-direction:column;gap:12px;margin-bottom:30px}.section-note{max-width:380px}.work-section,.experience-section,.skills-section,.about-section{padding-top:75px;padding-bottom:80px}.project-row{grid-template-columns:35px minmax(0,1fr) 40px;gap:13px;padding:27px 0}.project-row:hover{padding-left:4px;padding-right:4px}.experience-list{padding:0 20px}.experience-entry{grid-template-columns:1fr;gap:10px}.skill-group{grid-template-columns:1fr;gap:12px}.about-columns{grid-template-columns:1fr;gap:38px}.footer-bottom{margin-top:60px}}
 @media(max-width:480px){:root{--gutter:20px}.site-header{padding:9px 10px}.nav-shell{min-height:48px;padding:0 14px}.nav-links{gap:12px}.nav-links>a{font-size:10px}.nav-links>a:nth-child(2){display:none}.nav-links .nav-cta{padding:8px 11px}.hero{min-height:640px;padding-top:112px}.hero-top{font-size:10px}.hero-main{padding:78px 0 64px}.hero h1{font-size:clamp(60px,14vw,76px)}.hero-description{font-size:13px}.hero-rule{font-size:9px}.section-heading h2{font-size:43px}.project-row{grid-template-columns:25px minmax(0,1fr) 36px;gap:10px}.project-main h3{font-size:24px}.project-description{font-size:12px}.project-open{width:34px;height:34px}.about-entry{grid-template-columns:68px 1fr;gap:9px}.about-entry strong{grid-column:2}.site-footer{padding-top:68px}.footer-bottom{flex-direction:column;gap:14px}.footer-links{gap:16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Quiet finish: remove ornamental dots and let spacing create structure. */
+.availability,.visual-orb,.visual-glint,.project-symbol{display:none!important}
+.project-count{display:block;width:auto;height:auto;padding:0;background:none;color:#9299a8;font-size:10px;letter-spacing:.08em}
+.project-list,.skills-list{border:0}
+.project-row,.skill-row,.experience-entry,.about-entry,.recognition-entry{border:0}
+.project-row{padding:42px 0}
+.project-row:nth-child(even) .project-visual{background:linear-gradient(135deg,#e9edf7,#e6eaf1)}
+.project-visual:before{width:58%;border-radius:28%;background:linear-gradient(135deg,#ffffffa8,#d4dceda8);filter:blur(18px);transform:rotate(-15deg)}
+.experience-section,.about-section{border:0}
+.experience-list{border:0}
+.experience-entry{padding:28px 0}
+.skill-row{padding:17px 0}
+.about-entry,.recognition-entry{padding:16px 0}
+.hero-visual{background:linear-gradient(135deg,#edf0f7 0%,#e8eaf2 48%,#e4edf0 100%)}
+.visual-tile{border-radius:38px;transform:rotate(-7deg)}
+.project-visual{border-radius:34px}
+.project-glass{border-radius:38px}
+@media(max-width:650px){.project-row{padding:30px 0}.project-visual{border-radius:27px}}
