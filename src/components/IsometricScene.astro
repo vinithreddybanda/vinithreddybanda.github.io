@@ -1,6 +1,6 @@
 ---
 interface Props {
-  scene?: "hero" | "clinic" | "journal" | "android";
+  scene?: string;
   class?: string;
 }
 const { scene = "hero", class: className = "" } = Astro.props;
