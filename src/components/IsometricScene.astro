@@ -23,7 +23,7 @@ const { scene = "hero", class: className = "" } = Astro.props;
  </>}
 {scene === "clinic" && <>
  <!-- CareSchedule: a cutaway clinic with reception, waiting, provider room and live schedule. -->
- <g class="base"><path d="M38 292l280-140 284 142-282 141z" fill="#1a1a1a" stroke="#777"/><path d="M38 292l282 143v13L38 305z" fill="#080808"/><path d="M320 435l282-141v13L320 448z" fill="#333"/><path d="M38 292l280-140 284 142-282 141z" fill="url(#grain)"/></g>
+ <g class="base"><path d="M38 292l280-140 284 142-282 141z" fill="#1a1a1a" stroke="#777"/><path d="M38 292l282 143v13L38 305z" fill="#080808"/><path d="M320 435l282-141v13L320 448z" fill="#333"/><path d="M38 292l280-140 284 142-282 141z" fill={`url(#grain-${scene})`}/></g>
  <g class="clinic-building"><path d="M113 183l203-102 211 105-204 102z" fill="#eee" stroke="#fff"/><path d="M323 288l204-102v111L323 399z" fill="#444" stroke="#aaa"/><path d="M113 183l210 105v111L113 294z" fill="#777" stroke="#ddd"/><path d="M130 184l186-93 194 97-187 94z" fill="#242424"/><path d="M130 184l194 97v95l-194-97z" fill="#555"/><path d="M324 281l186-93v95l-186 93z" fill="#292929"/>
  <!-- reception window and entry --> <path d="M147 210l77 38v47l-77-38z" fill="#171717" stroke="#ddd"/><path d="M157 218l56 28v25l-56-28z" fill="#999"/><path d="M163 276l67 33-1 18-67-33z" fill="#eee"/><path d="M181 285l31 15v-7l-31-15z" fill="#333"/>
  <!-- exam-room window --> <path d="M359 292l91-46v43l-91 46z" fill="#111" stroke="#ddd"/><path d="M370 294l69-35v26l-69 35z" fill="#777"/><path d="M377 308l54-27" stroke="#eee" stroke-width="2"/>
@@ -39,7 +39,7 @@ const { scene = "hero", class: className = "" } = Astro.props;
  </>}
 {scene === "journal" && <>
  <!-- JournalAI: private writing becomes a mood signal and a compact insight, not a generic AI orb. -->
- <g class="base"><path d="M40 294l278-139 282 141-280 140z" fill="#1a1a1a" stroke="#777"/><path d="M40 294l280 142v13L40 307z" fill="#090909"/><path d="M320 436l280-140v13L320 449z" fill="#333"/><path d="M40 294l278-139 282 141-280 140z" fill="url(#grain)"/></g>
+ <g class="base"><path d="M40 294l278-139 282 141-280 140z" fill="#1a1a1a" stroke="#777"/><path d="M40 294l280 142v13L40 307z" fill="#090909"/><path d="M320 436l280-140v13L320 449z" fill="#333"/><path d="M40 294l278-139 282 141-280 140z" fill={`url(#grain-${scene})`}/></g>
  <g class="journal-book"><path d="M93 248l170-85 164 82-170 85z" fill="#777" stroke="#eee"/><path d="M257 330l170-85v13l-170 85z" fill="#444"/><path d="M93 248l164 82v13L93 261z" fill="#555"/><path d="M107 245l156-78 147 73-156 78z" fill="#eee" stroke="#fff"/><path d="M263 318l147-78v10l-147 78z" fill="#aaa"/><path d="M107 245l156 73v10l-156-73z" fill="#bbb"/><path d="M263 170v148" stroke="#777" stroke-width="2"/><g class="handwriting" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"><path d="M128 231l68 32m-61-43 51 24m-43-36 59 28m-52-39 38 18"/><path d="M281 210l94 46m-87-59 75 37m-67-48 82 41"/></g><path d="M133 266l83 39m-74-26 54 25m99 20 88-44" stroke="#777" stroke-width="1.4"/></g>
  <g class="pen"><path d="M183 112l13-7 99 50-13 7z" fill="#eee" stroke="#fff"/><path d="M282 162l13-7-7 17-10 4z" fill="#555"/><path d="M183 112l99 50-8 11-99-50z" fill="#888"/><path d="M190 109l8-4 98 49-8 4z" fill="#fff"/><path d="M281 167l7-3-3 9-6 3z" fill="#ddd"/></g>
  <!-- Private entry cards flow into local analysis, then an insight chart. -->
@@ -50,7 +50,7 @@ const { scene = "hero", class: className = "" } = Astro.props;
  </>}
 {scene === "android" && <>
  <!-- Android Discord presence: handset controls a desktop client through a JNI/native bridge. -->
- <g class="base"><path d="M36 293l282-141 285 143-283 142z" fill="#1a1a1a" stroke="#777"/><path d="M36 293l284 144v13L36 306z" fill="#090909"/><path d="M320 437l283-142v13L320 450z" fill="#333"/><path d="M36 293l282-141 285 143-283 142z" fill="url(#grain)"/></g>
+ <g class="base"><path d="M36 293l282-141 285 143-283 142z" fill="#1a1a1a" stroke="#777"/><path d="M36 293l284 144v13L36 306z" fill="#090909"/><path d="M320 437l283-142v13L320 450z" fill="#333"/><path d="M36 293l282-141 285 143-283 142z" fill={`url(#grain-${scene})`}/></g>
  <!-- Desktop client -->
  <g class="desktop"><path d="M290 102l137-69 154 77-137 69z" fill="#eee" stroke="#fff"/><path d="M444 179l137-69v118l-137 69z" fill="#333" stroke="#aaa"/><path d="M290 102l154 77v118l-154-77z" fill="#777" stroke="#ddd"/><path d="M305 104l122-61 135 67-122 61z" fill="#111" stroke="#aaa"/><path d="M305 104l135 67v91l-135-67z" fill="#171717"/><path d="M440 171l122-61v91l-122 61z" fill="#090909"/><path d="M321 120l21-11 0 68-21 11z" fill="#777"/><path d="M355 116l75 37m-75-23 75 37m-75-23 75 37" stroke="#aaa" stroke-width="2"/><circle cx="367" cy="133" r="8" fill="#eee"/><path d="M355 204l68 34 43-22-68-34z" fill="#555"/><path d="M421 271l23-12v17l-23 12z" fill="#aaa"/></g>
  <!-- Android handset -->
@@ -73,7 +73,8 @@ const { scene = "hero", class: className = "" } = Astro.props;
 .terminal-cursor{animation:cursor-blink 1.05s steps(2,start) infinite}
 .keyboard{animation:keyboard-tap 4.8s ease-in-out infinite}
 .desk-lamp{transform-origin:145px 205px;animation:lamp-adjust 9s ease-in-out infinite alternate}
-.calendar-slot{animation:slot-shift 8s cubic-bezier(.45,0,.2,1) infinite alternate}\n.patient{animation:patient-route 11s cubic-bezier(.4,0,.2,1) infinite}
+.calendar-slot{animation:slot-shift 8s cubic-bezier(.45,0,.2,1) infinite alternate}
+.patient{animation:patient-route 11s cubic-bezier(.4,0,.2,1) infinite}
 
 .waiting-chair{animation:chair-rock 6s ease-in-out infinite alternate}
 .handwriting{stroke-dasharray:none}
@@ -90,7 +91,8 @@ const { scene = "hero", class: className = "" } = Astro.props;
 @keyframes cursor-blink{50%{opacity:0}}
 @keyframes keyboard-tap{0%,100%{transform:translateY(0)}48%,54%{transform:translateY(2px)}}
 @keyframes lamp-adjust{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
-@keyframes slot-shift{0%{transform:translate(0,0)}100%{transform:translate(19px,-10px)}}\n@keyframes patient-route{0%,100%{translate:220px 300px}50%{translate:286px 267px}}
+@keyframes slot-shift{0%{transform:translate(0,0)}100%{transform:translate(19px,-10px)}}
+@keyframes patient-route{0%,100%{translate:220px 300px}50%{translate:286px 267px}}
 
 @keyframes chair-rock{from{transform:translateY(0)}to{transform:translateY(-2px)}}
 
