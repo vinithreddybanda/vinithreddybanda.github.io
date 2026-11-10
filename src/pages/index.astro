@@ -240,6 +240,20 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
         *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
         html.js .reveal,html.js .depth,html.js .depth:not(.in-focus){opacity:1;transform:none;filter:none}
       }
+
+      /* Scroll is the animation timeline: every scene moves only while it travels through the viewport. */
+      .top::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--fg);transform:scaleX(var(--page-progress,0));transform-origin:left;opacity:.75}
+      .hero-art,.project-art{filter:grayscale(1) saturate(0) contrast(1.12);transform:translate3d(0,var(--scene-y,0px),0) rotate(var(--scene-tilt,0deg)) scale(var(--scene-scale,1));transform-origin:50% 50%;will-change:transform,filter}
+      .hero-art{--scene-y:0px}
+      .project-art{--scene-y:0px}
+      .project-art .iso-float,.hero-art .iso-float,.project-art .iso-drift,.hero-art .iso-drift,.project-art .iso-pulse,.hero-art .iso-pulse{animation:none!important}
+      .project-art .iso-float,.hero-art .iso-float{transform:translate3d(0,calc((.5 - var(--scene-progress,.5))*-16px),0)}
+      .project-art .iso-drift,.hero-art .iso-drift{transform:translate3d(0,calc((.5 - var(--scene-progress,.5))*22px),0) rotate(calc((var(--scene-progress,.5) - .5)*5deg))}
+      .project-art .iso-pulse,.hero-art .iso-pulse{opacity:calc(.48 + var(--scene-progress,.5)*.5)}
+      .project{--row-progress:.5}
+      .project-art{transition:filter .35s ease}
+      .project:hover .project-art{filter:grayscale(1) saturate(0) contrast(1.25)}
+      @media(prefers-reduced-motion:reduce){.hero-art,.project-art{transform:none!important;will-change:auto}.project-art .iso-float,.hero-art .iso-float,.project-art .iso-drift,.hero-art .iso-drift{transform:none!important}}
     </style>
   </head>
   <body>
@@ -380,6 +394,38 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
         for (const entry of entries) entry.target.classList.toggle("in-focus", entry.isIntersecting);
       }, { threshold: 0.18, rootMargin: "-22% 0px -22% 0px" });
       document.querySelectorAll(".depth").forEach((node) => depthObserver.observe(node));
+
+
+      // Scroll-linked motion. Progress is calculated from each illustration's own viewport journey.
+      const scrollScenes = [...document.querySelectorAll(".hero-art, .project-art")];
+      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+      let sceneFrame = 0;
+      const clamp01 = (value) => Math.max(0, Math.min(1, value));
+      const paintScrollState = () => {
+        sceneFrame = 0;
+        if (reduceMotion.matches) return;
+        const vh = window.innerHeight || 1;
+        const doc = document.documentElement;
+        const maxScroll = Math.max(1, doc.scrollHeight - vh);
+        doc.style.setProperty("--page-progress", String(clamp01(window.scrollY / maxScroll)));
+        for (const scene of scrollScenes) {
+          const rect = scene.getBoundingClientRect();
+          const progress = clamp01((vh - rect.top) / (vh + rect.height));
+          scene.style.setProperty("--scene-progress", progress.toFixed(4));
+          const centered = progress - .5;
+          const isHero = scene.classList.contains("hero-art");
+          scene.style.setProperty("--scene-y", ((isHero ? -centered * 76 : -centered * 54).toFixed(2)) + "px");
+          scene.style.setProperty("--scene-tilt", (centered * (isHero ? 3.2 : 5)).toFixed(2) + "deg");
+          scene.style.setProperty("--scene-scale", (1 + Math.sin(progress * Math.PI) * (isHero ? .045 : .035)).toFixed(4));
+        }
+      };
+      const requestSceneFrame = () => {
+        if (!sceneFrame) sceneFrame = requestAnimationFrame(paintScrollState);
+      };
+      addEventListener("scroll", requestSceneFrame, { passive: true });
+      addEventListener("resize", requestSceneFrame, { passive: true });
+      if (reduceMotion.addEventListener) reduceMotion.addEventListener("change", requestSceneFrame);
+      paintScrollState();
 
       const hero = document.querySelector(".hero");
       let heroFrame = false;
