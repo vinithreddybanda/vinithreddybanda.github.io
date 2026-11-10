@@ -89,27 +89,24 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       .nav-right a:hover{color:var(--fg)}
       .nav-index{color:var(--dim);font:10px var(--mono);margin-right:clamp(8px,2vw,26px)}
       .hero{min-height:100svh;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding-top:130px;padding-bottom:clamp(30px,5vw,70px);isolation:isolate}
-      .hero>.hero-art{position:absolute;z-index:0;top:7%;right:var(--g);width:min(58vw,820px);aspect-ratio:640/450;height:auto;pointer-events:none;opacity:.96;overflow:visible}
+      .hero>.hero-art{position:absolute;z-index:0;top:5%;right:var(--g);width:min(66vw,940px);aspect-ratio:720/500;height:auto;pointer-events:none;opacity:.98;overflow:visible}
       .hero>.shell{position:relative;z-index:1}
       .hero .scroll-cue{z-index:2}
-      .project-art{display:block;width:100%;height:auto;aspect-ratio:640/450;overflow:visible;margin:0;opacity:.96}
-      .project-art svg,.hero-art svg{display:block;width:100%;height:100%;overflow:visible}
-      .project-art .iso-shadow{opacity:.42}
-      .project-art .iso-float,.hero-art .iso-float{transform-box:fill-box;transform-origin:center;animation:iso-hover 5.8s ease-in-out infinite}
-      .project-art .iso-float.delay,.hero-art .iso-float.delay{animation-delay:-2.4s}
-      .project-art .iso-drift,.hero-art .iso-drift{transform-box:fill-box;transform-origin:center;animation:iso-drift 8s ease-in-out infinite}
-      .project-art .iso-pulse,.hero-art .iso-pulse{transform-box:fill-box;transform-origin:center;animation:iso-pulse 3.8s ease-in-out infinite}
-      @keyframes iso-hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-      @keyframes iso-drift{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(4px,-6px) rotate(1.5deg)}}
-      @keyframes iso-pulse{0%,100%{opacity:.55}50%{opacity:1}}
-      .project-aside{min-width:0}
+      .hero-art svg,.project-art svg{display:block;width:100%;height:100%;overflow:visible}
+      .project-art{display:block;grid-column:1/-1;width:100%;height:auto;aspect-ratio:720/500;overflow:visible;margin:0;opacity:1}
+      .project-aside{grid-column:2/-1;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:18px;min-width:0;padding-top:24px}
+      .project-year{grid-column:2}
+      .project-metric{grid-column:3}
       @media(max-width:760px){
-        .hero>.hero-art{top:10%;right:-10%;width:88vw;opacity:.56}
+        .hero>.hero-art{top:9%;right:-8%;width:92vw;opacity:.58}
         .hero>.shell{z-index:1}
-        .project-art{width:100%;height:auto;aspect-ratio:640/450;margin:0}
+        .project-art{width:100%;height:auto;aspect-ratio:720/500;margin:0}
+        .project-aside{grid-column:2;grid-template-columns:minmax(0,1fr) auto;gap:14px;padding-top:20px}
+        .project-art{grid-column:1/-1}
+        .project-year{grid-column:1}
+        .project-metric{grid-column:2}
       }
-      @media(max-width:430px){.hero>.hero-art{top:15%;right:-23%;width:94vw;opacity:.46}.project-art{height:auto;width:100%;aspect-ratio:640/450}}
-      @media(prefers-reduced-motion:reduce){.project-art .iso-float,.hero-art .iso-float,.project-art .iso-drift,.hero-art .iso-drift,.project-art .iso-pulse,.hero-art .iso-pulse{animation:none!important}}
+      @media(max-width:430px){.hero>.hero-art{top:14%;right:-20%;width:100vw;opacity:.48}.project-art{height:auto;width:100%;aspect-ratio:720/500}}
       .hero::before{content:"";position:absolute;z-index:-1;width:min(75vw,1050px);aspect-ratio:1;right:-28%;top:-25%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.105),rgba(255,255,255,.025) 36%,transparent 68%);filter:blur(55px);transform:translate3d(0,var(--glow-y,0),0)}
       .hero-topline{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(35px,7vh,90px)}
       .hero-topline .mono:last-child{color:var(--dim)}
@@ -134,7 +131,7 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       .work-heading h2 em{font:italic .98em var(--serif);letter-spacing:-.075em}
       .work-heading p{max-width:220px;font-size:12px;line-height:1.7;color:var(--dim);margin:0 0 4px}
       .projects{border-top:1px solid var(--line)}
-      .project{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(270px,.58fr);gap:clamp(16px,3vw,48px);align-items:start;padding:clamp(32px,5.5vw,78px) 0;border-bottom:1px solid var(--line);position:relative;isolation:isolate}
+      .project{display:grid;grid-template-columns:72px minmax(0,1fr);gap:clamp(16px,3vw,48px);align-items:start;padding:clamp(32px,5.5vw,78px) 0;border-bottom:1px solid var(--line);position:relative;isolation:isolate}
       .project::before{content:"";position:absolute;z-index:-1;inset:0 calc(var(--g)*-.35);background:linear-gradient(100deg,rgba(255,255,255,.055),transparent 72%);opacity:0;transform:scaleY(.86);transform-origin:center;transition:opacity .7s var(--ease),transform .7s var(--ease)}
       .project:hover::before{opacity:1;transform:scaleY(1)}
       .project-num{padding-top:10px;color:var(--dim)}
@@ -145,9 +142,9 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       .project:hover h3{transform:translateX(7px);filter:blur(.15px)}
       .project h3 em{font:italic 1em var(--serif);letter-spacing:-.06em}
       .project-summary{max-width:420px;font-size:clamp(14px,1.3vw,17px);line-height:1.65;color:#aaa;margin:24px 0 0}
-      .project-aside{display:grid;grid-template-columns:1fr;align-content:start;align-items:start;gap:16px;padding-top:10px;min-width:0}
+      .project-aside{grid-column:2/-1;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:18px;padding-top:24px;min-width:0}
       .project-year{color:var(--dim)}
-      .project-metric{width:100%;max-width:none;min-height:135px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;padding:16px;position:relative;overflow:hidden;transition:background .6s var(--ease),color .6s var(--ease),transform .6s var(--ease)}
+      .project-metric{width:100%;max-width:none;min-height:110px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;padding:16px;position:relative;overflow:hidden;transition:background .6s var(--ease),color .6s var(--ease),transform .6s var(--ease)}
       .project-metric::after{content:"";position:absolute;width:110px;height:110px;border:1px solid currentColor;border-radius:50%;right:-48px;bottom:-52px;box-shadow:0 0 0 12px transparent,0 0 0 13px currentColor;opacity:.25;transition:transform .8s var(--ease)}
       .project:hover .project-metric{background:var(--fg);color:var(--bg);transform:translateY(-4px)}
       .project:hover .project-metric::after{transform:scale(1.35) rotate(28deg)}
