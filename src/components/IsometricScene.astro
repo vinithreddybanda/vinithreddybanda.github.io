@@ -5,145 +5,199 @@ interface Props {
 }
 const { scene = "hero", class: className = "" } = Astro.props;
 ---
-<div class={className} aria-hidden="true">
-  {scene === "hero" && (
-    <svg viewBox="0 0 520 380" role="presentation">
-      <ellipse class="iso-shadow" cx="276" cy="315" rx="190" ry="28" fill="#000" />
-      <g class="iso-float delay">
-        <polygon points="92,118 170,80 228,108 150,147" fill="#d9e2d8" />
-        <polygon points="150,147 228,108 228,116 150,155" fill="#87988e" />
-        <polygon points="92,118 150,147 150,155 92,126" fill="#aebdb1" />
-        <path d="M112 119l44 22M128 111l44 22M145 103l44 22" stroke="#5e7067" stroke-width="2" opacity=".7"/>
+<div class={`iso-scene ${className}`} aria-hidden="true" data-iso-scene={scene}>
+  <svg viewBox="0 0 640 480" role="presentation" focusable="false">
+    <defs>
+      <linearGradient id="iso-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f4f1"/><stop offset="1" stop-color="#858585"/></linearGradient>
+      <linearGradient id="iso-side" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#777"/><stop offset="1" stop-color="#292929"/></linearGradient>
+      <linearGradient id="iso-dark" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#484848"/><stop offset="1" stop-color="#111"/></linearGradient>
+      <linearGradient id="iso-metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fafaf8"/><stop offset=".48" stop-color="#aaa"/><stop offset="1" stop-color="#555"/></linearGradient>
+      <pattern id="iso-grid" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="skewY(-26)"><path d="M12 0H0V12" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width=".7"/></pattern>
+      <pattern id="iso-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V5" stroke="#fff" stroke-opacity=".18" stroke-width="1"/></pattern>
+      <filter id="iso-shadow" x="-40%" y="-40%" width="180%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
+    </defs>
+    <ellipse cx="325" cy="397" rx="242" ry="34" fill="#000" opacity=".7" filter="url(#iso-shadow)"/>
+    {scene === "hero" && <>
+      <!-- Floating technical annotations and exploded modules -->
+      <g class="iso-part iso-part-a"><path d="M105 112l74-37 54 26-74 37z" fill="#d8d8d5" stroke="#fff" stroke-opacity=".6"/><path d="M159 138l74-37v9l-74 37z" fill="#555"/><path d="M105 112l54 26v9l-54-26z" fill="#888"/><path d="M125 112l34 16m-20-25 34 16m-20-25 34 16" stroke="#444" stroke-width="2"/></g>
+      <g class="iso-platform">
+        <path d="M66 312l267-133 242 117-269 136z" fill="#1a1a1a" stroke="#777" stroke-width="1.5"/>
+        <path d="M66 312l240 120v17L66 329z" fill="#090909" stroke="#555"/>
+        <path d="M306 432l269-136v17L306 449z" fill="#303030" stroke="#777"/>
+        <path d="M66 312l267-133 242 117-269 136z" fill="url(#iso-grid)"/>
+        <path d="M91 312l241-120 209 101-243 122z" fill="none" stroke="#aaa" stroke-opacity=".3" stroke-dasharray="3 6"/>
+        {#each Array.from({length:9},(_,i)=>i) as n}
+          <path d={`M${105+n*25} ${310-n*12.5}l240 120`} stroke="#fff" stroke-opacity=".055"/>
+        {/each}
       </g>
-      <g>
-        <polygon points="74,282 275,183 458,270 254,369" fill="#252b29"/>
-        <polygon points="74,282 254,369 254,380 74,293" fill="#171b1a"/>
-        <polygon points="254,369 458,270 458,281 254,380" fill="#303835"/>
-        <polygon points="74,282 275,183 458,270 254,369" fill="none" stroke="#75857a" stroke-opacity=".45"/>
+      <!-- Monitor chassis -->
+      <g class="iso-part iso-part-b">
+        <path d="M174 105l187-94 160 78-188 95z" fill="url(#iso-metal)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M333 184l188-95v147l-188 96z" fill="#292929" stroke="#aaa"/>
+        <path d="M174 105l159 79v148l-159-79z" fill="#555" stroke="#ddd"/>
+        <path d="M186 111l174-87 143 69-174 88z" fill="#0c0c0c" stroke="#aaa"/>
+        <path d="M186 111l143 70v121l-143-70z" fill="#151515"/>
+        <path d="M329 181l174-88v121l-174 88z" fill="#090909"/>
+        <path d="M205 120l121 59m-121-44 121 59m-121-44 121 59" stroke="#eee" stroke-opacity=".25" stroke-width="1"/>
+        <path d="M215 133l42 20 0 3-42-20zm0 12 67 33 0 3-67-33z" fill="#ddd" opacity=".65"/>
+        <path d="M273 163l42 21 0 3-42-21z" fill="#777"/>
+        <path d="M352 117l124-62m-124 78 124-62m-124 78 88-44" stroke="#fff" stroke-opacity=".24"/>
+        <circle cx="493" cy="216" r="3" fill="#eee"/>
+        <path d="M329 300l-7 34 60 30 8-35z" fill="#555" stroke="#aaa"/>
+        <path d="M322 334l-36 18 63 31 41-19z" fill="#aaa" stroke="#eee"/>
+        <path d="M286 352l63 31v9l-63-31z" fill="#555"/>
       </g>
-      <g class="iso-float">
-        <polygon points="145,91 290,20 395,70 250,142" fill="#b9c7bd"/>
-        <polygon points="250,142 395,70 395,80 250,152" fill="#6e7e74"/>
-        <polygon points="145,91 250,142 250,152 145,101" fill="#87978d"/>
-        <polygon points="157,94 290,30 381,74 249,138" fill="#111614"/>
-        <polygon points="169,96 289,38 368,76 249,134" fill="#26322d"/>
-        <path d="M185 102l53-26M185 112l31-15M185 122l70-34" stroke="#b5d0bd" stroke-width="3" stroke-linecap="round" opacity=".85"/>
-        <path d="M267 81l26-13M267 91l57-28" stroke="#b9a58a" stroke-width="3" stroke-linecap="round" opacity=".8"/>
-        <polygon points="249,142 278,128 278,183 249,197" fill="#77877d"/>
-        <polygon points="220,211 278,183 325,206 267,235" fill="#c5d0c7"/>
-        <polygon points="267,235 325,206 325,213 267,242" fill="#69776e"/>
-        <polygon points="220,211 267,235 267,242 220,218" fill="#87968b"/>
+      <!-- Keyboard, keycaps, wrist rest -->
+      <g class="iso-part iso-part-c">
+        <path d="M179 294l115-58 140 69-115 59z" fill="#d0d0ce" stroke="#fff"/>
+        <path d="M319 364l115-59v14l-115 59z" fill="#555" stroke="#999"/>
+        <path d="M179 294l140 70v14l-140-70z" fill="#777" stroke="#aaa"/>
+        <path d="M190 295l104-52 119 59-104 53z" fill="#181818" stroke="#aaa"/>
+        {#each Array.from({length:4},(_,i)=>i) as r}
+          {#each Array.from({length:9},(_,i)=>i) as c}
+            <path d={`M${200+c*11+r*3} ${292-r*8+c*5.5}l8-4 8 4-8 4z`} fill={r===0?"#bdbdbd":"#555"} stroke="#ddd" stroke-opacity=".5" stroke-width=".55"/>
+          {/each}
+        {/each}
+        <path d="M235 326l45-22 46 23-45 23z" fill="#777" stroke="#eee"/>
+        <path d="M345 337l43-22 28 14-43 22z" fill="#aaa" stroke="#eee"/>
       </g>
-      <g class="iso-drift">
-        <polygon points="385,150 424,131 463,150 424,170" fill="#d2b89a"/>
-        <polygon points="385,150 424,170 424,224 385,204" fill="#8f7962"/>
-        <polygon points="424,170 463,150 463,204 424,224" fill="#b39a7d"/>
-        <ellipse cx="424" cy="151" rx="22" ry="10" fill="#e6d4bc"/>
-        <path d="M424 144c-10-18-8-30 0-39 10 10 12 23 0 39M417 148c-20-8-25-19-22-29 16 2 25 12 22 29M431 147c12-17 24-20 32-14-6 15-17 21-32 14" fill="#9eaf9b"/>
+      <!-- articulated lamp -->
+      <g class="iso-part iso-part-d">
+        <path d="M468 273l21-11 9 5-21 11z" fill="#eee"/><path d="M477 278l-31-64 8-4 31 64z" fill="#aaa" stroke="#eee"/>
+        <path d="M446 214l-40-31 7-8 42 31z" fill="#666" stroke="#ddd"/>
+        <path d="M401 185l-16-29 15-8 19 31z" fill="#eee" stroke="#fff"/>
+        <path d="M386 156l29-14 33 17-29 15z" fill="#ddd" stroke="#fff"/>
+        <path d="M415 174l33-15-5 15-24 12z" fill="#555"/>
+        <circle cx="450" cy="212" r="7" fill="#222" stroke="#eee" stroke-width="2"/>
+        <circle cx="410" cy="180" r="6" fill="#222" stroke="#eee" stroke-width="2"/>
       </g>
-      <g class="iso-float delay">
-        <polygon points="335,108 385,84 425,103 375,127" fill="#d6ded7"/>
-        <polygon points="375,127 425,103 425,111 375,135" fill="#84948a"/>
-        <polygon points="335,108 375,127 375,135 335,116" fill="#aab8ad"/>
-        <path d="M352 108l22 11 34-16" fill="none" stroke="#5f7667" stroke-width="2"/>
+      <!-- desktop tower with vents -->
+      <g class="iso-part iso-part-e">
+        <path d="M78 213l68-34 48 24-68 34z" fill="#eee" stroke="#fff"/>
+        <path d="M126 237l68-34v111l-68 34z" fill="#444" stroke="#aaa"/>
+        <path d="M78 213l48 24v111l-48-24z" fill="#777" stroke="#ddd"/>
+        <path d="M90 219l36 18v93l-36-18z" fill="#171717"/>
+        {#each Array.from({length:8},(_,i)=>i) as n}
+          <path d={`M96 ${232+n*10}l24 12`} stroke="#aaa" stroke-width="1.2" opacity=".65"/>
+        {/each}
+        <circle cx="108" cy="316" r="5" fill="#ddd"/><circle cx="108" cy="316" r="2" fill="#333"/>
+        <path d="M137 251l42-21m-42 31 42-21m-42 31 42-21m-42 31 42-21" stroke="#eee" stroke-opacity=".35"/>
       </g>
-      <g class="iso-pulse">
-        <circle cx="108" cy="204" r="4" fill="#c4d9c8"/>
-        <circle cx="108" cy="204" r="12" fill="none" stroke="#c4d9c8" stroke-opacity=".35"/>
+      <!-- speaker, notebook and plant -->
+      <g class="iso-part iso-part-f">
+        <path d="M496 312l40-20 35 17-40 20z" fill="#eee" stroke="#fff"/><path d="M531 329l40-20v47l-40 20z" fill="#555" stroke="#aaa"/><path d="M496 312l35 17v47l-35-17z" fill="#999" stroke="#ddd"/>
+        <ellipse cx="515" cy="339" rx="10" ry="6" fill="#222" stroke="#eee"/><ellipse cx="515" cy="339" rx="4" ry="2.5" fill="#aaa"/>
       </g>
-    </svg>
-  )}
-  {scene === "clinic" && (
-    <svg viewBox="0 0 320 230" role="presentation">
-      <ellipse class="iso-shadow" cx="160" cy="194" rx="120" ry="18" fill="#000"/>
-      <polygon points="38,164 156,105 282,166 163,225" fill="#29312d"/>
-      <polygon points="38,164 163,225 163,232 38,171" fill="#171d1a"/>
-      <polygon points="163,225 282,166 282,173 163,232" fill="#3a4540"/>
-      <g class="iso-float">
-        <polygon points="88,79 166,40 227,69 149,108" fill="#d6e0d8"/>
-        <polygon points="149,108 227,69 227,145 149,184" fill="#71847a"/>
-        <polygon points="88,79 149,108 149,184 88,155" fill="#a7b7ab"/>
-        <polygon points="101,81 166,49 213,72 148,104" fill="#24312b"/>
-        <polygon points="109,83 166,55 204,74 148,102" fill="#d8e4db"/>
-        <path d="M166 64v25M154 76h24" stroke="#617e6b" stroke-width="7" stroke-linecap="square"/>
-        <polygon points="101,116 138,134 138,164 101,146" fill="#26332c"/>
-        <path d="M110 124l18 9M110 132l18 9" stroke="#c3d0c6" stroke-width="2"/>
+      <g class="iso-part iso-part-g">
+        <path d="M88 275l53-27 45 22-53 27z" fill="#eee" stroke="#fff"/><path d="M133 297l53-27v8l-53 27z" fill="#555"/><path d="M88 275l45 22v8l-45-22z" fill="#888"/>
+        <path d="M100 273l41-20m-37 27 31-15" stroke="#555" stroke-width="1.4"/>
+        <path d="M556 242l21-11 18 9-21 11z" fill="#aaa"/><path d="M556 242l18 9v27l-18-9z" fill="#555"/><path d="M574 251l21-11v27l-21 11z" fill="#888"/>
+        <path d="M565 241c-20-28-10-45 3-53 10 18 9 34-3 53m3 0c-3-31 12-43 26-42 0 20-10 34-26 42m-5-3c-28-12-31-30-22-42 17 8 25 22 22 42" fill="#ddd" stroke="#fff"/>
       </g>
-      <g class="iso-float delay">
-        <polygon points="198,26 255,0 293,19 236,47" fill="#e5d9c8"/>
-        <polygon points="236,47 293,19 293,91 236,120" fill="#9b8873"/>
-        <polygon points="198,26 236,47 236,120 198,99" fill="#c0ad96"/>
-        <polygon points="207,29 255,7 284,21 236,44" fill="#303b35"/>
-        <path d="M218 31l18 9 41-20" fill="none" stroke="#c9d8cc" stroke-width="2"/>
-        <path d="M217 49l9 5M217 59l9 5M217 69l9 5" stroke="#5d7567" stroke-width="3" stroke-linecap="round"/>
+      <!-- cable runs, bolts and measurement marks -->
+      <g fill="none" stroke="#bbb" stroke-width="1.3" opacity=".8"><path d="M385 383c-22 32 9 43 42 26s34-6 24 6"/><path d="M389 383c-18 24 10 34 37 20"/><path d="M82 345l-19 10v-23m490-28 22 11v18"/></g>
+      <g fill="#eee"><circle cx="90" cy="315" r="2"/><circle cx="305" cy="420" r="2"/><circle cx="548" cy="300" r="2"/></g>
+    </>}
+    {scene === "clinic" && <>
+      <!-- architectural site plate -->
+      <g class="iso-platform"><path d="M83 322l236-118 238 118-238 120z" fill="#1b1b1b" stroke="#aaa"/><path d="M83 322l236 120v14L83 336z" fill="#090909"/><path d="M319 442l238-120v14L319 456z" fill="#444"/><path d="M83 322l236-118 238 118-238 120z" fill="url(#iso-grid)"/></g>
+      <!-- main clinic building -->
+      <g class="iso-part iso-part-b">
+        <path d="M153 171l167-84 176 87-167 84z" fill="#eee" stroke="#fff" stroke-width="1.5"/>
+        <path d="M329 258l167-84v126l-167 84z" fill="#555" stroke="#bbb"/>
+        <path d="M153 171l176 87v126l-176-87z" fill="#999" stroke="#eee"/>
+        <path d="M170 174l150-75 157 78-150 76z" fill="#242424" stroke="#ddd"/>
+        <path d="M170 174l157 79v101l-157-79z" fill="#777"/>
+        <path d="M327 253l150-76v101l-150 76z" fill="#333"/>
+        <!-- facade windows -->
+        {#each Array.from({length:3},(_,i)=>i) as n}
+          <path d={`M187 ${204+n*24}l30 15v17l-30-15z`} fill="#161616" stroke="#ddd"/>
+          <path d={`M342 ${260+n*24}l27-14v17l-27 14z`} fill="#111" stroke="#ddd"/>
+          <path d={`M222 ${222+n*24}l25 13v17l-25-13z`} fill="#333" stroke="#ddd"/>
+        {/each}
+        <path d="M260 220l42 21v90l-42-21z" fill="#151515" stroke="#eee"/><path d="M281 231v69" stroke="#aaa"/>
+        <path d="M271 267l8 4" stroke="#eee" stroke-width="2"/>
+        <!-- rooftop plant room and vents -->
+        <path d="M265 137l65-33 62 31-65 33z" fill="#ddd" stroke="#fff"/>
+        <path d="M327 168l65-33v38l-65 33z" fill="#444"/><path d="M265 137l62 31v38l-62-31z" fill="#777"/>
+        <path d="M280 139l47-24 47 24-47 24z" fill="#181818"/>
+        <path d="M292 143l35-18 35 18-35 18z" fill="#aaa"/>
       </g>
-      <g class="iso-pulse">
-        <circle cx="66" cy="94" r="9" fill="#c3d9c9"/>
-        <circle cx="66" cy="94" r="17" fill="none" stroke="#c3d9c9" stroke-opacity=".35"/>
+      <!-- emergency sign / cross, monochrome -->
+      <g class="iso-part iso-part-c"><path d="M112 146l48-24 36 18-48 24z" fill="#eee" stroke="#fff"/><path d="M148 164l48-24v55l-48 24z" fill="#555"/><path d="M112 146l36 18v55l-36-18z" fill="#999"/><path d="M147 151v24m-12-12h24" stroke="#111" stroke-width="7" stroke-linecap="square"/></g>
+      <!-- ambulance bay, ramp and parking marks -->
+      <g class="iso-part iso-part-d"><path d="M111 341l45-23 49 25-45 23z" fill="#777" stroke="#ddd"/><path d="M160 366l45-23v8l-45 23z" fill="#333"/><path d="M111 341l49 25v8l-49-25z" fill="#555"/><path d="M124 340l32-16 25 13-32 16z" fill="#111"/><path d="M181 358l28-14 28 14-28 14z" fill="none" stroke="#eee" stroke-dasharray="3 3"/></g>
+      <g class="iso-part iso-part-e"><path d="M453 344l50-25 32 16-50 25z" fill="#ddd"/><path d="M485 360l50-25v29l-50 25z" fill="#444"/><path d="M453 344l32 16v29l-32-16z" fill="#888"/><path d="M463 346l22 11 30-15" fill="none" stroke="#222" stroke-width="2"/></g>
+      <g class="iso-part iso-part-f"><path d="M197 128l24-12 15 8-24 12z" fill="#eee"/><path d="M212 136l24-12v34l-24 12z" fill="#555"/><path d="M197 128l15 8v34l-15-8z" fill="#999"/><path d="M205 117v-19m8 15v-24m8 29V99" stroke="#ddd" stroke-width="2"/><path d="M205 98l4-6 4 6m0-3 4-6 4 6" fill="none" stroke="#fff"/></g>
+    </>}
+    {scene === "journal" && <>
+      <g class="iso-platform"><path d="M82 331l238-119 239 119-239 119z" fill="#1a1a1a" stroke="#aaa"/><path d="M82 331l238 119v14L82 345z" fill="#080808"/><path d="M320 450l239-119v14L320 464z" fill="#444"/><path d="M82 331l238-119 239 119-239 119z" fill="url(#iso-grid)"/></g>
+      <!-- open journal with sculpted pages -->
+      <g class="iso-part iso-part-b">
+        <path d="M138 243l176-89 171 85-176 89z" fill="#777" stroke="#eee" stroke-width="2"/>
+        <path d="M309 328l176-89v19l-176 89z" fill="#444" stroke="#aaa"/>
+        <path d="M138 243l171 85v19l-171-85z" fill="#555" stroke="#aaa"/>
+        <path d="M151 239l163-82 154 77-163 82z" fill="#eee" stroke="#fff"/>
+        <path d="M314 316l154-82v12l-154 82z" fill="#999"/>
+        <path d="M151 239l163 77v12l-163-77z" fill="#bbb"/>
+        <path d="M314 161v155" stroke="#555" stroke-width="2"/>
+        {#each Array.from({length:7},(_,i)=>i) as n}
+          <path d={`M174 ${234+n*10}l112 53m36-48 102-51`} stroke="#555" stroke-width="1" opacity=".75"/>
+        {/each}
+        <path d="M178 223l72-36 45 22-72 36z" fill="#333"/><path d="M223 245l72-36v7l-72 36z" fill="#777"/>
+        <path d="M178 223l45 22v7l-45-22z" fill="#aaa"/>
       </g>
-    </svg>
-  )}
-  {scene === "journal" && (
-    <svg viewBox="0 0 320 230" role="presentation">
-      <ellipse class="iso-shadow" cx="158" cy="194" rx="120" ry="18" fill="#000"/>
-      <polygon points="35,161 158,100 286,162 163,224" fill="#2c302c"/>
-      <polygon points="35,161 163,224 163,231 35,168" fill="#171b19"/>
-      <polygon points="163,224 286,162 286,169 163,231" fill="#3c433d"/>
-      <g class="iso-float">
-        <polygon points="76,104 157,64 232,101 151,142" fill="#b7c5b8"/>
-        <polygon points="151,142 232,101 232,153 151,194" fill="#77877a"/>
-        <polygon points="76,104 151,142 151,194 76,156" fill="#8f9f91"/>
-        <polygon points="86,105 157,70 220,101 149,136" fill="#e6dfd2"/>
-        <polygon points="149,136 220,101 220,149 149,184" fill="#c8c1b5"/>
-        <polygon points="86,105 149,136 149,184 86,153" fill="#d8d1c4"/>
-        <path d="M103 111l37 18M103 120l29 14M161 127l42-21M161 138l42-21" stroke="#8d988a" stroke-width="2" stroke-linecap="round"/>
-        <path d="M149 136v48" stroke="#7a7569" stroke-width="2"/>
+      <!-- floating stylus exploded in space -->
+      <g class="iso-part iso-part-c"><path d="M427 131l14-7 79 39-14 7z" fill="#eee" stroke="#fff"/><path d="M506 170l14-7-4 12-10 5z" fill="#555"/><path d="M427 131l79 39-7 10-79-39z" fill="#888"/><path d="M438 127l9-5 76 38-9 5z" fill="#fff"/><path d="M430 133l-12 17 13 6 7-13z" fill="#555"/></g>
+      <!-- analog timer, rings -->
+      <g class="iso-part iso-part-d"><ellipse cx="140" cy="139" rx="48" ry="23" fill="#333" stroke="#ddd" stroke-width="2"/><path d="M92 139v-12l48-24 48 24v12" fill="#777" stroke="#ddd"/><ellipse cx="140" cy="127" rx="48" ry="23" fill="#111" stroke="#eee" stroke-width="2"/><ellipse cx="140" cy="127" rx="35" ry="16" fill="#aaa" stroke="#fff"/><path d="M140 127l16-8m-16 8v-11" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="140" cy="127" r="3" fill="#111"/></g>
+      <!-- ink bottle and paper clips -->
+      <g class="iso-part iso-part-e"><path d="M482 285l34-17 30 15-34 17z" fill="#ddd"/><path d="M512 300l34-17v35l-34 17z" fill="#444"/><path d="M482 285l30 15v35l-30-15z" fill="#888"/><path d="M490 286l26-13 18 9-26 13z" fill="#111"/><path d="M530 270c13-10 21 7 7 15-9 5-16-5-8-10 6-4 11 2 6 5" fill="none" stroke="#eee" stroke-width="2"/></g>
+      <g class="iso-part iso-part-f"><path d="M100 288c-18-18 2-33 13-17 10 15-7 27-14 15m23-6c-13-17 4-29 14-13 9 14-4 24-12 15" fill="none" stroke="#ddd" stroke-width="2.5"/></g>
+    </>}
+    {scene === "android" && <>
+      <g class="iso-platform"><path d="M89 332l234-117 231 116-234 118z" fill="#1a1a1a" stroke="#aaa"/><path d="M89 332l231 117v14L89 346z" fill="#080808"/><path d="M320 449l234-118v14L320 463z" fill="#444"/><path d="M89 332l234-117 231 116-234 118z" fill="url(#iso-grid)"/></g>
+      <!-- phone body -->
+      <g class="iso-part iso-part-b">
+        <path d="M224 93l102-51 124 62-102 51z" fill="#eee" stroke="#fff" stroke-width="2"/>
+        <path d="M348 155l102-51v192l-102 51z" fill="#444" stroke="#ddd"/>
+        <path d="M224 93l124 62v192l-124-62z" fill="#999" stroke="#eee"/>
+        <path d="M237 97l89-45 110 55-89 45z" fill="#111" stroke="#aaa"/>
+        <path d="M237 97l110 55v167l-110-55z" fill="#171717"/>
+        <path d="M347 152l89-45v167l-89 45z" fill="#090909"/>
+        <path d="M270 109l57-29 74 37-57 29z" fill="#ddd"/><path d="M327 146l74-37v10l-74 37z" fill="#555"/>
+        <path d="M255 158l72 36m-72-20 72 36m-72-20 72 36" stroke="#eee" stroke-opacity=".7" stroke-width="2"/>
+        <path d="M255 238l46 23 0 24-46-23z" fill="#777" stroke="#eee"/>
+        <circle cx="326" cy="291" r="7" fill="#aaa" stroke="#fff"/>
+        <path d="M237 97l110 55v167" fill="none" stroke="#fff" stroke-opacity=".5"/>
       </g>
-      <g class="iso-drift">
-        <path d="M222 54l12-7 44 22-12 7z" fill="#d6b68e"/>
-        <path d="M222 54l44 22-4 8-44-22z" fill="#a88660"/>
-        <path d="M222 54l-4 8-8 16 12-6z" fill="#e4d1b5"/>
-        <path d="M274 69l8-4-8 12z" fill="#e6d6c0"/>
-      </g>
-      <g class="iso-float delay">
-        <circle cx="72" cy="54" r="22" fill="#c6d5c9" opacity=".9"/>
-        <circle cx="72" cy="54" r="13" fill="#29352e"/>
-        <path d="M72 41v13l9 6" fill="none" stroke="#dce6dc" stroke-width="2.5" stroke-linecap="round"/>
-      </g>
-      <circle class="iso-pulse" cx="258" cy="152" r="5" fill="#d7b994"/>
-    </svg>
-  )}
-  {scene === "android" && (
-    <svg viewBox="0 0 320 230" role="presentation">
-      <ellipse class="iso-shadow" cx="160" cy="194" rx="120" ry="18" fill="#000"/>
-      <polygon points="37,165 159,105 284,166 162,227" fill="#29302d"/>
-      <polygon points="37,165 162,227 162,234 37,172" fill="#171c19"/>
-      <polygon points="162,227 284,166 284,173 162,234" fill="#3b433e"/>
-      <g class="iso-float">
-        <polygon points="103,37 178,0 232,26 157,64" fill="#dce4dc"/>
-        <polygon points="157,64 232,26 232,154 157,192" fill="#68786e"/>
-        <polygon points="103,37 157,64 157,192 103,165" fill="#9eafa2"/>
-        <polygon points="112,41 178,8 222,29 156,62" fill="#1b2420"/>
-        <polygon points="112,41 156,62 156,178 112,157" fill="#26342c"/>
-        <polygon points="156,62 222,29 222,145 156,178" fill="#17201b"/>
-        <polygon points="121,47 178,18 212,34 155,63" fill="#b8c9ba"/>
-        <path d="M136 83l38-19M136 94l52-26M136 105l30-15" stroke="#d7e2d8" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="169" cy="145" r="10" fill="#a8c4ad"/>
-        <circle cx="169" cy="145" r="4" fill="#26342c"/>
-      </g>
-      <g class="iso-float delay">
-        <polygon points="39,87 84,65 117,81 72,104" fill="#d5dfd6"/>
-        <polygon points="72,104 117,81 117,125 72,148" fill="#718176"/>
-        <polygon points="39,87 72,104 72,148 39,131" fill="#9dac9f"/>
-        <path d="M53 91l20 10M53 101l20 10M53 111l20 10" stroke="#34453a" stroke-width="3" stroke-linecap="round"/>
-      </g>
-      <g class="iso-drift">
-        <polygon points="222,95 258,77 287,91 251,109" fill="#d6b995"/>
-        <polygon points="251,109 287,91 287,127 251,145" fill="#8d785f"/>
-        <polygon points="222,95 251,109 251,145 222,131" fill="#b49b7c"/>
-        <circle cx="253" cy="110" r="7" fill="#26342c"/>
-      </g>
-      <path class="iso-pulse" d="M82 39l5-8 5 8 8 5-8 5-5 8-5-8-8-5z" fill="#c7d9ca"/>
-    </svg>
-  )}
+      <!-- detached controller and UI cards -->
+      <g class="iso-part iso-part-c"><path d="M112 212l66-33 65 32-66 33z" fill="#eee" stroke="#fff"/><path d="M177 244l66-33v57l-66 33z" fill="#444" stroke="#aaa"/><path d="M112 212l65 32v57l-65-32z" fill="#888"/><path d="M127 213l50-25 42 21-50 25z" fill="#111"/><path d="M145 215l-7 4 14 7 7-4m15-16 9 5" stroke="#eee" stroke-width="3" fill="none"/></g>
+      <g class="iso-part iso-part-d"><path d="M425 82l57-29 57 28-57 29z" fill="#eee" stroke="#fff"/><path d="M482 110l57-29v46l-57 29z" fill="#444"/><path d="M425 82l57 28v46l-57-28z" fill="#888"/><path d="M439 84l43-22 40 20-43 22z" fill="#151515"/><circle cx="479" cy="83" r="8" fill="#ddd"/><path d="M479 83l0-5m0 5 5 3" stroke="#111" stroke-width="1.5"/></g>
+      <g class="iso-part iso-part-e"><path d="M111 119l40-20 43 21-40 20z" fill="#ddd"/><path d="M154 140l40-20v41l-40 20z" fill="#444"/><path d="M111 119l43 21v41l-43-21z" fill="#888"/><path d="M123 120l28-14 27 13-28 14z" fill="#111"/><path d="M132 125l20 10 18-9" stroke="#eee" stroke-width="2" fill="none"/></g>
+      <!-- network cable and status nodes -->
+      <g fill="none" stroke="#ddd" stroke-width="2"><path d="M397 331c46 35 70 21 74-4s-13-27-28-16"/><path d="M398 340c58 42 89 15 78-18"/></g>
+      <g fill="#eee"><circle cx="487" cy="309" r="4"/><circle cx="499" cy="303" r="2"/><circle cx="510" cy="298" r="2"/></g>
+    </>}
+    <!-- Shared assembly details -->
+    <g fill="none" stroke="#eee" stroke-opacity=".65" stroke-width="1">
+      <path d="M42 390h38m-38-4v8m38-8v8M554 82h34m-34-4v8m34-8v8"/>
+      <path d="M44 95l16-8 16 8-16 8zM568 395l16-8 16 8-16 8z" stroke-dasharray="2 3"/>
+    </g>
+    <g class="iso-progress-mark" fill="#fff"><circle cx="60" cy="95" r="2"/><circle cx="584" cy="395" r="2"/></g>
+  </svg>
 </div>
+<style>
+  .iso-scene{position:relative;isolation:isolate;contain:layout paint;overflow:visible}
+  .iso-scene svg{display:block;width:100%;height:100%;overflow:visible}
+  .iso-scene .iso-part{transform-box:view-box;transform-origin:center;will-change:transform;transition:none}
+  .iso-scene .iso-part-a{transform:translateY(calc((1 - var(--scene-progress,.5))*-28px))}
+  .iso-scene .iso-part-b{transform:translateY(calc((1 - var(--scene-progress,.5))*-56px))}
+  .iso-scene .iso-part-c{transform:translateY(calc((1 - var(--scene-progress,.5))*-84px))}
+  .iso-scene .iso-part-d{transform:translateY(calc((1 - var(--scene-progress,.5))*-112px))}
+  .iso-scene .iso-part-e{transform:translateY(calc((1 - var(--scene-progress,.5))*-140px))}
+  .iso-scene .iso-part-f{transform:translateY(calc((1 - var(--scene-progress,.5))*-168px))}
+  .iso-scene .iso-part-g{transform:translateY(calc((1 - var(--scene-progress,.5))*-196px))}
+  .iso-scene .iso-platform{transform:translateY(calc((1 - var(--scene-progress,.5))*18px));transform-origin:center}
+  @media(prefers-reduced-motion:reduce){.iso-scene .iso-part,.iso-scene .iso-platform{transform:none!important}}
+</style>
