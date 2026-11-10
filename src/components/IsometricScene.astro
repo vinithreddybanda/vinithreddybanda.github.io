@@ -2,107 +2,156 @@
 interface Props { scene?: string; class?: string; }
 const { scene = "hero", class: className = "" } = Astro.props;
 ---
-<div class={`iso-scene ${className}`} aria-hidden="true" data-iso-scene={scene}>
-<svg viewBox="0 0 640 450" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<div class={`iso-scene iso-${scene} ${className}`} aria-hidden="true" data-iso-scene={scene}>
+<svg viewBox="0 0 720 500" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">
 <defs>
- <linearGradient id="top" x2="1" y2="1"><stop stop-color="#f4f4f1"/><stop offset="1" stop-color="#777"/></linearGradient>
- <linearGradient id="face" x2="0" y2="1"><stop stop-color="#777"/><stop offset="1" stop-color="#242424"/></linearGradient>
- <linearGradient id="screen" x2="1" y2="1"><stop stop-color="#d8d8d4"/><stop offset="1" stop-color="#555"/></linearGradient>
- <pattern id={`grain-${scene}`} width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" stroke="#fff" stroke-opacity=".08"/></pattern>
- <filter id={`shadow-${scene}`} x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+ <linearGradient id={`top-${scene}`} x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f2f2ed"/><stop offset="1" stop-color="#858580"/></linearGradient>
+ <linearGradient id={`side-${scene}`} x1="0" y1="0" x2="0" y2="1"><stop stop-color="#666"/><stop offset="1" stop-color="#171717"/></linearGradient>
+ <linearGradient id={`screen-${scene}`} x1="0" y1="0" x2="1" y2="1"><stop stop-color="#262626"/><stop offset="1" stop-color="#050505"/></linearGradient>
+ <pattern id={`grid-${scene}`} width="12" height="12" patternUnits="userSpaceOnUse"><path d="M12 0H0V12" fill="none" stroke="#fff" stroke-opacity=".07"/></pattern>
+ <filter id={`blur-${scene}`} x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="12"/></filter>
 </defs>
-<ellipse cx="320" cy="365" rx="245" ry="28" fill="#000" opacity=".58" filter={`url(#shadow-${scene})`}/>
+<ellipse cx="360" cy="426" rx="300" ry="38" fill="#000" opacity=".56" filter={`url(#blur-${scene})`}/>
 {scene === "hero" && <>
- <!-- A developer's desk: display, keyboard, notebook and a small task board. -->
- <g class="base"><path d="M52 284l266-133 270 135-266 133z" fill="#181818" stroke="#777"/><path d="M52 284l270 135v13L52 297z" fill="#090909"/><path d="M322 419l266-133v13L322 432z" fill="#333"/><path d="M52 284l266-133 270 135-266 133z" fill={`url(#grain-${scene})`}/></g>
- <g class="desk-monitor"><path d="M193 92l133-67 146 73-133 67z" fill="#eee" stroke="#fff"/><path d="M339 165l133-67v113l-133 67z" fill="#333" stroke="#aaa"/><path d="M193 92l146 73v113l-146-73z" fill="#777" stroke="#ddd"/><path d="M207 94l119-60 126 63-119 60z" fill="#111" stroke="#aaa"/><path d="M207 94l126 63v86l-126-63z" fill="#171717"/><path d="M333 157l119-60v86l-119 60z" fill="#090909"/><g class="code-lines" stroke-linecap="round" fill="none"><path d="M229 111l46-23m-46 35 83-42m-83 54 63-32m-63 44 92-47m-92 59 48-24" stroke="#eee" stroke-width="3"/><path d="M348 165l52-26m-52 39 78-39m-78 52 54-27" stroke="#999" stroke-width="2"/></g><path d="M310 280l29 14v18l-29-14z" fill="#aaa"/><path d="M275 312l65-33 64 32-65 33z" fill="#777" stroke="#ddd"/></g>
- <g class="keyboard"><path d="M153 296l111-56 112 56-111 56z" fill="#777" stroke="#ddd"/><path d="M153 296l112 56v13l-112-56z" fill="#444"/><path d="M265 352l111-56v13l-111 56z" fill="#222"/><path d="M169 295l95-48 94 47-95 48z" fill="#171717"/><path d="M184 294l14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24 12 14-7 12 6-14 7zm24 12 14-7 12 6-14 7z" fill="#ddd"/></g>
- <g class="notebook"><path d="M405 300l71-36 76 38-71 36z" fill="#eee" stroke="#fff"/><path d="M481 338l71-36v10l-71 36z" fill="#555"/><path d="M405 300l76 38v10l-76-38z" fill="#888"/><path d="M420 299l56-28 57 28-56 28z" fill="#bbb"/><path d="M430 297l44-22m-38 29 45-23m-36 30 38-19" stroke="#333" stroke-width="2"/></g>
- <g class="desk-lamp"><path d="M105 270l18-9 13 7-18 9z" fill="#777"/><path d="M124 268l17-62 8 2-17 63z" fill="#aaa"/><circle cx="145" cy="205" r="7" fill="#eee"/><path d="M145 205l39-29 7 8-39 29z" fill="#aaa"/><path d="M177 177l23-18 27 14-24 18z" fill="#eee" stroke="#fff"/><path d="M183 180l17-13 16 8-17 13z" fill="#222"/></g>
- <g class="terminal-cursor"><rect x="227" y="137" width="5" height="8" fill="#fff"/></g>
- </>}
-{scene === "clinic" && <>
- <!-- CareSchedule: a cutaway clinic with reception, waiting, provider room and live schedule. -->
- <g class="base"><path d="M38 292l280-140 284 142-282 141z" fill="#1a1a1a" stroke="#777"/><path d="M38 292l282 143v13L38 305z" fill="#080808"/><path d="M320 435l282-141v13L320 448z" fill="#333"/><path d="M38 292l280-140 284 142-282 141z" fill={`url(#grain-${scene})`}/></g>
- <g class="clinic-building"><path d="M113 183l203-102 211 105-204 102z" fill="#eee" stroke="#fff"/><path d="M323 288l204-102v111L323 399z" fill="#444" stroke="#aaa"/><path d="M113 183l210 105v111L113 294z" fill="#777" stroke="#ddd"/><path d="M130 184l186-93 194 97-187 94z" fill="#242424"/><path d="M130 184l194 97v95l-194-97z" fill="#555"/><path d="M324 281l186-93v95l-186 93z" fill="#292929"/>
- <!-- reception window and entry --> <path d="M147 210l77 38v47l-77-38z" fill="#171717" stroke="#ddd"/><path d="M157 218l56 28v25l-56-28z" fill="#999"/><path d="M163 276l67 33-1 18-67-33z" fill="#eee"/><path d="M181 285l31 15v-7l-31-15z" fill="#333"/>
- <!-- exam-room window --> <path d="M359 292l91-46v43l-91 46z" fill="#111" stroke="#ddd"/><path d="M370 294l69-35v26l-69 35z" fill="#777"/><path d="M377 308l54-27" stroke="#eee" stroke-width="2"/>
- <!-- door and cross --> <path d="M263 235l39 20v87l-39-20z" fill="#151515" stroke="#eee"/><path d="M282 245v84" stroke="#888"/><path d="M170 153l27-14 28 14-27 14z" fill="#eee"/><path d="M198 167l27-14v40l-27 14z" fill="#444"/><path d="M170 153l28 14v40l-28-14z" fill="#888"/><path d="M197 151v25m-12-12h24" stroke="#111" stroke-width="6"/>
+ <!-- Developer workstation: a real editor/build/preview cycle, not floating props. -->
+ <g class="platform"><path d="M32 314l320-160 337 168-320 160z" fill="#171717" stroke="#777"/><path d="M32 314l337 168v15L32 329z" fill="#080808"/><path d="M369 482l320-160v15L369 497z" fill="#333"/><path d="M32 314l320-160 337 168-320 160z" fill={`url(#grid-${scene})`}/></g>
+ <g class="monitor">
+  <path d="M194 79l144-72 174 87-144 72z" fill="#eee" stroke="#fff"/><path d="M368 166l144-72v146l-144 72z" fill="#303030" stroke="#999"/><path d="M194 79l174 87v146l-174-87z" fill="#666" stroke="#ddd"/>
+  <path d="M211 82l127-63 150 75-127 63z" fill="#090909" stroke="#aaa"/><path d="M211 82l150 75v110l-150-75z" fill="#141414"/><path d="M361 157l127-63v110l-127 63z" fill="#080808"/>
+  <path d="M228 102l21-11v83l-21 11z" fill="#444"/><path d="M262 101l62-31m-62 44 79-39m-79 52 55-27m-55 40 87-43m-87 56 68-34" fill="none" stroke="#aaa" stroke-width="3" stroke-linecap="round"/>
+  <g class="editor-typing" fill="none" stroke="#f2f2ed" stroke-width="3" stroke-linecap="round"><path d="M264 116l38-19m-38 31 61-30m-61 42 47-23m-47 35 72-36"/></g>
+  <g class="editor-cursor"><rect x="326" y="149" width="4" height="10" fill="#fff"/></g>
+  <path d="M333 313l35 18v18l-35-18z" fill="#aaa"/><path d="M293 353l75-38 76 38-76 38z" fill="#777" stroke="#ddd"/>
  </g>
- <!-- Reception desk, chairs and exam bed are separate, recognisable pieces. -->
- <g class="reception"><path d="M111 310l49-25 52 26-49 26z" fill="#ddd"/><path d="M163 337l49-26v22l-49 26z" fill="#444"/><path d="M111 310l52 27v22l-52-27z" fill="#777"/><path d="M123 307l37-19 37 19-37 19z" fill="#222"/></g>
- <g class="waiting-chair"><path d="M226 335l24-12 28 14-24 12z" fill="#ddd"/><path d="M250 349l24-12v22l-24 12z" fill="#555"/><path d="M226 335l24 14v22l-24-14z" fill="#888"/><path d="M232 321l19-10 23 12-19 10z" fill="#aaa"/></g>
- <g class="exam-bed"><path d="M376 350l58-29 64 32-58 29z" fill="#eee"/><path d="M440 382l58-29v9l-58 29z" fill="#555"/><path d="M376 350l64 32v9l-64-32z" fill="#888"/><path d="M387 348l47-24 43 22-47 24z" fill="#aaa"/><path d="M398 372v18m66-26v18" stroke="#ddd" stroke-width="4"/></g>
- <!-- schedule board: appointment cards travel from request queue into a real provider slot -->
- <g class="schedule-board"><path d="M425 78l94-47 99 49-94 47z" fill="#eee" stroke="#fff"/><path d="M524 127l94-47v94l-94 47z" fill="#444"/><path d="M425 78l99 49v94l-99-49z" fill="#777"/><path d="M438 79l81-40 80 40-81 40z" fill="#151515"/><path d="M448 83l26-13m-26 23 49-25m-49 35 37-19m-37 29 60-31" stroke="#aaa" stroke-width="2"/><g class="calendar-slot"><path d="M467 107l25-13 27 13-25 13z" fill="#eee"/><path d="M494 120l25-13v17l-25 13z" fill="#888"/><path d="M467 107l27 13v17l-27-13z" fill="#bbb"/></g><path d="M538 84l58-29m-58 41 58-29m-58 41 58-29" stroke="#ddd" stroke-width="2"/></g>
- <g class="patient" style="translate:220px 300px"><circle cx="0" cy="-24" r="8" fill="#eee"/><path d="M-8-15l16 0 8 25-24 0z" fill="#aaa" stroke="#eee"/><path d="M-5 9l-5 16m15-16 6 16" stroke="#ddd" stroke-width="4" stroke-linecap="round"/></g>
- </>}
+ <g class="keyboard"><path d="M118 335l104-52 119 60-104 52z" fill="#777" stroke="#ddd"/><path d="M118 335l119 60v13l-119-60z" fill="#444"/><path d="M237 395l104-52v13l-104 52z" fill="#222"/><path d="M136 334l86-43 96 48-86 43z" fill="#111"/><path d="M151 332l13-7 13 7-13 7zm23-11 13-7 13 7-13 7zm23-11 13-7 13 7-13 7zm23-11 13-7 13 7-13 7zm24 12 13-7 13 7-13 7zm23 11 13-7 13 7-13 7zm-91 25 13-7 13 7-13 7zm24-12 13-7 13 7-13 7zm24-12 13-7 13 7-13 7z" fill="#ddd"/></g>
+ <g class="terminal"><path d="M413 323l93-47 111 56-93 47z" fill="#eee"/><path d="M524 379l93-47v31l-93 47z" fill="#444"/><path d="M413 323l111 56v31l-111-56z" fill="#777"/><path d="M430 323l75-38 76 38-75 38z" fill="#090909"/><path d="M446 323l28-14m-28 24 47-24m-47 34 36-18" stroke="#ddd" stroke-width="2" stroke-linecap="round"/><path d="M494 316l25-13" stroke="#999" stroke-width="2"/></g>
+ <g class="build-progress"><path d="M454 344l40-20" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="40" stroke-dashoffset="40"/></g>
+ <g class="preview-window"><path d="M516 128l68-34 79 40-68 34z" fill="#eee"/><path d="M595 168l68-34v91l-68 34z" fill="#444"/><path d="M516 128l79 40v91l-79-40z" fill="#777"/><path d="M526 129l58-29 59 30-58 29z" fill="#111"/><path d="M538 132l35-18m-35 27 44-22" stroke="#ddd" stroke-width="2"/><path d="M544 172l25-13 29 14-25 13z" fill="#ddd"/><path d="M569 186l25-13v27l-25 13z" fill="#777"/><path d="M544 172l25 14v27l-25-14z" fill="#aaa"/></g>
+ <g class="desk-lamp"><path d="M75 294l20-10 20 10-20 10z" fill="#777"/><path d="M93 291l22-67 8 3-22 67z" fill="#aaa"/><circle cx="119" cy="225" r="7" fill="#eee"/><path d="M119 225l36-27 8 9-36 27z" fill="#aaa"/><path d="M151 199l22-15 27 14-22 16z" fill="#eee"/><path d="M157 199l16-10 17 9-16 10z" fill="#222"/></g>
+</>}
+{scene === "clinic" && <>
+ <!-- CareSchedule: clinic floorplan plus the appointment constraint engine. -->
+ <g class="clinic-floor"><path d="M20 324l326-163 354 177-328 164z" fill="#181818" stroke="#888"/><path d="M20 324l352 178v-16L20 308z" fill="#080808"/><path d="M372 502l328-164v-16L372 486z" fill="#333"/><path d="M20 324l326-163 354 177-328 164z" fill={`url(#grid-${scene})`}/></g>
+ <!-- Two clinic wings, exposed rooms and an open circulation corridor. -->
+ <g class="clinic-shell">
+  <path d="M76 210l244-122 270 135-244 122z" fill="#eee" stroke="#fff"/><path d="M346 345l244-122v115L346 460z" fill="#444" stroke="#aaa"/><path d="M76 210l270 135v115L76 325z" fill="#777" stroke="#ddd"/>
+  <path d="M96 209l224-112 246 123-224 112z" fill="#222"/><path d="M96 209l246 123v91L96 300z" fill="#555"/><path d="M342 332l224-112v91L342 423z" fill="#292929"/>
+  <path d="M115 222l90 45v55l-90-45z" fill="#111" stroke="#ddd"/><path d="M128 229l63 32v35l-63-32z" fill="#777"/><path d="M367 348l101-51v-51l-101 51z" fill="#111" stroke="#ddd"/><path d="M381 341l73-37v-27l-73 37z" fill="#777"/>
+  <path d="M260 290l45 22v95l-45-22z" fill="#111" stroke="#eee"/><path d="M281 300v95" stroke="#777" stroke-width="2"/>
+  <path d="M144 178l27-14 29 15-28 14z" fill="#eee"/><path d="M172 193l28-14v42l-28 14z" fill="#444"/><path d="M144 178l28 15v42l-28-15z" fill="#888"/><path d="M172 177v25m-12-13h24" stroke="#111" stroke-width="6"/>
+ </g>
+ <!-- Reception station -->
+ <g class="reception-desk"><path d="M85 335l63-32 69 35-63 32z" fill="#eee"/><path d="M154 370l63-32v30l-63 32z" fill="#444"/><path d="M85 335l69 35v30l-69-35z" fill="#777"/><path d="M100 334l48-24 48 24-48 24z" fill="#171717"/><path d="M111 332l34-17" stroke="#ddd" stroke-width="2"/></g>
+ <!-- Waiting seats -->
+ <g class="waiting-row"><path d="M230 367l28-14 31 16-28 14z" fill="#ddd"/><path d="M261 383l28-14v22l-28 14z" fill="#555"/><path d="M230 367l31 16v22l-31-16z" fill="#888"/><path d="M278 343l28-14 31 16-28 14z" fill="#ddd"/><path d="M309 359l28-14v22l-28 14z" fill="#555"/><path d="M278 343l31 16v22l-31-16z" fill="#888"/></g>
+ <!-- Examination couch, monitor and instrument trolley -->
+ <g class="exam-room"><path d="M402 385l67-34 72 36-67 34z" fill="#eee"/><path d="M474 421l67-34v12l-67 34z" fill="#444"/><path d="M402 385l72 36v12l-72-36z" fill="#777"/><path d="M415 383l54-27 53 27-54 27z" fill="#aaa"/><path d="M421 417v22m76-38v22" stroke="#ddd" stroke-width="5"/><path d="M500 324l36-18 39 20-36 18z" fill="#eee"/><path d="M539 344l36-18v41l-36 18z" fill="#444"/><path d="M500 324l39 20v41l-39-20z" fill="#777"/><path d="M510 326l26-13 26 13-26 13z" fill="#111"/><path d="M518 327l15-8m-15 15 21-11" stroke="#eee" stroke-width="2"/></g>
+ <!-- Appointment operations console: provider availability, leave, holidays, rooms. -->
+ <g class="scheduler-console"><path d="M415 64l118-59 132 66-118 59z" fill="#eee" stroke="#fff"/><path d="M547 130l118-59v111l-118 59z" fill="#444"/><path d="M415 64l132 66v111l-132-66z" fill="#777"/><path d="M430 65l103-52 111 56-103 52z" fill="#101010"/><path d="M444 69l34-17m-34 27 54-27m-54 37 36-18" stroke="#aaa" stroke-width="2"/><path d="M493 80l35-18 36 18-35 18z" fill="#777"/><path d="M529 98l35-18v29l-35 18z" fill="#333"/><path d="M493 80l36 18v29l-36-18z" fill="#aaa"/><path d="M580 82l47-24m-47 35 47-24m-47 35 47-24" stroke="#ddd" stroke-width="2"/></g>
+ <!-- Provider calendar: three columns, blocked leave/holiday slots and a free room slot. -->
+ <g class="calendar-board"><path d="M430 230l95-48 105 52-95 48z" fill="#eee"/><path d="M535 282l95-48v72l-95 48z" fill="#444"/><path d="M430 230l105 52v72l-105-52z" fill="#777"/><path d="M443 230l82-41 82 41-82 41z" fill="#111"/><path d="M452 233l25-13m-25 22 39-20m-39 29 25-13" stroke="#ddd" stroke-width="2"/><g fill="#999"><path d="M462 260l15-8 15 8-15 8z"/><path d="M498 278l15-8 15 8-15 8z"/><path d="M534 260l15-8 15 8-15 8z"/></g><g class="blocked-slots" fill="#222" stroke="#aaa"><path d="M462 280l15-8 15 8-15 8z"/><path d="M498 298l15-8 15 8-15 8z"/></g><g class="free-slot"><path d="M534 296l15-8 15 8-15 8z" fill="#fff"/><path d="M549 304l15-8v17l-15 8z" fill="#888"/><path d="M534 296l15 8v17l-15-8z" fill="#bbb"/></g></g>
+ <!-- Request queue and confirmed appointment ticket -->
+ <g class="request-ticket"><path d="M71 115l48-24 54 27-48 24z" fill="#eee"/><path d="M125 142l48-24v60l-48 24z" fill="#555"/><path d="M71 115l54 27v60l-54-27z" fill="#888"/><path d="M82 115l37-19 38 19-37 19z" fill="#111"/><path d="M91 116l25-13m-25 22 31-16" stroke="#ddd" stroke-width="2"/></g>
+ <g class="booking-confirm"><path d="M100 259l35-18 39 19-35 18z" fill="#eee"/><path d="M139 278l35-18v42l-35 18z" fill="#555"/><path d="M100 259l39 19v42l-39-19z" fill="#888"/><path d="M110 259l25-13 26 13-25 13z" fill="#111"/><path d="M117 260l18-9m-18 17 22-11" stroke="#ddd" stroke-width="2"/></g>
+ <!-- A patient is seated in the waiting area; check-in indicator responds to booking. -->
+ <g class="patient-seat"><circle cx="0" cy="-22" r="8" fill="#eee"/><path d="M-9-13h18l8 24h-34z" fill="#aaa" stroke="#eee"/><path d="M-5 10l-2 12m13-12 4 12" stroke="#ddd" stroke-width="4" stroke-linecap="round"/></g>
+ <g class="checkin-light"><circle cx="154" cy="301" r="5" fill="#fff"/><circle cx="154" cy="301" r="11" fill="none" stroke="#fff" stroke-opacity=".5"/></g>
+</>}
 {scene === "journal" && <>
- <!-- JournalAI: private writing becomes a mood signal and a compact insight, not a generic AI orb. -->
- <g class="base"><path d="M40 294l278-139 282 141-280 140z" fill="#1a1a1a" stroke="#777"/><path d="M40 294l280 142v13L40 307z" fill="#090909"/><path d="M320 436l280-140v13L320 449z" fill="#333"/><path d="M40 294l278-139 282 141-280 140z" fill={`url(#grain-${scene})`}/></g>
- <g class="journal-book"><path d="M93 248l170-85 164 82-170 85z" fill="#777" stroke="#eee"/><path d="M257 330l170-85v13l-170 85z" fill="#444"/><path d="M93 248l164 82v13L93 261z" fill="#555"/><path d="M107 245l156-78 147 73-156 78z" fill="#eee" stroke="#fff"/><path d="M263 318l147-78v10l-147 78z" fill="#aaa"/><path d="M107 245l156 73v10l-156-73z" fill="#bbb"/><path d="M263 170v148" stroke="#777" stroke-width="2"/><g class="handwriting" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"><path d="M128 231l68 32m-61-43 51 24m-43-36 59 28m-52-39 38 18"/><path d="M281 210l94 46m-87-59 75 37m-67-48 82 41"/></g><path d="M133 266l83 39m-74-26 54 25m99 20 88-44" stroke="#777" stroke-width="1.4"/></g>
- <g class="pen"><path d="M183 112l13-7 99 50-13 7z" fill="#eee" stroke="#fff"/><path d="M282 162l13-7-7 17-10 4z" fill="#555"/><path d="M183 112l99 50-8 11-99-50z" fill="#888"/><path d="M190 109l8-4 98 49-8 4z" fill="#fff"/><path d="M281 167l7-3-3 9-6 3z" fill="#ddd"/></g>
- <!-- Private entry cards flow into local analysis, then an insight chart. -->
- <g class="entry-stack"><path d="M385 119l67-34 70 35-67 35z" fill="#eee"/><path d="M455 155l67-35v54l-67 35z" fill="#555"/><path d="M385 119l70 36v54l-70-36z" fill="#888"/><path d="M400 119l52-26 51 26-52 26z" fill="#171717"/><path d="M410 119l31-16m-27 24 40-20" stroke="#ddd" stroke-width="2"/></g>
- <g class="insight-panel"><path d="M414 258l83-42 91 45-83 42z" fill="#eee" stroke="#fff"/><path d="M505 303l83-42v55l-83 42z" fill="#444"/><path d="M414 258l91 45v55l-91-45z" fill="#777"/><path d="M428 258l69-35 69 34-69 35z" fill="#151515"/><path d="M442 274l16-8 13 6 14-19 14 7 17-17 20 10" fill="none" stroke="#eee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M442 283h98m-98 8h70" stroke="#888" stroke-width="1.5"/></g>
- <g class="analysis-pulse"><circle cx="343" cy="180" r="7" fill="#eee"/><circle cx="343" cy="180" r="17" fill="none" stroke="#ddd" stroke-opacity=".5"/></g>
- <g class="mood-marker"><path d="M474 202l8-4 8 4-8 4z" fill="#fff"/><path d="M482 206l8-4v12l-8 4z" fill="#555"/><path d="M474 202l8 4v12l-8-4z" fill="#999"/></g>
- </>}
+ <!-- JournalAI: a real writing-to-insight sequence, with privacy as part of the visual story. -->
+ <g class="journal-platform"><path d="M20 326l324-162 354 177-326 163z" fill="#181818" stroke="#888"/><path d="M20 326l352 178v-16L20 310z" fill="#080808"/><path d="M372 504l326-163v-16L372 488z" fill="#333"/><path d="M20 326l324-162 354 177-326 163z" fill={`url(#grid-${scene})`}/></g>
+ <!-- Open physical journal with page depth, binding, ruled paper and handwriting. -->
+ <g class="open-journal"><path d="M65 262l163-82 176 88-163 82z" fill="#555" stroke="#ddd"/><path d="M241 350l163-82v16l-163 82z" fill="#333"/><path d="M65 262l176 88v16L65 278z" fill="#777"/><path d="M80 257l148-74 151 75-149 75z" fill="#eee" stroke="#fff"/><path d="M228 333l151-75v12l-151 75z" fill="#aaa"/><path d="M80 257l148 76v12L80 269z" fill="#bbb"/><path d="M228 185v148" stroke="#777" stroke-width="3"/><path d="M100 245l104 53m-104-40 104 53m-104-40 104 53m44-99 105 53m-105-40 105 53m-105-40 105 53" stroke="#999" stroke-width="1.3" opacity=".65"/><g class="ink-writing" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round"><path d="M103 225l20 10 12-8 15 18 16-8 18 17m-76-9 24 12 13-7 20 18 18-9m63-53 17 10 14-7 16 16 16-8 18 17m-81 1 23 11 12-6 21 16 18-9"/></g></g>
+ <!-- Stylus physically writes across the page. -->
+ <g class="journal-pen"><path d="M145 104l14-7 114 57-14 8z" fill="#eee" stroke="#fff"/><path d="M259 162l14-8-8 20-10 4z" fill="#555"/><path d="M145 104l114 58-8 12-114-58z" fill="#888"/><path d="M151 101l9-4 113 56-9 5z" fill="#fff"/><path d="M255 168l10-5-4 13-8 4z" fill="#ddd"/></g>
+ <!-- Privacy lock seals the entry before it enters the insight pipeline. -->
+ <g class="privacy-card"><path d="M366 112l78-39 88 44-78 39z" fill="#eee"/><path d="M454 156l78-39v62l-78 39z" fill="#444"/><path d="M366 112l88 44v62l-88-44z" fill="#777"/><path d="M383 111l61-31 62 31-61 31z" fill="#111"/><path d="M424 116v-8a10 10 0 0 1 20 0v8" fill="none" stroke="#eee" stroke-width="3"/><rect x="420" y="114" width="28" height="21" rx="3" fill="#ddd"/><circle cx="434" cy="124" r="3" fill="#333"/><path d="M434 126v5" stroke="#333" stroke-width="2"/></g>
+ <!-- Insight engine: written entry is structured into emotional dimensions, then plotted over time. -->
+ <g class="insight-engine"><path d="M306 259l83-42 92 46-83 42z" fill="#eee"/><path d="M398 305l83-42v61l-83 42z" fill="#444"/><path d="M306 259l92 46v61l-92-46z" fill="#777"/><path d="M321 260l68-34 68 34-68 34z" fill="#111"/><path d="M335 259l34-17m-34 27 47-24m-47 34 31-16" stroke="#ddd" stroke-width="2"/><g class="analysis-bars"><path d="M344 284v-8m19 8v-15m19 15v-23m19 23v-12" stroke="#eee" stroke-width="6" stroke-linecap="round"/></g></g>
+ <g class="mood-chart"><path d="M472 329l87-44 98 49-87 44z" fill="#eee"/><path d="M570 378l87-44v57l-87 44z" fill="#444"/><path d="M472 329l98 49v57l-98-49z" fill="#777"/><path d="M486 330l73-37 72 36-73 37z" fill="#111"/><path class="mood-line" d="M500 346l17-8 15 5 16-20 15 9 18-14 22 9" fill="none" stroke="#eee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M500 355h87m-87 8h57" stroke="#777" stroke-width="1.5"/></g>
+ <g class="insight-note"><path d="M526 205l48-24 53 27-48 24z" fill="#eee"/><path d="M579 232l48-24v34l-48 24z" fill="#555"/><path d="M526 205l53 27v34l-53-27z" fill="#888"/><path d="M537 205l37-19 38 19-37 19z" fill="#111"/><path d="M546 205l23-12m-23 21 29-15" stroke="#ddd" stroke-width="2"/></g>
+</>}
 {scene === "android" && <>
- <!-- Android Discord presence: handset controls a desktop client through a JNI/native bridge. -->
- <g class="base"><path d="M36 293l282-141 285 143-283 142z" fill="#1a1a1a" stroke="#777"/><path d="M36 293l284 144v13L36 306z" fill="#090909"/><path d="M320 437l283-142v13L320 450z" fill="#333"/><path d="M36 293l282-141 285 143-283 142z" fill={`url(#grain-${scene})`}/></g>
- <!-- Desktop client -->
- <g class="desktop"><path d="M290 102l137-69 154 77-137 69z" fill="#eee" stroke="#fff"/><path d="M444 179l137-69v118l-137 69z" fill="#333" stroke="#aaa"/><path d="M290 102l154 77v118l-154-77z" fill="#777" stroke="#ddd"/><path d="M305 104l122-61 135 67-122 61z" fill="#111" stroke="#aaa"/><path d="M305 104l135 67v91l-135-67z" fill="#171717"/><path d="M440 171l122-61v91l-122 61z" fill="#090909"/><path d="M321 120l21-11 0 68-21 11z" fill="#777"/><path d="M355 116l75 37m-75-23 75 37m-75-23 75 37" stroke="#aaa" stroke-width="2"/><circle cx="367" cy="133" r="8" fill="#eee"/><path d="M355 204l68 34 43-22-68-34z" fill="#555"/><path d="M421 271l23-12v17l-23 12z" fill="#aaa"/></g>
- <!-- Android handset -->
- <g class="handset"><path d="M104 157l83-42 97 49-83 42z" fill="#eee" stroke="#fff"/><path d="M201 206l83-42v144l-83 42z" fill="#333" stroke="#aaa"/><path d="M104 157l97 49v144l-97-49z" fill="#777" stroke="#ddd"/><path d="M115 159l72-36 82 41-72 36z" fill="#111"/><path d="M115 159l82 41v120l-82-41z" fill="#151515"/><path d="M197 200l72-36v120l-72 36z" fill="#090909"/><path d="M129 175l45 23m-45-11 45 23m-45-11 45 23" stroke="#ddd" stroke-width="2"/><circle cx="170" cy="275" r="7" fill="#aaa" stroke="#fff"/><path d="M134 150l28-14 31 15-28 14z" fill="#555"/><path d="M146 150l16-8 17 8-16 8z" fill="#eee"/></g>
- <!-- Native bridge: distinct paired endpoints and a cable path, with data packets travelling both ways. -->
- <g class="bridge"><path d="M232 291c42 45 69 51 108 22s60-32 95-1" fill="none" stroke="#aaa" stroke-width="4"/><path d="M232 291c42 45 69 51 108 22s60-32 95-1" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="5 6"/></g>
- <g class="packet packet-a"><circle r="5" fill="#fff"/><circle r="10" fill="none" stroke="#eee" stroke-opacity=".6"/></g>
- <g class="packet packet-b"><circle r="4" fill="#aaa"/><circle r="8" fill="none" stroke="#ddd" stroke-opacity=".5"/></g>
- <!-- Status activity card on desktop -->
- <g class="presence-card"><path d="M457 297l61-31 67 34-61 31z" fill="#eee"/><path d="M524 331l61-31v35l-61 31z" fill="#555"/><path d="M457 297l67 34v35l-67-34z" fill="#888"/><circle cx="489" cy="300" r="7" fill="#222" stroke="#fff"/><path d="M505 303l34-17m-34 27 44-22" stroke="#222" stroke-width="2"/></g>
- </>}
+ <!-- Activities for Discord: Android control -> JNI bridge -> persistent Partner SDK -> desktop Rich Presence. -->
+ <g class="android-platform"><path d="M20 326l324-162 354 177-326 163z" fill="#181818" stroke="#888"/><path d="M20 326l352 178v-16L20 310z" fill="#080808"/><path d="M372 504l326-163v-16L372 488z" fill="#333"/><path d="M20 326l324-162 354 177-326 163z" fill={`url(#grid-${scene})`}/></g>
+ <!-- Android phone: detailed app screen with presence controls and encrypted session. -->
+ <g class="android-phone"><path d="M73 165l91-46 111 56-91 46z" fill="#eee" stroke="#fff"/><path d="M184 221l91-46v166l-91 46z" fill="#333" stroke="#aaa"/><path d="M73 165l111 56v166L73 331z" fill="#777" stroke="#ddd"/><path d="M87 166l76-38 94 47-76 38z" fill="#090909"/><path d="M87 166l94 47v137l-94-47z" fill="#111"/><path d="M181 213l76-38v137l-76 38z" fill="#080808"/><path d="M105 183l54 27m-54-14 54 27m-54-14 54 27" stroke="#888" stroke-width="2"/><g class="presence-toggle"><path d="M115 246l30-15 34 17-30 15z" fill="#eee"/><path d="M149 263l30-15v13l-30 15z" fill="#777"/><path d="M115 246l34 17v13l-34-17z" fill="#aaa"/><circle cx="160" cy="254" r="5" fill="#111"/></g><path d="M105 293l58 29m-58-15 58 29" stroke="#aaa" stroke-width="2"/><circle cx="166" cy="319" r="7" fill="#eee"/></g>
+ <!-- JNI/native integration board: Java call enters JNI, crosses native C++ adapter and reaches SDK session. -->
+ <g class="jni-board"><path d="M274 305l110-55 120 60-110 55z" fill="#777" stroke="#ddd"/><path d="M394 365l110-55v35l-110 55z" fill="#333"/><path d="M274 305l120 60v35l-120-60z" fill="#555"/><path d="M289 304l95-48 95 48-95 48z" fill="#111"/><path d="M307 304l31-16 31 16-31 16z" fill="#eee"/><path d="M338 320l31-16v22l-31 16z" fill="#777"/><path d="M307 304l31 16v22l-31-16z" fill="#aaa"/><path d="M373 294l26-13 27 13-26 13z" fill="#888"/><path d="M400 307l26-13v22l-26 13z" fill="#444"/><path d="M373 294l27 13v22l-27-13z" fill="#bbb"/><path d="M322 342l16-8m-16 17 38-19m-38 28 25-13" stroke="#ddd" stroke-width="2"/><path d="M443 331l30-15" stroke="#eee" stroke-width="3"/></g>
+ <!-- Persistent SDK session tile -->
+ <g class="sdk-session"><path d="M391 128l84-42 94 47-84 42z" fill="#eee"/><path d="M485 175l84-42v71l-84 42z" fill="#444"/><path d="M391 128l94 47v71l-94-47z" fill="#777"/><path d="M407 128l68-34 68 34-68 34z" fill="#111"/><circle cx="435" cy="128" r="6" fill="#eee"/><path d="M450 128h67m-67 10h47" stroke="#aaa" stroke-width="2"/></g>
+ <!-- Desktop Discord client with Rich Presence card. -->
+ <g class="discord-desktop"><path d="M428 62l114-57 135 68-114 57z" fill="#eee" stroke="#fff"/><path d="M563 130l114-57v145l-114 57z" fill="#333" stroke="#aaa"/><path d="M428 62l135 68v145L428 207z" fill="#777" stroke="#ddd"/><path d="M444 64l98-49 104 52-99 49z" fill="#090909"/><path d="M444 64l103 52v110L444 174z" fill="#111"/><path d="M547 116l99-49v110l-99 49z" fill="#080808"/><path d="M459 83l48 24m-48-11 48 24m-48-11 48 24" stroke="#888" stroke-width="2"/><g class="rich-presence"><path d="M468 185l65-33 72 36-65 33z" fill="#eee"/><path d="M540 221l65-33v44l-65 33z" fill="#555"/><path d="M468 185l72 36v44l-72-36z" fill="#888"/><path d="M481 185l52-26 52 26-52 26z" fill="#111"/><circle cx="500" cy="185" r="7" fill="#eee"/><path d="M515 186l38-19m-38 28 46-23" stroke="#ddd" stroke-width="2"/></g></g>
+ <!-- Bidirectional, sequenced packets follow actual connection path, not orbiting decoration. -->
+ <path d="M219 301C254 347 292 354 330 334S390 294 432 307" fill="none" stroke="#777" stroke-width="5" stroke-linecap="round"/><path d="M219 301C254 347 292 354 330 334S390 294 432 307" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="5 7"/>
+ <g class="packet-forward"><circle r="6" fill="#fff"/><circle r="11" fill="none" stroke="#eee" stroke-opacity=".55"/></g>
+ <g class="packet-return"><circle r="5" fill="#aaa"/><circle r="9" fill="none" stroke="#ddd" stroke-opacity=".55"/></g>
+ <g class="credential-vault"><path d="M83 369l44-22 50 25-44 22z" fill="#eee"/><path d="M133 394l44-22v32l-44 22z" fill="#555"/><path d="M83 369l50 25v32l-50-25z" fill="#888"/><path d="M111 373v-8a9 9 0 0 1 18 0v8" fill="none" stroke="#222" stroke-width="3"/><rect x="106" y="371" width="28" height="22" rx="3" fill="#ddd"/><circle cx="120" cy="380" r="3" fill="#222"/></g>
+</>}
 </svg>
 </div>
 <style>
-.iso-scene{position:relative;width:100%;height:100%;overflow:visible;isolation:isolate;contain:layout paint}
+.iso-scene{position:relative;width:100%;height:100%;overflow:visible;isolation:isolate}
 .iso-scene svg{display:block;width:100%;height:100%;overflow:visible}
-.base{transform-origin:center}
-.desk-monitor{transform-origin:333px 157px}
-.code-lines{animation:code-refresh 5s steps(5,end) infinite}
-.terminal-cursor{animation:cursor-blink 1.05s steps(2,start) infinite}
-.keyboard{animation:keyboard-tap 4.8s ease-in-out infinite}
-.desk-lamp{transform-origin:145px 205px;animation:lamp-adjust 9s ease-in-out infinite alternate}
-.calendar-slot{animation:slot-shift 8s cubic-bezier(.45,0,.2,1) infinite alternate}
-.patient{animation:patient-route 11s cubic-bezier(.4,0,.2,1) infinite}
+.iso-scene .platform,.iso-scene .clinic-floor,.iso-scene .journal-platform,.iso-scene .android-platform{transform-origin:center}
+.iso-hero .editor-typing{stroke-dasharray:160;animation:typing 4.8s steps(12,end) infinite}
+.iso-hero .editor-cursor{animation:cursor 1s steps(2,end) infinite}
+.iso-hero .keyboard{transform-origin:235px 360px;animation:key-press 4.8s ease-in-out infinite}
+.iso-hero .build-progress path{animation:compile 4.8s ease-in-out infinite}
+.iso-hero .preview-window{transform-origin:590px 175px;animation:preview-refresh 4.8s ease-in-out infinite}
+.iso-hero .desk-lamp{transform-origin:119px 225px;animation:lamp-sweep 9s ease-in-out infinite alternate}
+@keyframes typing{0%,10%{stroke-dashoffset:160}58%,78%{stroke-dashoffset:0}100%{stroke-dashoffset:160}}
+@keyframes cursor{0%,48%{opacity:1}50%,100%{opacity:0}}
+@keyframes key-press{0%,18%,100%{transform:translateY(0)}23%,28%{transform:translateY(3px)}34%,39%{transform:translateY(0)}44%,49%{transform:translateY(2px)}}
+@keyframes compile{0%,45%{stroke-dashoffset:40;opacity:.3}68%,88%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:40;opacity:.3}}
+@keyframes preview-refresh{0%,48%{opacity:.45;transform:translateY(5px)}66%,90%{opacity:1;transform:translateY(0)}100%{opacity:.45;transform:translateY(5px)}}
+@keyframes lamp-sweep{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
 
-.waiting-chair{animation:chair-rock 6s ease-in-out infinite alternate}
-.handwriting{stroke-dasharray:none}
-.pen{transform-origin:280px 160px;animation:pen-write 7s ease-in-out infinite alternate}
-.entry-stack{animation:entry-lift 8s ease-in-out infinite alternate}
-.analysis-pulse{animation:analysis-breathe 3.8s ease-in-out infinite}
-.mood-marker{animation:mood-rise 8s ease-in-out infinite alternate}
-.insight-panel{animation:insight-tilt 8s ease-in-out infinite alternate}
-.packet{offset-path:path("M232 291 C274 336 301 342 340 313 S400 281 435 312");offset-rotate:0deg;animation:packet-travel 3.4s linear infinite}
-.packet-b{animation-delay:-1.7s;animation-direction:reverse}
-.handset{animation:handset-tap 5.2s ease-in-out infinite}
-.presence-card{animation:presence-sync 5.2s ease-in-out infinite}
-@keyframes code-refresh{0%,12%{opacity:.5}40%,75%{opacity:1}100%{opacity:.5}}
-@keyframes cursor-blink{50%{opacity:0}}
-@keyframes keyboard-tap{0%,100%{transform:translateY(0)}48%,54%{transform:translateY(2px)}}
-@keyframes lamp-adjust{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
-@keyframes slot-shift{0%{transform:translate(0,0)}100%{transform:translate(19px,-10px)}}
-@keyframes patient-route{0%,100%{translate:220px 300px}50%{translate:286px 267px}}
+/* CareSchedule: request -> constraint checks -> provider slot -> confirmation -> check-in. */
+.iso-clinic .request-ticket{transform-box:fill-box;transform-origin:center;animation:request-route 12s cubic-bezier(.45,0,.2,1) infinite}
+.iso-clinic .blocked-slots{animation:constraint-check 12s steps(1,end) infinite}
+.iso-clinic .free-slot{animation:slot-book 12s steps(1,end) infinite}
+.iso-clinic .booking-confirm{animation:confirmation-print 12s cubic-bezier(.3,0,.2,1) infinite}
+.iso-clinic .checkin-light{animation:checkin 12s steps(1,end) infinite}
+.iso-clinic .patient-seat{transform:translate(266px,365px)}
+.iso-clinic .clinic-shell{transform-origin:360px 280px}
+.iso-clinic .exam-room{animation:room-activity 12s ease-in-out infinite}
+@keyframes request-route{0%,8%{transform:translate(0,0);opacity:1}24%,35%{transform:translate(385px,115px);opacity:1}44%,100%{transform:translate(385px,115px);opacity:0}}
+@keyframes constraint-check{0%,20%{opacity:.4}22%,42%{opacity:1}48%,100%{opacity:.4}}
+@keyframes slot-book{0%,36%{opacity:.15}42%,75%{opacity:1}82%,100%{opacity:.15}}
+@keyframes confirmation-print{0%,48%{transform:translate(0,0);opacity:0}55%{opacity:1}75%{transform:translate(280px,75px);opacity:1}86%,100%{transform:translate(280px,75px);opacity:0}}
+@keyframes checkin{0%,72%{opacity:.15}78%,91%{opacity:1}100%{opacity:.15}}
+@keyframes room-activity{0%,70%,100%{filter:brightness(1)}80%,90%{filter:brightness(1.22)}}
 
-@keyframes chair-rock{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+/* JournalAI: write -> secure -> analyse -> add to longitudinal mood pattern -> insight. */
+.iso-journal .journal-pen{transform-box:fill-box;transform-origin:90% 90%;animation:journal-write 8s cubic-bezier(.45,0,.2,1) infinite}
+.iso-journal .ink-writing{stroke-dasharray:330;stroke-dashoffset:330;animation:ink-reveal 8s ease-in-out infinite}
+.iso-journal .privacy-card{animation:privacy-seal 8s ease-in-out infinite}
+.iso-journal .analysis-bars{animation:bar-analysis 8s ease-in-out infinite}
+.iso-journal .mood-line{stroke-dasharray:190;stroke-dashoffset:190;animation:mood-draw 8s ease-in-out infinite}
+.iso-journal .insight-note{animation:insight-deliver 8s ease-in-out infinite}
+.iso-journal .insight-engine{animation:engine-process 8s ease-in-out infinite}
+@keyframes journal-write{0%,7%{transform:translate(0,0) rotate(0)}36%,45%{transform:translate(54px,28px) rotate(1deg)}52%,100%{transform:translate(0,0) rotate(0)}}
+@keyframes ink-reveal{0%,8%{stroke-dashoffset:330}43%,66%{stroke-dashoffset:0}82%,100%{stroke-dashoffset:330}}
+@keyframes privacy-seal{0%,43%{opacity:.45;transform:translateY(0)}55%,80%{opacity:1;transform:translateY(-5px)}100%{opacity:.45;transform:translateY(0)}}
+@keyframes bar-analysis{0%,49%{opacity:.15;transform:scaleY(.2)}64%,84%{opacity:1;transform:scaleY(1)}100%{opacity:.15;transform:scaleY(.2)}}
+@keyframes mood-draw{0%,58%{stroke-dashoffset:190}82%,94%{stroke-dashoffset:0}100%{stroke-dashoffset:190}}
+@keyframes insight-deliver{0%,72%{opacity:0;transform:translate(-10px,10px)}83%,94%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(10px,-10px)}}
+@keyframes engine-process{0%,46%{filter:brightness(.8)}62%,82%{filter:brightness(1.35)}100%{filter:brightness(.8)}}
 
-@keyframes pen-write{from{transform:translate(0,0) rotate(-2deg)}to{transform:translate(17px,-9px) rotate(2deg)}}
-@keyframes entry-lift{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-@keyframes analysis-breathe{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
-@keyframes mood-rise{from{transform:translateY(12px)}to{transform:translateY(-12px)}}
-@keyframes insight-tilt{from{transform:translateY(0)}to{transform:translateY(-7px)}}
-@keyframes packet-travel{0%{offset-distance:0%;opacity:0}8%,90%{opacity:1}100%{offset-distance:100%;opacity:0}}
-@keyframes handset-tap{0%,40%,100%{transform:translateY(0)}48%,54%{transform:translateY(-3px)}}
-@keyframes presence-sync{0%,38%,100%{opacity:.7}48%,72%{opacity:1;filter:brightness(1.35)}}
-@media(prefers-reduced-motion:reduce){.iso-scene [class]{animation:none!important}}
+/* Activities for Discord: Android control -> JNI -> SDK session -> desktop Rich Presence. */
+.iso-android .presence-toggle{transform-origin:150px 255px;animation:toggle-press 6.4s ease-in-out infinite}
+.iso-android .packet-forward{offset-path:path("M219 301 C254 347 292 354 330 334 S390 294 432 307");offset-rotate:0deg;animation:packet-out 6.4s linear infinite}
+.iso-android .packet-return{offset-path:path("M432 307 C390 294 330 334 292 354 S254 347 219 301");offset-rotate:0deg;animation:packet-back 6.4s linear infinite}
+.iso-android .sdk-session{animation:sdk-handshake 6.4s ease-in-out infinite}
+.iso-android .rich-presence{animation:presence-update 6.4s steps(1,end) infinite}
+.iso-android .credential-vault{animation:vault-secure 6.4s ease-in-out infinite}
+@keyframes toggle-press{0%,10%,100%{transform:translateY(0)}14%,18%{transform:translateY(3px)}22%{transform:translateY(0)}}
+@keyframes packet-out{0%,18%{offset-distance:0%;opacity:0}22%{opacity:1}52%{offset-distance:100%;opacity:1}57%,100%{offset-distance:100%;opacity:0}}
+@keyframes packet-back{0%,54%{offset-distance:0%;opacity:0}60%{opacity:1}86%{offset-distance:100%;opacity:1}92%,100%{offset-distance:100%;opacity:0}}
+@keyframes sdk-handshake{0%,18%,100%{filter:brightness(.8)}30%,50%{filter:brightness(1.5)}60%,86%{filter:brightness(1.1)}}
+@keyframes presence-update{0%,58%{opacity:.35}60%,88%{opacity:1}92%,100%{opacity:.35}}
+@keyframes vault-secure{0%,10%,100%{opacity:.5}18%,86%{opacity:1}}
+
+@media(prefers-reduced-motion:reduce){.iso-scene *{animation:none!important;offset-path:none!important}}
 </style>
