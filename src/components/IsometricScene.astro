@@ -11,10 +11,10 @@ const { scene = "hero", class: className = "" } = Astro.props;
  <pattern id={`grain-${scene}`} width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" stroke="#fff" stroke-opacity=".08"/></pattern>
  <filter id={`shadow-${scene}`} x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
 </defs>
-<ellipse cx="320" cy="365" rx="245" ry="28" fill="#000" opacity=".58" filter="url(#shadow-${scene})"/>
+<ellipse cx="320" cy="365" rx="245" ry="28" fill="#000" opacity=".58" filter={`url(#shadow-${scene})`}/>
 {scene === "hero" && <>
  <!-- A developer's desk: display, keyboard, notebook and a small task board. -->
- <g class="base"><path d="M52 284l266-133 270 135-266 133z" fill="#181818" stroke="#777"/><path d="M52 284l270 135v13L52 297z" fill="#090909"/><path d="M322 419l266-133v13L322 432z" fill="#333"/><path d="M52 284l266-133 270 135-266 133z" fill="url(#grain-${scene})"/></g>
+ <g class="base"><path d="M52 284l266-133 270 135-266 133z" fill="#181818" stroke="#777"/><path d="M52 284l270 135v13L52 297z" fill="#090909"/><path d="M322 419l266-133v13L322 432z" fill="#333"/><path d="M52 284l266-133 270 135-266 133z" fill={`url(#grain-${scene})`}/></g>
  <g class="desk-monitor"><path d="M193 92l133-67 146 73-133 67z" fill="#eee" stroke="#fff"/><path d="M339 165l133-67v113l-133 67z" fill="#333" stroke="#aaa"/><path d="M193 92l146 73v113l-146-73z" fill="#777" stroke="#ddd"/><path d="M207 94l119-60 126 63-119 60z" fill="#111" stroke="#aaa"/><path d="M207 94l126 63v86l-126-63z" fill="#171717"/><path d="M333 157l119-60v86l-119 60z" fill="#090909"/><g class="code-lines" stroke-linecap="round" fill="none"><path d="M229 111l46-23m-46 35 83-42m-83 54 63-32m-63 44 92-47m-92 59 48-24" stroke="#eee" stroke-width="3"/><path d="M348 165l52-26m-52 39 78-39m-78 52 54-27" stroke="#999" stroke-width="2"/></g><path d="M310 280l29 14v18l-29-14z" fill="#aaa"/><path d="M275 312l65-33 64 32-65 33z" fill="#777" stroke="#ddd"/></g>
  <g class="keyboard"><path d="M153 296l111-56 112 56-111 56z" fill="#777" stroke="#ddd"/><path d="M153 296l112 56v13l-112-56z" fill="#444"/><path d="M265 352l111-56v13l-111 56z" fill="#222"/><path d="M169 295l95-48 94 47-95 48z" fill="#171717"/><path d="M184 294l14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24 12 14-7 12 6-14 7zm24 12 14-7 12 6-14 7z" fill="#ddd"/></g>
  <g class="notebook"><path d="M405 300l71-36 76 38-71 36z" fill="#eee" stroke="#fff"/><path d="M481 338l71-36v10l-71 36z" fill="#555"/><path d="M405 300l76 38v10l-76-38z" fill="#888"/><path d="M420 299l56-28 57 28-56 28z" fill="#bbb"/><path d="M430 297l44-22m-38 29 45-23m-36 30 38-19" stroke="#333" stroke-width="2"/></g>
@@ -35,7 +35,7 @@ const { scene = "hero", class: className = "" } = Astro.props;
  <g class="exam-bed"><path d="M376 350l58-29 64 32-58 29z" fill="#eee"/><path d="M440 382l58-29v9l-58 29z" fill="#555"/><path d="M376 350l64 32v9l-64-32z" fill="#888"/><path d="M387 348l47-24 43 22-47 24z" fill="#aaa"/><path d="M398 372v18m66-26v18" stroke="#ddd" stroke-width="4"/></g>
  <!-- schedule board: appointment cards travel from request queue into a real provider slot -->
  <g class="schedule-board"><path d="M425 78l94-47 99 49-94 47z" fill="#eee" stroke="#fff"/><path d="M524 127l94-47v94l-94 47z" fill="#444"/><path d="M425 78l99 49v94l-99-49z" fill="#777"/><path d="M438 79l81-40 80 40-81 40z" fill="#151515"/><path d="M448 83l26-13m-26 23 49-25m-49 35 37-19m-37 29 60-31" stroke="#aaa" stroke-width="2"/><g class="calendar-slot"><path d="M467 107l25-13 27 13-25 13z" fill="#eee"/><path d="M494 120l25-13v17l-25 13z" fill="#888"/><path d="M467 107l27 13v17l-27-13z" fill="#bbb"/></g><path d="M538 84l58-29m-58 41 58-29m-58 41 58-29" stroke="#ddd" stroke-width="2"/></g>
- <g class="patient"><animateTransform attributeName="transform" type="translate" values="220 300;286 267;220 300" dur="11s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines=".4 0 .2 1;.4 0 .2 1"/><circle cx="0" cy="-24" r="8" fill="#eee"/><path d="M-8-15l16 0 8 25-24 0z" fill="#aaa" stroke="#eee"/><path d="M-5 9l-5 16m15-16 6 16" stroke="#ddd" stroke-width="4" stroke-linecap="round"/></g>
+ <g class="patient" style="translate:220px 300px"><circle cx="0" cy="-24" r="8" fill="#eee"/><path d="M-8-15l16 0 8 25-24 0z" fill="#aaa" stroke="#eee"/><path d="M-5 9l-5 16m15-16 6 16" stroke="#ddd" stroke-width="4" stroke-linecap="round"/></g>
  </>}
 {scene === "journal" && <>
  <!-- JournalAI: private writing becomes a mood signal and a compact insight, not a generic AI orb. -->
@@ -73,7 +73,7 @@ const { scene = "hero", class: className = "" } = Astro.props;
 .terminal-cursor{animation:cursor-blink 1.05s steps(2,start) infinite}
 .keyboard{animation:keyboard-tap 4.8s ease-in-out infinite}
 .desk-lamp{transform-origin:145px 205px;animation:lamp-adjust 9s ease-in-out infinite alternate}
-.calendar-slot{animation:slot-shift 8s cubic-bezier(.45,0,.2,1) infinite alternate}
+.calendar-slot{animation:slot-shift 8s cubic-bezier(.45,0,.2,1) infinite alternate}\n.patient{animation:patient-route 11s cubic-bezier(.4,0,.2,1) infinite}
 
 .waiting-chair{animation:chair-rock 6s ease-in-out infinite alternate}
 .handwriting{stroke-dasharray:none}
@@ -90,7 +90,7 @@ const { scene = "hero", class: className = "" } = Astro.props;
 @keyframes cursor-blink{50%{opacity:0}}
 @keyframes keyboard-tap{0%,100%{transform:translateY(0)}48%,54%{transform:translateY(2px)}}
 @keyframes lamp-adjust{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
-@keyframes slot-shift{0%{transform:translate(0,0)}100%{transform:translate(19px,-10px)}}
+@keyframes slot-shift{0%{transform:translate(0,0)}100%{transform:translate(19px,-10px)}}\n@keyframes patient-route{0%,100%{translate:220px 300px}50%{translate:286px 267px}}
 
 @keyframes chair-rock{from{transform:translateY(0)}to{transform:translateY(-2px)}}
 
