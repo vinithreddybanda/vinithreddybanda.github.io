@@ -1,191 +1,106 @@
 ---
-interface Props {
-  scene?: string;
-  class?: string;
-}
+interface Props { scene?: string; class?: string; }
 const { scene = "hero", class: className = "" } = Astro.props;
 ---
 <div class={`iso-scene ${className}`} aria-hidden="true" data-iso-scene={scene}>
-  <svg viewBox="0 0 640 480" role="presentation" focusable="false">
-    <defs>
-      <linearGradient id="iso-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4f4f1"/><stop offset="1" stop-color="#858585"/></linearGradient>
-      <linearGradient id="iso-side" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#777"/><stop offset="1" stop-color="#292929"/></linearGradient>
-      <linearGradient id="iso-dark" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#484848"/><stop offset="1" stop-color="#111"/></linearGradient>
-      <linearGradient id="iso-metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fafaf8"/><stop offset=".48" stop-color="#aaa"/><stop offset="1" stop-color="#555"/></linearGradient>
-      <pattern id="iso-grid" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="skewY(-26)"><path d="M12 0H0V12" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width=".7"/></pattern>
-      <pattern id="iso-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V5" stroke="#fff" stroke-opacity=".18" stroke-width="1"/></pattern>
-      <filter id="iso-shadow" x="-40%" y="-40%" width="180%" height="190%"><feGaussianBlur stdDeviation="12"/></filter>
-    </defs>
-    <ellipse cx="325" cy="397" rx="242" ry="34" fill="#000" opacity=".7" filter="url(#iso-shadow)"/>
-    {scene === "hero" && <>
-      <!-- Automated production cell: indexing conveyor, articulated pick-and-place robot and machining enclosure. -->
-      <g class="iso-platform"><path d="M66 312l267-133 242 117-269 136z" fill="#1a1a1a" stroke="#777"/><path d="M66 312l240 120v17L66 329z" fill="#090909"/><path d="M306 432l269-136v17L306 449z" fill="#303030"/><path d="M66 312l267-133 242 117-269 136z" fill="url(#iso-grid)"/></g>
-      <g class="iso-part iso-part-b">
-        <path d="M366 111l118-59 86 43-118 59z" fill="#ddd" stroke="#fff"/><path d="M452 154l118-59v145l-118 59z" fill="#333" stroke="#aaa"/><path d="M366 111l86 43v145l-86-43z" fill="#777" stroke="#ddd"/>
-        <path d="M382 115l70 35v116l-70-35z" fill="#111" stroke="#aaa"/>
-        <g class="iso-machine-door"><path d="M391 137l52 26v86l-52-26z" fill="#555" stroke="#eee" stroke-width="1.5"/><path d="M399 146l37 18v68l-37-18z" fill="#171717" stroke="#aaa"/><path d="M431 184l5 2v15l-5-2z" fill="#eee"/></g>
-        <path d="M467 130l72-36m-72 51 72-36m-72 51 72-36" stroke="#aaa" stroke-opacity=".35"/>
-      </g>
-      <g class="iso-part iso-part-c">
-        <path d="M82 281l259-130 190 94-259 130z" fill="#aaa" stroke="#eee"/><path d="M272 375l259-130v20L272 395z" fill="#333" stroke="#888"/><path d="M82 281l190 94v20L82 301z" fill="#555" stroke="#aaa"/><path d="M99 282l242-121 170 84-242 121z" fill="#151515" stroke="#ddd"/>
-        {Array.from({length:12},(_,n)=><g class="iso-roller" style={`--roller-delay:${n*-0.12}s`} transform={`translate(${110+n*19} ${276-n*9.5})`}><path d="M0 0l13-6.5 16 8-13 6.5z" fill="#bbb" stroke="#eee"/><path d="M0 0v7l16 8V8z" fill="#555"/><path d="M16 8v7l13-6.5V2z" fill="#888"/></g>)}
-        <path d="M112 307l-1 34m45-12-1 34m45-12-1 34m45-12-1 34" stroke="#888" stroke-width="5"/>
-      </g>
-      <g class="iso-workpiece" style="translate:100px 250px"><path d="M0 0l28-14 29 14-28 14z" fill="#f0f0ed" stroke="#fff"/><path d="M29 14l28-14v27L29 41z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v27L0 27z" fill="#999" stroke="#eee"/><path d="M8 1l20-10 20 10-20 10z" fill="#222"/></g>
-      <g class="iso-workpiece-finished" style="translate:70px 220px"><path d="M0 0l25-13 26 13-25 13z" fill="#eee" stroke="#fff"/><path d="M26 13l25-13v23L26 36z" fill="#444" stroke="#ddd"/><path d="M0 0l26 13v23L0 23z" fill="#888" stroke="#ddd"/><path d="M10 0l15-8 15 8-15 8z" fill="#111"/></g>
-      <g class="iso-robot">
-        <path d="M180 327l43-22 43 21-43 22z" fill="#eee" stroke="#fff"/><path d="M223 348l43-22v-30l-43 22z" fill="#555" stroke="#aaa"/><path d="M180 327l43 21v-30l-43-21z" fill="#888" stroke="#ddd"/>
-        <g class="iso-robot-shoulder" style="translate:223px 316px">
-          <path d="M-18 4l18-19 22 11-18 19z" fill="#aaa" stroke="#fff" stroke-width="2"/><path d="M0-15l18-9 24 12-18 10z" fill="#eee" stroke="#fff"/>
-          <g class="iso-robot-upper"><path d="M25-13l15-8 75-52-15 9z" fill="#ddd" stroke="#fff" stroke-width="1.5"/><path d="M34-11l65-48" stroke="#555" stroke-width="3"/><circle cx="112" cy="-75" r="12" fill="#222" stroke="#eee" stroke-width="4"/>
-            <g class="iso-robot-forearm"><path d="M112-75l11-5 59-32-12 7z" fill="#eee" stroke="#fff" stroke-width="1.5"/><path d="M123-77l47-26" stroke="#555" stroke-width="3"/><circle cx="178" cy="-105" r="9" fill="#222" stroke="#eee" stroke-width="3"/>
-              <g class="iso-gripper"><path d="M178-105l-3 19-8 8m11-27 10 14 9 3" fill="none" stroke="#eee" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M167-78l-8 5m38-2 8 4" stroke="#aaa" stroke-width="3" stroke-linecap="round"/></g>
-            </g>
-          </g>
-        </g>
-      </g>
-      <g class="iso-machine-head"><path d="M478 259l31-16 24 12-31 16z" fill="#eee" stroke="#fff"/><path d="M502 271l31-16v34l-31 16z" fill="#444" stroke="#aaa"/><path d="M478 259l24 12v34l-24-12z" fill="#888" stroke="#ddd"/><path d="M496 291v18m8-14v14" stroke="#eee" stroke-width="3"/></g>
-      <g class="iso-status-stack"><path d="M544 158l7-4 7 4v33l-7 4-7-4z" fill="#222" stroke="#aaa"/><circle cx="551" cy="164" r="3.5" fill="#eee"/><circle cx="551" cy="176" r="3.5" fill="#888"/><circle cx="551" cy="188" r="3.5" fill="#555"/></g>
-      <g fill="none" stroke="#bbb" stroke-width="1.2" opacity=".8"><path d="M86 351l-20 10v-22m475-43 22 11v18"/></g>
-    </>}
-    {scene === "clinic" && <>
-      <!-- architectural site plate -->
-      <g class="iso-platform"><path d="M83 322l236-118 238 118-238 120z" fill="#1b1b1b" stroke="#aaa"/><path d="M83 322l236 120v14L83 336z" fill="#090909"/><path d="M319 442l238-120v14L319 456z" fill="#444"/><path d="M83 322l236-118 238 118-238 120z" fill="url(#iso-grid)"/></g>
-      <!-- main clinic building -->
-      <g class="iso-part iso-part-b">
-        <path d="M153 171l167-84 176 87-167 84z" fill="#eee" stroke="#fff" stroke-width="1.5"/>
-        <path d="M329 258l167-84v126l-167 84z" fill="#555" stroke="#bbb"/>
-        <path d="M153 171l176 87v126l-176-87z" fill="#999" stroke="#eee"/>
-        <path d="M170 174l150-75 157 78-150 76z" fill="#242424" stroke="#ddd"/>
-        <path d="M170 174l157 79v101l-157-79z" fill="#777"/>
-        <path d="M327 253l150-76v101l-150 76z" fill="#333"/>
-        <!-- facade windows -->
-        {Array.from({ length: 3 }, (_, n) => <>
-          <path d={`M187 ${204+n*24}l30 15v17l-30-15z`} fill="#161616" stroke="#ddd"/>
-          <path d={`M342 ${260+n*24}l27-14v17l-27 14z`} fill="#111" stroke="#ddd"/>
-          <path d={`M222 ${222+n*24}l25 13v17l-25-13z`} fill="#333" stroke="#ddd"/>
-        </>)}
-        <path d="M260 220l42 21v90l-42-21z" fill="#151515" stroke="#eee"/><path d="M281 231v69" stroke="#aaa"/>
-        <path d="M271 267l8 4" stroke="#eee" stroke-width="2"/>
-        <!-- rooftop plant room and vents -->
-        <path d="M265 137l65-33 62 31-65 33z" fill="#ddd" stroke="#fff"/>
-        <path d="M327 168l65-33v38l-65 33z" fill="#444"/><path d="M265 137l62 31v38l-62-31z" fill="#777"/>
-        <path d="M280 139l47-24 47 24-47 24z" fill="#181818"/>
-        <path d="M292 143l35-18 35 18-35 18z" fill="#aaa"/>
-      </g>
-      <!-- emergency sign / cross, monochrome -->
-      <g class="iso-part iso-part-c"><path d="M112 146l48-24 36 18-48 24z" fill="#eee" stroke="#fff"/><path d="M148 164l48-24v55l-48 24z" fill="#555"/><path d="M112 146l36 18v55l-36-18z" fill="#999"/><path d="M147 151v24m-12-12h24" stroke="#111" stroke-width="7" stroke-linecap="square"/></g>
-      <!-- ambulance bay, ramp and parking marks -->
-      <g class="iso-part iso-part-d"><path d="M111 341l45-23 49 25-45 23z" fill="#777" stroke="#ddd"/><path d="M160 366l45-23v8l-45 23z" fill="#333"/><path d="M111 341l49 25v8l-49-25z" fill="#555"/><path d="M124 340l32-16 25 13-32 16z" fill="#111"/><path d="M181 358l28-14 28 14-28 14z" fill="none" stroke="#eee" stroke-dasharray="3 3"/></g>
-      <g class="iso-part iso-part-e"><path d="M453 344l50-25 32 16-50 25z" fill="#ddd"/><path d="M485 360l50-25v29l-50 25z" fill="#444"/><path d="M453 344l32 16v29l-32-16z" fill="#888"/><path d="M463 346l22 11 30-15" fill="none" stroke="#222" stroke-width="2"/></g>
-      <g class="iso-part iso-part-f"><path d="M197 128l24-12 15 8-24 12z" fill="#eee"/><path d="M212 136l24-12v34l-24 12z" fill="#555"/><path d="M197 128l15 8v34l-15-8z" fill="#999"/><path d="M205 117v-19m8 15v-24m8 29V99" stroke="#ddd" stroke-width="2"/><path d="M205 98l4-6 4 6m0-3 4-6 4 6" fill="none" stroke="#fff"/></g>
-      <g class="iso-clinic-cart" style="translate:400px 270px"><path d="M0 0l28-14 29 14-28 14z" fill="#eee" stroke="#fff"/><path d="M29 14l28-14v28L29 42z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v28L0 28z" fill="#888" stroke="#ddd"/><path d="M7 2l22-11 21 11-21 11z" fill="#171717"/><path d="M10 26l18 9 18-9" fill="none" stroke="#eee" stroke-width="2"/><circle cx="9" cy="32" r="5" fill="#111" stroke="#eee" stroke-width="2"/><circle cx="47" cy="51" r="5" fill="#111" stroke="#eee" stroke-width="2"/></g>
-      <g class="iso-clinic-door"><path d="M260 220l21 10v69l-21-10z" fill="#222" stroke="#eee" stroke-width="1.5"/><path d="M281 230l21 10v69l-21-10z" fill="#555" stroke="#eee" stroke-width="1.5"/><path d="M270 251v25m21-17v25" stroke="#aaa" stroke-width="2"/></g>
-    </>}
-    {scene === "journal" && <>
-      <g class="iso-platform"><path d="M82 331l238-119 239 119-239 119z" fill="#1a1a1a" stroke="#aaa"/><path d="M82 331l238 119v14L82 345z" fill="#080808"/><path d="M320 450l239-119v14L320 464z" fill="#444"/><path d="M82 331l238-119 239 119-239 119z" fill="url(#iso-grid)"/></g>
-      <!-- open journal with sculpted pages -->
-      <g class="iso-part iso-part-b">
-        <path d="M138 243l176-89 171 85-176 89z" fill="#777" stroke="#eee" stroke-width="2"/>
-        <path d="M309 328l176-89v19l-176 89z" fill="#444" stroke="#aaa"/>
-        <path d="M138 243l171 85v19l-171-85z" fill="#555" stroke="#aaa"/>
-        <path d="M151 239l163-82 154 77-163 82z" fill="#eee" stroke="#fff"/>
-        <path d="M314 316l154-82v12l-154 82z" fill="#999"/>
-        <path d="M151 239l163 77v12l-163-77z" fill="#bbb"/>
-        <path d="M314 161v155" stroke="#555" stroke-width="2"/>
-        {Array.from({ length: 7 }, (_, n) => <path d={`M174 ${234+n*10}l112 53m36-48 102-51`} stroke="#555" stroke-width="1" opacity=".75" />)}
-        <path d="M178 223l72-36 45 22-72 36z" fill="#333"/><path d="M223 245l72-36v7l-72 36z" fill="#777"/>
-        <path d="M178 223l45 22v7l-45-22z" fill="#aaa"/>
-      </g>
-      <!-- floating stylus exploded in space -->
-      <g class="iso-part iso-part-c"><path d="M427 131l14-7 79 39-14 7z" fill="#eee" stroke="#fff"/><path d="M506 170l14-7-4 12-10 5z" fill="#555"/><path d="M427 131l79 39-7 10-79-39z" fill="#888"/><path d="M438 127l9-5 76 38-9 5z" fill="#fff"/><path d="M430 133l-12 17 13 6 7-13z" fill="#555"/></g>
-      <!-- analog timer, rings -->
-      <g class="iso-part iso-part-d"><ellipse cx="140" cy="139" rx="48" ry="23" fill="#333" stroke="#ddd" stroke-width="2"/><path d="M92 139v-12l48-24 48 24v12" fill="#777" stroke="#ddd"/><ellipse cx="140" cy="127" rx="48" ry="23" fill="#111" stroke="#eee" stroke-width="2"/><ellipse cx="140" cy="127" rx="35" ry="16" fill="#aaa" stroke="#fff"/><path d="M140 127l16-8m-16 8v-11" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="140" cy="127" r="3" fill="#111"/></g>
-      <!-- ink bottle and paper clips -->
-      <g class="iso-part iso-part-e"><path d="M482 285l34-17 30 15-34 17z" fill="#ddd"/><path d="M512 300l34-17v35l-34 17z" fill="#444"/><path d="M482 285l30 15v35l-30-15z" fill="#888"/><path d="M490 286l26-13 18 9-26 13z" fill="#111"/><path d="M530 270c13-10 21 7 7 15-9 5-16-5-8-10 6-4 11 2 6 5" fill="none" stroke="#eee" stroke-width="2"/></g>
-      <g class="iso-part iso-part-f"><path d="M100 288c-18-18 2-33 13-17 10 15-7 27-14 15m23-6c-13-17 4-29 14-13 9 14-4 24-12 15" fill="none" stroke="#ddd" stroke-width="2.5"/></g>
-      <g class="iso-plotter-carriage"><path d="M0 0l19-10 22 11-19 10z" fill="#eee" stroke="#fff"/><path d="M22 11l19-10v18L22 29z" fill="#555"/><path d="M0 0l22 11v18L0 18z" fill="#888"/><path d="M17 21l5 3-8 20-5-3z" fill="#ddd" stroke="#fff"/><path d="M9 41l5 3-4 7z" fill="#111"/></g><path class="iso-ink-trace" d="M175 224l30 15 26-13 28 14 25-12" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>
-    </>}
-    {scene === "android" && <>
-      <g class="iso-platform"><path d="M89 332l234-117 231 116-234 118z" fill="#1a1a1a" stroke="#aaa"/><path d="M89 332l231 117v14L89 346z" fill="#080808"/><path d="M320 449l234-118v14L320 463z" fill="#444"/><path d="M89 332l234-117 231 116-234 118z" fill="url(#iso-grid)"/></g>
-      <!-- phone body -->
-      <g class="iso-part iso-part-b">
-        <path d="M224 93l102-51 124 62-102 51z" fill="#eee" stroke="#fff" stroke-width="2"/>
-        <path d="M348 155l102-51v192l-102 51z" fill="#444" stroke="#ddd"/>
-        <path d="M224 93l124 62v192l-124-62z" fill="#999" stroke="#eee"/>
-        <path d="M237 97l89-45 110 55-89 45z" fill="#111" stroke="#aaa"/>
-        <path d="M237 97l110 55v167l-110-55z" fill="#171717"/>
-        <path d="M347 152l89-45v167l-89 45z" fill="#090909"/>
-        <path d="M270 109l57-29 74 37-57 29z" fill="#ddd"/><path d="M327 146l74-37v10l-74 37z" fill="#555"/>
-        <path d="M255 158l72 36m-72-20 72 36m-72-20 72 36" stroke="#eee" stroke-opacity=".7" stroke-width="2"/>
-        <path d="M255 238l46 23 0 24-46-23z" fill="#777" stroke="#eee"/>
-        <circle cx="326" cy="291" r="7" fill="#aaa" stroke="#fff"/>
-        <path d="M237 97l110 55v167" fill="none" stroke="#fff" stroke-opacity=".5"/>
-      </g>
-      <!-- detached controller and UI cards -->
-      <g class="iso-part iso-part-c"><path d="M112 212l66-33 65 32-66 33z" fill="#eee" stroke="#fff"/><path d="M177 244l66-33v57l-66 33z" fill="#444" stroke="#aaa"/><path d="M112 212l65 32v57l-65-32z" fill="#888"/><path d="M127 213l50-25 42 21-50 25z" fill="#111"/><path d="M145 215l-7 4 14 7 7-4m15-16 9 5" stroke="#eee" stroke-width="3" fill="none"/></g>
-      <g class="iso-part iso-part-d"><path d="M425 82l57-29 57 28-57 29z" fill="#eee" stroke="#fff"/><path d="M482 110l57-29v46l-57 29z" fill="#444"/><path d="M425 82l57 28v46l-57-28z" fill="#888"/><path d="M439 84l43-22 40 20-43 22z" fill="#151515"/><circle cx="479" cy="83" r="8" fill="#ddd"/><path d="M479 83l0-5m0 5 5 3" stroke="#111" stroke-width="1.5"/></g>
-      <g class="iso-part iso-part-e"><path d="M111 119l40-20 43 21-40 20z" fill="#ddd"/><path d="M154 140l40-20v41l-40 20z" fill="#444"/><path d="M111 119l43 21v41l-43-21z" fill="#888"/><path d="M123 120l28-14 27 13-28 14z" fill="#111"/><path d="M132 125l20 10 18-9" stroke="#eee" stroke-width="2" fill="none"/></g>
-      <!-- network cable and status nodes -->
-      <g fill="none" stroke="#ddd" stroke-width="2"><path d="M397 331c46 35 70 21 74-4s-13-27-28-16"/><path d="M398 340c58 42 89 15 78-18"/></g>
-      <g fill="#eee"><circle cx="487" cy="309" r="4"/><circle cx="499" cy="303" r="2"/><circle cx="510" cy="298" r="2"/></g>
-      <g class="iso-phone-blank"><path d="M0 0l34-17 38 19-34 17z" fill="#eee" stroke="#fff"/><path d="M38 19l34-17v15L38 34z" fill="#555"/><path d="M0 0l38 19v15L0 15z" fill="#888"/><path d="M9 0l25-13 27 13-25 13z" fill="#171717"/></g>
-      <g class="iso-phone-gantry" style="translate:420px 180px"><path d="M0 0l14-7 14 7v-72l-14-7z" fill="#555" stroke="#ddd"/><path d="M-9-79l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><g class="iso-phone-press"><path d="M-9-8l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><path d="M-9-8v14l23 12V4z" fill="#777"/><path d="M14 4l23-12V6L14 18z" fill="#444"/><path d="M7 18v10m14-10v10" stroke="#eee" stroke-width="3"/></g></g>
-    </>}
-    <!-- Shared assembly details -->
-    <g fill="none" stroke="#eee" stroke-opacity=".65" stroke-width="1">
-      <path d="M42 390h38m-38-4v8m38-8v8M554 82h34m-34-4v8m34-8v8"/>
-      <path d="M44 95l16-8 16 8-16 8zM568 395l16-8 16 8-16 8z" stroke-dasharray="2 3"/>
-    </g>
-    <g class="iso-progress-mark" fill="#fff"><circle cx="60" cy="95" r="2"/><circle cx="584" cy="395" r="2"/></g>
-  </svg>
+<svg viewBox="0 0 640 420" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <linearGradient id="top" x2="1" y2="1"><stop stop-color="#f4f4f1"/><stop offset="1" stop-color="#777"/></linearGradient>
+ <linearGradient id="face" x2="0" y2="1"><stop stop-color="#777"/><stop offset="1" stop-color="#242424"/></linearGradient>
+ <linearGradient id="screen" x2="1" y2="1"><stop stop-color="#d8d8d4"/><stop offset="1" stop-color="#555"/></linearGradient>
+ <pattern id="grain" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" stroke="#fff" stroke-opacity=".08"/></pattern>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<ellipse cx="320" cy="365" rx="245" ry="28" fill="#000" opacity=".58" filter="url(#shadow)"/>
+{scene === "hero" && <>
+ <!-- A developer's desk: display, keyboard, notebook and a small task board. -->
+ <g class="base"><path d="M52 284l266-133 270 135-266 133z" fill="#181818" stroke="#777"/><path d="M52 284l270 135v13L52 297z" fill="#090909"/><path d="M322 419l266-133v13L322 432z" fill="#333"/><path d="M52 284l266-133 270 135-266 133z" fill="url(#grain)"/></g>
+ <g class="desk-monitor"><path d="M193 92l133-67 146 73-133 67z" fill="#eee" stroke="#fff"/><path d="M339 165l133-67v113l-133 67z" fill="#333" stroke="#aaa"/><path d="M193 92l146 73v113l-146-73z" fill="#777" stroke="#ddd"/><path d="M207 94l119-60 126 63-119 60z" fill="#111" stroke="#aaa"/><path d="M207 94l126 63v86l-126-63z" fill="#171717"/><path d="M333 157l119-60v86l-119 60z" fill="#090909"/><g class="code-lines" stroke-linecap="round" fill="none"><path d="M229 111l46-23m-46 35 83-42m-83 54 63-32m-63 44 92-47m-92 59 48-24" stroke="#eee" stroke-width="3"/><path d="M348 165l52-26m-52 39 78-39m-78 52 54-27" stroke="#999" stroke-width="2"/></g><path d="M310 280l29 14v18l-29-14z" fill="#aaa"/><path d="M275 312l65-33 64 32-65 33z" fill="#777" stroke="#ddd"/></g>
+ <g class="keyboard"><path d="M153 296l111-56 112 56-111 56z" fill="#777" stroke="#ddd"/><path d="M153 296l112 56v13l-112-56z" fill="#444"/><path d="M265 352l111-56v13l-111 56z" fill="#222"/><path d="M169 295l95-48 94 47-95 48z" fill="#171717"/><path d="M184 294l14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24-12 14-7 12 6-14 7zm24 12 14-7 12 6-14 7zm24 12 14-7 12 6-14 7z" fill="#ddd"/></g>
+ <g class="notebook"><path d="M405 300l71-36 76 38-71 36z" fill="#eee" stroke="#fff"/><path d="M481 338l71-36v10l-71 36z" fill="#555"/><path d="M405 300l76 38v10l-76-38z" fill="#888"/><path d="M420 299l56-28 57 28-56 28z" fill="#bbb"/><path d="M430 297l44-22m-38 29 45-23m-36 30 38-19" stroke="#333" stroke-width="2"/></g>
+ <g class="desk-lamp"><path d="M105 270l18-9 13 7-18 9z" fill="#777"/><path d="M124 268l17-62 8 2-17 63z" fill="#aaa"/><circle cx="145" cy="205" r="7" fill="#eee"/><path d="M145 205l39-29 7 8-39 29z" fill="#aaa"/><path d="M177 177l23-18 27 14-24 18z" fill="#eee" stroke="#fff"/><path d="M183 180l17-13 16 8-17 13z" fill="#222"/></g>
+ <g class="terminal-cursor"><rect x="227" y="137" width="5" height="8" fill="#fff"/></g>
+ </>}
+{scene === "clinic" && <>
+ <!-- CareSchedule: a cutaway clinic with reception, waiting, provider room and live schedule. -->
+ <g class="base"><path d="M38 292l280-140 284 142-282 141z" fill="#1a1a1a" stroke="#777"/><path d="M38 292l282 143v13L38 305z" fill="#080808"/><path d="M320 435l282-141v13L320 448z" fill="#333"/><path d="M38 292l280-140 284 142-282 141z" fill="url(#grain)"/></g>
+ <g class="clinic-building"><path d="M113 183l203-102 211 105-204 102z" fill="#eee" stroke="#fff"/><path d="M323 288l204-102v111L323 399z" fill="#444" stroke="#aaa"/><path d="M113 183l210 105v111L113 294z" fill="#777" stroke="#ddd"/><path d="M130 184l186-93 194 97-187 94z" fill="#242424"/><path d="M130 184l194 97v95l-194-97z" fill="#555"/><path d="M324 281l186-93v95l-186 93z" fill="#292929"/>
+ <!-- reception window and entry --> <path d="M147 210l77 38v47l-77-38z" fill="#171717" stroke="#ddd"/><path d="M157 218l56 28v25l-56-28z" fill="#999"/><path d="M163 276l67 33-1 18-67-33z" fill="#eee"/><path d="M181 285l31 15v-7l-31-15z" fill="#333"/>
+ <!-- exam-room window --> <path d="M359 292l91-46v43l-91 46z" fill="#111" stroke="#ddd"/><path d="M370 294l69-35v26l-69 35z" fill="#777"/><path d="M377 308l54-27" stroke="#eee" stroke-width="2"/>
+ <!-- door and cross --> <path d="M263 235l39 20v87l-39-20z" fill="#151515" stroke="#eee"/><path d="M282 245v84" stroke="#888"/><path d="M170 153l27-14 28 14-27 14z" fill="#eee"/><path d="M198 167l27-14v40l-27 14z" fill="#444"/><path d="M170 153l28 14v40l-28-14z" fill="#888"/><path d="M197 151v25m-12-12h24" stroke="#111" stroke-width="6"/>
+ </g>
+ <!-- Reception desk, chairs and exam bed are separate, recognisable pieces. -->
+ <g class="reception"><path d="M111 310l49-25 52 26-49 26z" fill="#ddd"/><path d="M163 337l49-26v22l-49 26z" fill="#444"/><path d="M111 310l52 27v22l-52-27z" fill="#777"/><path d="M123 307l37-19 37 19-37 19z" fill="#222"/></g>
+ <g class="waiting-chair"><path d="M226 335l24-12 28 14-24 12z" fill="#ddd"/><path d="M250 349l24-12v22l-24 12z" fill="#555"/><path d="M226 335l24 14v22l-24-14z" fill="#888"/><path d="M232 321l19-10 23 12-19 10z" fill="#aaa"/></g>
+ <g class="exam-bed"><path d="M376 350l58-29 64 32-58 29z" fill="#eee"/><path d="M440 382l58-29v9l-58 29z" fill="#555"/><path d="M376 350l64 32v9l-64-32z" fill="#888"/><path d="M387 348l47-24 43 22-47 24z" fill="#aaa"/><path d="M398 372v18m66-26v18" stroke="#ddd" stroke-width="4"/></g>
+ <!-- schedule board: appointment cards travel from request queue into a real provider slot -->
+ <g class="schedule-board"><path d="M425 78l94-47 99 49-94 47z" fill="#eee" stroke="#fff"/><path d="M524 127l94-47v94l-94 47z" fill="#444"/><path d="M425 78l99 49v94l-99-49z" fill="#777"/><path d="M438 79l81-40 80 40-81 40z" fill="#151515"/><path d="M448 83l26-13m-26 23 49-25m-49 35 37-19m-37 29 60-31" stroke="#aaa" stroke-width="2"/><g class="calendar-slot"><path d="M467 107l25-13 27 13-25 13z" fill="#eee"/><path d="M494 120l25-13v17l-25 13z" fill="#888"/><path d="M467 107l27 13v17l-27-13z" fill="#bbb"/></g><path d="M538 84l58-29m-58 41 58-29m-58 41 58-29" stroke="#ddd" stroke-width="2"/></g>
+ <g class="patient"><circle cx="0" cy="-24" r="8" fill="#eee"/><path d="M-8-15l16 0 8 25-24 0z" fill="#aaa" stroke="#eee"/><path d="M-5 9l-5 16m15-16 6 16" stroke="#ddd" stroke-width="4" stroke-linecap="round"/></g>
+ </>}
+{scene === "journal" && <>
+ <!-- JournalAI: private writing becomes a mood signal and a compact insight, not a generic AI orb. -->
+ <g class="base"><path d="M40 294l278-139 282 141-280 140z" fill="#1a1a1a" stroke="#777"/><path d="M40 294l280 142v13L40 307z" fill="#090909"/><path d="M320 436l280-140v13L320 449z" fill="#333"/><path d="M40 294l278-139 282 141-280 140z" fill="url(#grain)"/></g>
+ <g class="journal-book"><path d="M93 248l170-85 164 82-170 85z" fill="#777" stroke="#eee"/><path d="M257 330l170-85v13l-170 85z" fill="#444"/><path d="M93 248l164 82v13L93 261z" fill="#555"/><path d="M107 245l156-78 147 73-156 78z" fill="#eee" stroke="#fff"/><path d="M263 318l147-78v10l-147 78z" fill="#aaa"/><path d="M107 245l156 73v10l-156-73z" fill="#bbb"/><path d="M263 170v148" stroke="#777" stroke-width="2"/><g class="handwriting" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"><path d="M128 231l68 32m-61-43 51 24m-43-36 59 28m-52-39 38 18"/><path d="M281 210l94 46m-87-59 75 37m-67-48 82 41"/></g><path d="M133 266l83 39m-74-26 54 25m99 20 88-44" stroke="#777" stroke-width="1.4"/></g>
+ <g class="pen"><path d="M183 112l13-7 99 50-13 7z" fill="#eee" stroke="#fff"/><path d="M282 162l13-7-7 17-10 4z" fill="#555"/><path d="M183 112l99 50-8 11-99-50z" fill="#888"/><path d="M190 109l8-4 98 49-8 4z" fill="#fff"/><path d="M281 167l7-3-3 9-6 3z" fill="#ddd"/></g>
+ <!-- Private entry cards flow into local analysis, then an insight chart. -->
+ <g class="entry-stack"><path d="M385 119l67-34 70 35-67 35z" fill="#eee"/><path d="M455 155l67-35v54l-67 35z" fill="#555"/><path d="M385 119l70 36v54l-70-36z" fill="#888"/><path d="M400 119l52-26 51 26-52 26z" fill="#171717"/><path d="M410 119l31-16m-27 24 40-20" stroke="#ddd" stroke-width="2"/></g>
+ <g class="insight-panel"><path d="M414 258l83-42 91 45-83 42z" fill="#eee" stroke="#fff"/><path d="M505 303l83-42v55l-83 42z" fill="#444"/><path d="M414 258l91 45v55l-91-45z" fill="#777"/><path d="M428 258l69-35 69 34-69 35z" fill="#151515"/><path d="M442 274l16-8 13 6 14-19 14 7 17-17 20 10" fill="none" stroke="#eee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M442 283h98m-98 8h70" stroke="#888" stroke-width="1.5"/></g>
+ <g class="analysis-pulse"><circle cx="343" cy="180" r="7" fill="#eee"/><circle cx="343" cy="180" r="17" fill="none" stroke="#ddd" stroke-opacity=".5"/></g>
+ <g class="mood-marker"><path d="M474 202l8-4 8 4-8 4z" fill="#fff"/><path d="M482 206l8-4v12l-8 4z" fill="#555"/><path d="M474 202l8 4v12l-8-4z" fill="#999"/></g>
+ </>}
+{scene === "android" && <>
+ <!-- Android Discord presence: handset controls a desktop client through a JNI/native bridge. -->
+ <g class="base"><path d="M36 293l282-141 285 143-283 142z" fill="#1a1a1a" stroke="#777"/><path d="M36 293l284 144v13L36 306z" fill="#090909"/><path d="M320 437l283-142v13L320 450z" fill="#333"/><path d="M36 293l282-141 285 143-283 142z" fill="url(#grain)"/></g>
+ <!-- Desktop client -->
+ <g class="desktop"><path d="M290 102l137-69 154 77-137 69z" fill="#eee" stroke="#fff"/><path d="M444 179l137-69v118l-137 69z" fill="#333" stroke="#aaa"/><path d="M290 102l154 77v118l-154-77z" fill="#777" stroke="#ddd"/><path d="M305 104l122-61 135 67-122 61z" fill="#111" stroke="#aaa"/><path d="M305 104l135 67v91l-135-67z" fill="#171717"/><path d="M440 171l122-61v91l-122 61z" fill="#090909"/><path d="M321 120l21-11 0 68-21 11z" fill="#777"/><path d="M355 116l75 37m-75-23 75 37m-75-23 75 37" stroke="#aaa" stroke-width="2"/><circle cx="367" cy="133" r="8" fill="#eee"/><path d="M355 204l68 34 43-22-68-34z" fill="#555"/><path d="M421 271l23-12v17l-23 12z" fill="#aaa"/></g>
+ <!-- Android handset -->
+ <g class="handset"><path d="M104 157l83-42 97 49-83 42z" fill="#eee" stroke="#fff"/><path d="M201 206l83-42v144l-83 42z" fill="#333" stroke="#aaa"/><path d="M104 157l97 49v144l-97-49z" fill="#777" stroke="#ddd"/><path d="M115 159l72-36 82 41-72 36z" fill="#111"/><path d="M115 159l82 41v120l-82-41z" fill="#151515"/><path d="M197 200l72-36v120l-72 36z" fill="#090909"/><path d="M129 175l45 23m-45-11 45 23m-45-11 45 23" stroke="#ddd" stroke-width="2"/><circle cx="170" cy="275" r="7" fill="#aaa" stroke="#fff"/><path d="M134 150l28-14 31 15-28 14z" fill="#555"/><path d="M146 150l16-8 17 8-16 8z" fill="#eee"/></g>
+ <!-- Native bridge: distinct paired endpoints and a cable path, with data packets travelling both ways. -->
+ <g class="bridge"><path d="M232 291c42 45 69 51 108 22s60-32 95-1" fill="none" stroke="#aaa" stroke-width="4"/><path d="M232 291c42 45 69 51 108 22s60-32 95-1" fill="none" stroke="#222" stroke-width="1.5" stroke-dasharray="5 6"/></g>
+ <g class="packet packet-a"><circle r="5" fill="#fff"/><circle r="10" fill="none" stroke="#eee" stroke-opacity=".6"/></g>
+ <g class="packet packet-b"><circle r="4" fill="#aaa"/><circle r="8" fill="none" stroke="#ddd" stroke-opacity=".5"/></g>
+ <!-- Status activity card on desktop -->
+ <g class="presence-card"><path d="M457 297l61-31 67 34-61 31z" fill="#eee"/><path d="M524 331l61-31v35l-61 31z" fill="#555"/><path d="M457 297l67 34v35l-67-34z" fill="#888"/><circle cx="489" cy="300" r="7" fill="#222" stroke="#fff"/><path d="M505 303l34-17m-34 27 44-22" stroke="#222" stroke-width="2"/></g>
+ </>}
+</svg>
 </div>
 <style>
-  .iso-scene{position:relative;isolation:isolate;contain:layout paint;overflow:visible}
-  .iso-scene svg{display:block;width:100%;height:100%;overflow:visible}
-  .iso-scene .iso-part{transform-box:view-box;transform-origin:center;will-change:transform;transition:none}
-  .iso-scene .iso-part-a{transform:translateY(var(--part-a-y, -14px))}
-  .iso-scene .iso-part-b{transform:translateY(var(--part-b-y, -28px))}
-  .iso-scene .iso-part-c{transform:translateY(var(--part-c-y, -42px))}
-  .iso-scene .iso-part-d{transform:translateY(var(--part-d-y, -56px))}
-  .iso-scene .iso-part-e{transform:translateY(var(--part-e-y, -70px))}
-  .iso-scene .iso-part-f{transform:translateY(var(--part-f-y, -84px))}
-  .iso-scene .iso-part-g{transform:translateY(var(--part-g-y, -98px))}
-  .iso-scene .iso-platform{transform:translateY(var(--platform-y, 9px));transform-origin:center}
-  @media(prefers-reduced-motion:reduce){.iso-scene .iso-part,.iso-scene .iso-platform{transform:none!important}}
-
-  /* Coordinated mechanical cycles: every movement performs a visible operation. */
-  .iso-machine-door{transform-origin:452px 210px;animation:machine-door 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-roller{animation:roller-cycle .8s linear infinite;animation-delay:var(--roller-delay,0s)}
-  .iso-workpiece{animation:workpiece-cycle 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-workpiece-finished{animation:finished-cycle 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-robot-shoulder{transform-origin:0 0;animation:robot-shoulder 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-robot-upper{transform-origin:0 0;animation:robot-upper 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-robot-forearm{transform-origin:112px -75px;animation:robot-forearm 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-gripper{transform-origin:178px -105px;animation:robot-grip 7.2s ease-in-out infinite}
-  .iso-machine-head{animation:machine-head 7.2s ease-in-out infinite}
-  .iso-clinic-cart{animation:clinic-cart 8s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-clinic-door{transform-origin:281px 264px;animation:clinic-door 8s ease-in-out infinite}
-  .iso-plotter-carriage{animation:plotter-write 6.4s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-ink-trace{stroke-dasharray:180;stroke-dashoffset:180;animation:ink-write 6.4s ease-in-out infinite}
-  .iso-phone-blank{animation:phone-feed 7s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-phone-gantry{animation:phone-gantry 7s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-phone-press{animation:phone-press 7s ease-in-out infinite}
-  @keyframes machine-door{0%,8%,100%{transform:translateX(0)}18%,48%{transform:translateX(-32px)}60%,88%{transform:translateX(0)}}
-  @keyframes roller-cycle{to{filter:brightness(1.5)}}
-  @keyframes workpiece-cycle{0%{transform:translate(70px,38px);opacity:0}10%{opacity:1}25%,54%{transform:translate(230px,-42px);opacity:1}68%{opacity:0}100%{transform:translate(70px,38px);opacity:0}}
-  @keyframes finished-cycle{0%,48%{transform:translate(245px,-48px);opacity:0}58%{opacity:1}78%{transform:translate(430px,-140px);opacity:1}92%,100%{transform:translate(480px,-165px);opacity:0}}
-  @keyframes robot-shoulder{0%,10%,100%{transform:rotate(-8deg)}22%,34%{transform:rotate(18deg)}48%,62%{transform:rotate(-12deg)}78%{transform:rotate(12deg)}}
-  @keyframes robot-upper{0%,10%,100%{transform:rotate(0)}22%,34%{transform:rotate(-18deg)}48%,62%{transform:rotate(10deg)}78%{transform:rotate(-8deg)}}
-  @keyframes robot-forearm{0%,10%,100%{transform:rotate(0)}22%,34%{transform:rotate(22deg)}48%,62%{transform:rotate(-18deg)}78%{transform:rotate(14deg)}}
-  @keyframes robot-grip{0%,20%,100%{transform:scale(1)}26%,52%{transform:scale(.68)}62%,88%{transform:scale(1)}}
-  @keyframes machine-head{0%,20%,100%{transform:translateY(0)}32%,54%{transform:translateY(22px)}66%{transform:translateY(0)}}
-  @keyframes clinic-cart{0%,8%{transform:translate(-55px,28px);opacity:0}18%{opacity:1}42%,58%{transform:translate(0,0);opacity:1}82%{transform:translate(85px,-43px);opacity:1}94%,100%{transform:translate(120px,-62px);opacity:0}}
-  @keyframes clinic-door{0%,12%,100%{transform:translateX(0)}24%,54%{transform:translateX(-13px)}68%,88%{transform:translateX(0)}}
-  @keyframes plotter-write{0%,5%{transform:translate(165px,202px)}18%{transform:translate(205px,182px)}36%{transform:translate(252px,206px)}54%{transform:translate(300px,182px)}68%{transform:translate(340px,202px)}82%,100%{transform:translate(165px,202px)}}
-  @keyframes ink-write{0%,12%{stroke-dashoffset:180;opacity:0}18%{opacity:1}68%{stroke-dashoffset:0;opacity:1}82%,100%{stroke-dashoffset:180;opacity:0}}
-  @keyframes phone-feed{0%,8%{transform:translate(-80px,40px);opacity:0}18%{opacity:1}38%,54%{transform:translate(0,0);opacity:1}78%{transform:translate(170px,-84px);opacity:1}92%,100%{transform:translate(230px,-114px);opacity:0}}
-  @keyframes phone-gantry{0%,18%,100%{transform:translateY(0)}32%,52%{transform:translateY(24px)}66%{transform:translateY(0)}}
-  @keyframes phone-press{0%,25%,100%{transform:translateY(0)}38%,50%{transform:translateY(12px)}62%{transform:translateY(0)}}
-  @media(prefers-reduced-motion:reduce){.iso-scene [class*="iso-"]{animation:none!important;stroke-dashoffset:0!important}}
+.iso-scene{position:relative;width:100%;height:100%;overflow:visible;isolation:isolate;contain:layout paint}
+.iso-scene svg{display:block;width:100%;height:100%;overflow:visible}
+.base{transform-origin:center}
+.desk-monitor{transform-origin:333px 157px}
+.code-lines{animation:code-refresh 5s steps(5,end) infinite}
+.terminal-cursor{animation:cursor-blink 1.05s steps(2,start) infinite}
+.keyboard{animation:keyboard-tap 4.8s ease-in-out infinite}
+.desk-lamp{transform-origin:145px 205px;animation:lamp-adjust 9s ease-in-out infinite alternate}
+.calendar-slot{animation:slot-shift 8s cubic-bezier(.45,0,.2,1) infinite alternate}
+.patient{animation:patient-route 11s cubic-bezier(.4,0,.2,1) infinite alternate}
+.waiting-chair{animation:chair-rock 6s ease-in-out infinite alternate}
+.handwriting{stroke-dasharray:3 0;animation:write-flow 7s linear infinite}
+.pen{transform-origin:280px 160px;animation:pen-write 7s ease-in-out infinite alternate}
+.entry-stack{animation:entry-lift 8s ease-in-out infinite alternate}
+.analysis-pulse{animation:analysis-breathe 3.8s ease-in-out infinite}
+.mood-marker{animation:mood-rise 8s ease-in-out infinite alternate}
+.insight-panel{animation:insight-tilt 8s ease-in-out infinite alternate}
+.packet{offset-path:path("M232 291 C274 336 301 342 340 313 S400 281 435 312");offset-rotate:0deg;animation:packet-travel 3.4s linear infinite}
+.packet-b{animation-delay:-1.7s;animation-direction:reverse}
+.handset{animation:handset-tap 5.2s ease-in-out infinite}
+.presence-card{animation:presence-sync 5.2s ease-in-out infinite}
+@keyframes code-refresh{0%,12%{opacity:.5}40%,75%{opacity:1}100%{opacity:.5}}
+@keyframes cursor-blink{50%{opacity:0}}
+@keyframes keyboard-tap{0%,100%{transform:translateY(0)}48%,54%{transform:translateY(2px)}}
+@keyframes lamp-adjust{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+@keyframes slot-shift{0%{transform:translate(0,0)}100%{transform:translate(19px,-10px)}}
+@keyframes patient-route{0%{transform:translate(0,0)}50%{transform:translate(66px,-33px)}100%{transform:translate(0,0)}}
+@keyframes chair-rock{from{transform:translateY(0)}to{transform:translateY(-2px)}}
+@keyframes write-flow{0%{stroke-dasharray:0 420}100%{stroke-dasharray:420 0}}
+@keyframes pen-write{from{transform:translate(0,0) rotate(-2deg)}to{transform:translate(17px,-9px) rotate(2deg)}}
+@keyframes entry-lift{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+@keyframes analysis-breathe{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+@keyframes mood-rise{from{transform:translateY(12px)}to{transform:translateY(-12px)}}
+@keyframes insight-tilt{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+@keyframes packet-travel{0%{offset-distance:0%;opacity:0}8%,90%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes handset-tap{0%,40%,100%{transform:translateY(0)}48%,54%{transform:translateY(-3px)}}
+@keyframes presence-sync{0%,38%,100%{opacity:.7}48%,72%{opacity:1;filter:brightness(1.35)}}
+@media(prefers-reduced-motion:reduce){.iso-scene [class]{animation:none!important}}
 </style>
