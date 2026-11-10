@@ -417,6 +417,11 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
           scene.style.setProperty("--scene-y", ((isHero ? -centered * 76 : -centered * 54).toFixed(2)) + "px");
           scene.style.setProperty("--scene-tilt", (centered * (isHero ? 3.2 : 5)).toFixed(2) + "deg");
           scene.style.setProperty("--scene-scale", (1 + Math.sin(progress * Math.PI) * (isHero ? .045 : .035)).toFixed(4));
+          const spread = 1 - progress;
+          for (const [part, distance] of [["a",28],["b",56],["c",84],["d",112],["e",140],["f",168],["g",196]]) {
+            scene.style.setProperty("--part-" + part + "-y", (-spread * distance).toFixed(2) + "px");
+          }
+          scene.style.setProperty("--platform-y", (spread * 18).toFixed(2) + "px");
         }
       };
       const requestSceneFrame = () => {
