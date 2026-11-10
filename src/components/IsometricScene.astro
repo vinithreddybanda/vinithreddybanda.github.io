@@ -31,15 +31,15 @@ const { scene = "hero", class: className = "" } = Astro.props;
         {Array.from({length:12},(_,n)=><g class="iso-roller" style={`--roller-delay:${n*-0.12}s`} transform={`translate(${110+n*19} ${276-n*9.5})`}><path d="M0 0l13-6.5 16 8-13 6.5z" fill="#bbb" stroke="#eee"/><path d="M0 0v7l16 8V8z" fill="#555"/><path d="M16 8v7l13-6.5V2z" fill="#888"/></g>)}
         <path d="M112 307l-1 34m45-12-1 34m45-12-1 34m45-12-1 34" stroke="#888" stroke-width="5"/>
       </g>
-      <g class="iso-workpiece"><path d="M0 0l28-14 29 14-28 14z" fill="#f0f0ed" stroke="#fff"/><path d="M29 14l28-14v27L29 41z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v27L0 27z" fill="#999" stroke="#eee"/><path d="M8 1l20-10 20 10-20 10z" fill="#222"/></g>
-      <g class="iso-workpiece-finished"><path d="M0 0l25-13 26 13-25 13z" fill="#eee" stroke="#fff"/><path d="M26 13l25-13v23L26 36z" fill="#444" stroke="#ddd"/><path d="M0 0l26 13v23L0 23z" fill="#888" stroke="#ddd"/><path d="M10 0l15-8 15 8-15 8z" fill="#111"/></g>
+      <g class="iso-workpiece" style="translate:100px 250px"><path d="M0 0l28-14 29 14-28 14z" fill="#f0f0ed" stroke="#fff"/><path d="M29 14l28-14v27L29 41z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v27L0 27z" fill="#999" stroke="#eee"/><path d="M8 1l20-10 20 10-20 10z" fill="#222"/></g>
+      <g class="iso-workpiece-finished" style="translate:70px 220px"><path d="M0 0l25-13 26 13-25 13z" fill="#eee" stroke="#fff"/><path d="M26 13l25-13v23L26 36z" fill="#444" stroke="#ddd"/><path d="M0 0l26 13v23L0 23z" fill="#888" stroke="#ddd"/><path d="M10 0l15-8 15 8-15 8z" fill="#111"/></g>
       <g class="iso-robot">
         <path d="M180 327l43-22 43 21-43 22z" fill="#eee" stroke="#fff"/><path d="M223 348l43-22v-30l-43 22z" fill="#555" stroke="#aaa"/><path d="M180 327l43 21v-30l-43-21z" fill="#888" stroke="#ddd"/>
-        <g class="iso-robot-shoulder" transform="translate(223 316)">
+        <g class="iso-robot-shoulder" style="translate:223px 316px">
           <path d="M-18 4l18-19 22 11-18 19z" fill="#aaa" stroke="#fff" stroke-width="2"/><path d="M0-15l18-9 24 12-18 10z" fill="#eee" stroke="#fff"/>
-          <g class="iso-robot-upper"><path d="M25-13l15-8 75 37-15 9z" fill="#ddd" stroke="#fff" stroke-width="1.5"/><path d="M34-11l65 32" stroke="#555" stroke-width="3"/><circle cx="112" cy="20" r="12" fill="#222" stroke="#eee" stroke-width="4"/>
-            <g class="iso-robot-forearm"><path d="M112 20l11-5 59 32-12 7z" fill="#eee" stroke="#fff" stroke-width="1.5"/><path d="M123 18l47 26" stroke="#555" stroke-width="3"/><circle cx="178" cy="50" r="9" fill="#222" stroke="#eee" stroke-width="3"/>
-              <g class="iso-gripper"><path d="M178 50l-3 19-8 8m11-27 10 14 9 3" fill="none" stroke="#eee" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M167 77l-8 5m38-2 8 4" stroke="#aaa" stroke-width="3" stroke-linecap="round"/></g>
+          <g class="iso-robot-upper"><path d="M25-13l15-8 75-52-15 9z" fill="#ddd" stroke="#fff" stroke-width="1.5"/><path d="M34-11l65-48" stroke="#555" stroke-width="3"/><circle cx="112" cy="-75" r="12" fill="#222" stroke="#eee" stroke-width="4"/>
+            <g class="iso-robot-forearm"><path d="M112-75l11-5 59-32-12 7z" fill="#eee" stroke="#fff" stroke-width="1.5"/><path d="M123-77l47-26" stroke="#555" stroke-width="3"/><circle cx="178" cy="-105" r="9" fill="#222" stroke="#eee" stroke-width="3"/>
+              <g class="iso-gripper"><path d="M178-105l-3 19-8 8m11-27 10 14 9 3" fill="none" stroke="#eee" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M167-78l-8 5m38-2 8 4" stroke="#aaa" stroke-width="3" stroke-linecap="round"/></g>
             </g>
           </g>
         </g>
@@ -161,8 +161,8 @@ const { scene = "hero", class: className = "" } = Astro.props;
   .iso-workpiece-finished{animation:finished-cycle 7.2s cubic-bezier(.65,0,.35,1) infinite}
   .iso-robot-shoulder{transform-origin:0 0;animation:robot-shoulder 7.2s cubic-bezier(.65,0,.35,1) infinite}
   .iso-robot-upper{transform-origin:0 0;animation:robot-upper 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-robot-forearm{transform-origin:112px 20px;animation:robot-forearm 7.2s cubic-bezier(.65,0,.35,1) infinite}
-  .iso-gripper{transform-origin:178px 50px;animation:robot-grip 7.2s ease-in-out infinite}
+  .iso-robot-forearm{transform-origin:112px -75px;animation:robot-forearm 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-gripper{transform-origin:178px -105px;animation:robot-grip 7.2s ease-in-out infinite}
   .iso-machine-head{animation:machine-head 7.2s ease-in-out infinite}
   .iso-clinic-cart{animation:clinic-cart 8s cubic-bezier(.65,0,.35,1) infinite}
   .iso-clinic-door{transform-origin:281px 264px;animation:clinic-door 8s ease-in-out infinite}
