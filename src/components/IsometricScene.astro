@@ -18,80 +18,35 @@ const { scene = "hero", class: className = "" } = Astro.props;
     </defs>
     <ellipse cx="325" cy="397" rx="242" ry="34" fill="#000" opacity=".7" filter="url(#iso-shadow)"/>
     {scene === "hero" && <>
-      <!-- Floating technical annotations and exploded modules -->
-      <g class="iso-part iso-part-a"><path d="M105 112l74-37 54 26-74 37z" fill="#d8d8d5" stroke="#fff" stroke-opacity=".6"/><path d="M159 138l74-37v9l-74 37z" fill="#555"/><path d="M105 112l54 26v9l-54-26z" fill="#888"/><path d="M125 112l34 16m-20-25 34 16m-20-25 34 16" stroke="#444" stroke-width="2"/></g>
-      <g class="iso-platform">
-        <path d="M66 312l267-133 242 117-269 136z" fill="#1a1a1a" stroke="#777" stroke-width="1.5"/>
-        <path d="M66 312l240 120v17L66 329z" fill="#090909" stroke="#555"/>
-        <path d="M306 432l269-136v17L306 449z" fill="#303030" stroke="#777"/>
-        <path d="M66 312l267-133 242 117-269 136z" fill="url(#iso-grid)"/>
-        <path d="M91 312l241-120 209 101-243 122z" fill="none" stroke="#aaa" stroke-opacity=".3" stroke-dasharray="3 6"/>
-        {Array.from({ length: 9 }, (_, n) => <path d={`M${105+n*25} ${310-n*12.5}l240 120`} stroke="#fff" stroke-opacity=".055" />)}
-      </g>
-      <!-- Monitor chassis -->
+      <!-- Automated production cell: indexing conveyor, articulated pick-and-place robot and machining enclosure. -->
+      <g class="iso-platform"><path d="M66 312l267-133 242 117-269 136z" fill="#1a1a1a" stroke="#777"/><path d="M66 312l240 120v17L66 329z" fill="#090909"/><path d="M306 432l269-136v17L306 449z" fill="#303030"/><path d="M66 312l267-133 242 117-269 136z" fill="url(#iso-grid)"/></g>
       <g class="iso-part iso-part-b">
-        <path d="M174 105l187-94 160 78-188 95z" fill="url(#iso-metal)" stroke="#fff" stroke-width="1.5"/>
-        <path d="M333 184l188-95v147l-188 96z" fill="#292929" stroke="#aaa"/>
-        <path d="M174 105l159 79v148l-159-79z" fill="#555" stroke="#ddd"/>
-        <path d="M186 111l174-87 143 69-174 88z" fill="#0c0c0c" stroke="#aaa"/>
-        <path d="M186 111l143 70v121l-143-70z" fill="#151515"/>
-        <path d="M329 181l174-88v121l-174 88z" fill="#090909"/>
-        <path d="M205 120l121 59m-121-44 121 59m-121-44 121 59" stroke="#eee" stroke-opacity=".25" stroke-width="1"/>
-        <path d="M215 133l42 20 0 3-42-20zm0 12 67 33 0 3-67-33z" fill="#ddd" opacity=".65"/>
-        <path d="M273 163l42 21 0 3-42-21z" fill="#777"/>
-        <path d="M352 117l124-62m-124 78 124-62m-124 78 88-44" stroke="#fff" stroke-opacity=".24"/>
-        <circle cx="493" cy="216" r="3" fill="#eee"/>
-        <path d="M329 300l-7 34 60 30 8-35z" fill="#555" stroke="#aaa"/>
-        <path d="M322 334l-36 18 63 31 41-19z" fill="#aaa" stroke="#eee"/>
-        <path d="M286 352l63 31v9l-63-31z" fill="#555"/>
+        <path d="M366 111l118-59 86 43-118 59z" fill="#ddd" stroke="#fff"/><path d="M452 154l118-59v145l-118 59z" fill="#333" stroke="#aaa"/><path d="M366 111l86 43v145l-86-43z" fill="#777" stroke="#ddd"/>
+        <path d="M382 115l70 35v116l-70-35z" fill="#111" stroke="#aaa"/>
+        <g class="iso-machine-door"><path d="M391 137l52 26v86l-52-26z" fill="#555" stroke="#eee" stroke-width="1.5"/><path d="M399 146l37 18v68l-37-18z" fill="#171717" stroke="#aaa"/><path d="M431 184l5 2v15l-5-2z" fill="#eee"/></g>
+        <path d="M467 130l72-36m-72 51 72-36m-72 51 72-36" stroke="#aaa" stroke-opacity=".35"/>
       </g>
-      <!-- Keyboard, keycaps, wrist rest -->
       <g class="iso-part iso-part-c">
-        <path d="M179 294l115-58 140 69-115 59z" fill="#d0d0ce" stroke="#fff"/>
-        <path d="M319 364l115-59v14l-115 59z" fill="#555" stroke="#999"/>
-        <path d="M179 294l140 70v14l-140-70z" fill="#777" stroke="#aaa"/>
-        <path d="M190 295l104-52 119 59-104 53z" fill="#181818" stroke="#aaa"/>
-        {Array.from({ length: 4 }, (_, r) => Array.from({ length: 9 }, (_, c) => <path d={`M${200+c*11+r*3} ${292-r*8+c*5.5}l8-4 8 4-8 4z`} fill={r===0?"#bdbdbd":"#555"} stroke="#ddd" stroke-opacity=".5" stroke-width=".55" />))}
-        <path d="M235 326l45-22 46 23-45 23z" fill="#777" stroke="#eee"/>
-        <path d="M345 337l43-22 28 14-43 22z" fill="#aaa" stroke="#eee"/>
+        <path d="M82 281l259-130 190 94-259 130z" fill="#aaa" stroke="#eee"/><path d="M272 375l259-130v20L272 395z" fill="#333" stroke="#888"/><path d="M82 281l190 94v20L82 301z" fill="#555" stroke="#aaa"/><path d="M99 282l242-121 170 84-242 121z" fill="#151515" stroke="#ddd"/>
+        {Array.from({length:12},(_,n)=><g class="iso-roller" style={`--roller-delay:${n*-0.12}s`} transform={`translate(${110+n*19} ${276-n*9.5})`}><path d="M0 0l13-6.5 16 8-13 6.5z" fill="#bbb" stroke="#eee"/><path d="M0 0v7l16 8V8z" fill="#555"/><path d="M16 8v7l13-6.5V2z" fill="#888"/></g>)}
+        <path d="M112 307l-1 34m45-12-1 34m45-12-1 34m45-12-1 34" stroke="#888" stroke-width="5"/>
       </g>
-      <!-- articulated lamp -->
-      <g class="iso-part iso-part-d">
-        <path d="M468 273l21-11 9 5-21 11z" fill="#eee"/><path d="M477 278l-31-64 8-4 31 64z" fill="#aaa" stroke="#eee"/>
-        <path d="M446 214l-40-31 7-8 42 31z" fill="#666" stroke="#ddd"/>
-        <path d="M401 185l-16-29 15-8 19 31z" fill="#eee" stroke="#fff"/>
-        <path d="M386 156l29-14 33 17-29 15z" fill="#ddd" stroke="#fff"/>
-        <path d="M415 174l33-15-5 15-24 12z" fill="#555"/>
-        <circle cx="450" cy="212" r="7" fill="#222" stroke="#eee" stroke-width="2"/>
-        <circle cx="410" cy="180" r="6" fill="#222" stroke="#eee" stroke-width="2"/>
+      <g class="iso-workpiece"><path d="M0 0l28-14 29 14-28 14z" fill="#f0f0ed" stroke="#fff"/><path d="M29 14l28-14v27L29 41z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v27L0 27z" fill="#999" stroke="#eee"/><path d="M8 1l20-10 20 10-20 10z" fill="#222"/></g>
+      <g class="iso-workpiece-finished"><path d="M0 0l25-13 26 13-25 13z" fill="#eee" stroke="#fff"/><path d="M26 13l25-13v23L26 36z" fill="#444" stroke="#ddd"/><path d="M0 0l26 13v23L0 23z" fill="#888" stroke="#ddd"/><path d="M10 0l15-8 15 8-15 8z" fill="#111"/></g>
+      <g class="iso-robot">
+        <path d="M180 327l43-22 43 21-43 22z" fill="#eee" stroke="#fff"/><path d="M223 348l43-22v-30l-43 22z" fill="#555" stroke="#aaa"/><path d="M180 327l43 21v-30l-43-21z" fill="#888" stroke="#ddd"/>
+        <g class="iso-robot-shoulder" transform="translate(223 316)">
+          <path d="M-18 4l18-19 22 11-18 19z" fill="#aaa" stroke="#fff" stroke-width="2"/><path d="M0-15l18-9 24 12-18 10z" fill="#eee" stroke="#fff"/>
+          <g class="iso-robot-upper"><path d="M25-13l15-8 75 37-15 9z" fill="#ddd" stroke="#fff" stroke-width="1.5"/><path d="M34-11l65 32" stroke="#555" stroke-width="3"/><circle cx="112" cy="20" r="12" fill="#222" stroke="#eee" stroke-width="4"/>
+            <g class="iso-robot-forearm"><path d="M112 20l11-5 59 32-12 7z" fill="#eee" stroke="#fff" stroke-width="1.5"/><path d="M123 18l47 26" stroke="#555" stroke-width="3"/><circle cx="178" cy="50" r="9" fill="#222" stroke="#eee" stroke-width="3"/>
+              <g class="iso-gripper"><path d="M178 50l-3 19-8 8m11-27 10 14 9 3" fill="none" stroke="#eee" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M167 77l-8 5m38-2 8 4" stroke="#aaa" stroke-width="3" stroke-linecap="round"/></g>
+            </g>
+          </g>
+        </g>
       </g>
-      <!-- desktop tower with vents -->
-      <g class="iso-part iso-part-e">
-        <path d="M78 213l68-34 48 24-68 34z" fill="#eee" stroke="#fff"/>
-        <path d="M126 237l68-34v111l-68 34z" fill="#444" stroke="#aaa"/>
-        <path d="M78 213l48 24v111l-48-24z" fill="#777" stroke="#ddd"/>
-        <path d="M90 219l36 18v93l-36-18z" fill="#171717"/>
-        {Array.from({ length: 8 }, (_, n) => <path d={`M96 ${232+n*10}l24 12`} stroke="#aaa" stroke-width="1.2" opacity=".65" />)}
-        <circle cx="108" cy="316" r="5" fill="#ddd"/><circle cx="108" cy="316" r="2" fill="#333"/>
-        <path d="M137 251l42-21m-42 31 42-21m-42 31 42-21m-42 31 42-21" stroke="#eee" stroke-opacity=".35"/>
-      </g>
-      <!-- speaker, notebook and plant -->
-      <g class="iso-part iso-part-f">
-        <path d="M496 312l40-20 35 17-40 20z" fill="#eee" stroke="#fff"/><path d="M531 329l40-20v47l-40 20z" fill="#555" stroke="#aaa"/><path d="M496 312l35 17v47l-35-17z" fill="#999" stroke="#ddd"/>
-        <ellipse cx="515" cy="339" rx="10" ry="6" fill="#222" stroke="#eee"/><ellipse cx="515" cy="339" rx="4" ry="2.5" fill="#aaa"/>
-      </g>
-      <g class="iso-part iso-part-g">
-        <path d="M88 275l53-27 45 22-53 27z" fill="#eee" stroke="#fff"/><path d="M133 297l53-27v8l-53 27z" fill="#555"/><path d="M88 275l45 22v8l-45-22z" fill="#888"/>
-        <path d="M100 273l41-20m-37 27 31-15" stroke="#555" stroke-width="1.4"/>
-        <path d="M556 242l21-11 18 9-21 11z" fill="#aaa"/><path d="M556 242l18 9v27l-18-9z" fill="#555"/><path d="M574 251l21-11v27l-21 11z" fill="#888"/>
-        <path d="M565 241c-20-28-10-45 3-53 10 18 9 34-3 53m3 0c-3-31 12-43 26-42 0 20-10 34-26 42m-5-3c-28-12-31-30-22-42 17 8 25 22 22 42" fill="#ddd" stroke="#fff"/>
-      </g>
-      <g class="iso-loop iso-monitor-scan"><path d="M340 119l125-63v115l-125 63z" fill="#fff" opacity=".08"/><path d="M340 119l125-63" stroke="#fff" stroke-width="5" opacity=".75"/></g>
-      <g class="iso-loop iso-fan" transform="translate(108 284)"><circle r="19" fill="#111" stroke="#ddd" stroke-width="2"/><path d="M0-16C10-17 12-7 3-2L0 0C-5-8-5-13 0-16M16 0C17 10 7 12 2 3L0 0C8-5 13-5 16 0M0 16C-10 17-12 7-3 2L0 0C5 8 5 13 0 16M-16 0C-17-10-7-12-2-3L0 0C-8 5-13 5-16 0" fill="#aaa" stroke="#eee" stroke-width="1"/><circle r="3" fill="#eee"/></g>
-      <g class="iso-loop iso-orbit"><ellipse cx="324" cy="205" rx="250" ry="130" fill="none" stroke="#fff" stroke-opacity=".22" stroke-dasharray="2 12"/><circle cx="574" cy="205" r="4" fill="#fff"/></g>
-      <!-- cable runs, bolts and measurement marks -->
-      <g fill="none" stroke="#bbb" stroke-width="1.3" opacity=".8"><path d="M385 383c-22 32 9 43 42 26s34-6 24 6"/><path d="M389 383c-18 24 10 34 37 20"/><path d="M82 345l-19 10v-23m490-28 22 11v18"/></g>
-      <g fill="#eee"><circle cx="90" cy="315" r="2"/><circle cx="305" cy="420" r="2"/><circle cx="548" cy="300" r="2"/></g>
+      <g class="iso-machine-head"><path d="M478 259l31-16 24 12-31 16z" fill="#eee" stroke="#fff"/><path d="M502 271l31-16v34l-31 16z" fill="#444" stroke="#aaa"/><path d="M478 259l24 12v34l-24-12z" fill="#888" stroke="#ddd"/><path d="M496 291v18m8-14v14" stroke="#eee" stroke-width="3"/></g>
+      <g class="iso-status-stack"><path d="M544 158l7-4 7 4v33l-7 4-7-4z" fill="#222" stroke="#aaa"/><circle cx="551" cy="164" r="3.5" fill="#eee"/><circle cx="551" cy="176" r="3.5" fill="#888"/><circle cx="551" cy="188" r="3.5" fill="#555"/></g>
+      <g fill="none" stroke="#bbb" stroke-width="1.2" opacity=".8"><path d="M86 351l-20 10v-22m475-43 22 11v18"/></g>
     </>}
     {scene === "clinic" && <>
       <!-- architectural site plate -->
@@ -123,8 +78,6 @@ const { scene = "hero", class: className = "" } = Astro.props;
       <!-- ambulance bay, ramp and parking marks -->
       <g class="iso-part iso-part-d"><path d="M111 341l45-23 49 25-45 23z" fill="#777" stroke="#ddd"/><path d="M160 366l45-23v8l-45 23z" fill="#333"/><path d="M111 341l49 25v8l-49-25z" fill="#555"/><path d="M124 340l32-16 25 13-32 16z" fill="#111"/><path d="M181 358l28-14 28 14-28 14z" fill="none" stroke="#eee" stroke-dasharray="3 3"/></g>
       <g class="iso-part iso-part-e"><path d="M453 344l50-25 32 16-50 25z" fill="#ddd"/><path d="M485 360l50-25v29l-50 25z" fill="#444"/><path d="M453 344l32 16v29l-32-16z" fill="#888"/><path d="M463 346l22 11 30-15" fill="none" stroke="#222" stroke-width="2"/></g>
-      <g class="iso-loop iso-beacon"><path d="M207 111l11-6 11 6-11 6z" fill="#eee"/><path d="M207 111v-9l11-6 11 6v9" fill="#777" stroke="#eee"/><path d="M202 99l-7-5m36 5 7-5m-18-7v-8" stroke="#fff" stroke-width="2" opacity=".8"/></g>
-      <g class="iso-loop iso-orbit"><ellipse cx="322" cy="260" rx="245" ry="130" fill="none" stroke="#fff" stroke-opacity=".2" stroke-dasharray="2 12"/><circle cx="567" cy="260" r="4" fill="#fff"/></g>
       <g class="iso-part iso-part-f"><path d="M197 128l24-12 15 8-24 12z" fill="#eee"/><path d="M212 136l24-12v34l-24 12z" fill="#555"/><path d="M197 128l15 8v34l-15-8z" fill="#999"/><path d="M205 117v-19m8 15v-24m8 29V99" stroke="#ddd" stroke-width="2"/><path d="M205 98l4-6 4 6m0-3 4-6 4 6" fill="none" stroke="#fff"/></g>
     </>}
     {scene === "journal" && <>
@@ -148,11 +101,9 @@ const { scene = "hero", class: className = "" } = Astro.props;
       <g class="iso-part iso-part-d"><ellipse cx="140" cy="139" rx="48" ry="23" fill="#333" stroke="#ddd" stroke-width="2"/><path d="M92 139v-12l48-24 48 24v12" fill="#777" stroke="#ddd"/><ellipse cx="140" cy="127" rx="48" ry="23" fill="#111" stroke="#eee" stroke-width="2"/><ellipse cx="140" cy="127" rx="35" ry="16" fill="#aaa" stroke="#fff"/><path d="M140 127l16-8m-16 8v-11" stroke="#111" stroke-width="3" stroke-linecap="round"/><circle cx="140" cy="127" r="3" fill="#111"/></g>
       <!-- ink bottle and paper clips -->
       <g class="iso-part iso-part-e"><path d="M482 285l34-17 30 15-34 17z" fill="#ddd"/><path d="M512 300l34-17v35l-34 17z" fill="#444"/><path d="M482 285l30 15v35l-30-15z" fill="#888"/><path d="M490 286l26-13 18 9-26 13z" fill="#111"/><path d="M530 270c13-10 21 7 7 15-9 5-16-5-8-10 6-4 11 2 6 5" fill="none" stroke="#eee" stroke-width="2"/></g>
-      <g class="iso-loop iso-page-flutter"><path d="M314 161v155l8-4V157z" fill="#fff" opacity=".45"/><path d="M322 157l9 5v154l-9-5z" fill="#555" opacity=".7"/></g>
-      <g class="iso-loop iso-timer-hand"><path d="M140 127l16-8" stroke="#111" stroke-width="3" stroke-linecap="round"/></g>
-      <g class="iso-loop iso-orbit"><ellipse cx="320" cy="245" rx="250" ry="125" fill="none" stroke="#fff" stroke-opacity=".2" stroke-dasharray="2 12"/><circle cx="570" cy="245" r="4" fill="#fff"/></g>
       <g class="iso-part iso-part-f"><path d="M100 288c-18-18 2-33 13-17 10 15-7 27-14 15m23-6c-13-17 4-29 14-13 9 14-4 24-12 15" fill="none" stroke="#ddd" stroke-width="2.5"/></g>
     </>}
+      <g class="iso-plotter-carriage"><path d="M0 0l19-10 22 11-19 10z" fill="#eee" stroke="#fff"/><path d="M22 11l19-10v18L22 29z" fill="#555"/><path d="M0 0l22 11v18L0 18z" fill="#888"/><path d="M17 21l5 3-8 20-5-3z" fill="#ddd" stroke="#fff"/><path d="M9 41l5 3-4 7z" fill="#111"/></g><path class="iso-ink-trace" d="M175 224l30 15 26-13 28 14 25-12" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>
     {scene === "android" && <>
       <g class="iso-platform"><path d="M89 332l234-117 231 116-234 118z" fill="#1a1a1a" stroke="#aaa"/><path d="M89 332l231 117v14L89 346z" fill="#080808"/><path d="M320 449l234-118v14L320 463z" fill="#444"/><path d="M89 332l234-117 231 116-234 118z" fill="url(#iso-grid)"/></g>
       <!-- phone body -->
@@ -173,13 +124,14 @@ const { scene = "hero", class: className = "" } = Astro.props;
       <g class="iso-part iso-part-c"><path d="M112 212l66-33 65 32-66 33z" fill="#eee" stroke="#fff"/><path d="M177 244l66-33v57l-66 33z" fill="#444" stroke="#aaa"/><path d="M112 212l65 32v57l-65-32z" fill="#888"/><path d="M127 213l50-25 42 21-50 25z" fill="#111"/><path d="M145 215l-7 4 14 7 7-4m15-16 9 5" stroke="#eee" stroke-width="3" fill="none"/></g>
       <g class="iso-part iso-part-d"><path d="M425 82l57-29 57 28-57 29z" fill="#eee" stroke="#fff"/><path d="M482 110l57-29v46l-57 29z" fill="#444"/><path d="M425 82l57 28v46l-57-28z" fill="#888"/><path d="M439 84l43-22 40 20-43 22z" fill="#151515"/><circle cx="479" cy="83" r="8" fill="#ddd"/><path d="M479 83l0-5m0 5 5 3" stroke="#111" stroke-width="1.5"/></g>
       <g class="iso-part iso-part-e"><path d="M111 119l40-20 43 21-40 20z" fill="#ddd"/><path d="M154 140l40-20v41l-40 20z" fill="#444"/><path d="M111 119l43 21v41l-43-21z" fill="#888"/><path d="M123 120l28-14 27 13-28 14z" fill="#111"/><path d="M132 125l20 10 18-9" stroke="#eee" stroke-width="2" fill="none"/></g>
-      <g class="iso-loop iso-phone-scan"><path d="M247 178l88 44v15l-88-44z" fill="#fff" opacity=".13"/><path d="M247 178l88 44" stroke="#fff" stroke-width="3" opacity=".8"/></g>
-      <g class="iso-loop iso-loader"><circle cx="480" cy="83" r="17" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="14 7"/></g>
-      <g class="iso-loop iso-orbit"><ellipse cx="320" cy="230" rx="246" ry="132" fill="none" stroke="#fff" stroke-opacity=".2" stroke-dasharray="2 12"/><circle cx="566" cy="230" r="4" fill="#fff"/></g>
       <!-- network cable and status nodes -->
       <g fill="none" stroke="#ddd" stroke-width="2"><path d="M397 331c46 35 70 21 74-4s-13-27-28-16"/><path d="M398 340c58 42 89 15 78-18"/></g>
       <g fill="#eee"><circle cx="487" cy="309" r="4"/><circle cx="499" cy="303" r="2"/><circle cx="510" cy="298" r="2"/></g>
     </>}
+      <g class="iso-clinic-cart"><path d="M0 0l28-14 29 14-28 14z" fill="#eee" stroke="#fff"/><path d="M29 14l28-14v28L29 42z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v28L0 28z" fill="#888" stroke="#ddd"/><path d="M7 2l22-11 21 11-21 11z" fill="#171717"/><path d="M10 26l18 9 18-9" fill="none" stroke="#eee" stroke-width="2"/><circle cx="9" cy="32" r="5" fill="#111" stroke="#eee" stroke-width="2"/><circle cx="47" cy="51" r="5" fill="#111" stroke="#eee" stroke-width="2"/></g>
+      <g class="iso-clinic-door"><path d="M260 220l21 10v69l-21-10z" fill="#222" stroke="#eee" stroke-width="1.5"/><path d="M281 230l21 10v69l-21-10z" fill="#555" stroke="#eee" stroke-width="1.5"/><path d="M270 251v25m21-17v25" stroke="#aaa" stroke-width="2"/></g>
+      <g class="iso-phone-blank"><path d="M0 0l34-17 38 19-34 17z" fill="#eee" stroke="#fff"/><path d="M38 19l34-17v15L38 34z" fill="#555"/><path d="M0 0l38 19v15L0 15z" fill="#888"/><path d="M9 0l25-13 27 13-25 13z" fill="#171717"/></g>
+      <g class="iso-phone-gantry"><path d="M0 0l14-7 14 7v-72l-14-7z" fill="#555" stroke="#ddd"/><path d="M-9-79l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><g class="iso-phone-press"><path d="M-9-8l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><path d="M-9-8v14l23 12V4z" fill="#777"/><path d="M14 4l23-12V6L14 18z" fill="#444"/><path d="M7 18v10m14-10v10" stroke="#eee" stroke-width="3"/></g></g>
     <!-- Shared assembly details -->
     <g fill="none" stroke="#eee" stroke-opacity=".65" stroke-width="1">
       <path d="M42 390h38m-38-4v8m38-8v8M554 82h34m-34-4v8m34-8v8"/>
@@ -202,23 +154,38 @@ const { scene = "hero", class: className = "" } = Astro.props;
   .iso-scene .iso-platform{transform:translateY(var(--platform-y, 9px));transform-origin:center}
   @media(prefers-reduced-motion:reduce){.iso-scene .iso-part,.iso-scene .iso-platform{transform:none!important}}
 
-  /* Continuous micro-motion gives each isometric scene a living, looping rhythm. */
-  .iso-scene .iso-loop{pointer-events:none;transform-box:view-box;will-change:transform,opacity}
-  .iso-scene .iso-orbit{transform-origin:320px 240px;animation:iso-orbit 28s linear infinite}
-  .iso-scene .iso-orbit circle{animation:iso-orbit-glint 2.8s ease-in-out infinite alternate}
-  .iso-scene .iso-monitor-scan{animation:iso-screen-sweep 5.2s ease-in-out infinite}
-  .iso-scene .iso-fan{transform-box:view-box;transform-origin:108px 284px;animation:iso-spin 2.4s linear infinite}
-  .iso-scene .iso-beacon{transform-box:view-box;transform-origin:218px 103px;animation:iso-beacon 1.8s ease-in-out infinite}
-  .iso-scene .iso-page-flutter{transform-box:view-box;transform-origin:314px 240px;animation:iso-page 4.8s ease-in-out infinite}
-  .iso-scene .iso-timer-hand{transform-box:view-box;transform-origin:140px 127px;animation:iso-clock 8s linear infinite}
-  .iso-scene .iso-phone-scan{animation:iso-screen-sweep 3.8s ease-in-out infinite}
-  .iso-scene .iso-loader{transform-box:view-box;transform-origin:480px 83px;animation:iso-spin 3s linear infinite}
-  @keyframes iso-orbit{to{transform:rotate(360deg)}}
-  @keyframes iso-orbit-glint{from{opacity:.35}to{opacity:1}}
-  @keyframes iso-spin{to{transform:rotate(360deg)}}
-  @keyframes iso-clock{to{transform:rotate(360deg)}}
-  @keyframes iso-beacon{0%,100%{opacity:.45;filter:blur(0)}50%{opacity:1;filter:blur(1.8px)}}
-  @keyframes iso-page{0%,72%,100%{transform:skewY(0) translateX(0)}84%{transform:skewY(-5deg) translateX(5px)}92%{transform:skewY(2deg) translateX(-2px)}}
-  @keyframes iso-screen-sweep{0%,12%{opacity:0;transform:translateX(-34px)}28%{opacity:.9}62%{opacity:.65}88%,100%{opacity:0;transform:translateX(34px)}}
-  @media(prefers-reduced-motion:reduce){.iso-scene .iso-loop{animation:none!important;opacity:.5}}
+  /* Coordinated mechanical cycles: every movement performs a visible operation. */
+  .iso-machine-door{transform-origin:452px 210px;animation:machine-door 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-roller{animation:roller-cycle .8s linear infinite;animation-delay:var(--roller-delay,0s)}
+  .iso-workpiece{animation:workpiece-cycle 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-workpiece-finished{animation:finished-cycle 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-robot-shoulder{transform-origin:0 0;animation:robot-shoulder 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-robot-upper{transform-origin:0 0;animation:robot-upper 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-robot-forearm{transform-origin:112px 20px;animation:robot-forearm 7.2s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-gripper{transform-origin:178px 50px;animation:robot-grip 7.2s ease-in-out infinite}
+  .iso-machine-head{animation:machine-head 7.2s ease-in-out infinite}
+  .iso-clinic-cart{animation:clinic-cart 8s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-clinic-door{transform-origin:281px 264px;animation:clinic-door 8s ease-in-out infinite}
+  .iso-plotter-carriage{animation:plotter-write 6.4s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-ink-trace{stroke-dasharray:180;stroke-dashoffset:180;animation:ink-write 6.4s ease-in-out infinite}
+  .iso-phone-blank{animation:phone-feed 7s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-phone-gantry{animation:phone-gantry 7s cubic-bezier(.65,0,.35,1) infinite}
+  .iso-phone-press{animation:phone-press 7s ease-in-out infinite}
+  @keyframes machine-door{0%,8%,100%{transform:translateX(0)}18%,48%{transform:translateX(-32px)}60%,88%{transform:translateX(0)}}
+  @keyframes roller-cycle{to{filter:brightness(1.5)}}
+  @keyframes workpiece-cycle{0%{transform:translate(70px,38px);opacity:0}10%{opacity:1}25%,54%{transform:translate(230px,-42px);opacity:1}68%{opacity:0}100%{transform:translate(70px,38px);opacity:0}}
+  @keyframes finished-cycle{0%,48%{transform:translate(245px,-48px);opacity:0}58%{opacity:1}78%{transform:translate(430px,-140px);opacity:1}92%,100%{transform:translate(480px,-165px);opacity:0}}
+  @keyframes robot-shoulder{0%,10%,100%{transform:rotate(-8deg)}22%,34%{transform:rotate(18deg)}48%,62%{transform:rotate(-12deg)}78%{transform:rotate(12deg)}}
+  @keyframes robot-upper{0%,10%,100%{transform:rotate(0)}22%,34%{transform:rotate(-18deg)}48%,62%{transform:rotate(10deg)}78%{transform:rotate(-8deg)}}
+  @keyframes robot-forearm{0%,10%,100%{transform:rotate(0)}22%,34%{transform:rotate(22deg)}48%,62%{transform:rotate(-18deg)}78%{transform:rotate(14deg)}}
+  @keyframes robot-grip{0%,20%,100%{transform:scale(1)}26%,52%{transform:scale(.68)}62%,88%{transform:scale(1)}}
+  @keyframes machine-head{0%,20%,100%{transform:translateY(0)}32%,54%{transform:translateY(22px)}66%{transform:translateY(0)}}
+  @keyframes clinic-cart{0%,8%{transform:translate(-55px,28px);opacity:0}18%{opacity:1}42%,58%{transform:translate(0,0);opacity:1}82%{transform:translate(85px,-43px);opacity:1}94%,100%{transform:translate(120px,-62px);opacity:0}}
+  @keyframes clinic-door{0%,12%,100%{transform:translateX(0)}24%,54%{transform:translateX(-13px)}68%,88%{transform:translateX(0)}}
+  @keyframes plotter-write{0%,5%{transform:translate(165px,202px)}18%{transform:translate(205px,182px)}36%{transform:translate(252px,206px)}54%{transform:translate(300px,182px)}68%{transform:translate(340px,202px)}82%,100%{transform:translate(165px,202px)}}
+  @keyframes ink-write{0%,12%{stroke-dashoffset:180;opacity:0}18%{opacity:1}68%{stroke-dashoffset:0;opacity:1}82%,100%{stroke-dashoffset:180;opacity:0}}
+  @keyframes phone-feed{0%,8%{transform:translate(-80px,40px);opacity:0}18%{opacity:1}38%,54%{transform:translate(0,0);opacity:1}78%{transform:translate(170px,-84px);opacity:1}92%,100%{transform:translate(230px,-114px);opacity:0}}
+  @keyframes phone-gantry{0%,18%,100%{transform:translateY(0)}32%,52%{transform:translateY(24px)}66%{transform:translateY(0)}}
+  @keyframes phone-press{0%,25%,100%{transform:translateY(0)}38%,50%{transform:translateY(12px)}62%{transform:translateY(0)}}
+  @media(prefers-reduced-motion:reduce){.iso-scene [class*="iso-"]{animation:none!important;stroke-dashoffset:0!important}}
 </style>
