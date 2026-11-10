@@ -79,6 +79,8 @@ const { scene = "hero", class: className = "" } = Astro.props;
       <g class="iso-part iso-part-d"><path d="M111 341l45-23 49 25-45 23z" fill="#777" stroke="#ddd"/><path d="M160 366l45-23v8l-45 23z" fill="#333"/><path d="M111 341l49 25v8l-49-25z" fill="#555"/><path d="M124 340l32-16 25 13-32 16z" fill="#111"/><path d="M181 358l28-14 28 14-28 14z" fill="none" stroke="#eee" stroke-dasharray="3 3"/></g>
       <g class="iso-part iso-part-e"><path d="M453 344l50-25 32 16-50 25z" fill="#ddd"/><path d="M485 360l50-25v29l-50 25z" fill="#444"/><path d="M453 344l32 16v29l-32-16z" fill="#888"/><path d="M463 346l22 11 30-15" fill="none" stroke="#222" stroke-width="2"/></g>
       <g class="iso-part iso-part-f"><path d="M197 128l24-12 15 8-24 12z" fill="#eee"/><path d="M212 136l24-12v34l-24 12z" fill="#555"/><path d="M197 128l15 8v34l-15-8z" fill="#999"/><path d="M205 117v-19m8 15v-24m8 29V99" stroke="#ddd" stroke-width="2"/><path d="M205 98l4-6 4 6m0-3 4-6 4 6" fill="none" stroke="#fff"/></g>
+      <g class="iso-clinic-cart" style="translate:400px 270px"><path d="M0 0l28-14 29 14-28 14z" fill="#eee" stroke="#fff"/><path d="M29 14l28-14v28L29 42z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v28L0 28z" fill="#888" stroke="#ddd"/><path d="M7 2l22-11 21 11-21 11z" fill="#171717"/><path d="M10 26l18 9 18-9" fill="none" stroke="#eee" stroke-width="2"/><circle cx="9" cy="32" r="5" fill="#111" stroke="#eee" stroke-width="2"/><circle cx="47" cy="51" r="5" fill="#111" stroke="#eee" stroke-width="2"/></g>
+      <g class="iso-clinic-door"><path d="M260 220l21 10v69l-21-10z" fill="#222" stroke="#eee" stroke-width="1.5"/><path d="M281 230l21 10v69l-21-10z" fill="#555" stroke="#eee" stroke-width="1.5"/><path d="M270 251v25m21-17v25" stroke="#aaa" stroke-width="2"/></g>
     </>}
     {scene === "journal" && <>
       <g class="iso-platform"><path d="M82 331l238-119 239 119-239 119z" fill="#1a1a1a" stroke="#aaa"/><path d="M82 331l238 119v14L82 345z" fill="#080808"/><path d="M320 450l239-119v14L320 464z" fill="#444"/><path d="M82 331l238-119 239 119-239 119z" fill="url(#iso-grid)"/></g>
@@ -102,8 +104,8 @@ const { scene = "hero", class: className = "" } = Astro.props;
       <!-- ink bottle and paper clips -->
       <g class="iso-part iso-part-e"><path d="M482 285l34-17 30 15-34 17z" fill="#ddd"/><path d="M512 300l34-17v35l-34 17z" fill="#444"/><path d="M482 285l30 15v35l-30-15z" fill="#888"/><path d="M490 286l26-13 18 9-26 13z" fill="#111"/><path d="M530 270c13-10 21 7 7 15-9 5-16-5-8-10 6-4 11 2 6 5" fill="none" stroke="#eee" stroke-width="2"/></g>
       <g class="iso-part iso-part-f"><path d="M100 288c-18-18 2-33 13-17 10 15-7 27-14 15m23-6c-13-17 4-29 14-13 9 14-4 24-12 15" fill="none" stroke="#ddd" stroke-width="2.5"/></g>
-    </>}
       <g class="iso-plotter-carriage"><path d="M0 0l19-10 22 11-19 10z" fill="#eee" stroke="#fff"/><path d="M22 11l19-10v18L22 29z" fill="#555"/><path d="M0 0l22 11v18L0 18z" fill="#888"/><path d="M17 21l5 3-8 20-5-3z" fill="#ddd" stroke="#fff"/><path d="M9 41l5 3-4 7z" fill="#111"/></g><path class="iso-ink-trace" d="M175 224l30 15 26-13 28 14 25-12" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round"/>
+    </>}
     {scene === "android" && <>
       <g class="iso-platform"><path d="M89 332l234-117 231 116-234 118z" fill="#1a1a1a" stroke="#aaa"/><path d="M89 332l231 117v14L89 346z" fill="#080808"/><path d="M320 449l234-118v14L320 463z" fill="#444"/><path d="M89 332l234-117 231 116-234 118z" fill="url(#iso-grid)"/></g>
       <!-- phone body -->
@@ -127,11 +129,9 @@ const { scene = "hero", class: className = "" } = Astro.props;
       <!-- network cable and status nodes -->
       <g fill="none" stroke="#ddd" stroke-width="2"><path d="M397 331c46 35 70 21 74-4s-13-27-28-16"/><path d="M398 340c58 42 89 15 78-18"/></g>
       <g fill="#eee"><circle cx="487" cy="309" r="4"/><circle cx="499" cy="303" r="2"/><circle cx="510" cy="298" r="2"/></g>
-    </>}
-      <g class="iso-clinic-cart"><path d="M0 0l28-14 29 14-28 14z" fill="#eee" stroke="#fff"/><path d="M29 14l28-14v28L29 42z" fill="#555" stroke="#ddd"/><path d="M0 0l29 14v28L0 28z" fill="#888" stroke="#ddd"/><path d="M7 2l22-11 21 11-21 11z" fill="#171717"/><path d="M10 26l18 9 18-9" fill="none" stroke="#eee" stroke-width="2"/><circle cx="9" cy="32" r="5" fill="#111" stroke="#eee" stroke-width="2"/><circle cx="47" cy="51" r="5" fill="#111" stroke="#eee" stroke-width="2"/></g>
-      <g class="iso-clinic-door"><path d="M260 220l21 10v69l-21-10z" fill="#222" stroke="#eee" stroke-width="1.5"/><path d="M281 230l21 10v69l-21-10z" fill="#555" stroke="#eee" stroke-width="1.5"/><path d="M270 251v25m21-17v25" stroke="#aaa" stroke-width="2"/></g>
       <g class="iso-phone-blank"><path d="M0 0l34-17 38 19-34 17z" fill="#eee" stroke="#fff"/><path d="M38 19l34-17v15L38 34z" fill="#555"/><path d="M0 0l38 19v15L0 15z" fill="#888"/><path d="M9 0l25-13 27 13-25 13z" fill="#171717"/></g>
-      <g class="iso-phone-gantry"><path d="M0 0l14-7 14 7v-72l-14-7z" fill="#555" stroke="#ddd"/><path d="M-9-79l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><g class="iso-phone-press"><path d="M-9-8l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><path d="M-9-8v14l23 12V4z" fill="#777"/><path d="M14 4l23-12V6L14 18z" fill="#444"/><path d="M7 18v10m14-10v10" stroke="#eee" stroke-width="3"/></g></g>
+      <g class="iso-phone-gantry" style="translate:420px 180px"><path d="M0 0l14-7 14 7v-72l-14-7z" fill="#555" stroke="#ddd"/><path d="M-9-79l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><g class="iso-phone-press"><path d="M-9-8l23-12 23 12-23 12z" fill="#eee" stroke="#fff"/><path d="M-9-8v14l23 12V4z" fill="#777"/><path d="M14 4l23-12V6L14 18z" fill="#444"/><path d="M7 18v10m14-10v10" stroke="#eee" stroke-width="3"/></g></g>
+    </>}
     <!-- Shared assembly details -->
     <g fill="none" stroke="#eee" stroke-opacity=".65" stroke-width="1">
       <path d="M42 390h38m-38-4v8m38-8v8M554 82h34m-34-4v8m34-8v8"/>
