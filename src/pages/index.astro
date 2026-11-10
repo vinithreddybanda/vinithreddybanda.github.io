@@ -89,10 +89,10 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       .nav-right a:hover{color:var(--fg)}
       .nav-index{color:var(--dim);font:10px var(--mono);margin-right:clamp(8px,2vw,26px)}
       .hero{min-height:100svh;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding-top:130px;padding-bottom:clamp(30px,5vw,70px);isolation:isolate}
-      .hero>.hero-art{position:absolute;z-index:0;top:8%;right:var(--g);width:min(53vw,760px);height:auto;pointer-events:none;opacity:.96;overflow:visible}
+      .hero>.hero-art{position:absolute;z-index:0;top:7%;right:var(--g);width:min(58vw,820px);aspect-ratio:640/420;height:auto;pointer-events:none;opacity:.96;overflow:visible}
       .hero>.shell{position:relative;z-index:1}
       .hero .scroll-cue{z-index:2}
-      .project-art{display:block;width:100%;height:clamp(138px,17vw,205px);overflow:visible;margin:-8px 0 2px;opacity:.96}
+      .project-art{display:block;width:100%;height:auto;aspect-ratio:640/420;overflow:visible;margin:0;opacity:.96}
       .project-art svg,.hero-art svg{display:block;width:100%;height:100%;overflow:visible}
       .project-art .iso-shadow{opacity:.42}
       .project-art .iso-float,.hero-art .iso-float{transform-box:fill-box;transform-origin:center;animation:iso-hover 5.8s ease-in-out infinite}
@@ -104,11 +104,11 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       @keyframes iso-pulse{0%,100%{opacity:.55}50%{opacity:1}}
       .project-aside{min-width:0}
       @media(max-width:760px){
-        .hero>.hero-art{top:12%;right:-13%;width:82vw;opacity:.56}
+        .hero>.hero-art{top:10%;right:-10%;width:88vw;opacity:.56}
         .hero>.shell{z-index:1}
-        .project-art{height:clamp(120px,35vw,170px);width:min(100%,230px);margin:0 0 8px}
+        .project-art{width:100%;height:auto;aspect-ratio:640/420;margin:0}
       }
-      @media(max-width:430px){.hero>.hero-art{top:15%;right:-23%;width:94vw;opacity:.46}.project-art{height:122px;width:145px}}
+      @media(max-width:430px){.hero>.hero-art{top:15%;right:-23%;width:94vw;opacity:.46}.project-art{height:auto;width:100%;aspect-ratio:640/420}}
       @media(prefers-reduced-motion:reduce){.project-art .iso-float,.hero-art .iso-float,.project-art .iso-drift,.hero-art .iso-drift,.project-art .iso-pulse,.hero-art .iso-pulse{animation:none!important}}
       .hero::before{content:"";position:absolute;z-index:-1;width:min(75vw,1050px);aspect-ratio:1;right:-28%;top:-25%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.105),rgba(255,255,255,.025) 36%,transparent 68%);filter:blur(55px);transform:translate3d(0,var(--glow-y,0),0)}
       .hero-topline{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(35px,7vh,90px)}
@@ -134,7 +134,7 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       .work-heading h2 em{font:italic .98em var(--serif);letter-spacing:-.075em}
       .work-heading p{max-width:220px;font-size:12px;line-height:1.7;color:var(--dim);margin:0 0 4px}
       .projects{border-top:1px solid var(--line)}
-      .project{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(210px,.48fr);gap:clamp(16px,3vw,48px);align-items:start;padding:clamp(32px,5.5vw,78px) 0;border-bottom:1px solid var(--line);position:relative;isolation:isolate}
+      .project{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(270px,.58fr);gap:clamp(16px,3vw,48px);align-items:start;padding:clamp(32px,5.5vw,78px) 0;border-bottom:1px solid var(--line);position:relative;isolation:isolate}
       .project::before{content:"";position:absolute;z-index:-1;inset:0 calc(var(--g)*-.35);background:linear-gradient(100deg,rgba(255,255,255,.055),transparent 72%);opacity:0;transform:scaleY(.86);transform-origin:center;transition:opacity .7s var(--ease),transform .7s var(--ease)}
       .project:hover::before{opacity:1;transform:scaleY(1)}
       .project-num{padding-top:10px;color:var(--dim)}
@@ -145,9 +145,9 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       .project:hover h3{transform:translateX(7px);filter:blur(.15px)}
       .project h3 em{font:italic 1em var(--serif);letter-spacing:-.06em}
       .project-summary{max-width:420px;font-size:clamp(14px,1.3vw,17px);line-height:1.65;color:#aaa;margin:24px 0 0}
-      .project-aside{display:flex;flex-direction:column;align-items:flex-start;gap:22px;padding-top:10px}
+      .project-aside{display:grid;grid-template-columns:1fr;align-content:start;align-items:start;gap:16px;padding-top:10px;min-width:0}
       .project-year{color:var(--dim)}
-      .project-metric{width:100%;max-width:230px;min-height:135px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;padding:16px;position:relative;overflow:hidden;transition:background .6s var(--ease),color .6s var(--ease),transform .6s var(--ease)}
+      .project-metric{width:100%;max-width:none;min-height:135px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;padding:16px;position:relative;overflow:hidden;transition:background .6s var(--ease),color .6s var(--ease),transform .6s var(--ease)}
       .project-metric::after{content:"";position:absolute;width:110px;height:110px;border:1px solid currentColor;border-radius:50%;right:-48px;bottom:-52px;box-shadow:0 0 0 12px transparent,0 0 0 13px currentColor;opacity:.25;transition:transform .8s var(--ease)}
       .project:hover .project-metric{background:var(--fg);color:var(--bg);transform:translateY(-4px)}
       .project:hover .project-metric::after{transform:scale(1.35) rotate(28deg)}
@@ -207,7 +207,7 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
         .work-heading{align-items:start;flex-direction:column}
         .work-heading p{max-width:300px}
         .project{grid-template-columns:34px minmax(0,1fr);gap:12px}
-        .project-aside{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between;padding-top:20px}
+        .project-aside{grid-column:2;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;padding-top:20px}.project-art{grid-column:1/-1;width:100%;max-height:230px}.project-year{grid-column:1}.project-metric{grid-column:2}
         .project-metric{max-width:170px;min-height:105px}
         .project h3{font-size:clamp(40px,9vw,68px)}
         .about-grid,.skills{grid-template-columns:1fr;gap:36px}
@@ -241,19 +241,12 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
         html.js .reveal,html.js .depth,html.js .depth:not(.in-focus){opacity:1;transform:none;filter:none}
       }
 
-      /* Scroll is the animation timeline: every scene moves only while it travels through the viewport. */
-      .top::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:var(--fg);transform:scaleX(var(--page-progress,0));transform-origin:left;opacity:.75}
-      .hero-art,.project-art{filter:grayscale(1) saturate(0) contrast(1.12);transform:translate3d(0,var(--scene-y,0px),0) rotate(var(--scene-tilt,0deg)) scale(var(--scene-scale,1));transform-origin:50% 50%;will-change:transform,filter}
-      .hero-art{--scene-y:0px}
-      .project-art{--scene-y:0px}
-      .project-art .iso-float,.hero-art .iso-float,.project-art .iso-drift,.hero-art .iso-drift,.project-art .iso-pulse,.hero-art .iso-pulse{animation:none!important}
-      .project-art .iso-float,.hero-art .iso-float{transform:translate3d(0,calc((.5 - var(--scene-progress,.5))*-16px),0)}
-      .project-art .iso-drift,.hero-art .iso-drift{transform:translate3d(0,calc((.5 - var(--scene-progress,.5))*22px),0) rotate(calc((var(--scene-progress,.5) - .5)*5deg))}
-      .project-art .iso-pulse,.hero-art .iso-pulse{opacity:calc(.48 + var(--scene-progress,.5)*.5)}
-      .project{--row-progress:.5}
+      /* Illustrations stay assembled; their own project-specific timelines run continuously. */
+      .hero-art,.project-art{filter:grayscale(1) saturate(0) contrast(1.12);transform:none;transform-origin:center}
+      .hero-art svg,.project-art svg{width:100%;height:100%}
       .project-art{transition:filter .35s ease}
       .project:hover .project-art{filter:grayscale(1) saturate(0) contrast(1.25)}
-      @media(prefers-reduced-motion:reduce){.hero-art,.project-art{transform:none!important;will-change:auto}.project-art .iso-float,.hero-art .iso-float,.project-art .iso-drift,.hero-art .iso-drift{transform:none!important}}
+      @media(prefers-reduced-motion:reduce){.hero-art,.project-art{transform:none!important}}
     </style>
   </head>
   <body>
@@ -396,41 +389,15 @@ const capabilities = ["C# / .NET", "TypeScript", "React / Next.js", "Java / Kotl
       document.querySelectorAll(".depth").forEach((node) => depthObserver.observe(node));
 
 
-      // Scroll-linked motion. Progress is calculated from each illustration's own viewport journey.
-      const scrollScenes = [...document.querySelectorAll(".hero-art, .project-art")];
-      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
-      let sceneFrame = 0;
-      const clamp01 = (value) => Math.max(0, Math.min(1, value));
-      const paintScrollState = () => {
-        sceneFrame = 0;
-        if (reduceMotion.matches) return;
-        const vh = window.innerHeight || 1;
+      // Keep the page progress indicator independent from the artwork's continuous loops.
+      const syncPageProgress = () => {
         const doc = document.documentElement;
-        const maxScroll = Math.max(1, doc.scrollHeight - vh);
-        doc.style.setProperty("--page-progress", String(clamp01(window.scrollY / maxScroll)));
-        for (const scene of scrollScenes) {
-          const rect = scene.getBoundingClientRect();
-          const progress = clamp01((vh - rect.top) / (vh + rect.height));
-          scene.style.setProperty("--scene-progress", progress.toFixed(4));
-          const centered = progress - .5;
-          const isHero = scene.classList.contains("hero-art");
-          scene.style.setProperty("--scene-y", ((isHero ? -centered * 76 : -centered * 54).toFixed(2)) + "px");
-          scene.style.setProperty("--scene-tilt", (centered * (isHero ? 3.2 : 5)).toFixed(2) + "deg");
-          scene.style.setProperty("--scene-scale", (1 + Math.sin(progress * Math.PI) * (isHero ? .045 : .035)).toFixed(4));
-          const spread = 1 - progress;
-          for (const [part, distance] of [["a",28],["b",56],["c",84],["d",112],["e",140],["f",168],["g",196]]) {
-            scene.style.setProperty("--part-" + part + "-y", (-spread * distance).toFixed(2) + "px");
-          }
-          scene.style.setProperty("--platform-y", (spread * 18).toFixed(2) + "px");
-        }
+        const maxScroll = Math.max(1, doc.scrollHeight - window.innerHeight);
+        doc.style.setProperty("--page-progress", String(Math.max(0, Math.min(1, window.scrollY / maxScroll))));
       };
-      const requestSceneFrame = () => {
-        if (!sceneFrame) sceneFrame = requestAnimationFrame(paintScrollState);
-      };
-      addEventListener("scroll", requestSceneFrame, { passive: true });
-      addEventListener("resize", requestSceneFrame, { passive: true });
-      if (reduceMotion.addEventListener) reduceMotion.addEventListener("change", requestSceneFrame);
-      paintScrollState();
+      addEventListener("scroll", syncPageProgress, { passive: true });
+      addEventListener("resize", syncPageProgress, { passive: true });
+      syncPageProgress();
 
       const hero = document.querySelector(".hero");
       let heroFrame = false;
