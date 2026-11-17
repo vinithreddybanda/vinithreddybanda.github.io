@@ -393,6 +393,51 @@ const skills = [
       @media(hover:none),(pointer:coarse){.project:hover{transform:none}.project::after{display:none}}
       @media(prefers-reduced-motion:reduce){.js .reveal{filter:none}}
 
+
+      /* Square-edged monochrome direction */
+      :root{--corner:2px}
+      .nav,.theme-toggle,.hero-side,.project,.project-stack span,.project-link,
+      .fact,.skill-group,.skill-items span,.mail,.eyebrow::before{
+        border-radius:var(--corner)!important;
+      }
+      .nav{height:54px;padding-inline:20px;background:rgba(18,18,18,.58);border-color:var(--glass-edge)}
+      :root[data-theme="light"] .nav{background:rgba(248,248,248,.72)}
+      .theme-toggle{padding:8px 11px}
+      .hero-side{border-radius:var(--corner);padding:18px 20px}
+      .project{border-radius:var(--corner);padding:clamp(26px,3.6vw,48px)}
+      .project:nth-child(1){min-height:370px}
+      .project-stack span{border-radius:var(--corner);padding:6px 9px}
+      .project-link{border-radius:var(--corner);padding:9px 12px}
+      .fact,.skill-group{border-radius:var(--corner);padding:22px}
+      .skill-items span{border-radius:var(--corner);padding:6px 9px;background:var(--surface)}
+      .mail{border-radius:var(--corner);padding:12px 0}
+      .project:hover{transform:translateY(-3px)}
+      .project::after{background:radial-gradient(460px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.075),transparent 58%)}
+      .js .reveal{
+        opacity:.28;filter:blur(11px);transform:translate3d(0,22px,0);
+        transition:opacity .65s var(--ease),filter .65s var(--ease),transform .65s var(--ease);
+        will-change:opacity,filter,transform;
+      }
+      .js .reveal.visible{opacity:1;filter:blur(0);transform:translate3d(0,0,0)}
+      .header{backdrop-filter:none;-webkit-backdrop-filter:none}
+      .header.scrolled{background:rgba(9,9,9,.62);backdrop-filter:blur(24px) saturate(125%);-webkit-backdrop-filter:blur(24px) saturate(125%)}
+      :root[data-theme="light"] .header.scrolled{background:rgba(245,245,245,.68)}
+      @media(max-width:760px){
+        .nav{height:50px;padding-inline:15px}
+        .project,.project:nth-child(1){border-radius:var(--corner)!important;padding:24px;min-height:0}
+        .fact,.skill-group{padding:17px}
+      }
+      @media(max-width:480px){
+        .nav{height:48px}
+        .hero-side{padding:14px}
+        .project,.project:nth-child(1){padding:21px}
+        .fact,.skill-group{padding:15px}
+      }
+      @media(hover:none),(pointer:coarse){.project:hover{transform:none}}
+      @media(prefers-reduced-motion:reduce){
+        .js .reveal{opacity:1;filter:none;transform:none;will-change:auto}
+      }
+
     </style>
     <script is:inline>
       (() => {
@@ -539,14 +584,11 @@ const skills = [
 
       const revealNodes = document.querySelectorAll(".reveal");
       if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        const observer = new IntersectionObserver((entries, current) => {
+        const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-              current.unobserve(entry.target);
-            }
+            entry.target.classList.toggle("visible", entry.isIntersecting);
           });
-        }, { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
+        }, { threshold: 0.01, rootMargin: "-12% 0px -12% 0px" });
         revealNodes.forEach((node) => observer.observe(node));
       } else {
         revealNodes.forEach((node) => node.classList.add("visible"));
