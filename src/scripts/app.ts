@@ -8,9 +8,14 @@ function applyTheme(theme: Theme) {
   document.querySelectorAll<HTMLElement>("[data-theme-label]").forEach((label) => {
     label.textContent = theme === "dark" ? "Light" : "Dark";
   });
-  document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
-    button.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+  document.querySelectorAll<HTMLElement>("[data-theme-icon]").forEach((icon) => {
+    icon.textContent = theme === "dark" ? "☼" : "☾";
   });
+  document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+    button.setAttribute("aria-label", theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance");
+  });
+  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  themeColor?.setAttribute("content", theme === "dark" ? "#090a0c" : "#f4f4f6");
 }
 
 function initialiseTheme() {
@@ -25,9 +30,15 @@ function initialiseTheme() {
   document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
     button.addEventListener("click", () => {
       const next = themeStore.get() === "dark" ? "light" : "dark";
-      themeStore.set(next);
-      applyTheme(next);
-      try { localStorage.setItem("portfolio-theme", next); } catch { /* storage can be unavailable */ }
+      const change = () => {
+        themeStore.set(next);
+        applyTheme(next);
+        try { localStorage.setItem("portfolio-theme", next); } catch {}
+      };
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if ("startViewTransition" in document && !reduceMotion) {
+        (document as Document & { startViewTransition: (callback: () => void) => unknown }).startViewTransition(change);
+      } else change();
     });
   });
 }
@@ -59,7 +70,7 @@ function initialiseReveals() {
       entry.target.classList.add("is-visible");
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+  }, { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
   nodes.forEach((node) => observer.observe(node));
 }
 

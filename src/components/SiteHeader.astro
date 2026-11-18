@@ -1,6 +1,6 @@
 ---
 const path = Astro.url.pathname;
-const links = [{ href: "/", label: "Overview" }, { href: "/work/", label: "Work" }, { href: "/about/", label: "About" }, { href: "/contact/", label: "Contact" }];
+const links = [{ href: "/", label: "Home" }, { href: "/work/", label: "Work" }, { href: "/about/", label: "About" }, { href: "/contact/", label: "Contact" }];
 ---
 <header class="site-header" data-header>
   <div class="site-header__inner">
@@ -10,7 +10,7 @@ const links = [{ href: "/", label: "Overview" }, { href: "/work/", label: "Work"
     </nav>
     <div class="header-tools">
       <span class="header-tools__index">IN / 2026</span>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span data-theme-label>Light</span><span aria-hidden="true">◐</span></button>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light appearance" title="Switch appearance"><span data-theme-label>Light</span><span aria-hidden="true" data-theme-icon>☼</span></button>
     </div>
   </div>
 </header>
