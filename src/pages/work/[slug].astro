@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { projects } from "../../data/projects";
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+const { project } = Astro.props;
+---
+<BaseLayout title={`${project.name} — Vinith Reddy Banda`} description={project.summary}>
+  <article class="case-study page-wrap">
+    <a class="back-link" href="/work/">← Back to all work</a>
+    <header class="case-study__hero">
+      <div class="case-study__meta"><span class="eyebrow">{project.number} / {project.category}</span><span class="eyebrow">{project.year} · {project.status}</span></div>
+      <h1>{project.name}<em>.</em></h1>
+      <p>{project.summary}</p>
+    </header>
+    <div class="case-study__layout">
+      <div class="case-study__main">
+        <span class="eyebrow">Overview</span>
+        <p class="case-study__description">{project.description}</p>
+        <div class="case-study__highlights">
+          <span class="eyebrow">Engineering notes</span>
+          <ul>{project.highlights.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+      <aside class="case-study__aside">
+        <div><span class="eyebrow">Role</span><p>{project.role}</p></div>
+        <div><span class="eyebrow">Technology</span><div class="tag-list tag-list--large">{project.stack.map((item) => <span>{item}</span>)}</div></div>
+        {project.href && <a class="text-link" href={project.href} target="_blank" rel="noreferrer">View source repository <span>↗</span></a>}
+      </aside>
+    </div>
+    <div class="case-study__next"><span class="eyebrow">Keep exploring</span><a class="text-link" href="/work/">Back to selected work <span>↗</span></a></div>
+  </article>
+</BaseLayout>

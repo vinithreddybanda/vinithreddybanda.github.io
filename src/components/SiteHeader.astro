@@ -1,0 +1,16 @@
+---
+const path = Astro.url.pathname;
+const links = [{ href: "/", label: "Overview" }, { href: "/work/", label: "Work" }, { href: "/about/", label: "About" }, { href: "/contact/", label: "Contact" }];
+---
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="brand" href="/" aria-label="Vinith Reddy Banda, home">V<span>/</span>RB<span class="brand__period">.</span></a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      {links.map((link) => <a href={link.href} class:list={["primary-nav__link", path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "is-active" : ""]} aria-current={path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "page" : undefined}>{link.label}</a>)}
+    </nav>
+    <div class="header-tools">
+      <span class="header-tools__index">IN / 2026</span>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light theme"><span data-theme-label>Light</span><span aria-hidden="true">◐</span></button>
+    </div>
+  </div>
+</header>
