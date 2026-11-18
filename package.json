@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "astro build"
+    "build": "astro build",
+    "test": "node --test"
   },
   "dependencies": {
     "astro": "^6.0.0"

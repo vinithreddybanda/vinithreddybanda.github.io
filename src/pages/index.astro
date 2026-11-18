@@ -13,34 +13,34 @@ import { skillGroups } from "../data/skills";
       <div class="hero-actions"><a class="button-primary" href="/work/">Explore my work <span>↗</span></a><a class="button-quiet" href="/about/">A little about me</a></div>
     </div>
     <div class="hero-visual" aria-label="VB monogram graphic">
-      <div class="hero-visual__top"><span>VB / 26</span><span>HYDERABAD, IN</span></div>
+      <div class="hero-visual__top"><span>VB / 26</span><span>INDIA</span></div>
       <div class="hero-visual__monogram">V<span>/</span>B</div>
       <div class="hero-visual__orbit hero-visual__orbit--one"></div><div class="hero-visual__orbit hero-visual__orbit--two"></div>
-      <div class="hero-visual__bottom"><span>ENGINEERING<br />WITH INTENT</span><span>17° 23' N<br />78° 29' E</span></div>
+      <div class="hero-visual__bottom"><span>ENGINEERING<br />WITH INTENT</span><span>BUILD · LEARN<br />REPEAT</span></div>
     </div>
     <div class="hero-foot"><span>SCROLL TO EXPLORE</span><span>↓</span><span>PORTFOLIO / 2026</span></div>
   </section>
 
-  <section class="home-section page-wrap" aria-labelledby="work-heading">
+  <section class="home-section page-wrap" id="selected-work" aria-labelledby="work-heading">
     <div class="section-topline"><span class="eyebrow">02 / SELECTED WORK</span><a href="/work/" class="inline-link">All projects <span>↗</span></a></div>
-    <div class="section-intro"><h2 id="work-heading">A few things<br /><span>I've built.</span></h2><p>From native Android experiences to full-stack products and AI experiments. Each project starts with a problem worth solving.</p></div>
-    <div class="work-list">
+    <div class="section-intro" data-reveal><h2 id="work-heading">A few things<br /><span>I've built.</span></h2><p>From native Android experiences to full-stack products and AI experiments. Each project starts with a problem worth solving.</p></div>
+    <div class="work-list" data-reveal>
       {projects.slice(0, 4).map((project) => <a class="work-row" href={`/work/${project.slug}/`}>
         <span class="work-row__number">{project.number}</span><div class="work-row__main"><h3>{project.name}</h3><p>{project.summary}</p></div><span class="work-row__category">{project.category}</span><span class="work-row__arrow">↗</span>
       </a>)}
     </div>
   </section>
 
-  <section class="home-section home-section--about page-wrap">
+  <section class="home-section home-section--about page-wrap" id="approach">
     <div class="section-topline"><span class="eyebrow">03 / THE APPROACH</span><a href="/about/" class="inline-link">More about me <span>↗</span></a></div>
-    <div class="approach-grid"><h2>Curious by<br /><span>default.</span></h2><div><p class="approach-lead">I like understanding how things work, then making them work better.</p><p class="approach-copy">My interests move between backend architecture, frontend experiences, native Android and applied AI. I value simple systems, deliberate technical decisions and interfaces that respect people's time.</p></div></div>
+    <div class="approach-grid" data-reveal><h2>Curious by<br /><span>default.</span></h2><div><p class="approach-lead">I like understanding how things work, then making them work better.</p><p class="approach-copy">My interests move between backend architecture, frontend experiences, native Android and applied AI. I value simple systems, deliberate technical decisions and interfaces that respect people's time.</p></div></div>
   </section>
 
   <section class="home-section page-wrap">
     <div class="section-topline"><span class="eyebrow">04 / TOOLKIT</span><span class="eyebrow">ALWAYS LEARNING</span></div>
-    <div class="section-intro"><h2>Tools of<br /><span>the trade.</span></h2><p>A practical toolkit shaped by building, breaking, debugging and shipping.</p></div>
-    <div class="toolkit-list">{skillGroups.map((group, index) => <div class="toolkit-row"><span class="toolkit-row__index">0{index + 1}</span><h3>{group.title}</h3><div class="toolkit-tags">{group.items.map((item) => <span>{item}</span>)}</div></div>)}</div>
+    <div class="section-intro" data-reveal><h2>Tools of<br /><span>the trade.</span></h2><p>A practical toolkit shaped by building, breaking, debugging and shipping.</p></div>
+    <div class="toolkit-list" data-reveal>{skillGroups.map((group, index) => <div class="toolkit-row"><span class="toolkit-row__index">0{index + 1}</span><h3>{group.title}</h3><div class="toolkit-tags">{group.items.map((item) => <span>{item}</span>)}</div></div>)}</div>
   </section>
 
-  <section class="home-cta page-wrap"><span class="eyebrow">05 / NEXT UP</span><h2>Have something<br /><span>in mind?</span></h2><div class="home-cta__bottom"><p>Good ideas get better when they're built together. Let's talk.</p><a class="button-primary" href="/contact/">Start a conversation <span>↗</span></a></div></section>
+  <section class="home-cta page-wrap" id="contact" data-reveal><span class="eyebrow">05 / NEXT UP</span><h2>Have something<br /><span>in mind?</span></h2><div class="home-cta__bottom"><p>Good ideas get better when they're built together. Let's talk.</p><a class="button-primary" href="/contact/">Start a conversation <span>↗</span></a></div></section>
 </BaseLayout>

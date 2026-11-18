@@ -2,6 +2,7 @@ import { createStore } from "./store";
 
 type Theme = "dark" | "light";
 const themeStore = createStore<Theme>("dark");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
@@ -14,8 +15,8 @@ function applyTheme(theme: Theme) {
   document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
     button.setAttribute("aria-label", theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance");
   });
-  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-  themeColor?.setAttribute("content", theme === "dark" ? "#090a0c" : "#f4f4f6");
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    ?.setAttribute("content", theme === "dark" ? "#090a0c" : "#f4f5f2");
 }
 
 function initialiseTheme() {
@@ -27,40 +28,49 @@ function initialiseTheme() {
   const preferred: Theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
   themeStore.set(saved ?? preferred);
   applyTheme(themeStore.get());
+
   document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
     button.addEventListener("click", () => {
       const next = themeStore.get() === "dark" ? "light" : "dark";
       const change = () => {
         themeStore.set(next);
         applyTheme(next);
-        try { localStorage.setItem("portfolio-theme", next); } catch {}
+        try { localStorage.setItem("portfolio-theme", next); } catch { /* Storage can be unavailable. */ }
       };
-      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if ("startViewTransition" in document && !reduceMotion) {
-        (document as Document & { startViewTransition: (callback: () => void) => unknown }).startViewTransition(change);
-      } else change();
+      const transitionDocument = document as Document & { startViewTransition?: (callback: () => void) => unknown };
+      if (transitionDocument.startViewTransition && !reduceMotion.matches) transitionDocument.startViewTransition(change);
+      else change();
     });
   });
 }
 
-function initialiseHeader() {
-  const header = document.querySelector<HTMLElement>("[data-header]");
-  if (!header) return;
-  let previousState = false;
+function initialiseDock() {
+  const dock = document.querySelector<HTMLElement>("[data-dock]");
+  if (!dock) return;
+
+  let lastY = window.scrollY;
+  let frame = 0;
+  const show = () => dock.classList.remove("is-hidden");
   const update = () => {
-    const nextState = window.scrollY > 18;
-    if (nextState === previousState) return;
-    previousState = nextState;
-    header.classList.toggle("is-scrolled", nextState);
+    const y = Math.max(0, window.scrollY);
+    const delta = y - lastY;
+    if (y < 100 || delta < -5) show();
+    else if (delta > 7 && y > 150) dock.classList.add("is-hidden");
+    lastY = y;
+    frame = 0;
   };
-  update();
-  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("scroll", () => {
+    if (!frame) frame = window.requestAnimationFrame(update);
+  }, { passive: true });
+  dock.addEventListener("focusin", show);
+  dock.addEventListener("pointerenter", show);
+  dock.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => link.addEventListener("click", show));
 }
 
 function initialiseReveals() {
   const nodes = document.querySelectorAll<HTMLElement>("[data-reveal]");
   if (!nodes.length) return;
-  if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (!("IntersectionObserver" in window) || reduceMotion.matches) {
     nodes.forEach((node) => node.classList.add("is-visible"));
     return;
   }
@@ -70,11 +80,11 @@ function initialiseReveals() {
       entry.target.classList.add("is-visible");
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -7% 0px" });
+  }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
   nodes.forEach((node) => observer.observe(node));
 }
 
 document.documentElement.classList.add("js");
 initialiseTheme();
-initialiseHeader();
+initialiseDock();
 initialiseReveals();
