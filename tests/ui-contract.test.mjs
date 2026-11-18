@@ -9,6 +9,7 @@ test("dock uses a contextual action instead of a decorative plus or mail shortcu
   assert.match(header, /data-dock-action/);
   assert.match(header, /data-dock-label/);
   assert.match(header, /href: "#selected-work"/);
+  assert.match(header, /links\\.slice\\(0, 2\\)[\\s\\S]*data-dock-action[\\s\\S]*links\\.slice\\(2\\)/);
   assert.doesNotMatch(header, /mailto:vinithreddybanda@gmail\.com/);
 });
 
