@@ -26,8 +26,6 @@
 .dock-action:hover { transform: translateY(-2px); border-color: var(--accent); filter: brightness(1.12); }
 .dock-action:hover svg { transform: translateX(2px); }
 .tab-dock.is-hidden { transform: translate(-50%, 125%); opacity: 0; pointer-events: none; }
-@keyframes dock-arrive { from { opacity: 0; transform: translate(-50%, 18px) scale(.97); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
-.tab-dock { animation: dock-arrive .5s var(--ease) both; }
 
 .dashboard-hero { position: relative; display: grid; min-height: min(690px, calc(100svh - 68px)); grid-template-columns: minmax(0, 1.12fr) minmax(260px, .88fr); align-items: center; gap: clamp(34px, 6vw, 82px); padding-top: 42px; padding-bottom: 70px; }
 .dashboard-hero__copy { max-width: 720px; animation: hero-in .75s var(--ease) both; }
