@@ -17,6 +17,6 @@ import { experience, skillGroups } from "../data/skills";
   </div>
   <section class="file-section"><div class="section-kicker"><span>THE RECORD</span><span>01 / EXPERIENCE</span></div><div class="record-list">{experience.map(item => <div class="record-row"><span>{item.period}</span><div><b>{item.organisation}</b><small>{item.role}</small></div><p>{item.detail}</p></div>)}</div></section>
   <section class="file-section"><div class="section-kicker"><span>ON THE DESK</span><span>02 / TOOLKIT</span></div><div class="toolkit-list">{skillGroups.map(group => <div class="toolkit-row"><b>{group.title}</b><p>{group.items.join(" · ")}</p></div>)}</div></section>
-  <div class="about-contact"><p>Have a good problem?</p><a href="mailto:vinithreddybanda@gmail.com">WRITE TO ME ↗</a></div>
+  <div class="about-contact"><p>Have a good problem?</p><a href="/contact/">WRITE TO ME ↗</a></div>
 </section>
 </BaseLayout>
