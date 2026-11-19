@@ -321,20 +321,17 @@ html{view-transition-name:page}
 }
 
 
-/* A continuous shape journey: one motion layer travels through the full document */
-.site-header,#main,.site-footer{position:relative;z-index:1}
-.shape-journey{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;contain:strict;isolation:isolate;opacity:.72}
-.shape-journey>span{position:absolute;left:0;top:0;display:block;will-change:transform,border-radius,filter}
-.shape-journey__primary{width:clamp(230px,39vw,570px);aspect-ratio:1;background:radial-gradient(circle at 34% 28%,#e3ffad 0%,#c8f169 31%,#91b74e 68%,#78913e 100%);filter:blur(.2px) drop-shadow(0 28px 45px rgba(60,82,31,.13));mix-blend-mode:multiply;transition:filter .25s ease}
-.shape-journey__secondary{width:clamp(170px,27vw,390px);aspect-ratio:1;background:radial-gradient(circle at 35% 32%,#e1d8ff 0%,#b8a8ff 48%,#8f7bd8 100%);mix-blend-mode:multiply;opacity:.78;filter:blur(.35px)}
-.shape-journey__orbit{width:clamp(330px,54vw,760px);aspect-ratio:1;border:1px solid rgba(75,91,49,.2);border-radius:50%;transform:translate3d(75vw,25vh,0) translate(-50%,-50%) rotate(-28deg) scaleY(.42);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
-html[data-theme="dark"] .shape-journey{opacity:.28}
-html[data-theme="dark"] .shape-journey__primary,html[data-theme="dark"] .shape-journey__secondary{mix-blend-mode:screen;opacity:.52}
-@media(max-width:760px){
- .shape-journey{opacity:.48}
- .shape-journey__primary{width:clamp(190px,66vw,330px)}
- .shape-journey__secondary{width:clamp(145px,48vw,245px)}
- .shape-journey__orbit{width:88vw}
- html[data-theme="dark"] .shape-journey{opacity:.22}
+
+/* Shared project transitions: listing artwork and title become their case-study counterparts */
+.project-art,.case-hero-art{view-transition-class:project-visual}
+::view-transition-old(page){animation:page-out .16s ease both}
+::view-transition-new(page){animation:page-in .24s cubic-bezier(.2,.8,.2,1) both}
+::view-transition-group(project-art-*),
+::view-transition-group(project-title-*){animation-duration:.48s;animation-timing-function:cubic-bezier(.2,.85,.25,1)}
+::view-transition-old(project-art-*),
+::view-transition-new(project-art-*){height:100%;object-fit:cover}
+::view-transition-old(project-title-*),
+::view-transition-new(project-title-*){height:100%}
+@media(prefers-reduced-motion:reduce){
+ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
 }
-@media(prefers-reduced-motion:reduce){.shape-journey{display:none}}

@@ -26,13 +26,13 @@ const featured = projects.slice(0, 4);
     <div class="section-heading"><h2>Things I’ve made<span>({featured.length})</span></h2><a href="/work/">All projects <b>↗</b></a></div>
     <div class="project-grid">
       {featured.map((project, i) => <a class:list={["project-card", "project-card-"+(i+1)]} href={"/work/"+project.slug+"/"}>
-        <div class="project-art art-"+(i+1)} aria-hidden="true">
+        <div class="project-art art-"+(i+1)} aria-hidden="true" style={"view-transition-name: project-art-"+project.slug}>
           {i===0 && <div class="care-window"><div class="window-dots"><i></i><i></i><i></i></div><div class="care-title">Care<span>schedule.</span></div><div class="care-calendar"><b>MON</b><b>TUE</b><b>WED</b><b>THU</b><i>09</i><i>10</i><i class="selected">11</i><i>12</i><i>13</i><i>14</i><i>15</i><i>16</i></div><div class="care-pill">Appointment confirmed ✓</div></div>}
           {i===1 && <div class="journal-card"><span>MONDAY, 9:41 AM</span><b>Dear,<br /><em>today.</em></b><div class="journal-lines"></div><small>A little space for your thoughts.</small></div>}
           {i===2 && <div class="status-stack"><div class="status-photo photo-a"></div><div class="status-photo photo-b"></div><div class="status-photo photo-c"></div><span>Saved ✳</span></div>}
           {i===3 && <div class="voice-card"><span>LIVE TRANSCRIPTION</span><b>Listening<span>...</span></b><div class="waveform">{Array.from({length:31},(_,n)=><i style={"--h:"+((n*19)%42+8)+"px"}></i>)}</div><small>40+ languages</small></div>}
         </div>
-        <div class="project-info"><div><h3>{project.name}</h3><p>{project.summary}</p></div><span class="project-arrow">↗</span></div>
+        <div class="project-info"><div><h3 style={"view-transition-name: project-title-"+project.slug}>{project.name}</h3><p>{project.summary}</p></div><span class="project-arrow">↗</span></div>
       </a>)}
     </div>
   </section>
