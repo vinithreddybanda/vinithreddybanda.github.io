@@ -3,24 +3,38 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { projects } from "../data/projects";
 const cards = projects.map((project,index)=>({...project,index}));
 ---
-<BaseLayout title="Vinith Reddy Banda — Software Engineer" description="Selected work, experiments and notes from Vinith Reddy Banda.">
+<BaseLayout title="Vinith Reddy Banda — Software Engineer" description="Selected software projects by Vinith Reddy Banda.">
 <section class="workshop page-wrap" id="top">
-<div class="workshop-topline"><span>INDEPENDENT DEVELOPER <b>№ 001</b></span><span>HYDERABAD, INDIA <i></i> AVAILABLE FOR SELECT WORK</span></div>
-<div class="workshop-intro"><div><p class="micro-label">SOFTWARE ENGINEER / 2026</p><h1>Building<br /><em>useful things.</em></h1></div><p class="intro-note">I’m Vinith. I build software across web, Android, backend systems and applied AI. A selection of projects, experiments and things I’m figuring out.</p></div>
-<div class="press-stage" data-press-stage>
-<div class="press-stage__heading"><span>SELECTED WORK</span><span data-wheel-readout>01 — 0{projects.length}</span></div>
-<div class="press-floor" data-wheel>
-<div class="wheel-glow" aria-hidden="true"></div><div class="wheel-track" data-wheel-track>
-{cards.map((project)=><button class="wheel-card" type="button" data-wheel-card data-index={project.index} aria-label={`Select ${project.name}`} aria-pressed={project.index===0} style={`--angle:${project.index*360/projects.length}deg;`}>
-<span class="plate-frame"><span class="plate-top"><small>{project.number} / SELECTED PROJECT</small><small>{project.year}</small></span><span class:list={["plate-art",`plate-art--${project.index%4}`]}><i></i><b></b><em></em><strong>{project.name.split(/\s+/).map(x=>x[0]).join("").slice(0,3)}</strong></span><span class="plate-bottom"><strong>{project.name}</strong><small>{project.category}</small></span></span></button>)}
-</div>
-<div class="wheel-shadow" aria-hidden="true"></div><button class="wheel-control wheel-control--prev" type="button" data-wheel-prev aria-label="Previous project">←</button><button class="wheel-control wheel-control--next" type="button" data-wheel-next aria-label="Next project">→</button><div class="wheel-hint">DRAG TO EXPLORE <span>·</span> SELECT A PROJECT</div>
-</div>
-<div class="press-caption" aria-live="polite"><div class="press-caption__number" data-active-number>01</div><div class="press-caption__copy"><span class="micro-label" data-active-category>{projects[0].category}</span><h2 data-active-title>{projects[0].name}</h2><p data-active-summary>{projects[0].summary}</p><div class="plate-tags" data-active-tags>{projects[0].stack.slice(0,5).map(tag=><span>{tag}</span>)}</div></div><a class="open-project" data-active-link href={`/work/${projects[0].slug}/`}>VIEW PROJECT <span>↗</span></a></div>
-<div class="press-controls"><div class="press-dots" data-wheel-dots>{cards.map((project)=><button type="button" data-dot={project.index} aria-label={`Go to project ${project.index+1}`} aria-pressed={project.index===0}></button>)}</div><div class="press-instructions"><span>← → BROWSE</span><span>DRAG / SCROLL / TOUCH</span><span>⌘ K SEARCH</span></div></div>
-</div>
-<div class="workshop-bottom"><div class="bottom-statement"><span class="micro-label">THE APPROACH</span><p>Curiosity starts it.<br /><em>Shipping makes it real.</em></p></div><div class="bottom-links"><a href="/about/"><span>01</span> ABOUT ME <b>↗</b></a><a href="/work/"><span>02</span> ALL PROJECTS <b>↗</b></a><a href="/contact/"><span>03</span> GET IN TOUCH <b>↗</b></a></div></div>
+  <div class="workshop-topline"><span>SOFTWARE ENGINEER <b>IN / HYDERABAD</b></span><span>WEB · ANDROID · APPLIED AI</span></div>
+  <div class="workshop-intro">
+    <div><p class="micro-label">VINITH REDDY BANDA / 2026</p><h1>Making<br /><em>software matter.</em></h1></div>
+    <p class="intro-note">I build useful products and the systems behind them. A small selection of work, shaped by curiosity and shipped with intent.</p>
+  </div>
+  <div class="press-stage" data-press-stage>
+    <div class="press-stage__heading"><span>SELECTED WORK</span><span data-wheel-readout>01 — 0{projects.length}</span></div>
+    <div class="press-floor" data-wheel>
+      <div class="wheel-track" data-wheel-track>
+        {cards.map((project)=><button class="wheel-card" type="button" data-wheel-card data-index={project.index} aria-label={`Select ${project.name}`} aria-pressed={project.index===0} style={`--angle:${project.index*360/projects.length}deg;`}>
+          <span class="plate-frame"><span class="plate-top"><small>{project.number} / {project.category}</small><small>{project.year}</small></span><span class:list={["plate-art",`plate-art--${project.index%4}`]}><i></i><b></b><em></em><strong>{project.name.split(/\s+/).map(x=>x[0]).join("").slice(0,3)}</strong></span><span class="plate-bottom"><strong>{project.name}</strong><small>{project.status}</small></span></span>
+        </button>)}
+      </div>
+      <button class="wheel-control wheel-control--prev" type="button" data-wheel-prev aria-label="Previous project">←</button>
+      <button class="wheel-control wheel-control--next" type="button" data-wheel-next aria-label="Next project">→</button>
+      <div class="wheel-hint">DRAG · SCROLL · TOUCH</div>
+    </div>
+    <div class="press-caption" aria-live="polite">
+      <div class="press-caption__number" data-active-number>01</div>
+      <div class="press-caption__copy"><span class="micro-label" data-active-category>{projects[0].category}</span><h2 data-active-title>{projects[0].name}</h2><p data-active-summary>{projects[0].summary}</p><div class="plate-tags" data-active-tags>{projects[0].stack.slice(0,4).map(tag=><span>{tag}</span>)}</div></div>
+      <a class="open-project" data-active-link href={`/work/${projects[0].slug}/`}>EXPLORE <span>↗</span></a>
+    </div>
+    <div class="press-controls"><div class="press-dots" data-wheel-dots>{cards.map((project)=><button type="button" data-dot={project.index} aria-label={`Go to project ${project.index+1}`} aria-pressed={project.index===0}></button>)}</div><div class="press-instructions"><span>← → BROWSE</span><span>⌘ K SEARCH</span></div></div>
+  </div>
+  <div class="telemetry-grid" aria-label="Portfolio telemetry">
+    <div class="telemetry-card"><span>SELECTED BUILDS</span><strong data-project-total>{projects.length.toString().padStart(2,"0")}</strong><small>PROJECTS IN THE ARCHIVE</small></div>
+    <div class="telemetry-card"><span>BUILDING ACROSS</span><strong>03</strong><small>WEB / ANDROID / AI</small></div>
+    <div class="telemetry-card"><span>LOCAL TIME · IST</span><strong data-local-time>--:--:--</strong><small>HYDERABAD, INDIA</small></div>
+  </div>
+  <div class="home-contact"><p>Have something interesting to build?</p><a href="mailto:vinithreddybanda@gmail.com">LET'S TALK <span>↗</span></a></div>
 </section>
-<section class="workshop-lab page-wrap" id="lab"><div class="lab-heading"><span class="micro-label">SIDE PROJECTS / NOTES</span><span>EXPERIMENTS IN PROGRESS</span></div><div class="lab-grid"><a href="/work/whatsapp-status-saver/" class="lab-tile"><span>01 / ANDROID</span><strong>Native interfaces</strong><small>Fluid galleries and thoughtful interactions.</small><b>↗</b></a><a href="/work/journalai/" class="lab-tile"><span>02 / APPLIED AI</span><strong>Personal software</strong><small>AI features that belong inside the product.</small><b>↗</b></a><a href="/about/" class="lab-tile lab-tile--note"><span>03 / ENGINEERING</span><strong>Make it clear.<br /><em>Make it useful.</em></strong><small>How I think about building software.</small><b>↗</b></a></div></section>
 </BaseLayout>
 <script define:vars={{ projects: projects.map(({slug,number,name,category,year,summary,stack})=>({slug,number,name,category,year,summary,stack})) }}>window.__portfolioProjects=projects;</script>
