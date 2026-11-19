@@ -4,43 +4,24 @@ import { projects } from "../data/projects";
 import { skillGroups } from "../data/skills";
 ---
 <BaseLayout>
-  <section class="dashboard-hero page-wrap" id="top">
-    <div class="dashboard-hero__copy">
-      <div class="eyebrow-row"><span class="eyebrow">SOFTWARE ENGINEER · INDIA</span><span class="eyebrow">01 / INTRODUCTION</span></div>
-      <p class="hero-kicker">Building things for<br />the <span>real world.</span></p>
-      <h1>Vinith Reddy<br /><span>Banda.</span></h1>
-      <p class="hero-description">I design and engineer useful software across backend systems, web experiences, Android and applied AI. I care about the craft behind the interface as much as the system underneath it.</p>
-      <div class="hero-actions"><a class="button-primary" href="/work/">Explore my work <span>↗</span></a><a class="button-quiet" href="/about/">A little about me</a></div>
-    </div>
-    <div class="hero-visual" aria-label="VB monogram graphic">
-      <div class="hero-visual__top"><span>VB / 26</span><span>INDIA</span></div>
-      <div class="hero-visual__monogram">V<span>/</span>B</div>
-      <div class="hero-visual__orbit hero-visual__orbit--one"></div><div class="hero-visual__orbit hero-visual__orbit--two"></div>
-      <div class="hero-visual__bottom"><span>ENGINEERING<br />WITH INTENT</span><span>BUILD · LEARN<br />REPEAT</span></div>
-    </div>
-    <div class="hero-foot"><span>SCROLL TO EXPLORE</span><span>↓</span><span>PORTFOLIO / 2026</span></div>
-  </section>
-
-  <section class="home-section page-wrap" id="selected-work" aria-labelledby="work-heading">
-    <div class="section-topline"><span class="eyebrow">02 / SELECTED WORK</span><a href="/work/" class="inline-link">All projects <span>↗</span></a></div>
-    <div class="section-intro" data-reveal><h2 id="work-heading">A few things<br /><span>I've built.</span></h2><p>From native Android experiences to full-stack products and AI experiments. Each project starts with a problem worth solving.</p></div>
-    <div class="work-list" data-reveal>
-      {projects.slice(0, 4).map((project) => <a class="work-row" href={`/work/${project.slug}/`}>
-        <span class="work-row__number">{project.number}</span><div class="work-row__main"><h3>{project.name}</h3><p>{project.summary}</p></div><span class="work-row__category">{project.category}</span><span class="work-row__arrow">↗</span>
-      </a>)}
-    </div>
-  </section>
-
-  <section class="home-section home-section--about page-wrap" id="approach">
-    <div class="section-topline"><span class="eyebrow">03 / THE APPROACH</span><a href="/about/" class="inline-link">More about me <span>↗</span></a></div>
-    <div class="approach-grid" data-reveal><h2>Curious by<br /><span>default.</span></h2><div><p class="approach-lead">I like understanding how things work, then making them work better.</p><p class="approach-copy">My interests move between backend architecture, frontend experiences, native Android and applied AI. I value simple systems, deliberate technical decisions and interfaces that respect people's time.</p></div></div>
-  </section>
-
-  <section class="home-section page-wrap">
-    <div class="section-topline"><span class="eyebrow">04 / TOOLKIT</span><span class="eyebrow">ALWAYS LEARNING</span></div>
-    <div class="section-intro" data-reveal><h2>Tools of<br /><span>the trade.</span></h2><p>A practical toolkit shaped by building, breaking, debugging and shipping.</p></div>
-    <div class="toolkit-list" data-reveal>{skillGroups.map((group, index) => <div class="toolkit-row"><span class="toolkit-row__index">0{index + 1}</span><h3>{group.title}</h3><div class="toolkit-tags">{group.items.map((item) => <span>{item}</span>)}</div></div>)}</div>
-  </section>
-
-  <section class="home-cta page-wrap" id="contact" data-reveal><span class="eyebrow">05 / NEXT UP</span><h2>Have something<br /><span>in mind?</span></h2><div class="home-cta__bottom"><p>Good ideas get better when they're built together. Let's talk.</p><a class="button-primary" href="/contact/">Start a conversation <span>↗</span></a></div></section>
+<section class="home-hero page-wrap" id="top">
+<div class="hero-index"><span>PERSONAL INDEX / 2026</span><span>INDEPENDENT SOFTWARE ENGINEERING</span></div>
+<div class="hero-main"><div class="hero-copy">
+<p class="hero-pretitle">Curiosity, translated into code.</p><h1>I build<br />software with<br /><em>intent.</em></h1>
+<p class="hero-description">I'm Vinith, a software engineer interested in the details that make products useful: thoughtful interfaces, dependable systems and technology that solves real problems.</p>
+<div class="hero-links"><a class="link-solid" href="/work/">Explore selected work <span>↗</span></a><a class="link-understated" href="/about/">A little about me</a></div>
+</div><aside class="hero-note"><span class="note-index">FIELD NOTES / 001</span><p>Working across the stack, from the first interface to the system behind it.</p><div class="note-rule"></div>
+<dl><div><dt>FOCUS</dt><dd>Full stack · Android · AI</dd></div><div><dt>BASE</dt><dd>India</dd></div><div><dt>STATUS</dt><dd>Building & learning</dd></div></dl><span class="note-mark">VB—26</span></aside></div>
+<div class="hero-footer"><span>SCROLL TO EXPLORE</span><span class="hero-footer__line"></span><span>01 — 05</span></div>
+</section>
+<section class="home-section page-wrap" id="selected-work"><div class="section-overline"><span>01 / SELECTED WORK</span><a href="/work/">FULL PROJECT INDEX ↗</a></div>
+<div class="section-heading-home"><h2>Made with<br /><em>purpose.</em></h2><p>A selection of products and experiments across software engineering, mobile and applied AI.</p></div>
+<div class="work-list" data-reveal>{projects.slice(0,4).map((project)=><a class="work-row" href={`/work/${project.slug}/`}><span class="work-row__number">{project.number}</span><div class="work-row__main"><h3>{project.name}</h3><p>{project.summary}</p></div><span class="work-row__category">{project.category}</span><span class="work-row__arrow">↗</span></a>)}</div>
+</section>
+<section class="home-section home-section--statement page-wrap" id="approach"><div class="section-overline"><span>02 / THE APPROACH</span><span>THOUGHT BEFORE OUTPUT</span></div>
+<div class="statement-grid" data-reveal><h2>Good software<br />is felt in the<br /><em>details.</em></h2><div class="statement-copy"><p class="statement-lead">I like understanding how things work, then making them work better.</p><p>My interests move between backend architecture, web experiences, native Android and applied AI. I value simple systems, deliberate technical decisions and interfaces that respect people's time.</p><a class="text-arrow" href="/about/">Read my story <span>↗</span></a></div></div></section>
+<section class="home-section page-wrap" id="toolkit"><div class="section-overline"><span>03 / WORKING TOOLKIT</span><span>ALWAYS EVOLVING</span></div>
+<div class="toolkit-intro"><h2>Tools of<br /><em>the trade.</em></h2><p>A practical set of tools shaped by building, breaking, debugging and shipping.</p></div>
+<div class="toolkit-list" data-reveal>{skillGroups.map((group,index)=><div class="toolkit-row"><span class="toolkit-row__index">0{index+1}</span><h3>{group.title}</h3><div class="toolkit-tags">{group.items.map((item)=><span>{item}</span>)}</div></div>)}</div></section>
+<section class="home-cta page-wrap" id="contact" data-reveal><span class="section-overline">04 / OPEN CHANNEL</span><h2>Have a good<br /><em>problem?</em></h2><div class="home-cta__bottom"><p>Interesting work starts with a conversation. Tell me what you're building.</p><a class="link-solid" href="/contact/">Get in touch <span>↗</span></a></div></section>
 </BaseLayout>

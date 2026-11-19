@@ -1,49 +1,10 @@
 ---
 const path = Astro.url.pathname;
-const links = [
-  { href: "/", label: "Home", icon: "home" },
-  { href: "/work/", label: "Work", icon: "work" },
-  { href: "/about/", label: "About", icon: "about" },
-  { href: "/contact/", label: "Contact", icon: "contact" },
-];
-const active = (href: string) => href === "/" ? path === "/" : path.startsWith(href);
-const action = path === "/"
-  ? { href: "#selected-work", label: "Explore", icon: "down" }
-  : path.startsWith("/work/")
-    ? { href: "/about/", label: "About", icon: "arrow" }
-    : path.startsWith("/about/")
-      ? { href: "/contact/", label: "Contact", icon: "arrow" }
-      : { href: "/", label: "Home", icon: "home" };
+const links = [{href:"/work/",label:"Work",number:"01"},{href:"/about/",label:"About",number:"02"},{href:"/contact/",label:"Contact",number:"03"}];
+const active = (href: string) => path.startsWith(href);
 ---
-<header class="app-header" data-header>
-  <a class="app-brand" href="/" aria-label="Vinith Reddy Banda home">
-    <span class="app-brand__mark">V.</span>
-    <span class="app-brand__name">Vinith Reddy Banda</span>
-  </a>
-  <div class="app-header__right">
-    <span class="availability"><i aria-hidden="true"></i> Open to opportunities</span>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch appearance" title="Switch appearance">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
-    </button>
-  </div>
+<header class="site-header" data-header>
+<a class="site-header__brand" href="/" aria-label="Vinith Reddy Banda, home"><span class="site-header__monogram">V<span>/</span>B</span><span class="site-header__identity">VINITH REDDY BANDA<small>SOFTWARE ENGINEER</small></span></a>
+<nav class="site-nav" aria-label="Primary navigation">{links.map((link)=><a class:list={["site-nav__link",active(link.href)&&"is-active"]} href={link.href} aria-current={active(link.href)?"page":undefined}><span>{link.number}</span>{link.label}</a>)}</nav>
+<span class="site-header__location">INDIA <i aria-hidden="true"></i> 2026</span>
 </header>
-<nav class="tab-dock" aria-label="Primary navigation" data-dock>
-  <div class="tab-dock__items">
-    {links.slice(0, 2).map((link) => <a class:list={["tab-item", active(link.href) && "is-active"]} href={link.href} aria-current={active(link.href) ? "page" : undefined}>
-      {link.icon === "home" ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
-      : <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4V2h8v2M3 10h18m-11 0v2h4v-2"/></svg>}
-      <span>{link.label}</span>
-    </a>)}
-    <a class="dock-action" href={action.href} data-dock-action aria-label={action.label}>
-      {action.icon === "down" ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15m-6-6 6 6 6-6"/></svg>
-      : action.icon === "home" ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
-      : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>}
-      <span data-dock-label>{action.label}</span>
-    </a>
-    {links.slice(2).map((link) => <a class:list={["tab-item", active(link.href) && "is-active"]} href={link.href} aria-current={active(link.href) ? "page" : undefined}>
-      {link.icon === "about" ? <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/></svg>
-      : <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>}
-      <span>{link.label}</span>
-    </a>)}
-  </div>
-</nav>

@@ -4,38 +4,14 @@ import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/global.css";
 import "../styles/ui.css";
 interface Props { title?: string; description?: string; }
-const { title = "Vinith Reddy Banda — Software Engineer", description = "Software engineer building thoughtful products across backend systems, web interfaces, Android and applied AI." } = Astro.props;
+const { title = "Vinith Reddy Banda — Software Engineer", description = "Software engineer building useful products across backend systems, web interfaces, Android and applied AI." } = Astro.props;
 ---
-<!doctype html>
-<html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#090a0c" />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://vinithreddybanda.github.io/" />
-    <title>{title}</title>
-    <script is:inline>
-      (() => {
-        try {
-          const saved = localStorage.getItem("portfolio-theme");
-          const theme = saved === "light" || saved === "dark" ? saved : (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-          document.documentElement.dataset.theme = theme;
-        } catch {}
-      })();
-    </script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <SiteHeader />
-    <main id="main"><slot /></main>
-    <div class="page-end"><SiteFooter /></div>
-    <script>
-      import "../scripts/app";
-    </script>
-  </body>
-</html>
+<!doctype html><html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0b0a" /><meta name="color-scheme" content="dark" /><meta name="description" content={description} />
+<meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" /><meta property="og:url" content="https://vinithreddybanda.github.io/" />
+<title>{title}</title></head><body>
+<canvas class="paper-canvas" data-paper-canvas aria-hidden="true"></canvas><a class="skip-link" href="#main">Skip to content</a>
+<SiteHeader /><main id="main"><slot /></main><div class="page-end"><SiteFooter /></div>
+<script>import "../scripts/paper"; import "../scripts/app";</script>
+</body></html>
