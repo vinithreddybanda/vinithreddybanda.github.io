@@ -16,6 +16,16 @@ const { title = "Vinith | Creative developer", description = "I’m Vinith. I bu
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vinithreddybanda.github.io/" />
+  <script is:inline>
+    (() => {
+      try {
+        const saved = localStorage.getItem("vinith-theme");
+        const theme = saved === "dark" || saved === "light" ? saved : "light";
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#141612" : "#f3f2ed");
+      } catch {}
+    })();
+  </script>
   <title>{title}</title>
 </head>
 <body>

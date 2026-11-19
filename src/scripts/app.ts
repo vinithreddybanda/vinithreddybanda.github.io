@@ -17,3 +17,21 @@ document.querySelectorAll<HTMLElement>(".project-card").forEach(card => {
   });
   card.addEventListener("pointerleave", () => { card.style.setProperty("--tilt-x","0deg"); card.style.setProperty("--tilt-y","0deg"); });
 });
+const themeToggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+const root = document.documentElement;
+const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+const applyTheme = (theme: "light" | "dark") => {
+  root.dataset.theme = theme;
+  themeColor?.setAttribute("content", theme === "dark" ? "#141612" : "#f3f2ed");
+  if (themeToggle) {
+    const next = theme === "dark" ? "light" : "dark";
+    themeToggle.setAttribute("aria-label", `Switch to ${next} mode`);
+    themeToggle.setAttribute("title", `Switch to ${next} mode`);
+  }
+};
+applyTheme(root.dataset.theme === "dark" ? "dark" : "light");
+themeToggle?.addEventListener("click", () => {
+  const next = root.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(next);
+  try { localStorage.setItem("vinith-theme", next); } catch {}
+});
