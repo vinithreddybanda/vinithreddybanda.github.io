@@ -1,61 +1,58 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { projects } from "../data/projects";
-const featured = projects.slice(0, 4);
-const art = ["care", "journal", "status", "voice"];
+const featured=projects.slice(0,4);
+const art=["care","journal","status","voice"];
 ---
 <BaseLayout title="Vinith Reddy Banda — Software Engineer" description="Selected work and experiments by Vinith Reddy Banda.">
-<section class="home-shell page-shell">
-  <div class="home-intro">
-    <div class="intro-overline"><span>PORTFOLIO / 2026</span><span>01 — FRONT OFFICE</span></div>
-    <div class="intro-main">
-      <h1>Software with<br /><em>a point of view.</em></h1>
-      <div class="intro-letter">
-        <span class="letter-mark">THE NOTE / 001</span>
-        <p>I’m Vinith, an engineer interested in the space between useful software and thoughtful interaction. I build across web, Android and applied AI.</p>
-        <a href="/about/" class="text-arrow">A LITTLE ABOUT ME <span>↗</span></a>
+  <main class="front-page">
+    <section class="front-intro">
+      <div class="front-meta"><span>INDEPENDENT SOFTWARE ENGINEER</span><span>HYDERABAD, INDIA · 17°23′N 78°29′E</span></div>
+      <div class="front-title-wrap">
+        <h1>Building things<br /><i>that move.</i></h1>
+        <p>I’m Vinith. I build software across web, Android and applied AI, with an eye for the details between the lines of code.</p>
       </div>
-    </div>
-    <div class="intro-foot"><span>BUILDING THINGS THAT WORK.</span><span>SCROLL TO EXPLORE ↓</span></div>
-  </div>
-  <section class="press-section" aria-labelledby="press-title">
-    <div class="section-kicker"><span id="press-title">SELECTED WORK</span><span>THE PROJECT PRESS / 0{featured.length}</span></div>
-    <div class="press-controls-top">
-      <span class="press-instruction">DRAG TO TURN <i>·</i> SCROLL TO BROWSE</span>
-      <div class="view-switch" role="group" aria-label="Project layout"><button type="button" data-view="ring" aria-pressed="true">RING</button><button type="button" data-view="grid" aria-pressed="false">GRID</button></div>
-    </div>
-    <div class="press-stage" data-press-stage data-view="ring">
-      <div class="press-orbit">
-        <div class="press-wheel press-wheel--left" data-press-wheel aria-hidden="true"><span class="wheel-hub"></span></div><div class="press-wheel press-wheel--right" data-press-wheel aria-hidden="true"><span class="wheel-hub"></span></div>
+      <div class="front-bottom"><span>SELECTED WORK / 2024—2026</span><a href="#press">SCROLL TO EXPLORE ↓</a></div>
+    </section>
+    <section class="press-section" id="press" aria-label="Selected work">
+      <div class="press-heading"><span>THE PROJECT PRESS</span><span>DRAG / SCROLL / USE ARROWS</span></div>
+      <div class="press-tools">
+        <span class="press-counter"><b data-active-index>01</b><i>/</i><span>0{featured.length}</span></span>
+        <div class="view-switch" role="group" aria-label="Project view">
+          <button type="button" data-view="ring" aria-pressed="true">RING</button>
+          <button type="button" data-view="grid" aria-pressed="false">INDEX</button>
+        </div>
+      </div>
+      <div class="press-stage" data-press-stage data-view="ring" tabindex="0" aria-label="Project carousel. Drag or use arrow keys to browse.">
+        <div class="press-wheel press-wheel--left" data-press-wheel aria-hidden="true"><span></span></div>
+        <div class="press-wheel press-wheel--right" data-press-wheel aria-hidden="true"><span></span></div>
         <div class="press-ring" data-press-ring>
-          {featured.map((project, i) => <button class="press-plate" type="button" data-project-index={i} aria-label={"Select " + project.name} aria-pressed={i === 0} style={"--plate-angle:" + (i * 360 / featured.length) + "deg;"}>
+          {featured.map((project,i)=><button class="press-plate" type="button" data-project-index={i} aria-label={"Select "+project.name} aria-pressed={i===0}>
             <span class="plate-face">
-              <span class="plate-meta"><span>{project.number} / {project.category}</span><span>{project.year}</span></span>
-              <span class:list={["plate-artwork", "art-" + art[i]]}>
-                {i === 0 && <span class="care-ui"><span class="ui-top"><i></i><i></i><i></i></span><b>Appointments</b><small>Thursday, 24 September</small><span class="calendar-grid">{Array.from({length: 14}, (_, n) => <i>{n + 10}</i>)}</span><span class="calendar-slot">09:30 · Consultation</span></span>}
-                {i === 1 && <span class="journal-ui"><small>YOUR SPACE / 09:41 AM</small><b>Dear, today.</b><i></i><i></i><i></i><span>Write freely. Find clarity.</span></span>}
-                {i === 2 && <span class="status-ui"><span class="status-image"></span><span class="status-image"></span><span class="status-image"></span><small>RECENT STATUS</small></span>}
-                {i === 3 && <span class="voice-ui"><small>LIVE TRANSCRIPTION</small><span class="voice-wave">{Array.from({length: 23}, (_, n) => <i style={"--bar:" + (12 + ((n * 19) % 36)) + "px"}></i>)}</span><b>Listening...</b><small>ENGLISH / MULTILINGUAL</small></span>}
+              <span class="plate-top"><small>{project.number} / {project.category}</small><small>{project.year}</small></span>
+              <span class:list={["plate-artwork","art-"+art[i]]}>
+                {i===0&&<span class="care-art"><span class="art-label">CARE / 01</span><b>Care<br />Schedule.</b><span class="art-line"></span><span class="art-foot">CLINIC OPERATIONS PLATFORM</span></span>}
+                {i===1&&<span class="journal-art"><small>YOUR SPACE / 09:41</small><b>Dear,<br /><i>today.</i></b><span class="journal-lines"></span><span class="journal-mark">A PLACE TO THINK</span></span>}
+                {i===2&&<span class="status-art"><span class="status-tile status-tile-a"></span><span class="status-tile status-tile-b"></span><span class="status-tile status-tile-c"></span><small>STATUS / SAVED</small></span>}
+                {i===3&&<span class="voice-art"><small>LIVE TRANSCRIPTION</small><b>Listening<span>...</span></b><span class="voice-wave">{Array.from({length:25},(_,n)=><i style={"--bar:"+((n*17)%38+8)+"px"}></i>)}</span><small>40+ LANGUAGES / REAL TIME</small></span>}
               </span>
-              <span class="plate-caption"><b>{project.name}</b><small>{project.category}</small></span>
+              <span class="plate-bottom"><b>{project.name}</b><small>{project.category}</small></span>
             </span>
           </button>)}
         </div>
-        <div class="press-axis" aria-hidden="true"><span></span><i></i><span></span></div>
+        <div class="press-axis" aria-hidden="true"><i></i></div>
       </div>
-      <div class="press-hud"><span class="hud-readout"><b data-active-index>01</b><i>/</i><span>0{featured.length}</span></span><span class="hud-state" data-hud-state>PRESS READY</span><span class="hud-readout">DRAG / ↔</span></div>
-    </div>
-    <div class="selected-project" aria-live="polite">
-      <div class="selected-index"><span>ON THE PRESS</span><b data-selected-number>01</b></div>
-      <div class="selected-copy"><span class="selected-type" data-selected-type>{featured[0].category}</span><h2 data-selected-name>{featured[0].name}</h2><p data-selected-summary>{featured[0].summary}</p></div>
-      <a class="selected-link" data-selected-link href={"/work/" + featured[0].slug + "/"}>OPEN PROJECT <span>↗</span></a>
-    </div>
-  </section>
-  <section class="lab-teaser">
-    <div class="section-kicker"><span>AFTER HOURS</span><span>THE LAB / EXPERIMENTS</span></div>
-    <div class="lab-teaser-main"><h2>Curiosity<br /><em>in motion.</em></h2><div class="lab-teaser-copy"><p>Small experiments in motion, interaction and the browser. Less talk, more things to touch.</p><a href="/lab/" class="text-arrow">ENTER THE LAB <span>↗</span></a></div></div>
-    <div class="lab-preview-row"><a href="/lab/#dots"><span>01</span><b>Polka dots</b><small>CANVAS / PHYSICS</small><i>↗</i></a><a href="/lab/#presence"><span>02</span><b>Live presence</b><small>REAL-TIME / WEBSOCKET</small><i>↗</i></a><a href="/lab/#press"><span>03</span><b>Project press</b><small>3D / INTERACTION</small><i>↗</i></a></div>
-  </section>
-</section>
+      <div class="selected-project" aria-live="polite">
+        <div class="selected-no"><span>ON THE PRESS</span><b data-selected-number>01</b></div>
+        <div class="selected-description"><small data-selected-type>{featured[0].category}</small><h2 data-selected-name>{featured[0].name}</h2><p data-selected-summary>{featured[0].summary}</p></div>
+        <a data-selected-link href={"/work/"+featured[0].slug+"/"}>VIEW PROJECT <span>↗</span></a>
+      </div>
+    </section>
+    <section class="front-outro" data-reveal>
+      <div class="outro-label"><span>OUTSIDE THE PRESS</span><span>EXPERIMENTS / NOTES / CONTACT</span></div>
+      <div class="outro-main"><h2>Curiosity<br /><i>does the rest.</i></h2><div><p>Small experiments, useful tools and the occasional idea that refuses to stay in a notebook.</p><a href="/lab/">VISIT THE LAB ↗</a></div></div>
+      <div class="outro-links"><a href="/about/"><span>01</span><b>Studio</b><small>A little about me</small><i>↗</i></a><a href="/work/"><span>02</span><b>Archive</b><small>All selected work</small><i>↗</i></a><a href="/contact/"><span>03</span><b>Contact</b><small>Send a note</small><i>↗</i></a></div>
+    </section>
+  </main>
 </BaseLayout>
-<script define:vars={{ projects: featured.map(({slug,number,name,category,year,summary,stack}) => ({slug,number,name,category,year,summary,stack})) }}>window.__pressProjects = projects;</script>
+<script define:vars={{projects:featured.map(({slug,number,name,category,year,summary,stack})=>({slug,number,name,category,year,summary,stack}))}}>window.__pressProjects=projects;</script>

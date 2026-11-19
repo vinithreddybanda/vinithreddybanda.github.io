@@ -3,6 +3,7 @@ import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/global.css";
 import "../styles/ui.css";
+import "../styles/press.css";
 interface Props { title?: string; description?: string; }
 const { title = "Vinith Reddy Banda — Software Engineer", description = "Vinith Reddy Banda. Software engineer building web products, Android applications and applied AI." } = Astro.props;
 ---
@@ -27,15 +28,6 @@ const { title = "Vinith Reddy Banda — Software Engineer", description = "Vinit
   <SiteHeader />
   <main id="main"><slot /></main>
   <SiteFooter />
-  <div class="remote-cursors" data-remote-cursors aria-hidden="true"></div>
-  <div class="cursor-follower" data-cursor aria-hidden="true"></div>
-  <div class="command-scrim" data-command-overlay aria-hidden="true">
-    <section class="command-box" role="dialog" aria-modal="true" aria-label="Quick navigation">
-      <div class="command-input-row"><span class="command-symbol">⌘</span><input data-command-input type="search" placeholder="Find something..." autocomplete="off" /><kbd>ESC</kbd></div>
-      <div class="command-results" data-command-results></div>
-      <div class="command-hints"><span>↑ ↓ Navigate</span><span>↵ Open</span><span>ESC Close</span></div>
-    </section>
-  </div>
   <script>import "../scripts/paper"; import "../scripts/app";</script>
 </body>
 </html>
