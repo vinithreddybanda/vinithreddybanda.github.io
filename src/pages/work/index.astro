@@ -1,12 +1,15 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ProjectCard from "../../components/ProjectCard.astro";
 import { projects } from "../../data/projects";
 ---
-<BaseLayout title="Work — Vinith Reddy Banda" description="Selected software engineering projects.">
-<section class="archive page-wrap">
-  <header class="archive-heading"><span class="micro-label">SELECTED WORK / 2024—2026</span><h1>Things I've<br /><em>put into the world.</em></h1><p>A few products and experiments across software, systems and interfaces.</p></header>
-  <div class="archive-meta"><span>PROJECT</span><span>{String(projects.length).padStart(2,"0")} ENTRIES</span></div>
-  <div class="project-grid project-grid--archive">{projects.map((project,index)=><ProjectCard project={project} featured={index===0} />)}</div>
+<BaseLayout title="Selected Work — Vinith Reddy Banda" description="A selection of software products and engineering projects.">
+<section class="archive-shell page-shell">
+  <div class="archive-head"><div class="intro-overline"><span>THE ARCHIVE</span><span>2024 — 2026</span></div><h1>Selected<br /><em>work.</em></h1><p>Products, tools and experiments I’ve helped bring to life.</p></div>
+  <div class="archive-list">
+    {projects.map(project => <a class="archive-row" href={"/work/" + project.slug + "/"}>
+      <span class="archive-number">{project.number}</span><span class="archive-name"><b>{project.name}</b><small>{project.summary}</small></span><span class="archive-category">{project.category}</span><span class="archive-year">{project.year}</span><span class="archive-arrow">↗</span>
+    </a>)}
+  </div>
+  <div class="archive-foot"><span>{String(projects.length).padStart(2, "0")} PROJECTS</span><span>MORE WORK IN PROGRESS</span></div>
 </section>
 </BaseLayout>
