@@ -36,7 +36,7 @@ test("background is invisible at rest and creates a tactile pixel ripple on inte
   assert.match(paper,/ctx!\.fillRect/);
   assert.match(paper,/if\(alpha<\.018\)continue/);
   assert.doesNotMatch(paper,/REST_ALPHA/);
-  assert.match(css,/body:before\\{display:none\\}/);
+  assert.ok(css.includes("body:before{display:none}"));
   assert.match(paper,/ctx!\.clearRect\(0,0,width,height\);last=0/);
 });
 
