@@ -4,7 +4,7 @@ import { skillGroups, experience } from "../data/skills";
 ---
 <BaseLayout title="About | Vinith" description="A little about Vinith and the things he likes building.">
 <section class="inner-page page-wrap about-page">
-  <div class="inner-intro"><p>Hey, that’s me</p><h1 style="view-transition-name: about-entry">Hi, I’m<br /><em>Vinith.</em></h1><span>I build software and care a lot about how it feels to use.</span></div>
+  <div class="inner-intro"><p>Hey, that’s me</p><h1>Hi, I’m<br /><em>Vinith.</em></h1><span>I build software and care a lot about how it feels to use.</span></div>
   <div class="about-story"><div><p>I’m an IT engineer who enjoys making things for the web and Android. I like the full process: figuring out a problem, building the thing, making it faster, then polishing the details until it feels right.</p><p>My interests jump between product development, backend systems, interface design and applied AI. I’m also into open source and learning by building.</p><a class="text-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">Find me on GitHub <span>↗</span></a></div></div>
   <section class="simple-section"><h2>Stuff I work with</h2><div class="skill-pills">{skillGroups.flatMap(g=>g.items).map(item=><span>{item}</span>)}</div></section>
   <section class="simple-section"><h2>Currently</h2><div class="current-list">{experience.map(item=><div><span>{item.period}</span><div><b>{item.role}</b><small>{item.organisation}</small></div></div>)}</div></section>

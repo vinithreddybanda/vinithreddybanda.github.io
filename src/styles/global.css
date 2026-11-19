@@ -274,7 +274,7 @@ html[data-theme="dark"] .text-link{border-color:#dce3d6}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 
-/* Purposeful route and shared-element motion */
+/* Motion: animate existing content, never manufacture duplicate transition elements */
 .hero{
   display:flex;
   grid-template-columns:1fr;
@@ -292,46 +292,46 @@ html[data-theme="dark"] .text-link{border-color:#dce3d6}
 .play-card h2{font-size:clamp(28px,4vw,40px)}
 .play-card p{max-width:340px}
 .play-card>b{margin-top:22px}
-html,body{transition:none!important}
+
+/* The one persistent transition target is the real main element on every route. */
 main#main{view-transition-name:page-content}
-.site-header{view-transition-name:site-header}
-.site-footer{view-transition-name:site-footer}
-.site-header .wordmark{view-transition-name:site-brand}
-.header-cta{view-transition-name:header-contact}
-::view-transition-group(*){animation-duration:.5s;animation-timing-function:cubic-bezier(.2,.85,.25,1)}
-::view-transition-group(root){animation-duration:.22s}
-::view-transition-image-pair(root){isolation:isolate}
-::view-transition-old(root){animation:root-fade-out .16s ease both}
-::view-transition-new(root){animation:root-fade-in .22s ease both}
-::view-transition-group(site-header),::view-transition-group(site-footer),
-::view-transition-group(site-brand),::view-transition-group(header-contact){animation:none}
-::view-transition-old(page-content){animation:content-out-forward .18s cubic-bezier(.4,0,1,1) both}
-::view-transition-new(page-content){animation:content-in-forward .42s cubic-bezier(.22,1,.36,1) both}
-html[data-nav-direction="back"]::view-transition-old(page-content){animation:content-out-back .18s cubic-bezier(.4,0,1,1) both}
-html[data-nav-direction="back"]::view-transition-new(page-content){animation:content-in-back .42s cubic-bezier(.22,1,.36,1) both}
-::view-transition-old(nav-active){animation:nav-label-out .16s ease both}
-::view-transition-new(nav-active){animation:nav-label-in .28s cubic-bezier(.2,.8,.2,1) both}
-::view-transition-old(page-heading),::view-transition-new(page-heading),
-::view-transition-old(work-entry),::view-transition-new(work-entry),
-::view-transition-old(about-entry),::view-transition-new(about-entry),
-::view-transition-old(contact-entry),::view-transition-new(contact-entry){animation-timing-function:cubic-bezier(.2,.85,.25,1)}
-a:active,button:active{ -webkit-tap-highlight-color:transparent }
-.site-header nav a,.header-cta,.theme-toggle,.round-link,.project-arrow,
-.contact-banner>a,.text-link,.next-project,.back-link,.contact-options>a{
-  transition:color .2s ease,background-color .2s ease,border-color .2s ease,transform .28s cubic-bezier(.2,.8,.2,1);
+::view-transition-group(page-content){
+  animation-duration:.42s;
+  animation-timing-function:cubic-bezier(.22,1,.36,1);
+}
+::view-transition-old(page-content){animation:content-out-forward .16s ease both}
+::view-transition-new(page-content){animation:content-in-forward .38s cubic-bezier(.22,1,.36,1) both}
+html[data-nav-direction="back"]::view-transition-old(page-content){animation:content-out-back .16s ease both}
+html[data-nav-direction="back"]::view-transition-new(page-content){animation:content-in-back .38s cubic-bezier(.22,1,.36,1) both}
+
+/* Card interaction morphs the card and artwork that already exist in the DOM. */
+.project-card{transition:opacity .55s ease,transform .65s cubic-bezier(.2,.8,.2,1)}
+.project-art{
+  border-radius:7px;
+  transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) scale(1);
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),border-radius .55s cubic-bezier(.2,.8,.2,1);
+}
+.project-card:hover .project-art{
+  transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) scale(.985);
+  border-radius:18px;
+}
+.project-info h3{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.project-card:hover .project-info h3{transform:translateX(5px)}
+.project-arrow,.round-link,.contact-banner>a,.theme-toggle,.site-header nav a,
+.header-cta,.text-link,.next-project,.back-link,.contact-options>a{
+  transition:transform .28s cubic-bezier(.2,.8,.2,1),background-color .22s ease,
+    border-color .22s ease,color .22s ease;
   -webkit-tap-highlight-color:transparent;
 }
+.project-card:hover .project-arrow,.contact-banner>a:hover{transform:rotate(45deg)}
 .site-header nav a:active,.header-cta:active,.theme-toggle:active,.round-link:active,
 .project-arrow:active,.contact-banner>a:active,.text-link:active,.next-project:active,
-.back-link:active,.contact-options>a:active{transform:scale(.975)}
-@keyframes root-fade-out{to{opacity:0}}
-@keyframes root-fade-in{from{opacity:0}to{opacity:1}}
-@keyframes content-out-forward{to{opacity:.72;transform:translateX(-14px)}}
-@keyframes content-in-forward{from{opacity:.72;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes content-out-back{to{opacity:.72;transform:translateX(14px)}}
-@keyframes content-in-back{from{opacity:.72;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes nav-label-out{to{opacity:0;transform:translateY(-3px)}}
-@keyframes nav-label-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.back-link:active,.contact-options>a:active{transform:scale(.97)}
+
+@keyframes content-out-forward{to{opacity:.84;transform:translateX(-10px)}}
+@keyframes content-in-forward{from{opacity:.84;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes content-out-back{to{opacity:.84;transform:translateX(10px)}}
+@keyframes content-in-back{from{opacity:.84;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
 @media(max-width:760px){
   .hero{min-height:620px;padding-top:48px;padding-bottom:68px}
   .hero-copy{padding:0}

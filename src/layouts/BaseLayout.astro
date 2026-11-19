@@ -33,7 +33,7 @@ const { title = "Vinith | Creative developer", description = "I’m Vinith. I bu
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <SiteHeader />
-  <main id="main"><slot /></main>
+  <main id="main" transition:name="page-content"><slot /></main>
   <SiteFooter />
   <script>import "../scripts/app";</script>
 </body>
