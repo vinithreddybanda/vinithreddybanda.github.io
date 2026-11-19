@@ -41,9 +41,7 @@ if (canvas) {
         const x=gapX*(c+.5),y=gapY*(r+.5);
         dots.push({hx:x,hy:y,x,y,vx:0,vy:0,appear:reduced.matches?1:0});
       }
-      if(!reduced.matches) {
-        dots.forEach((d,i)=>window.setTimeout(()=>{d.appear=1;wake();},Math.abs(r=>r)(0)));
-      }
+      dots.forEach(d=>d.appear=1);
     };
     const draw=(time:number,dtMs:number)=>{
       const dt=Math.min(dtMs,40)/1000||.016;
