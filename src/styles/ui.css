@@ -34,3 +34,7 @@
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;filter:none;transition:none}}
 
 .project-category{font:8px var(--mono);letter-spacing:.04em;color:var(--muted)}
+
+@keyframes soft-focus-in{from{opacity:0;transform:translateY(8px);filter:blur(7px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+.press-caption.is-changing .press-caption__copy h2{animation:soft-focus-in .48s var(--ease) both}.press-caption.is-changing .press-caption__copy p{animation:soft-focus-in .56s var(--ease) .04s both}.press-caption.is-changing .plate-tags{animation:soft-focus-in .62s var(--ease) .08s both}
+@media(prefers-reduced-motion:reduce){.press-caption.is-changing .press-caption__copy h2,.press-caption.is-changing .press-caption__copy p,.press-caption.is-changing .plate-tags{animation:none}}
