@@ -7,9 +7,9 @@ function initPortfolio(){
   const clock=$("#local-clock"),progress=$("#read-progress"),overlay=$("#command-overlay"),input=$("#command-input"),drawer=$("#news-drawer");
   const items=$$("[data-command-item],[data-command-action]");let active=0;
   const themeSaved=(()=>{try{return localStorage.getItem("vinith-theme")}catch{return null}})();
-  if(themeSaved==="light"||themeSaved==="dark")root.dataset.theme=themeSaved;
-  const setTheme=mode=>{root.dataset.theme=mode;try{localStorage.setItem("vinith-theme",mode)}catch{};const meta=$('meta[name="theme-color"]');if(meta)meta.content=mode==="light"?"#e8e5db":"#10110f"};
-  const cycleTheme=()=>setTheme(root.dataset.theme==="dark"?"light":"dark");
+  if(themeSaved==="light"||themeSaved==="dark"||themeSaved==="system")root.dataset.theme=themeSaved;
+  const setTheme=mode=>{root.dataset.theme=mode;try{localStorage.setItem("vinith-theme",mode)}catch{};const meta=$('meta[name="theme-color"]');if(meta)meta.content=mode==="light"?"#e8e5db":mode==="system"&&matchMedia("(prefers-color-scheme: light)").matches?"#e8e5db":"#10110f"};
+  const cycleTheme=()=>setTheme(root.dataset.theme==="dark"?"light":root.dataset.theme==="light"?"system":"dark");
   $(".theme-toggle")?.addEventListener("click",cycleTheme);
   const presence=$("#presence-toggle"),presenceLabel=$("#presence-label"),aboutPresence=$("#about-presence");
   let presenceSocket=null,remotePeers=new Map(),presenceActive=true;const presenceRoot=$("#remote-cursors"),presenceUrl=document.body.dataset.presenceUrl;const onlineCount=$("#online-count");
