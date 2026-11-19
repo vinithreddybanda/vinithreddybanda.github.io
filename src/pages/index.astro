@@ -12,7 +12,7 @@ const cards = projects.map((project,index)=>({...project,index}));
 <div class="press-floor" data-wheel>
 <div class="wheel-glow" aria-hidden="true"></div><div class="wheel-track" data-wheel-track>
 {cards.map((project)=><button class="wheel-card" type="button" data-wheel-card data-index={project.index} aria-label={`Select ${project.name}`} aria-pressed={project.index===0} style={`--angle:${project.index*360/projects.length}deg;`}>
-<span class="plate-frame"><span class="plate-top"><small>{project.number} / SELECTED PROJECT</small><small>{project.year}</small></span><span class:list={["plate-art",`plate-art--${project.index%4}]}><i></i><b></b><em></em><strong>{project.name.split(/\s+/).map(x=>x[0]).join("").slice(0,3)}</strong></span><span class="plate-bottom"><strong>{project.name}</strong><small>{project.category}</small></span></span></button>)}
+<span class="plate-frame"><span class="plate-top"><small>{project.number} / SELECTED PROJECT</small><small>{project.year}</small></span><span class:list={["plate-art",`plate-art--${project.index%4}`]}><i></i><b></b><em></em><strong>{project.name.split(/\s+/).map(x=>x[0]).join("").slice(0,3)}</strong></span><span class="plate-bottom"><strong>{project.name}</strong><small>{project.category}</small></span></span></button>)}
 </div>
 <div class="wheel-shadow" aria-hidden="true"></div><button class="wheel-control wheel-control--prev" type="button" data-wheel-prev aria-label="Previous project">←</button><button class="wheel-control wheel-control--next" type="button" data-wheel-next aria-label="Next project">→</button><div class="wheel-hint">DRAG TO EXPLORE <span>·</span> SELECT A PROJECT</div>
 </div>
