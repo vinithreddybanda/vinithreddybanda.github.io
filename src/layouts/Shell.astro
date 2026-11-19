@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
+import { projects } from "../data/content";
 const { title = "Vinith Reddy Banda — Creative Developer", description = "I build software, interfaces and small experiments for the internet." } = Astro.props;
 const links = [{label:"About",href:"/about/"},{label:"Lab",href:"/lab/"},{label:"Writing",href:"/writing/"},{label:"Studio",href:"/studio/"},{label:"Contact",href:"/contact/"}];
 const path = Astro.url.pathname;
@@ -64,6 +65,7 @@ const path = Astro.url.pathname;
       <div class="command-caption">PAGES & ACTIONS</div>
       <div class="command-results" id="command-results">
         {links.map((link,i)=><a href={link.href} data-command-item><span class="command-number">0{i+1}</span><span>{link.label}</span><span>↗</span></a>)}
+        {projects.map(p=><a href={"/studio/"+p.slug+"/"} data-command-item><span class="command-number">{p.no}</span><span>{p.name}</span><span>↗</span></a>)}
         <a href="/" data-command-item><span class="command-number">00</span><span>Home</span><span>↗</span></a>
         <button type="button" data-command-action="theme"><span class="command-number">06</span><span>Cycle appearance</span><span>◐</span></button>
         <button type="button" data-command-action="presence"><span class="command-number">07</span><span>Toggle live presence</span><span>◎</span></button>
