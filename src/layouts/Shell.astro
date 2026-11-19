@@ -1,89 +1,17 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
-import { projects } from "../data/content";
-const { title = "Vinith Reddy Banda — Creative Developer", description = "I build software, interfaces and small experiments for the internet." } = Astro.props;
-const links = [{label:"About",href:"/about/"},{label:"Lab",href:"/lab/"},{label:"Writing",href:"/writing/"},{label:"Studio",href:"/studio/"},{label:"Contact",href:"/contact/"}];
-const path = Astro.url.pathname;
+import { projects, socials } from "../data/content";
+const { title = "Vinith Reddy Banda — Software Engineer", description = "Software engineer building Android apps, web products and applied AI experiments." } = Astro.props;
+const links=[{label:"About",href:"/about/"},{label:"Lab",href:"/lab/"},{label:"Writing",href:"/writing/"},{label:"Studio",href:"/studio/"},{label:"Contact",href:"/contact/"}];
+const path=Astro.url.pathname;
 ---
-<!doctype html>
-<html lang="en" data-theme="dark">
-<head>
-  <ClientRouter />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#10110f" />
-  <meta name="description" content={description} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://vinithreddybanda.github.io/" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <title>{title}</title>
-</head>
-<body data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="read-progress" aria-hidden="true"><span id="read-progress"></span></div>
-  <div class="cursor-follower" aria-hidden="true"></div><div class="remote-cursors" id="remote-cursors" aria-hidden="true"></div>
-  <header class="masthead">
-    <div class="masthead-top">
-      <a class="wordmark" href="/" aria-label="Vinith home">V<span>.</span></a>
-      <div class="telemetry" aria-label="Live site telemetry">
-        <span>HYD / IN</span><span class="telemetry-sep">·</span>
-        <span id="local-clock">--:--:--</span><span class="telemetry-sep">·</span>
-        <span>FPS <b id="fps-value">--</b></span><span class="telemetry-sep">·</span><span>ONLINE <b id="online-count">1</b></span><span class="telemetry-sep">·</span>
-        <span>LCP <b id="lcp-value">--</b></span><span class="telemetry-sep">·</span>
-        <button class="presence-toggle" id="presence-toggle" type="button"><i></i><span id="presence-label">HERE</span></button>
-      </div>
-      <div class="head-actions">
-        <button class="icon-button theme-toggle" type="button" aria-label="Cycle theme" title="Cycle theme">◐</button>
-        <button class="icon-button record-trigger" type="button" aria-label="Toggle live presence" title="Toggle live presence">◎</button>
-        <button class="icon-button news-trigger" type="button" aria-label="What's new" title="What's new">↗</button>
-        <button class="icon-button command-trigger" type="button" aria-label="Open command menu" title="Command menu">⌘K</button>
-      </div>
-    </div>
-    <div class="masthead-bottom">
-      <span class="edition">PERSONAL INDEX / VOL. 01</span>
-      <nav aria-label="Main navigation">
-        {links.map(link => <a href={link.href} class:list={{active:path===link.href || (link.href==="/about/" && path==="/")}}>{link.label}<span>↗</span></a>)}
-      </nav>
-      <span class="edition right-edition">EST. 2005 · INDIA</span>
-    </div>
-  </header>
-  <main id="main" transition:name="page-content"><slot /></main>
-  <footer class="site-footer">
-    <div class="footer-top"><a class="wordmark" href="/">V<span>.</span></a><p>Independent by curiosity.<br/>Built with intent.</p><a class="footer-back" href="#top">BACK TO TOP ↑</a></div>
-    <div class="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>DESIGNED & BUILT IN INDIA</span><a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GITHUB ↗</a></div>
-  </footer>
-  <div class="command-overlay" id="command-overlay" aria-hidden="true">
-    <div class="command-panel" role="dialog" aria-modal="true" aria-label="Search and quick actions">
-      <div class="command-input-row"><span>⌕</span><input id="command-input" type="search" placeholder="Search pages, projects, tools..." autocomplete="off" /><kbd>ESC</kbd></div>
-      <div class="command-caption">PAGES & ACTIONS</div>
-      <div class="command-results" id="command-results">
-        {links.map((link,i)=><a href={link.href} data-command-item><span class="command-number">0{i+1}</span><span>{link.label}</span><span>↗</span></a>)}
-        {projects.map(p=><a href={"/studio/"+p.slug+"/"} data-command-item><span class="command-number">{p.no}</span><span>{p.name}</span><span>↗</span></a>)}
-        <a href="/" data-command-item><span class="command-number">00</span><span>Home</span><span>↗</span></a>
-        <button type="button" data-command-action="theme"><span class="command-number">06</span><span>Cycle appearance</span><span>◐</span></button>
-        <button type="button" data-command-action="presence"><span class="command-number">07</span><span>Toggle live presence</span><span>◎</span></button>
-        <button type="button" data-command-action="news"><span class="command-number">08</span><span>What’s new</span><span>↗</span></button>
-      </div>
-      <div class="command-foot"><span>↑↓ TO MOVE</span><span>↵ TO SELECT</span><span>ESC TO CLOSE</span></div>
-    </div>
-  </div>
-  <aside class="news-drawer" id="news-drawer" aria-hidden="true">
-    <div class="news-drawer-head"><span>THE CHANGELOG / 2026</span><button type="button" id="news-close" aria-label="Close what's new">×</button></div>
-    <h2>What’s<br/><em>new.</em></h2>
-    <div class="news-items">
-      <a href="/lab/"><small>LAB / NOV 20</small><b>Interaction studies</b><span>New motion and input experiments are being added to the workbench.</span></a>
-      <a href="/studio/"><small>STUDIO / NOV 20</small><b>Project index</b><span>Selected builds, technical notes and case files.</span></a>
-      <a href="/about/"><small>ABOUT / NOV 20</small><b>The front office</b><span>A closer look at the person behind the work.</span></a>
-    </div>
-    <button class="news-mark-read" id="news-mark-read" type="button">MARK ALL READ ✓</button>
-  </aside>
-  <script>import "../scripts/interactions.js";</script>
-</body>
-</html>
+<!doctype html><html lang="en" data-theme="dark"><head><ClientRouter/><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><meta name="theme-color" content="#111111"/><meta name="description" content={description}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/><meta property="og:url" content="https://vinithreddybanda.github.io/"/><meta property="og:image" content="https://avatars.githubusercontent.com/u/116493221?v=4"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/><title>{title}</title></head>
+<body data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}><a class="skip-link" href="#main">Skip to content</a><div class="grain" aria-hidden="true"></div><div class="read-progress" aria-hidden="true"><span id="read-progress"></span></div><div class="cursor-follower" aria-hidden="true"></div><div class="remote-cursors" id="remote-cursors" aria-hidden="true"></div>
+<header class="masthead"><div class="masthead-top"><a class="wordmark" href="/" aria-label="Vinith home">V<span>.</span></a><div class="telemetry" aria-label="Live local time and performance"><span>HYD / IN</span><span class="telemetry-sep">·</span><span id="local-clock">--:--:--</span><span class="telemetry-sep telemetry-performance">·</span><span class="telemetry-performance">FPS <b id="fps-value">--</b></span><span class="telemetry-sep telemetry-performance">·</span><span class="telemetry-performance">LCP <b id="lcp-value">--</b></span></div><div class="head-actions"><button class="icon-button theme-toggle" type="button" aria-label="Cycle appearance" title="Cycle appearance">◐</button><button class="icon-button news-trigger" type="button" aria-label="What's new" title="What's new">↗</button><button class="icon-button command-trigger" type="button" aria-label="Open command menu" title="Search pages and projects">⌘K</button></div></div>
+<div class="masthead-bottom"><span class="edition">PERSONAL INDEX / VOL. 01</span><nav aria-label="Main navigation">{links.map(link=><a href={link.href} class:list={{active:path===link.href||(link.href==="/about/"&&path==="/")}}>{link.label}<span>↗</span></a>)}</nav><span class="edition right-edition">EST. 2005 · INDIA</span></div></header>
+<main id="main" transition:name="page-content"><slot/></main>
+<footer class="site-footer"><div class="footer-top"><a class="wordmark" href="/">V<span>.</span></a><p>Software, considered.<br/>Built in public.</p><a class="footer-back" href="#top">BACK TO TOP ↑</a></div><div class="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>HYDERABAD / INDIA</span><div class="footer-socials">{socials.slice(0,3).map(s=><a href={s.href} target="_blank" rel="noreferrer">{s.label} ↗</a>)}</div></div></footer>
+<div class="command-overlay" id="command-overlay" aria-hidden="true"><div class="command-panel" role="dialog" aria-modal="true" aria-label="Search and quick actions"><div class="command-input-row"><span>⌕</span><input id="command-input" type="search" placeholder="Search pages, projects, links..." autocomplete="off"/><kbd>ESC</kbd></div><div class="command-caption">PAGES / PROJECTS / ACTIONS</div><div class="command-results" id="command-results">{links.map((link,i)=><a href={link.href} data-command-item><span class="command-number">0{i+1}</span><span>{link.label}</span><span>↗</span></a>)}{projects.map(p=><a href={"/studio/"+p.slug+"/"} data-command-item><span class="command-number">{p.no}</span><span>{p.name}</span><span>↗</span></a>)}{socials.map((s,i)=><a href={s.href} target="_blank" rel="noreferrer" data-command-item><span class="command-number">S{i+1}</span><span>{s.label}</span><span>↗</span></a>)}<a href="/" data-command-item><span class="command-number">00</span><span>Home</span><span>↗</span></a><button type="button" data-command-action="theme"><span class="command-number">A1</span><span>Cycle appearance</span><span>◐</span></button><button type="button" data-command-action="news"><span class="command-number">A2</span><span>What’s new</span><span>↗</span></button></div><div class="command-foot"><span>↑↓ MOVE</span><span>↵ OPEN</span><span>ESC CLOSE</span></div></div></div>
+<aside class="news-drawer" id="news-drawer" aria-hidden="true"><div class="news-drawer-head"><span>THE CHANGELOG / 2026</span><button type="button" id="news-close" aria-label="Close what's new">×</button></div><h2>What’s<br/><em>new.</em></h2><div class="news-items"><a href="/studio/"><small>STUDIO / SELECTED WORK</small><b>Project index</b><span>Android, full-stack and applied AI builds, with source links where public.</span></a><a href="/writing/"><small>WRITING / PUBLIC RECORD</small><b>Research and releases</b><span>External records for published work, hackathon builds and open-source releases.</span></a><a href="/lab/"><small>LAB / EXPERIMENTS</small><b>Interaction studies</b><span>Small live experiments for motion, touch and responsive behaviour.</span></a></div><button class="news-mark-read" id="news-mark-read" type="button">MARK ALL READ ✓</button></aside>
+<script>import "../scripts/interactions.js";</script></body></html>

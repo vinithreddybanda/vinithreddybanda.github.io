@@ -39,6 +39,43 @@ function initPortfolio(){
   $$(".press-wheel").forEach(el=>{let start=0,rotation=0,active=false;el.addEventListener("pointerdown",e=>{active=true;start=e.clientX;el.setPointerCapture(e.pointerId);el.style.animation="none"});el.addEventListener("pointermove",e=>{if(!active)return;rotation+=(e.clientX-start)*.45;start=e.clientX;el.style.transform="rotateX(58deg) rotateZ("+rotation+"deg)"});const stop=()=>active=false;el.addEventListener("pointerup",stop);el.addEventListener("pointercancel",stop)});
   const dial=$("#radio-dial");if(dial){const setFrequency=n=>{frequency=Math.max(88,Math.min(108,Math.round(n*10)/10));dial.setAttribute("aria-valuenow",frequency);const readout=$("#radio-frequency"),station=$("#radio-station");if(readout)readout.textContent=frequency.toFixed(1)+" FM";if(station)station.textContent=frequency<94?"LOW BAND / AMBIENT":frequency<100?"CITY SIGNAL / BEATS":frequency<105?"OPEN CHANNEL / TALK":"HIGH BAND / STATIC";if(radioOscillator)radioOscillator.frequency.setTargetAtTime(150+(frequency-88)*22,audioContext.currentTime,.08);dial.style.setProperty("--dial-angle",((frequency-88)/20*270-135)+"deg")};let drag=false,last=0;dial.addEventListener("pointerdown",e=>{drag=true;last=e.clientX;dial.setPointerCapture(e.pointerId)});dial.addEventListener("pointermove",e=>{if(drag){setFrequency(frequency+(e.clientX-last)*.045);last=e.clientX}});dial.addEventListener("pointerup",()=>drag=false);dial.addEventListener("pointercancel",()=>drag=false);dial.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key==="ArrowUp"){e.preventDefault();setFrequency(frequency+.1)}if(e.key==="ArrowLeft"||e.key==="ArrowDown"){e.preventDefault();setFrequency(frequency-.1)}});setFrequency(88);$("#radio-play")?.addEventListener("click",async()=>{try{audioContext??=new(window.AudioContext||window.webkitAudioContext)();await audioContext.resume();if(!radioOscillator){radioOscillator=audioContext.createOscillator();radioGain=audioContext.createGain();radioOscillator.type="sine";radioOscillator.frequency.value=150+(frequency-88)*22;radioGain.gain.value=.035;radioOscillator.connect(radioGain).connect(audioContext.destination);radioOscillator.start()}$("#radio-play").disabled=true;$("#radio-stop").disabled=false;$("#radio-station").textContent="ON AIR / "+frequency.toFixed(1)}catch{const s=$("#radio-station");if(s)s.textContent="AUDIO UNAVAILABLE"}});$("#radio-stop")?.addEventListener("click",()=>{if(radioOscillator){radioOscillator.stop();radioOscillator.disconnect();radioOscillator=null}$("#radio-play").disabled=false;$("#radio-stop").disabled=true;const s=$("#radio-station");if(s)s.textContent="STANDBY"})}
   const tape=$("#rotation-tape");if(tape){let dragging=false,start=0,left=0;tape.addEventListener("pointerdown",e=>{dragging=true;start=e.clientX;left=tape.scrollLeft;tape.setPointerCapture(e.pointerId)});tape.addEventListener("pointermove",e=>{if(dragging)tape.scrollLeft=left-(e.clientX-start)});tape.addEventListener("pointerup",()=>dragging=false);tape.addEventListener("pointercancel",()=>dragging=false);tape.addEventListener("keydown",e=>{if(e.key==="ArrowRight")tape.scrollBy({left:100,behavior:"smooth"});if(e.key==="ArrowLeft")tape.scrollBy({left:-100,behavior:"smooth"})})}
+
+  const githubPanel=$("#github-live"),aboutRepos=$("#about-repos"),aboutFollowers=$("#about-followers");
+  if(githubPanel||aboutRepos||aboutFollowers){
+    const sync=$("#github-sync"),repoHost=$("#github-repos"),cacheKey="vinith-github-public-v2";let snapshot=null;
+    try{const cached=JSON.parse(localStorage.getItem(cacheKey)||"null");if(cached&&Date.now()-cached.savedAt<20*60*1000)snapshot=cached.data}catch{}
+    const applyGithub=data=>{
+      const profile=data.profile||{},repos=Array.isArray(data.repos)?data.repos:[];
+      const stat=(name,value)=>{const node=githubPanel?.querySelector('[data-github-stat="'+name+'"]');if(node)node.textContent=Number(value||0).toLocaleString("en-IN")};
+      stat("public_repos",profile.public_repos);stat("followers",profile.followers);
+      stat("stars",repos.reduce((sum,r)=>sum+(r.stargazers_count||0),0));
+      if(aboutRepos)aboutRepos.textContent=Number(profile.public_repos||0).toLocaleString("en-IN");
+      if(aboutFollowers)aboutFollowers.textContent=Number(profile.followers||0).toLocaleString("en-IN");
+      if(sync)sync.textContent=new Intl.DateTimeFormat("en-IN",{hour:"2-digit",minute:"2-digit",hour12:false,timeZone:"Asia/Kolkata"}).format(new Date());
+      const selected=["SimpMusic","WhatsapStatusSaver","journalai","CareSchedule_cts"];
+      const chosen=selected.map(name=>repos.find(r=>r.name.toLowerCase()===name.toLowerCase())).filter(Boolean);
+      if(repoHost&&chosen.length){repoHost.replaceChildren();chosen.forEach(r=>{
+        const a=document.createElement("a");a.className="github-repo";a.href=r.html_url;a.target="_blank";a.rel="noreferrer";
+        const top=document.createElement("span");top.className="repo-top";const dot=document.createElement("i");top.append(dot,document.createTextNode(r.language||"SOURCE"));
+        const title=document.createElement("b");title.textContent=r.name;const desc=document.createElement("p");desc.textContent=r.description||"Public repository and ongoing software work.";
+        const meta=document.createElement("span");meta.className="repo-meta";const left=document.createElement("span");left.textContent="★ "+(r.stargazers_count||0)+"  FORKS "+(r.forks_count||0);
+        const right=document.createElement("i");right.textContent="↗";meta.append(left,right);a.append(top,title,desc,meta);repoHost.append(a)
+      })}
+    };
+    if(snapshot)applyGithub(snapshot);
+    fetch("https://api.github.com/users/vinithreddybanda",{headers:{Accept:"application/vnd.github+json"},cache:"no-cache"})
+      .then(async response=>{if(!response.ok)throw new Error("GitHub profile unavailable");const profile=await response.json();
+        const reposResponse=await fetch("https://api.github.com/users/vinithreddybanda/repos?per_page=100&sort=updated",{headers:{Accept:"application/vnd.github+json"},cache:"no-cache"});
+        if(!reposResponse.ok)throw new Error("GitHub repositories unavailable");const repos=await reposResponse.json();
+        const data={profile,repos:repos.filter(r=>!r.fork&&!r.private)};applyGithub(data);
+        try{localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),data}))}catch{}
+      }).catch(()=>{if(!snapshot&&sync)sync.textContent="PROFILE LINK";const note=$("#github-footnote");if(note)note.textContent="Live GitHub data is temporarily unavailable. Repository links remain available."});
+  }
+  const motionStage=$("#lab-motion-stage"),motionTrigger=$("#lab-motion-trigger"),motionRange=$("#motion-intensity"),motionOutput=$("#motion-intensity-value");
+  const runLabMotion=()=>{if(!motionStage)return;motionStage.classList.remove("is-running");void motionStage.offsetWidth;const n=Number(motionRange?.value||3);motionStage.style.setProperty("--motion-duration",(1.2-(n-1)*.14)+"s");motionStage.classList.add("is-running")};
+  motionStage?.addEventListener("click",runLabMotion);motionTrigger?.addEventListener("click",runLabMotion);
+  motionRange?.addEventListener("input",()=>{const n=Number(motionRange.value);if(motionOutput)motionOutput.textContent=String(n).padStart(2,"0")+" / "+(["","GENTLE","SOFT","BALANCED","SNAPPY","DIRECT"][n])});
+
   const cursor=$(".cursor-follower");if(cursor&&!reduced&&matchMedia("(pointer:fine)").matches){let x=0,y=0,tx=0,ty=0;addEventListener("pointermove",e=>{tx=e.clientX;ty=e.clientY},{passive:true});const move=()=>{x+=(tx-x)*.22;y+=(ty-y)*.22;cursor.style.transform="translate3d("+x+"px,"+y+"px,0)";rafId=requestAnimationFrame(move)};move();$$("a,button,[role=slider]").forEach(el=>{el.addEventListener("pointerenter",()=>cursor.classList.add("is-hover"));el.addEventListener("pointerleave",()=>cursor.classList.remove("is-hover"))})}
   if("PerformanceObserver"in window){try{new PerformanceObserver(list=>{const entry=list.getEntries().at(-1);const el=$("#lcp-value");if(el)el.textContent=(entry.startTime/1000).toFixed(2)+"s"}).observe({type:"largest-contentful-paint",buffered:true})}catch{}}
   let frames=0,last=performance.now();const fps=()=>{frames++;const now=performance.now();if(now-last>=1000){const el=$("#fps-value");if(el)el.textContent=Math.round(frames*1000/(now-last));frames=0;last=now}if(!reduced)requestAnimationFrame(fps)};if(!reduced)requestAnimationFrame(fps);

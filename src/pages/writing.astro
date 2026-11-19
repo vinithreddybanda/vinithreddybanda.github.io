@@ -1,13 +1,11 @@
 ---
 import Shell from "../layouts/Shell.astro";
-const notes = [
-  {n:"01",type:"FIELD NOTE",date:"IN PROGRESS",title:"The personal starter",desc:"What belongs in a portfolio starter, what can be left out and why the first version should stay small."},
-  {n:"02",type:"ENGINEERING",date:"IN PROGRESS",title:"Small systems, reliable software",desc:"Notes on making build pipelines, app architecture and everyday developer workflows less fragile."},
-  {n:"03",type:"DESIGN NOTES",date:"IN PROGRESS",title:"Motion with a reason",desc:"A working collection of interaction patterns that clarify state instead of decorating the screen."}
-];
+const notes=[
+{n:"01",type:"RESEARCH",date:"MAR 2026",title:"Multi-Task Graph Attention Network for Kinematic Rehabilitation Exercise Analysis",desc:"Conference paper record associated with IEEE I3CTCON 2026.",href:"https://doi.org/10.1109/I3CTCON68242.2026.11507447",source:"IEEE / DOI"},
+{n:"02",type:"HACKATHON BUILD",date:"AUG 2025",title:"Nexus AI",desc:"An AI-assisted civic issue intake, prioritization and routing concept.",href:"https://devpost.com/software/nexus-ai-yao2hv",source:"DEVPOST"},
+{n:"03",type:"OPEN-SOURCE RELEASE",date:"JAN 2026",title:"Whatsap Status",desc:"A local-first Android utility listed in the F-Droid repository.",href:"https://f-droid.org/packages/com.vinithreddybanda.whatsapstatus/",source:"F-DROID"}];
 ---
-<Shell title="Writing — Vinith Reddy Banda" description="Notes on engineering, design and learning in public.">
-<section class="page-hero section-pad"><div class="section-index"><span>THE READING ROOM</span><span>NOTES / JOURNAL</span></div><p class="eyebrow"><span class="eyebrow-mark"></span> IDEAS, WRITTEN DOWN</p><h1 class="page-heading">Thinking<br/><em>out loud.</em></h1><p class="page-deck">Notes from the process: engineering decisions, design observations and lessons collected while building.</p></section>
-<section class="writing-list section-pad"><div class="section-index"><span>THE INDEX</span><span>RECENT NOTES</span></div>{notes.map(n=><article class="writing-row"><div class="writing-meta"><span>{n.n} / {n.type}</span><small>{n.date}</small></div><div><h2>{n.title}</h2><p>{n.desc}</p></div><span class="writing-arrow">↗</span></article>)}</section>
-<section class="writing-foot section-pad"><span class="micro-label">MORE NOTES, WHEN THEY’RE READY.</span><p>Writing is part of the work. This shelf will fill as the ideas become useful enough to share.</p></section>
-</Shell>
+<Shell title="Writing & Research — Vinith Reddy Banda" description="Public research records, hackathon builds and open-source releases.">
+<section class="page-hero section-pad"><div class="section-index"><span>THE READING ROOM</span><span>PUBLIC NOTES / RECORDS</span></div><p class="eyebrow"><span class="eyebrow-mark"></span> WORK THAT LEFT THE DESK</p><h1 class="page-heading">Research.<br/><em>Builds. Releases.</em></h1><p class="page-deck">A short index of work with a public record. No placeholder articles or invented publication dates.</p></section>
+<section class="writing-list section-pad"><div class="section-index"><span>THE INDEX</span><span>EXTERNAL RECORDS / 03</span></div>{notes.map(n=><a class="writing-row writing-link" href={n.href} target="_blank" rel="noreferrer"><div class="writing-meta"><span>{n.n} / {n.type}</span><small>{n.date}</small></div><div><h2>{n.title}</h2><p>{n.desc}</p></div><span class="writing-arrow">{n.source} ↗</span></a>)}</section>
+<section class="writing-foot section-pad"><span class="micro-label">SOURCE FIRST</span><p>Each entry opens its original public record. Research, project ownership and publication status should be judged from the source, not a portfolio summary.</p></section></Shell>

@@ -1,7 +1,1 @@
-{
-  "name": "vinithreddybanda.github.io",
-  "private": true,
-  "type": "module",
-  "scripts": { "dev": "astro dev", "build": "astro build", "preview": "astro preview", "test": "node --test" },
-  "dependencies": { "astro": "^6.0.0" }
-}
+{"name":"vinithreddybanda.github.io","private":true,"type":"module","scripts":{"dev":"astro dev","build":"astro build","preview":"astro preview","test":"node --test","test:responsive":"node scripts/responsive-check.mjs"},"dependencies":{"astro":"^6.0.0"},"devDependencies":{"playwright":"^1.56.1"}}

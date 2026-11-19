@@ -1,7 +1,7 @@
 ---
 import Shell from "../layouts/Shell.astro";
+import { socials } from "../data/content";
 ---
-<Shell title="Contact — Vinith Reddy Banda" description="Get in touch with Vinith Reddy Banda.">
-<section class="page-hero section-pad contact-page"><div class="section-index"><span>THE CONTACT DESK</span><span>INQUIRIES / OPEN</span></div><p class="eyebrow"><span class="eyebrow-mark"></span> START A CONVERSATION</p><h1 class="page-heading">Have a good<br/><em>one in mind?</em></h1><p class="page-deck">For interesting problems, open-source collaboration or a conversation about building better software.</p><a class="contact-primary" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer"><span>FIND ME ON GITHUB</span><b>↗</b></a></section>
-<section class="contact-details section-pad"><div class="section-index"><span>ELSEWHERE ON THE INTERNET</span><span>PUBLIC LINKS</span></div><a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer"><span>01 / CODE</span><b>GitHub</b><i>↗</i></a><a href="https://vinithreddybanda.github.io/" target="_blank" rel="noreferrer"><span>02 / PORTFOLIO</span><b>This website</b><i>↗</i></a></section>
-</Shell>
+<Shell title="Contact — Vinith Reddy Banda" description="Find Vinith Reddy Banda across code, professional and public project profiles.">
+<section class="page-hero section-pad contact-page"><div class="section-index"><span>THE CONTACT DESK</span><span>PUBLIC CHANNELS / OPEN</span></div><p class="eyebrow"><span class="eyebrow-mark"></span> START A CONVERSATION</p><h1 class="page-heading">Find me<br/><em>out there.</em></h1><p class="page-deck">For software work, open-source collaboration, technical conversations or a good problem worth solving.</p><a class="contact-primary" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer"><span>OPEN GITHUB PROFILE</span><b>↗</b></a></section>
+<section class="contact-details section-pad"><div class="section-index"><span>ELSEWHERE ON THE INTERNET</span><span>VERIFIED PUBLIC PROFILES</span></div>{socials.map((item,i)=><a href={item.href} target="_blank" rel="noreferrer"><span>0{i+1} / {item.detail.toUpperCase()}</span><b>{item.label}</b><i>↗</i></a>)}</section></Shell>

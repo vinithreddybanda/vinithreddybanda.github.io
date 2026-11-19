@@ -18,14 +18,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Test
+      - name: Unit checks
         run: npm test
       - name: Build
         env:
           PUBLIC_PRESENCE_URL: ${{ vars.PUBLIC_PRESENCE_URL }}
         run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verify responsive layouts
+        run: npm run test:responsive
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
