@@ -67,7 +67,7 @@ function initPortfolio(){
       .then(async response=>{if(!response.ok)throw new Error("GitHub profile unavailable");const profile=await response.json();
         const reposResponse=await fetch("https://api.github.com/users/vinithreddybanda/repos?per_page=100&sort=updated",{headers:{Accept:"application/vnd.github+json"},cache:"no-cache"});
         if(!reposResponse.ok)throw new Error("GitHub repositories unavailable");const repos=await reposResponse.json();
-        const data={profile,repos:repos.filter(r=>!r.fork&&!r.private)};applyGithub(data);
+        const data={profile,repos:repos.filter(r=>!r.private)};applyGithub(data);
         try{localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),data}))}catch{}
       }).catch(()=>{if(!snapshot&&sync)sync.textContent="PROFILE LINK";const note=$("#github-footnote");if(note)note.textContent="Live GitHub data is temporarily unavailable. Repository links remain available."});
   }

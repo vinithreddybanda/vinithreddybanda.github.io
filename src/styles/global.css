@@ -214,3 +214,7 @@ main,.section-pad,.site-footer,.masthead{min-width:0;max-width:100%}
 .lab-motion-stage.is-running .lab-motion-core,.lab-motion-stage.is-running .lab-motion-ring{animation:none}
 .github-repo,.featured-row,.record-row{transition:none}
 }
+
+/* Force the remaining decorative artwork into the same neutral print palette. */
+.object-art,.case-visual,.case-visual-grid,.lab-glyph,.radio-dial{filter:grayscale(1)}
+@media(max-width:820px){.masthead nav a{min-height:40px}.hero-copy h1,.page-heading,.case-heading h1{overflow-wrap:anywhere}.work-wheel,.rotation-tape{overscroll-behavior-x:contain}.github-repo,.featured-row{min-width:0}.featured-row>div{min-width:0}.contact-details>a>*{min-width:0}}
