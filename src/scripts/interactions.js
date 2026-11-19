@@ -39,7 +39,7 @@ function initPortfolio(){
     if(baseCount){
       const cloneSet=()=>originals.map(card=>{const clone=card.cloneNode(true);clone.setAttribute("aria-hidden","true");clone.querySelectorAll("a,button,[tabindex]").forEach(node=>node.setAttribute("tabindex","-1"));return clone});
       wheel.append(...cloneSet(),...cloneSet());
-      let cycleWidth=wheel.scrollWidth/3,dragging=false,moved=false,startX=0,scrollStart=0;
+      let cycleWidth=wheel.children[baseCount].offsetLeft-wheel.children[0].offsetLeft,dragging=false,moved=false,startX=0,scrollStart=0;
       wheel.scrollLeft=cycleWidth;
       const update=()=>{
         if(wheel.scrollLeft<cycleWidth*.45)wheel.scrollLeft+=cycleWidth;
@@ -57,7 +57,7 @@ function initPortfolio(){
       wheel.addEventListener("click",e=>{if(wheel.dataset.suppressClick==="true"){e.preventDefault();e.stopPropagation()}},true);
       $("#wheel-next")?.addEventListener("click",()=>wheel.scrollBy({left:wheel.clientWidth*.78,behavior:reduced?"auto":"smooth"}));
       $("#wheel-prev")?.addEventListener("click",()=>wheel.scrollBy({left:-wheel.clientWidth*.78,behavior:reduced?"auto":"smooth"}));
-      addEventListener("resize",()=>{cycleWidth=wheel.scrollWidth/3;wheel.scrollLeft=cycleWidth},{passive:true});
+      addEventListener("resize",()=>{cycleWidth=wheel.children[baseCount].offsetLeft-wheel.children[0].offsetLeft;wheel.scrollLeft=cycleWidth},{passive:true});
       update();
     }
   }
