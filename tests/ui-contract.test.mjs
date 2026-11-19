@@ -24,6 +24,7 @@ test("home renders a data-driven project press with accessible controls", async 
 
 test("background is invisible at rest and creates a tactile pixel ripple on interaction", async () => {
   const paper=await read("../src/scripts/paper.ts");
+  const css=await read("../src/styles/global.css");
   assert.match(paper,/SPACING=14/);
   assert.match(paper,/PIXEL_SIZE=1\.35/);
   assert.match(paper,/RIPPLE_SPEED=720/);
@@ -35,6 +36,7 @@ test("background is invisible at rest and creates a tactile pixel ripple on inte
   assert.match(paper,/ctx!\.fillRect/);
   assert.match(paper,/if\(alpha<\.018\)continue/);
   assert.doesNotMatch(paper,/REST_ALPHA/);
+  assert.match(css,/body:before\\{display:none\\}/);
   assert.match(paper,/ctx!\.clearRect\(0,0,width,height\);last=0/);
 });
 

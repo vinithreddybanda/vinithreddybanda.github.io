@@ -1,126 +1,119 @@
-const canvas=document.querySelector<HTMLCanvasElement>("[data-dot-field]");
-const reduced=matchMedia("(prefers-reduced-motion: reduce)");
-if(canvas){
-  const ctx=canvas.getContext("2d",{alpha:true});
-  if(ctx){
-    const clamp=(v:number,min:number,max:number)=>Math.max(min,Math.min(max,v));
-    const SPACING=14,PIXEL_SIZE=1.35;
-    const RIPPLE_SPEED=720,RIPPLE_WIDTH=78,RIPPLE_DECAY=.965,RIPPLE_HEIGHT=13;
-    const CURSOR_RADIUS=104,CURSOR_PUSH=9,FRICTION=.82;
-    type Pixel={x:number;y:number;homeX:number;homeY:number;vx:number;vy:number};
-    type Ripple={x:number;y:number;radius:number;strength:number};
-    const pixels:Pixel[]=[];
-    const ripples:Ripple[]=[];
-    const pointer={x:0,y:0,px:0,py:0,energy:0,inside:false};
-    let width=0,height=0,dpr=1,cols=0,rows=0,raf=0,last=0,visible=true;
-    let ink=[237,237,235];
+const canvas = document.querySelector<HTMLCanvasElement>("[data-dot-field]");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+if (canvas) {
+  const ctx = canvas.getContext("2d", { alpha: true });
+  if (ctx) {
+    const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+    const SPACING = 34, DOT_R = 2.4, REST_ALPHA = .2, VEL_PUSH = .16;
+    const WAVE = 2.4, RIPPLE_SPEED = 620, RIPPLE_WIDTH = 90, RIPPLE_PUSH = 3.4;
+    const REPEL_R = 116, PUSH = .9, BLOOM = 2.1, SPRING = .055, DAMPING = .18;
+    type Dot = { hx:number; hy:number; x:number; y:number; vx:number; vy:number; appear:number };
+    type Ripple = { x:number; y:number; radius:number; strength:number };
+    const dots: Dot[] = [];
+    const ripples: Ripple[] = [];
+    const mouse = { x:0, y:0, px:0, py:0, vx:0, vy:0, active:false };
+    let width=0, height=0, dpr=1, cols=0, rows=0, raf=0, last=0, visible=true;
+    let ink=[30,30,30];
     const resolveInk=()=>{
       const probe=document.createElement("span");
       probe.style.cssText="position:absolute;visibility:hidden;color:var(--ink)";
       document.body.append(probe);
-      const rgb=getComputedStyle(probe).color.match(/\d+/g);
+      const values=getComputedStyle(probe).color.match(/\d+/g);
       probe.remove();
-      if(rgb)ink=rgb.slice(0,3).map(Number);
+      if(values) ink=values.slice(0,3).map(Number);
     };
     const measure=()=>{
-      width=innerWidth;height=innerHeight;dpr=Math.min(devicePixelRatio||1,2);
-      canvas!.width=Math.round(width*dpr);canvas!.height=Math.round(height*dpr);
-      canvas!.style.width=width+"px";canvas!.style.height=height+"px";
+      width=innerWidth; height=innerHeight; dpr=Math.min(devicePixelRatio||1,2);
+      canvas!.width=Math.round(width*dpr); canvas!.height=Math.round(height*dpr);
+      canvas!.style.width=width+"px"; canvas!.style.height=height+"px";
       ctx!.setTransform(dpr,0,0,dpr,0,0);
-      const nextCols=Math.ceil(width/SPACING)+1,nextRows=Math.ceil(height/SPACING)+1;
-      if(nextCols===cols&&nextRows===rows&&pixels.length)return;
-      cols=nextCols;rows=nextRows;pixels.length=0;
-      for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
-        const hx=x*SPACING,hy=y*SPACING;
-        pixels.push({x:hx,y:hy,homeX:hx,homeY:hy,vx:0,vy:0});
+      const pitch=clamp(Math.min(width,height)/18,26,44);
+      const nextCols=Math.max(2,Math.round(width/pitch));
+      const nextRows=Math.max(2,Math.round(height/pitch));
+      if(nextCols===cols&&nextRows===rows&&dots.length){
+        const gapX=width/cols,gapY=height/rows;
+        dots.forEach((d,i)=>{const hx=gapX*(i%cols+.5),hy=gapY*(Math.floor(i/cols)+.5);d.x+=hx-d.hx;d.y+=hy-d.hy;d.hx=hx;d.hy=hy;});
+        return;
       }
-      ripples.length=0;ctx!.clearRect(0,0,width,height);
+      cols=nextCols; rows=nextRows; dots.length=0;
+      const gapX=width/cols,gapY=height/rows;
+      for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+        const x=gapX*(c+.5),y=gapY*(r+.5);
+        dots.push({hx:x,hy:y,x,y,vx:0,vy:0,appear:reduced.matches?1:0});
+      }
+      if(!reduced.matches) {
+        dots.forEach((d,i)=>window.setTimeout(()=>{d.appear=1;wake();},Math.abs(r=>r)(0)));
+      }
     };
-    const draw=(dtMs:number)=>{
+    const draw=(time:number,dtMs:number)=>{
       const dt=Math.min(dtMs,40)/1000||.016;
+      const radius2=REPEL_R*REPEL_R;
+      mouse.vx=mouse.x-mouse.px; mouse.vy=mouse.y-mouse.py;
+      mouse.px=mouse.x; mouse.py=mouse.y;
+      for(let i=ripples.length-1;i>=0;i--){
+        const ripple=ripples[i]; ripple.radius+=RIPPLE_SPEED*dt;
+        ripple.strength*=Math.pow(.955,dt*60);
+        if(ripple.strength<.05||ripple.radius>Math.hypot(width,height)) ripples.splice(i,1);
+      }
       ctx!.clearRect(0,0,width,height);
       const [r,g,b]=ink;
-      for(let i=ripples.length-1;i>=0;i--){
-        const wave=ripples[i];
-        wave.radius+=RIPPLE_SPEED*dt;
-        wave.strength*=Math.pow(RIPPLE_DECAY,dt*60);
-        if(wave.strength<.025||wave.radius>Math.hypot(width,height)+RIPPLE_WIDTH)ripples.splice(i,1);
-      }
-      pointer.energy*=Math.pow(.82,dt*60);
-      const cursorActive=pointer.inside&&pointer.energy>.015&&!reduced.matches;
-      for(const p of pixels){
-        let dx=0,dy=0,depth=0,light=0;
-        if(cursorActive){
-          const x=p.homeX-pointer.x,y=p.homeY-pointer.y,dist=Math.hypot(x,y);
-          if(dist<CURSOR_RADIUS){
-            const f=1-dist/CURSOR_RADIUS;
-            const inv=1/(dist||1);
-            const force=f*f*pointer.energy;
-            dx+=x*inv*CURSOR_PUSH*force;
-            dy+=y*inv*CURSOR_PUSH*force;
-            depth=Math.max(depth,force);
-            light=Math.max(light,force*.7);
+      for(const d of dots){
+        const hx=reduced.matches?d.hx:d.hx+Math.sin(d.hy*.02+time*.0012)*WAVE;
+        const hy=reduced.matches?d.hy:d.hy+Math.cos(d.hx*.02+time*.001)*WAVE;
+        let ax=(hx-d.x)*SPRING, ay=(hy-d.y)*SPRING, bloom=0;
+        if(mouse.active&&!reduced.matches){
+          const dx=d.x-mouse.x,dy=d.y-mouse.y,dd=dx*dx+dy*dy;
+          if(dd<radius2){
+            const dist=Math.sqrt(dd)||1,f=1-dist/REPEL_R;
+            ax+=dx/dist*f*PUSH+mouse.vx*f*VEL_PUSH;
+            ay+=dy/dist*f*PUSH+mouse.vy*f*VEL_PUSH;
+            bloom=f;
           }
         }
-        for(const wave of ripples){
-          const x=p.homeX-wave.x,y=p.homeY-wave.y,dist=Math.hypot(x,y)||1;
-          const edge=dist-wave.radius;
-          const envelope=Math.exp(-(edge*edge)/(2*RIPPLE_WIDTH*RIPPLE_WIDTH))*wave.strength;
-          if(envelope<.012)continue;
-          const crest=Math.sin(edge*.115);
-          const normalX=x/dist,normalY=y/dist;
-          dx+=normalX*crest*envelope*RIPPLE_HEIGHT;
-          dy+=normalY*crest*envelope*RIPPLE_HEIGHT;
-          depth=Math.max(depth,envelope);
-          light=Math.max(light,envelope*(.55+.45*Math.max(0,crest)));
+        for(const ripple of ripples){
+          const dx=d.x-ripple.x,dy=d.y-ripple.y,dist=Math.hypot(dx,dy)||1;
+          const edge=Math.abs(dist-ripple.radius);
+          if(edge<RIPPLE_WIDTH){
+            const force=(1-edge/RIPPLE_WIDTH)*ripple.strength;
+            ax+=dx/dist*force; ay+=dy/dist*force;
+            bloom=Math.max(bloom,Math.min(1,force*.4));
+          }
         }
-        const tx=p.homeX+dx,ty=p.homeY+dy;
-        p.vx=(p.vx+(tx-p.x)*.34)*Math.pow(FRICTION,dt*60);
-        p.vy=(p.vy+(ty-p.y)*.34)*Math.pow(FRICTION,dt*60);
-        p.x+=p.vx;p.y+=p.vy;
-        const alpha=clamp(depth*.92,0,.94);
-        if(alpha<.018)continue;
-        const size=PIXEL_SIZE+depth*1.05;
-        const x=Math.round(p.x),y=Math.round(p.y);
-        ctx!.fillStyle="rgba("+r+","+g+","+b+","+alpha+")";
-        ctx!.fillRect(x,y,size,size);
-        if(depth>.16){
-          ctx!.fillStyle="rgba(255,255,255,"+clamp(light*.38,0,.34)+")";
-          ctx!.fillRect(x,y,size,.55);
-          ctx!.fillStyle="rgba(0,0,0,"+clamp(depth*.3,0,.28)+")";
-          ctx!.fillRect(x,y+size-.55,size,.55);
-        }
+        const keep=1-DAMPING;
+        d.vx=(d.vx+ax)*keep; d.vy=(d.vy+ay)*keep;
+        d.x+=d.vx; d.y+=d.vy;
+        const appear=reduced.matches?1:d.appear;
+        const rad=DOT_R*(.4+.6*appear)*(1+bloom*BLOOM);
+        const alpha=appear*(REST_ALPHA+bloom*(1-REST_ALPHA));
+        if(alpha<.004||rad<.1) continue;
+        ctx!.beginPath(); ctx!.arc(d.x,d.y,rad,0,Math.PI*2);
+        ctx!.fillStyle="rgba("+r+","+g+","+b+","+alpha+")"; ctx!.fill();
       }
     };
     const tick=(time:number)=>{
-      raf=0;if(!visible)return;
-      const dt=last?time-last:16.67;last=time;draw(dt);
-      if(ripples.length||pointer.energy>.015)raf=requestAnimationFrame(tick);
-      else{ctx!.clearRect(0,0,width,height);last=0;}
+      raf=0; if(!visible) return;
+      const dt=last?time-last:16.67; last=time; draw(time,dt);
+      if(!reduced.matches||ripples.length||mouse.active) raf=requestAnimationFrame(tick);
     };
-    const wake=()=>{if(!raf&&visible&&!reduced.matches){last=0;raf=requestAnimationFrame(tick);}};
-    const local=(e:PointerEvent)=>({x:e.clientX,y:e.clientY});
+    function wake(){ if(!raf&&visible&&!reduced.matches) raf=requestAnimationFrame(tick); }
+    const point=(e:PointerEvent)=>({x:e.clientX,y:e.clientY});
     window.addEventListener("pointermove",e=>{
-      const p=local(e);pointer.x=p.x;pointer.y=p.y;
-      if(!pointer.inside){pointer.px=p.x;pointer.py=p.y;}
-      pointer.inside=true;pointer.energy=1;wake();
+      const p=point(e); mouse.x=p.x; mouse.y=p.y;
+      if(!mouse.active){mouse.px=p.x;mouse.py=p.y;}
+      mouse.active=true; wake();
     },{passive:true});
-    window.addEventListener("pointerout",e=>{
-      if(!e.relatedTarget){pointer.inside=false;wake();}
-    });
+    window.addEventListener("pointerout",e=>{if(!e.relatedTarget){mouse.active=false;wake();}});
     window.addEventListener("pointerdown",e=>{
-      if(reduced.matches)return;
-      const p=local(e);ripples.push({x:p.x,y:p.y,radius:0,strength:1});
-      wake();
+      if(reduced.matches) return;
+      const p=point(e); ripples.push({x:p.x,y:p.y,radius:0,strength:RIPPLE_PUSH}); wake();
     },{passive:true});
     window.addEventListener("resize",()=>{measure();wake();},{passive:true});
     document.addEventListener("visibilitychange",()=>{
       visible=document.visibilityState==="visible";
-      if(!visible&&raf){cancelAnimationFrame(raf);raf=0;}
-      else{last=0;wake();}
+      if(!visible&&raf){cancelAnimationFrame(raf);raf=0;} else {last=0;wake();}
     });
-    new MutationObserver(()=>{resolveInk();}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
-    reduced.addEventListener("change",()=>{if(reduced.matches){if(raf)cancelAnimationFrame(raf);raf=0;ctx!.clearRect(0,0,width,height);ripples.length=0;pointer.energy=0;}});
-    resolveInk();measure();
+    new MutationObserver(()=>{resolveInk();wake();}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+    reduced.addEventListener("change",()=>{measure();wake();});
+    resolveInk(); measure(); wake();
   }
 }
