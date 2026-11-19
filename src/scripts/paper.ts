@@ -23,8 +23,8 @@ if(canvas){
   };
   const tick=(now:number)=>{raf=0;if(!visible)return;const dt=last?now-last:16.67;last=now;draw(now,dt);if(!reduced.matches)raf=requestAnimationFrame(tick);};
   const wake=()=>{if(!raf&&!reduced.matches&&visible)raf=requestAnimationFrame(tick);};
-  canvas.addEventListener("pointermove",e=>{mouse.x=e.clientX;mouse.y=e.clientY;if(!mouse.active){mouse.px=mouse.x;mouse.py=mouse.y;}mouse.active=true;wake();},{passive:true});
-  canvas.addEventListener("pointerleave",()=>mouse.active=false);
+  window.addEventListener("pointermove",e=>{mouse.x=e.clientX;mouse.y=e.clientY;if(!mouse.active){mouse.px=mouse.x;mouse.py=mouse.y;}mouse.active=true;wake();},{passive:true});
+  window.addEventListener("pointerout",e=>{if(!e.relatedTarget)mouse.active=false;});
   window.addEventListener("pointerdown",e=>{if(reduced.matches)return;ripples.push({x:e.clientX,y:e.clientY,radius:0,strength:1});wake();},{passive:true});
   window.addEventListener("resize",measure,{passive:true});
   document.addEventListener("visibilitychange",()=>{visible=document.visibilityState==="visible";if(!visible&&raf){cancelAnimationFrame(raf);raf=0;}else wake();});
