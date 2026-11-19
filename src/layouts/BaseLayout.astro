@@ -8,8 +8,9 @@ const { title = "Vinith Reddy Banda — Software Engineer", description = "Softw
 ---
 <!doctype html><html lang="en" data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}><head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#f4f4f1" /><meta name="color-scheme" content="light" /><meta name="description" content={description} />
+<meta name="theme-color" content="#f4f4f1" /><meta name="color-scheme" content="light dark" /><meta name="description" content={description} />
 <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" /><meta property="og:url" content="https://vinithreddybanda.github.io/" />
+<script is:inline>try{const t=localStorage.getItem("vb-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;}catch(e){}</script>
 <title>{title}</title></head><body>
 <canvas class="pixel-canvas" data-paper-canvas aria-hidden="true"></canvas>
 <a class="skip-link" href="#main">Skip to content</a><SiteHeader /><main id="main"><slot /></main><div class="page-end"><SiteFooter /></div>
