@@ -27,7 +27,7 @@ jobs:
           PUBLIC_PRESENCE_URL: ${{ vars.PUBLIC_PRESENCE_URL }}
         run: npm run build
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Verify responsive layouts
         run: npm run test:responsive
       - uses: actions/upload-pages-artifact@v4
