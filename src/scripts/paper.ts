@@ -12,7 +12,7 @@ const fragmentSource=[
 "float ca=fbm(p*2.15+vec2(t,-t*0.62));float cb=fbm(p*5.8-vec2(t*0.55,t*0.31));float cloud=ca*0.72+cb*0.28;",
 "float grain=hash(gl_FragCoord.xy)-0.5;float fibre=noise(vec2(p.x*46.0+ca*3.0,p.y*310.0));",
 "vec3 deep=vec3(0.026,0.027,0.025);vec3 stock=vec3(0.078,0.075,0.066);vec3 tone=mix(deep,stock,smoothstep(0.20,0.82,cloud)*0.66);",
-"float vignette=smoothstep(1.08,0.12,length(p*vec2(0.82,1.12)));tone*=0.78+vignette*0.22;",
+"float vignette=1.0-smoothstep(0.12,1.08,length(p*vec2(0.82,1.12)));tone*=0.78+vignette*0.22;",
 "vec2 mouse=(u_mouse-0.5)*vec2(u_resolution.x/u_resolution.y,1.0);float shade=exp(-length(p-mouse)*3.1)*0.022;",
 "tone+=vec3(shade*0.95,shade*0.88,shade*0.72);tone+=(grain*0.026)+((fibre-0.5)*0.018);gl_FragColor=vec4(max(tone,0.0),1.0);}"
 ].join("\n");
