@@ -23,18 +23,18 @@ const path = Astro.url.pathname;
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <title>{title}</title>
 </head>
-<body>
+<body data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="grain" aria-hidden="true"></div>
   <div class="read-progress" aria-hidden="true"><span id="read-progress"></span></div>
-  <div class="cursor-follower" aria-hidden="true"></div>
+  <div class="cursor-follower" aria-hidden="true"></div><div class="remote-cursors" id="remote-cursors" aria-hidden="true"></div>
   <header class="masthead">
     <div class="masthead-top">
       <a class="wordmark" href="/" aria-label="Vinith home">V<span>.</span></a>
       <div class="telemetry" aria-label="Live site telemetry">
         <span>HYD / IN</span><span class="telemetry-sep">·</span>
         <span id="local-clock">--:--:--</span><span class="telemetry-sep">·</span>
-        <span>FPS <b id="fps-value">--</b></span><span class="telemetry-sep">·</span>
+        <span>FPS <b id="fps-value">--</b></span><span class="telemetry-sep">·</span><span>ONLINE <b id="online-count">1</b></span><span class="telemetry-sep">·</span>
         <span>LCP <b id="lcp-value">--</b></span><span class="telemetry-sep">·</span>
         <button class="presence-toggle" id="presence-toggle" type="button"><i></i><span id="presence-label">HERE</span></button>
       </div>
