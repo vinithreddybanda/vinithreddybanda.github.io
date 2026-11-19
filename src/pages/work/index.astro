@@ -1,19 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SectionHeading from "../../components/SectionHeading.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 import { projects } from "../../data/projects";
 ---
-<BaseLayout title="Work — Vinith Reddy Banda" description="Selected software engineering projects across full stack, Android and applied AI.">
-  <section class="page-hero page-wrap">
-    <span class="eyebrow">Portfolio / 01 — Work</span>
-    <h1>Things I've<br /><em>made.</em></h1>
-    <p>A closer look at the products, systems and experiments I've worked on. Each project is a chance to solve a real problem and learn something along the way.</p>
-  </section>
-  <section class="section-block page-wrap">
-    <SectionHeading eyebrow="Project archive" title="Selected" accent="work." note="Explore a project to see its intent, architecture and technology." number="01" />
-    <div class="project-grid project-grid--archive">
-      {projects.map((project, index) => <ProjectCard project={project} featured={index === 0} />)}
-    </div>
-  </section>
+<BaseLayout title="Work — Vinith Reddy Banda" description="Selected software engineering projects.">
+<section class="archive page-wrap">
+  <header class="archive-heading"><span class="micro-label">SELECTED WORK / 2024—2026</span><h1>Things I've<br /><em>put into the world.</em></h1><p>A few products and experiments across software, systems and interfaces.</p></header>
+  <div class="archive-meta"><span>PROJECT</span><span>{String(projects.length).padStart(2,"0")} ENTRIES</span></div>
+  <div class="project-grid project-grid--archive">{projects.map((project,index)=><ProjectCard project={project} featured={index===0} />)}</div>
+</section>
 </BaseLayout>
