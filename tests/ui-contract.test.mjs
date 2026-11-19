@@ -13,7 +13,7 @@ test("home renders a data-driven project press with accessible controls", async 
   assert.match(page,/featured/);
   assert.match(page,/tabindex="0"/);
   assert.match(app,/function initPress/);
-  assert.match(app,/function goSteps/);
+  assert.match(app,/const goSteps=/);
   assert.match(app,/target-=steps\*slice/);
   assert.match(app,/const mod=/);
   assert.match(app,/Math\.sin\(rad\)/);
