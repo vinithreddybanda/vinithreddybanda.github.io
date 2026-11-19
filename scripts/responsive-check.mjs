@@ -19,7 +19,7 @@ try{
    const m=await page.evaluate(()=>({viewport:document.documentElement.clientWidth,document:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
    if(m.document>m.viewport+1||m.body>m.viewport+1){
     failures.push(width+"px "+route+": horizontal overflow (viewport="+m.viewport+", document="+m.document+", body="+m.body+")");
-    await page.screenshot({path:"responsive-failure-"+width+"-"+route.replaceAll("/","_")+".png",fullPage:true});
+    if(!screenshotCaptured){await page.screenshot({path:"responsive-failure-"+width+"-"+route.replaceAll("/","_")+".png",fullPage:true});screenshotCaptured=true;}
    }
   }
   await page.close();
