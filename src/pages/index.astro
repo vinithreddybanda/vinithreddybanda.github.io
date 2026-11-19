@@ -1,47 +1,55 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { projects } from "../data/projects";
-const featured = projects.slice(0, 4);
+import Shell from "../layouts/Shell.astro";
+import { projects } from "../data/content";
 ---
-<BaseLayout title="Vinith | Creative developer" description="I’m Vinith. I build apps, websites and little experiments for the internet.">
-  <section class="hero page-wrap">
+<Shell title="Vinith Reddy Banda — Developer & Builder" description="Software engineer building useful digital products, native Android experiences and experiments.">
+<section class="hero-section" id="top">
+  <div class="hero-meta"><span>THE FRONT OFFICE</span><span>FILE Nº 001 / OPEN</span></div>
+  <div class="hero-layout">
     <div class="hero-copy">
-      <p class="hello">Hey, I’m Vinith</p>
-      <h1>I make<br /><span>digital things</span></h1>
-      <div class="hero-bottom">
-        <p>Apps, websites and experiments. I like making useful things feel really good to use.</p>
-        <a class="round-link" href="#work" aria-label="Scroll to selected work">↓</a>
-      </div>
+      <p class="eyebrow"><span class="eyebrow-mark"></span> SOFTWARE ENGINEER / CREATIVE BUILDER</p>
+      <h1>Making<br/><em>useful</em> things<br/>feel <span class="outline-word">different.</span></h1>
+      <div class="hero-foot"><p>I’m Vinith. I work across software, interfaces and the details that make a product feel considered.</p><a class="circle-link" href="#selected-work" aria-label="Explore selected work">↓</a></div>
     </div>
-  </section>
-
-  <section class="work-section page-wrap" id="work">
-    <div class="section-heading"><h2>Things I’ve made<span>({featured.length})</span></h2><a href="/work/">All projects <b>↗</b></a></div>
-    <div class="project-grid">
-      {featured.map((project, i) => <a class:list={["project-card", "project-card-"+(i+1)]} href={"/work/"+project.slug+"/"}>
-        <div class="project-art art-"+(i+1)} aria-hidden="true">
-          {i===0 && <div class="care-window"><div class="window-dots"><i></i><i></i><i></i></div><div class="care-title">Care<span>schedule.</span></div><div class="care-calendar"><b>MON</b><b>TUE</b><b>WED</b><b>THU</b><i>09</i><i>10</i><i class="selected">11</i><i>12</i><i>13</i><i>14</i><i>15</i><i>16</i></div><div class="care-pill">Appointment confirmed ✓</div></div>}
-          {i===1 && <div class="journal-card"><span>MONDAY, 9:41 AM</span><b>Dear,<br /><em>today.</em></b><div class="journal-lines"></div><small>A little space for your thoughts.</small></div>}
-          {i===2 && <div class="status-stack"><div class="status-photo photo-a"></div><div class="status-photo photo-b"></div><div class="status-photo photo-c"></div><span>Saved ✳</span></div>}
-          {i===3 && <div class="voice-card"><span>LIVE TRANSCRIPTION</span><b>Listening<span>...</span></b><div class="waveform">{Array.from({length:31},(_,n)=><i style={"--h:"+((n*19)%42+8)+"px"}></i>)}</div><small>40+ languages</small></div>}
+    <div class="press-stage" aria-label="Abstract interactive print press illustration">
+      <div class="press-label"><span>PRESS / 01</span><span>IN MOTION</span></div>
+      <div class="press-orbit orbit-a"></div><div class="press-orbit orbit-b"></div>
+      <div class="press-wheel"><div class="wheel-inner"><span>V</span><i>✳</i></div></div>
+      <div class="press-sheet"><span>IDEAS<br/>INTO<br/><em>OBJECTS</em></span><small>FIG. 001 — A WORKING PROCESS</small></div>
+      <div class="press-stamp">VB<br/><small>HYD / IN</small></div>
+      <span class="stage-coordinate coord-a">17°23' N</span><span class="stage-coordinate coord-b">78°29' E</span>
+    </div>
+  </div>
+  <div class="hero-bottomline"><span>SCROLL TO EXPLORE</span><span class="scroll-line"></span><span>INDEPENDENT PRACTICE · 2026</span></div>
+</section>
+<section class="intro-band section-pad">
+  <div class="section-index"><span>01 / THE LETTER</span><span>A SHORT INTRODUCTION</span></div>
+  <div class="intro-grid"><p class="intro-lead">I like building at the intersection of <em>engineering</em>, design and curiosity.</p><div class="intro-copy"><p>From backend systems to Android apps, I enjoy taking an idea from a rough sketch to something people can actually use. I care about how it works, how it moves and what happens in the tiny moments between.</p><a class="under-link" href="/about/">READ MY FILE <span>↗</span></a></div></div>
+</section>
+<section class="work-section section-pad" id="selected-work">
+  <div class="section-index"><span>02 / SELECTED WORK</span><span>RECENT BUILDS · 2025—26</span></div>
+  <div class="work-heading"><h2>Things made<br/><em>with intent.</em></h2><a class="under-link" href="/studio/">VIEW THE INDEX <span>↗</span></a></div>
+  <div class="work-wheel-wrap">
+    <div class="wheel-instruction"><span>DRAG / SWIPE TO ROTATE</span><span id="wheel-count">01 — 05</span></div>
+    <div class="work-wheel" id="work-wheel">
+      {projects.map((p,i)=><a class="work-object" href={"/studio/"+p.slug+"/"} style={"--i:"+i} data-wheel-item>
+        <div class={"object-art art-"+(i+1)}>
+          <span class="object-number">{p.no}</span>
+          {i===0 ? <div class="music-art"><i></i><i></i><i></i><i></i><i></i><b>PLAY</b></div> : i===1 ? <div class="journal-art"><span>dear,</span><em>today.</em><small>NOTES FROM WITHIN</small></div> : i===2 ? <div class="gallery-art"><i></i><i></i><i></i></div> : i===3 ? <div class="voice-art"><b>LISTEN</b><span>〰</span></div> : <div class="care-art"><b>CARE</b><span>09&nbsp; 10&nbsp; 11&nbsp; 12</span><i>✓</i></div>}
+          <span class="object-year">{p.year}</span>
         </div>
-        <div class="project-info"><div><h3>{project.name}</h3><p>{project.summary}</p></div><span class="project-arrow">↗</span></div>
+        <div class="object-caption"><span>{p.name}</span><small>{p.type}</small><b>↗</b></div>
       </a>)}
     </div>
-  </section>
-
-  <section class="about-strip">
-    <div class="about-strip-inner page-wrap"><p class="strip-kicker">A bit about me</p><h2>Curious by default.<br /><span>Builder by choice.</span></h2><div class="strip-bottom"><p>I work across web, Android and AI. Most days you’ll find me learning something new, fixing a tiny detail or turning a random idea into a real thing.</p><a class="text-link" href="/about/">More about me <span>↗</span></a></div></div>
-    
-  </section>
-
-  <section class="stack-section page-wrap">
-    <h2>My kind of toolkit</h2>
-    <div class="stack-list"><span>TypeScript</span><span>React</span><span>Next.js</span><span>C# / .NET</span><span>Kotlin</span><span>Android</span><span>SQL</span><span>AI</span><span>Docker</span></div>
-  </section>
-
-  <section class="contact-banner page-wrap">
-    <div><p>Got something in mind?</p><h2>Let’s make<br /><em>it happen.</em></h2></div>
-    <a href="/contact/" aria-label="Get in touch">↗</a>
-  </section>
-</BaseLayout>
+    <div class="wheel-controls"><button type="button" id="wheel-prev" aria-label="Previous project">←</button><span>01 / 05</span><button type="button" id="wheel-next" aria-label="Next project">→</button></div>
+  </div>
+</section>
+<section class="manifesto-section">
+  <div class="manifesto-mark">“</div><p>Good software should be<br/><em>useful first. Memorable always.</em></p><span>— A WORKING PRINCIPLE</span>
+</section>
+<section class="now-section section-pad">
+  <div class="section-index"><span>03 / CURRENT FREQUENCY</span><span>WHAT’S ON THE DESK</span></div>
+  <div class="now-grid"><div><span class="micro-label">CURRENTLY</span><h2>Building.<br/><em>Learning.</em><br/>Refining.</h2></div><div class="now-list"><div><span>01</span><p>Shipping and improving Android experiences</p><b>↗</b></div><div><span>02</span><p>Working with .NET, APIs and data systems</p><b>↗</b></div><div><span>03</span><p>Exploring interaction design and motion</p><b>↗</b></div><div><span>04</span><p>Building in public and contributing to open source</p><b>↗</b></div><a class="under-link" href="/lab/">STEP INTO THE LAB <span>↗</span></a></div></div>
+</section>
+<section class="contact-slab section-pad"><span class="micro-label">HAVE A GOOD PROBLEM?</span><div><h2>Let’s make<br/><em>something real.</em></h2><a class="circle-link" href="/contact/" aria-label="Contact Vinith">↗</a></div></section>
+</Shell>

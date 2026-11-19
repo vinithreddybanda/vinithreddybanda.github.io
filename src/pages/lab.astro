@@ -1,0 +1,14 @@
+---
+import Shell from "../layouts/Shell.astro";
+const experiments = [
+  ["01","Motion studies","Small explorations in timing, easing and the feeling of an interface responding."],
+  ["02","Audio interface","A playground for waveform visualisation, listening states and live feedback."],
+  ["03","Generative forms","Procedural shapes, type experiments and little systems that make unexpected things."],
+  ["04","Native interactions","Touch, drag, swipe and the small physical cues that make software feel direct."]
+];
+---
+<Shell title="Lab — Vinith Reddy Banda" description="Experiments, prototypes and works in progress.">
+<section class="page-hero section-pad"><div class="section-index"><span>THE LABORATORY</span><span>EXPERIMENTS / NO. 004</span></div><p class="eyebrow"><span class="eyebrow-mark"></span> TESTING THE EDGES</p><h1 class="page-heading">Ideas in<br/><em>progress.</em></h1><p class="page-deck">A space for prototypes, technical curiosities and things that don’t need to become products to be worth making.</p></section>
+<section class="lab-list-section section-pad"><div class="section-index"><span>OPEN NOTEBOOK</span><span>SELECT AN EXPERIMENT</span></div>{experiments.map((x,i)=><article class="lab-row"><span>{x[0]}</span><div><h2>{x[1]}</h2><p>{x[2]}</p></div><div class={"lab-glyph glyph-"+i}><i></i><i></i><i></i></div><span class="lab-status">ONGOING</span></article>)}</section>
+<section class="lab-note section-pad"><span class="micro-label">A NOTE FROM THE DESK</span><p>Not every experiment needs a roadmap. Some just need a browser tab, a little time and the willingness to see what happens.</p></section>
+</Shell>

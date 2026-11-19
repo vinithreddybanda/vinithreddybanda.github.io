@@ -1,0 +1,8 @@
+---
+import Shell from "../layouts/Shell.astro";
+import { projects } from "../data/content";
+---
+<Shell title="Studio — Vinith Reddy Banda" description="Selected software projects and product experiments.">
+<section class="page-hero section-pad"><div class="section-index"><span>THE WORKSHOP</span><span>PROJECT INDEX / 2025—26</span></div><p class="eyebrow"><span class="eyebrow-mark"></span> SELECTED WORK</p><h1 class="page-heading">Built to<br/><em>be useful.</em></h1><p class="page-deck">A selection of applications, systems and experiments. Each one is a chance to learn something by making it real.</p></section>
+<section class="studio-index section-pad"><div class="section-index"><span>PROJECT FILES</span><span>{projects.length} ENTRIES</span></div><div class="studio-list">{projects.map(p=><a class="studio-row" href={"/studio/"+p.slug+"/"}><span class="studio-no">{p.no}</span><div class="studio-main"><h2>{p.name}</h2><p>{p.summary}</p></div><div class="studio-meta"><span>{p.type}</span><small>{p.year} · {p.status}</small></div><b>↗</b></a>)}</div></section>
+</Shell>

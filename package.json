@@ -2,11 +2,6 @@
   "name": "vinithreddybanda.github.io",
   "private": true,
   "type": "module",
-  "scripts": {
-    "build": "astro build",
-    "test": "node --test"
-  },
-  "dependencies": {
-    "astro": "^6.0.0"
-  }
+  "scripts": { "dev": "astro dev", "build": "astro build", "preview": "astro preview", "test": "node --test" },
+  "dependencies": { "astro": "^6.0.0" }
 }

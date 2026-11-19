@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+const { title = "Vinith Reddy Banda — Creative Developer", description = "I build software, interfaces and small experiments for the internet." } = Astro.props;
+const links = [{label:"About",href:"/about/"},{label:"Lab",href:"/lab/"},{label:"Writing",href:"/writing/"},{label:"Studio",href:"/studio/"},{label:"Contact",href:"/contact/"}];
+const path = Astro.url.pathname;
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10110f" />
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vinithreddybanda.github.io/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>{title}</title>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="read-progress" aria-hidden="true"><span id="read-progress"></span></div>
+  <header class="masthead">
+    <div class="masthead-top">
+      <a class="wordmark" href="/" aria-label="Vinith home">V<span>.</span></a>
+      <div class="telemetry">
+        <span>HYD / IN</span><span class="telemetry-sep">·</span>
+        <span id="local-clock">--:--:--</span><span class="telemetry-sep">·</span>
+        <span class="status"><i></i> AVAILABLE FOR SELECT WORK</span>
+      </div>
+      <div class="head-actions">
+        <button class="icon-button theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">◐</button>
+        <button class="icon-button command-trigger" type="button" aria-label="Open command menu" title="Command menu">⌘K</button>
+      </div>
+    </div>
+    <div class="masthead-bottom">
+      <span class="edition">PERSONAL INDEX / VOL. 01</span>
+      <nav aria-label="Main navigation">
+        {links.map(link => <a href={link.href} class:list={{active:path===link.href || (link.href==="/about/" && path==="/")}}>{link.label}<span>↗</span></a>)}
+      </nav>
+      <span class="edition right-edition">EST. 2005 · INDIA</span>
+    </div>
+  </header>
+  <main id="main"><slot /></main>
+  <footer class="site-footer">
+    <div class="footer-top"><a class="wordmark" href="/">V<span>.</span></a><p>Independent by curiosity.<br/>Built with intent.</p><a class="footer-back" href="#top">BACK TO TOP ↑</a></div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>DESIGNED & BUILT IN INDIA</span><a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GITHUB ↗</a></div>
+  </footer>
+  <div class="command-overlay" id="command-overlay" aria-hidden="true">
+    <div class="command-panel" role="dialog" aria-modal="true" aria-label="Quick navigation">
+      <div class="command-input-row"><span>⌕</span><input id="command-input" type="search" placeholder="Where do you want to go?" autocomplete="off" /><kbd>ESC</kbd></div>
+      <div class="command-caption">NAVIGATE</div>
+      <div class="command-results" id="command-results">
+        {links.map((link,i)=><a href={link.href} data-command-item><span class="command-number">0{i+1}</span><span>{link.label}</span><span>↗</span></a>)}
+        <a href="/" data-command-item><span class="command-number">00</span><span>Home</span><span>↗</span></a>
+      </div>
+      <div class="command-foot"><span>↑↓ TO MOVE</span><span>↵ TO OPEN</span><span>ESC TO CLOSE</span></div>
+    </div>
+  </div>
+  <script>import "../scripts/interactions.js";</script>
+</body>
+</html>
