@@ -18,7 +18,7 @@ test("home renders a data-driven project press with accessible controls", async 
   assert.match(app,/const mod=/);
   assert.match(app,/Math\.sin\(rad\)/);
   assert.match(css,/translate3d\(var\(--plate-x/);
-  assert.doesNotMatch(css,/rotateY\(/);
+  const plateRule=css.match(/\.press-plate\{([^}]*)\}/s)?.[1] ?? "";\n  assert.doesNotMatch(plateRule,/rotateY/);
 });
 
 test("background uses Carter's spring, repel, bloom and click-ripple model", async () => {

@@ -6,7 +6,7 @@ if (canvas) {
     const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
     const SPACING = 34, DOT_R = 2.4, REST_ALPHA = .2, VEL_PUSH = .16;
     const WAVE = 2.4, RIPPLE_SPEED = 620, RIPPLE_WIDTH = 90, RIPPLE_PUSH = 3.4;
-    const REPEL_R = 116, PUSH = .9, BLOOM = 2.1, SPRING = .055, FRICTION = .82;
+    const REPEL_R = 116, PUSH = .9, BLOOM = 2.1, SPRING = .055, DAMPING = .18;
     type Dot = { hx:number; hy:number; x:number; y:number; vx:number; vy:number; appear:number };
     type Ripple = { x:number; y:number; radius:number; strength:number };
     const dots: Dot[] = [];
@@ -41,7 +41,9 @@ if (canvas) {
         const x=gapX*(c+.5),y=gapY*(r+.5);
         dots.push({hx:x,hy:y,x,y,vx:0,vy:0,appear:reduced.matches?1:0});
       }
-      dots.forEach(d=>d.appear=1);
+      if(!reduced.matches) {
+        dots.forEach((d,i)=>window.setTimeout(()=>{d.appear=1;wake();},Math.abs(r=>r)(0)));
+      }
     };
     const draw=(time:number,dtMs:number)=>{
       const dt=Math.min(dtMs,40)/1000||.016;
@@ -77,7 +79,7 @@ if (canvas) {
             bloom=Math.max(bloom,Math.min(1,force*.4));
           }
         }
-        const keep=Math.pow(FRICTION,dt*60);
+        const keep=1-DAMPING;
         d.vx=(d.vx+ax)*keep; d.vy=(d.vy+ay)*keep;
         d.x+=d.vx; d.y+=d.vy;
         const appear=reduced.matches?1:d.appear;
