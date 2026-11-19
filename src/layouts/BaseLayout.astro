@@ -4,17 +4,38 @@ import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/global.css";
 import "../styles/ui.css";
 interface Props { title?: string; description?: string; }
-const { title = "Vinith Reddy Banda — Software Engineer", description = "Software engineer building useful products across backend systems, web interfaces, Android and applied AI." } = Astro.props;
+const { title = "Vinith Reddy Banda — Software Engineer", description = "Vinith Reddy Banda. Software engineer building web products, Android applications and applied AI." } = Astro.props;
 ---
-<!doctype html><html lang="en" data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}><head>
-<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#f4f4f1" /><meta name="color-scheme" content="light dark" /><meta name="description" content={description} />
-<meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" /><meta property="og:url" content="https://vinithreddybanda.github.io/" />
-<script is:inline>try{const t=localStorage.getItem("vb-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;}catch(e){}</script>
-<title>{title}</title></head><body>
-<canvas class="pixel-canvas" data-paper-canvas aria-hidden="true"></canvas>
-<a class="skip-link" href="#main">Skip to content</a><SiteHeader /><main id="main"><slot /></main><div class="page-end"><SiteFooter /></div>
-<div class="visitor-layer" data-visitor-layer aria-hidden="true"></div><div class="cursor-dot" data-cursor aria-hidden="true"></div>
-<div class="command-overlay" data-command-overlay aria-hidden="true"><div class="command-panel" role="dialog" aria-modal="true" aria-label="Command menu"><div class="command-search"><span>⌘</span><input data-command-input type="search" placeholder="Find a page or project..." autocomplete="off" /><kbd>ESC</kbd></div><div class="command-results" data-command-results></div><div class="command-foot"><span>↑↓ Navigate</span><span>↵ Open</span><span>ESC Close</span></div></div></div>
-<script>import "../scripts/paper"; import "../scripts/app";</script>
-</body></html>
+<!doctype html>
+<html lang="en" data-theme="dark" data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111111" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vinithreddybanda.github.io/" />
+  <script is:inline>try { const saved = localStorage.getItem("vb-theme"); if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved; } catch {}</script>
+  <title>{title}</title>
+</head>
+<body>
+  <canvas class="dot-field" data-dot-field aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <SiteHeader />
+  <main id="main"><slot /></main>
+  <SiteFooter />
+  <div class="remote-cursors" data-remote-cursors aria-hidden="true"></div>
+  <div class="cursor-follower" data-cursor aria-hidden="true"></div>
+  <div class="command-scrim" data-command-overlay aria-hidden="true">
+    <section class="command-box" role="dialog" aria-modal="true" aria-label="Quick navigation">
+      <div class="command-input-row"><span class="command-symbol">⌘</span><input data-command-input type="search" placeholder="Find something..." autocomplete="off" /><kbd>ESC</kbd></div>
+      <div class="command-results" data-command-results></div>
+      <div class="command-hints"><span>↑ ↓ Navigate</span><span>↵ Open</span><span>ESC Close</span></div>
+    </section>
+  </div>
+  <script>import "../scripts/paper"; import "../scripts/app";</script>
+</body>
+</html>
