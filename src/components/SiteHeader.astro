@@ -1,9 +1,16 @@
 ---
 const path = Astro.url.pathname;
-const links = [{href:"/",label:"Index"},{href:"/work/",label:"Work"},{href:"/about/",label:"About"},{href:"/contact/",label:"Contact"}];
+const links = [{href:"/",label:"Home"},{href:"/work/",label:"Work"},{href:"/about/",label:"About"}];
 ---
 <header class="site-header" data-header>
-<a class="site-header__brand" href="/" aria-label="Vinith Reddy Banda, home"><span class="brand-stamp">V<span>B</span></span><span class="brand-copy">VINITH REDDY BANDA<small>SOFTWARE ENGINEER / INDIA</small></span></a>
-<nav class="site-nav" aria-label="Primary navigation">{links.map((link)=><a class:list={["site-nav__link",path===link.href||(link.href!=="/"&&path.startsWith(link.href))&&"is-active"]} href={link.href} aria-current={path===link.href||(link.href!=="/"&&path.startsWith(link.href))?"page":undefined}>{link.label}</a>)}</nav>
-<div class="site-header__right"><span class="presence-status"><i data-presence-dot></i><span data-presence-count>01</span> HERE</span><button class="command-trigger" type="button" data-command-open aria-label="Open command menu">⌘ K</button></div>
+  <a class="site-header__brand" href="/" aria-label="Vinith Reddy Banda, home">
+    <span class="brand-stamp">V<span>B</span></span>
+    <span class="brand-copy">VINITH REDDY BANDA<small>SOFTWARE ENGINEER</small></span>
+  </a>
+  <nav class="site-nav" aria-label="Primary navigation">{links.map((link)=><a class:list={["site-nav__link",path===link.href||(link.href!=="/"&&path.startsWith(link.href))&&"is-active"]} href={link.href} aria-current={path===link.href||(link.href!=="/"&&path.startsWith(link.href))?"page":undefined}>{link.label}</a>)}</nav>
+  <div class="site-header__right">
+    <span class="presence-status"><i data-presence-dot></i><span data-presence-count>01</span><small>HERE</small></span>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch theme"><span data-theme-icon>◐</span><span data-theme-label>Dark</span></button>
+    <button class="command-trigger" type="button" data-command-open aria-label="Open command menu">⌘ K</button>
+  </div>
 </header>
