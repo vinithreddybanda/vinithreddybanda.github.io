@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 const { title = "Vinith Reddy Banda — Creative Developer", description = "I build software, interfaces and small experiments for the internet." } = Astro.props;
 const links = [{label:"About",href:"/about/"},{label:"Lab",href:"/lab/"},{label:"Writing",href:"/writing/"},{label:"Studio",href:"/studio/"},{label:"Contact",href:"/contact/"}];
@@ -7,6 +8,7 @@ const path = Astro.url.pathname;
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
+  <ClientRouter />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#10110f" />
@@ -22,18 +24,24 @@ const path = Astro.url.pathname;
   <title>{title}</title>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="grain" aria-hidden="true"></div>
   <div class="read-progress" aria-hidden="true"><span id="read-progress"></span></div>
+  <div class="cursor-follower" aria-hidden="true"></div>
   <header class="masthead">
     <div class="masthead-top">
       <a class="wordmark" href="/" aria-label="Vinith home">V<span>.</span></a>
-      <div class="telemetry">
+      <div class="telemetry" aria-label="Live site telemetry">
         <span>HYD / IN</span><span class="telemetry-sep">·</span>
         <span id="local-clock">--:--:--</span><span class="telemetry-sep">·</span>
-        <span class="status"><i></i> AVAILABLE FOR SELECT WORK</span>
+        <span>FPS <b id="fps-value">--</b></span><span class="telemetry-sep">·</span>
+        <span>LCP <b id="lcp-value">--</b></span><span class="telemetry-sep">·</span>
+        <button class="presence-toggle" id="presence-toggle" type="button"><i></i><span id="presence-label">HERE</span></button>
       </div>
       <div class="head-actions">
-        <button class="icon-button theme-toggle" type="button" aria-label="Toggle theme" title="Toggle theme">◐</button>
+        <button class="icon-button theme-toggle" type="button" aria-label="Cycle theme" title="Cycle theme">◐</button>
+        <button class="icon-button record-trigger" type="button" aria-label="Toggle live presence" title="Toggle live presence">◎</button>
+        <button class="icon-button news-trigger" type="button" aria-label="What's new" title="What's new">↗</button>
         <button class="icon-button command-trigger" type="button" aria-label="Open command menu" title="Command menu">⌘K</button>
       </div>
     </div>
@@ -45,22 +53,35 @@ const path = Astro.url.pathname;
       <span class="edition right-edition">EST. 2005 · INDIA</span>
     </div>
   </header>
-  <main id="main"><slot /></main>
+  <main id="main" transition:name="page-content"><slot /></main>
   <footer class="site-footer">
     <div class="footer-top"><a class="wordmark" href="/">V<span>.</span></a><p>Independent by curiosity.<br/>Built with intent.</p><a class="footer-back" href="#top">BACK TO TOP ↑</a></div>
     <div class="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>DESIGNED & BUILT IN INDIA</span><a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GITHUB ↗</a></div>
   </footer>
   <div class="command-overlay" id="command-overlay" aria-hidden="true">
-    <div class="command-panel" role="dialog" aria-modal="true" aria-label="Quick navigation">
-      <div class="command-input-row"><span>⌕</span><input id="command-input" type="search" placeholder="Where do you want to go?" autocomplete="off" /><kbd>ESC</kbd></div>
-      <div class="command-caption">NAVIGATE</div>
+    <div class="command-panel" role="dialog" aria-modal="true" aria-label="Search and quick actions">
+      <div class="command-input-row"><span>⌕</span><input id="command-input" type="search" placeholder="Search pages, projects, tools..." autocomplete="off" /><kbd>ESC</kbd></div>
+      <div class="command-caption">PAGES & ACTIONS</div>
       <div class="command-results" id="command-results">
         {links.map((link,i)=><a href={link.href} data-command-item><span class="command-number">0{i+1}</span><span>{link.label}</span><span>↗</span></a>)}
         <a href="/" data-command-item><span class="command-number">00</span><span>Home</span><span>↗</span></a>
+        <button type="button" data-command-action="theme"><span class="command-number">06</span><span>Cycle appearance</span><span>◐</span></button>
+        <button type="button" data-command-action="presence"><span class="command-number">07</span><span>Toggle live presence</span><span>◎</span></button>
+        <button type="button" data-command-action="news"><span class="command-number">08</span><span>What’s new</span><span>↗</span></button>
       </div>
-      <div class="command-foot"><span>↑↓ TO MOVE</span><span>↵ TO OPEN</span><span>ESC TO CLOSE</span></div>
+      <div class="command-foot"><span>↑↓ TO MOVE</span><span>↵ TO SELECT</span><span>ESC TO CLOSE</span></div>
     </div>
   </div>
+  <aside class="news-drawer" id="news-drawer" aria-hidden="true">
+    <div class="news-drawer-head"><span>THE CHANGELOG / 2026</span><button type="button" id="news-close" aria-label="Close what's new">×</button></div>
+    <h2>What’s<br/><em>new.</em></h2>
+    <div class="news-items">
+      <a href="/lab/"><small>LAB / NOV 20</small><b>Interaction studies</b><span>New motion and input experiments are being added to the workbench.</span></a>
+      <a href="/studio/"><small>STUDIO / NOV 20</small><b>Project index</b><span>Selected builds, technical notes and case files.</span></a>
+      <a href="/about/"><small>ABOUT / NOV 20</small><b>The front office</b><span>A closer look at the person behind the work.</span></a>
+    </div>
+    <button class="news-mark-read" id="news-mark-read" type="button">MARK ALL READ ✓</button>
+  </aside>
   <script>import "../scripts/interactions.js";</script>
 </body>
 </html>
