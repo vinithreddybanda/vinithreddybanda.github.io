@@ -132,6 +132,7 @@ window.addEventListener("pointerout", event => {
 const journeyRoot = document.querySelector<HTMLElement>("[data-shape-journey]");
 const journeyPrimary = journeyRoot?.querySelector<HTMLElement>(".shape-journey__primary");
 const journeySecondary = journeyRoot?.querySelector<HTMLElement>(".shape-journey__secondary");
+const journeyOrbit = journeyRoot?.querySelector<HTMLElement>(".shape-journey__orbit");
 const journeyFrames = [
   { p: 0, x: 78, y: 24, r: -24, s: 0.82, radius: "38% 62% 57% 43% / 48% 38% 62% 52%" },
   { p: 0.19, x: 18, y: 34, r: 28, s: 1.08, radius: "61% 39% 42% 58% / 43% 57% 38% 62%" },
@@ -163,7 +164,7 @@ function journeyState(progress: number) {
 
 function renderShapeJourney() {
   journeyRaf = 0;
-  if (!journeyRoot || !journeyPrimary || !journeySecondary || motionQuery.matches) return;
+  if (!journeyRoot || !journeyPrimary || !journeySecondary || !journeyOrbit || motionQuery.matches) return;
   journeyProgress += (journeyTarget - journeyProgress) * 0.105;
   if (Math.abs(journeyTarget - journeyProgress) < 0.0005) journeyProgress = journeyTarget;
   const state = journeyState(journeyProgress);
@@ -174,6 +175,7 @@ function renderShapeJourney() {
   journeyPrimary.style.borderRadius = state.radius;
   journeySecondary.style.transform = `translate3d(calc(${state.x - 9}vw - ${journeyPointerX * 0.45}px), calc(${state.y + 8}vh - ${journeyPointerY * 0.45}px), 0) translate(-50%, -50%) rotate(${-state.r * 0.72}deg) scale(${state.s * 0.64}, ${state.s * 0.78})`;
   journeySecondary.style.borderRadius = state.radius.split(" / ").reverse().join(" / ");
+  journeyOrbit.style.transform = `translate3d(${state.x}vw, ${state.y}vh, 0) translate(-50%, -50%) rotate(${state.r - 28}deg) scaleY(.42)`;
   journeyRoot.style.setProperty("--journey-speed", String(speed));
   if (journeyProgress !== journeyTarget) journeyRaf = requestAnimationFrame(renderShapeJourney);
 }

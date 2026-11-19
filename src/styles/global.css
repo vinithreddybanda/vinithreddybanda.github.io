@@ -328,7 +328,6 @@ html{view-transition-name:page}
 .shape-journey__primary{width:clamp(230px,39vw,570px);aspect-ratio:1;background:radial-gradient(circle at 34% 28%,#e3ffad 0%,#c8f169 31%,#91b74e 68%,#78913e 100%);filter:blur(.2px) drop-shadow(0 28px 45px rgba(60,82,31,.13));mix-blend-mode:multiply;transition:filter .25s ease}
 .shape-journey__secondary{width:clamp(170px,27vw,390px);aspect-ratio:1;background:radial-gradient(circle at 35% 32%,#e1d8ff 0%,#b8a8ff 48%,#8f7bd8 100%);mix-blend-mode:multiply;opacity:.78;filter:blur(.35px)}
 .shape-journey__orbit{width:clamp(330px,54vw,760px);aspect-ratio:1;border:1px solid rgba(75,91,49,.2);border-radius:50%;transform:translate3d(75vw,25vh,0) translate(-50%,-50%) rotate(-28deg) scaleY(.42);transition:transform .8s cubic-bezier(.2,.8,.2,1)}
-.shape-journey[style*="--journey-speed"] .shape-journey__orbit{transform:translate3d(75vw,25vh,0) translate(-50%,-50%) rotate(calc(-28deg + var(--journey-speed)*16deg)) scaleY(.42)}
 html[data-theme="dark"] .shape-journey{opacity:.28}
 html[data-theme="dark"] .shape-journey__primary,html[data-theme="dark"] .shape-journey__secondary{mix-blend-mode:screen;opacity:.52}
 @media(max-width:760px){
