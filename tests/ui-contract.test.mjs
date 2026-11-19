@@ -22,17 +22,20 @@ test("home renders a data-driven project press with accessible controls", async 
   assert.doesNotMatch(plateRule,/rotateY/);
 });
 
-test("background uses Carter's spring, repel, bloom and click-ripple model", async () => {
+test("background is invisible at rest and creates a tactile pixel ripple on interaction", async () => {
   const paper=await read("../src/scripts/paper.ts");
-  assert.match(paper,/SPACING = 34/);
-  assert.match(paper,/DOT_R = 2\.4/);
-  assert.match(paper,/SPRING = \.055/);
-  assert.match(paper,/FRICTION = \.82/);
-  assert.match(paper,/REPEL_R = 116/);
-  assert.match(paper,/RIPPLE_SPEED = 620/);
-  assert.match(paper,/RIPPLE_PUSH = 3\.4/);
-  assert.match(paper,/mouse\.active/);
-  assert.match(paper,/ctx!\.arc/);
+  assert.match(paper,/SPACING=14/);
+  assert.match(paper,/PIXEL_SIZE=1\.35/);
+  assert.match(paper,/RIPPLE_SPEED=720/);
+  assert.match(paper,/RIPPLE_WIDTH=78/);
+  assert.match(paper,/CURSOR_RADIUS=104/);
+  assert.match(paper,/FRICTION=\.82/);
+  assert.match(paper,/pointerdown/);
+  assert.match(paper,/Math\.exp\(/);
+  assert.match(paper,/ctx!\.fillRect/);
+  assert.match(paper,/if\(alpha<\.018\)continue/);
+  assert.doesNotMatch(paper,/REST_ALPHA/);
+  assert.match(paper,/ctx!\.clearRect\(0,0,width,height\);last=0/);
 });
 
 test("theme, clock, presence, badge and letter interactions remain wired", async () => {
