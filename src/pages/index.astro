@@ -26,6 +26,7 @@ const art = ["care", "journal", "status", "voice"];
     </div>
     <div class="press-stage" data-press-stage data-view="ring">
       <div class="press-orbit">
+        <div class="press-wheel press-wheel--left" data-press-wheel aria-hidden="true"><span class="wheel-hub"></span></div><div class="press-wheel press-wheel--right" data-press-wheel aria-hidden="true"><span class="wheel-hub"></span></div>
         <div class="press-ring" data-press-ring>
           {featured.map((project, i) => <button class="press-plate" type="button" data-project-index={i} aria-label={"Select " + project.name} aria-pressed={i === 0} style={"--plate-angle:" + (i * 360 / featured.length) + "deg;"}>
             <span class="plate-face">
