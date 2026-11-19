@@ -1,46 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SectionHeading from "../components/SectionHeading.astro";
 import { experience, skillGroups } from "../data/skills";
 ---
-<BaseLayout title="About — Vinith Reddy Banda" description="Background, experience, education and technical interests of Vinith Reddy Banda.">
-  <section class="page-hero page-wrap">
-    <span class="eyebrow">Portfolio / 02 — About</span>
-    <h1>Engineer by<br /><em>curiosity.</em></h1>
-    <p>I enjoy the space between a good idea and a dependable product: understanding the problem, designing the system and refining the experience.</p>
-  </section>
-  <section class="section-block page-wrap">
-    <SectionHeading eyebrow="The perspective" title="How I" accent="work." number="01" />
-    <div class="about-page__intro">
-      <p class="display-copy">I like understanding how things work, then making them work <em>better.</em></p>
-      <p class="body-copy">My interests span backend architecture, web interfaces, native Android and applied AI. I value simple systems, deliberate technical decisions, maintainable code and interfaces that respect people's time.</p>
-    </div>
-  </section>
-  <section class="section-block page-wrap">
-    <SectionHeading eyebrow="Experience" title="Where I've" accent="worked." number="02" />
-    <div class="timeline">
-      {experience.map((item) => <article class="timeline-item"><span class="eyebrow">{item.period}</span><div><h3>{item.role}</h3><p class="timeline-item__org">{item.organisation}</p><p class="body-copy">{item.detail}</p></div></article>)}
-    </div>
-  </section>
-  <section class="section-block page-wrap">
-    <SectionHeading eyebrow="Education" title="Learning is" accent="ongoing." number="03" />
-    <div class="education-grid">
-      <article><span class="eyebrow">2023 — 2026</span><h3>B.E. Information Technology</h3><p>Chaitanya Bharathi Institute of Technology</p><strong>8.30 CGPA</strong></article>
-      <article><span class="eyebrow">2020 — 2023</span><h3>Diploma, Computer Engineering</h3><p>Government Polytechnic College, Warangal</p><strong>9.74 CGPA</strong></article>
-    </div>
-  </section>
-  <section class="section-block page-wrap">
-    <SectionHeading eyebrow="Recognition" title="A few" accent="milestones." number="04" />
-    <div class="recognition-list">
-      <div><span>01</span><p>Microsoft AI for Good</p><strong>Top 100</strong></div>
-      <div><span>02</span><p>GFG HackWeek</p><strong>Rank 6</strong></div>
-      <div><span>03</span><p>NxtWave Buildathon</p><strong>State level</strong></div>
-    </div>
-  </section>
-  <section class="section-block page-wrap">
-    <SectionHeading eyebrow="Technical range" title="Tools I work" accent="with." number="05" />
-    <div class="capability-grid">
-      {skillGroups.map((group, index) => <div class="capability-group"><span class="eyebrow">0{index + 1} / {group.title}</span><div class="tag-list tag-list--large">{group.items.map((item) => <span>{item}</span>)}</div></div>)}
-    </div>
-  </section>
+<BaseLayout title="About — Vinith Reddy Banda" description="Background and engineering interests of Vinith Reddy Banda.">
+<section class="about-page page-wrap">
+  <header class="archive-heading"><span class="micro-label">A LITTLE ABOUT ME</span><h1>Engineer by<br /><em>curiosity.</em></h1><p>I like turning complicated problems into software that feels straightforward. My work moves between backend engineering, web interfaces, Android and applied AI.</p></header>
+  <div class="about-facts">
+    <div><span>BASED IN</span><strong>Hyderabad, India</strong></div>
+    <div><span>EDUCATION</span><strong>B.E. Information Technology · CBIT</strong></div>
+    <div><span>ALSO</span><strong>Diploma in Computer Engineering</strong></div>
+  </div>
+  <section class="about-section"><div class="about-section__title"><span>01 / EXPERIENCE</span><h2>Where I've worked</h2></div><div class="timeline">{experience.map((item)=><article class="timeline-item"><span class="eyebrow">{item.period}</span><div><h3>{item.role}</h3><p class="timeline-item__org">{item.organisation}</p></div></article>)}</div></section>
+  <section class="about-section"><div class="about-section__title"><span>02 / TOOLKIT</span><h2>What I work with</h2></div><div class="capability-grid">{skillGroups.map((group)=><div class="capability-group"><span class="eyebrow">{group.title}</span><div class="tag-list tag-list--large">{group.items.map(item=><span>{item}</span>)}</div></div>)}</div></section>
+  <div class="about-cta"><p>Good problems are worth a conversation.</p><a href="mailto:vinithreddybanda@gmail.com">GET IN TOUCH ↗</a></div>
+</section>
 </BaseLayout>
