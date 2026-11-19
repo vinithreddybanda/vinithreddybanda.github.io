@@ -1,27 +1,32 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { projects } from "../data/projects";
-import { skillGroups } from "../data/skills";
+const cards = projects.map((project,index)=>({...project,index}));
 ---
-<BaseLayout>
-<section class="home-hero page-wrap" id="top">
-<div class="hero-index"><span>PERSONAL INDEX / 2026</span><span>INDEPENDENT SOFTWARE ENGINEERING</span></div>
-<div class="hero-main"><div class="hero-copy">
-<p class="hero-pretitle">Curiosity, translated into code.</p><h1>I build<br />software with<br /><em>intent.</em></h1>
-<p class="hero-description">I'm Vinith, a software engineer interested in the details that make products useful: thoughtful interfaces, dependable systems and technology that solves real problems.</p>
-<div class="hero-links"><a class="link-solid" href="/work/">Explore selected work <span>↗</span></a><a class="link-understated" href="/about/">A little about me</a></div>
-</div><aside class="hero-note"><span class="note-index">FIELD NOTES / 001</span><p>Working across the stack, from the first interface to the system behind it.</p><div class="note-rule"></div>
-<dl><div><dt>FOCUS</dt><dd>Full stack · Android · AI</dd></div><div><dt>BASE</dt><dd>India</dd></div><div><dt>STATUS</dt><dd>Building & learning</dd></div></dl><span class="note-mark">VB—26</span></aside></div>
-<div class="hero-footer"><span>SCROLL TO EXPLORE</span><span class="hero-footer__line"></span><span>01 — 05</span></div>
+<BaseLayout title="Vinith Reddy Banda — Software Engineer" description="Selected work, experiments and notes from Vinith Reddy Banda.">
+<section class="workshop page-wrap" id="top">
+<div class="workshop-topline"><span>PERSONAL WORKSHOP <b>№ 001</b></span><span>HYDERABAD, INDIA <i></i> OPEN TO GOOD PROBLEMS</span></div>
+<div class="workshop-intro"><div><p class="micro-label">THE FRONT OFFICE / 2026</p><h1>Ideas in.<br /><em>Working things out.</em></h1></div><p class="intro-note">I’m Vinith. Software engineer working across web, mobile, backend systems and applied AI. This is a record of things I’ve built, broken and made better.</p></div>
+<div class="press-stage" data-press-stage>
+<div class="press-stage__heading"><span>SELECTED WORK / THE PRESS</span><span data-wheel-readout>01 — 0{projects.length}</span></div>
+<div class="press-floor" data-wheel>
+<div class="wheel-glow" aria-hidden="true"></div>
+<div class="wheel-track" data-wheel-track>
+{cards.map((project)=><button class="wheel-card" type="button" data-wheel-card data-index={project.index} aria-label={`Select ${project.name}`} aria-pressed={project.index===0} style={`--i:${project.index};--n:${projects.length};--plate:${project.index%4};`}>
+<span class="plate-frame"><span class="plate-top"><small>{project.number} / PROJECT PLATE</small><small>{project.year}</small></span><span class:list={["plate-art",`plate-art--${project.index%4}`]}><i></i><b></b><em></em><strong>{project.name.split(/\s+/).map(x=>x[0]).join("").slice(0,3)}</strong></span><span class="plate-bottom"><strong>{project.name}</strong><small>{project.category}</small></span></span>
+</button>)}
+</div>
+<div class="wheel-shadow" aria-hidden="true"></div>
+<button class="wheel-control wheel-control--prev" type="button" data-wheel-prev aria-label="Previous project">←</button><button class="wheel-control wheel-control--next" type="button" data-wheel-next aria-label="Next project">→</button>
+<div class="wheel-hint">DRAG TO TURN <span>·</span> CLICK A PRINT TO SELECT</div>
+</div>
+<div class="press-caption" aria-live="polite"><div class="press-caption__number" data-active-number>01</div><div class="press-caption__copy"><span class="micro-label" data-active-category>{projects[0].category}</span><h2 data-active-title>{projects[0].name}</h2><p data-active-summary>{projects[0].summary}</p><div class="plate-tags" data-active-tags>{projects[0].stack.slice(0,5).map(tag=><span>{tag}</span>)}</div></div><a class="open-project" data-active-link href={`/work/${projects[0].slug}/`}>OPEN PROJECT <span>↗</span></a></div>
+<div class="press-controls"><div class="press-dots" data-wheel-dots>{cards.map((project)=><button type="button" data-dot={project.index} aria-label={`Go to project ${project.index+1}`} aria-pressed={project.index===0}></button>)}</div><div class="press-instructions"><span>← → TO BROWSE</span><span>DRAG / SCROLL / TOUCH</span><span>⌘ K COMMANDS</span></div></div>
+</div>
+<div class="workshop-bottom"><div class="bottom-statement"><span class="micro-label">A NOTE FROM THE DESK</span><p>Curiosity is the brief.<br /><em>Shipping is the point.</em></p></div><div class="bottom-links"><a href="/about/"><span>01</span> THE PERSON <b>↗</b></a><a href="/work/"><span>02</span> THE ARCHIVE <b>↗</b></a><a href="/contact/"><span>03</span> GET IN TOUCH <b>↗</b></a></div></div>
 </section>
-<section class="home-section page-wrap" id="selected-work"><div class="section-overline"><span>01 / SELECTED WORK</span><a href="/work/">FULL PROJECT INDEX ↗</a></div>
-<div class="section-heading-home"><h2>Made with<br /><em>purpose.</em></h2><p>A selection of products and experiments across software engineering, mobile and applied AI.</p></div>
-<div class="work-list" data-reveal>{projects.slice(0,4).map((project)=><a class="work-row" href={`/work/${project.slug}/`}><span class="work-row__number">{project.number}</span><div class="work-row__main"><h3>{project.name}</h3><p>{project.summary}</p></div><span class="work-row__category">{project.category}</span><span class="work-row__arrow">↗</span></a>)}</div>
-</section>
-<section class="home-section home-section--statement page-wrap" id="approach"><div class="section-overline"><span>02 / THE APPROACH</span><span>THOUGHT BEFORE OUTPUT</span></div>
-<div class="statement-grid" data-reveal><h2>Good software<br />is felt in the<br /><em>details.</em></h2><div class="statement-copy"><p class="statement-lead">I like understanding how things work, then making them work better.</p><p>My interests move between backend architecture, web experiences, native Android and applied AI. I value simple systems, deliberate technical decisions and interfaces that respect people's time.</p><a class="text-arrow" href="/about/">Read my story <span>↗</span></a></div></div></section>
-<section class="home-section page-wrap" id="toolkit"><div class="section-overline"><span>03 / WORKING TOOLKIT</span><span>ALWAYS EVOLVING</span></div>
-<div class="toolkit-intro"><h2>Tools of<br /><em>the trade.</em></h2><p>A practical set of tools shaped by building, breaking, debugging and shipping.</p></div>
-<div class="toolkit-list" data-reveal>{skillGroups.map((group,index)=><div class="toolkit-row"><span class="toolkit-row__index">0{index+1}</span><h3>{group.title}</h3><div class="toolkit-tags">{group.items.map((item)=><span>{item}</span>)}</div></div>)}</div></section>
-<section class="home-cta page-wrap" id="contact" data-reveal><span class="section-overline">04 / OPEN CHANNEL</span><h2>Have a good<br /><em>problem?</em></h2><div class="home-cta__bottom"><p>Interesting work starts with a conversation. Tell me what you're building.</p><a class="link-solid" href="/contact/">Get in touch <span>↗</span></a></div></section>
+<section class="workshop-lab page-wrap" id="lab"><div class="lab-heading"><span class="micro-label">AFTER HOURS / LAB NOTES</span><span>SMALL EXPERIMENTS, USEFUL CURIOSITY</span></div><div class="lab-grid"><a href="/work/whatsapp-status-saver/" class="lab-tile"><span>01 / ANDROID</span><strong>Native interfaces</strong><small>Exploring fluid galleries and useful interactions.</small><b>↗</b></a><a href="/work/journalai/" class="lab-tile"><span>02 / APPLIED AI</span><strong>Personal software</strong><small>Making AI features feel like part of the product.</small><b>↗</b></a><a href="/about/" class="lab-tile lab-tile--note"><span>03 / FIELD NOTE</span><strong>Keep it simple.<br /><em>Make it work.</em></strong><small>More about how I approach engineering.</small><b>↗</b></a></div></section>
 </BaseLayout>
+<script define:vars={{ projects: projects.map(({slug,number,name,category,year,summary,stack})=>({slug,number,name,category,year,summary,stack})) }}>
+window.__portfolioProjects=projects;
+</script>
