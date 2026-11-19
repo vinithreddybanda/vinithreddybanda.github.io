@@ -7,15 +7,13 @@ const art=["care","journal","status","voice"];
 <BaseLayout title="Vinith Reddy Banda — Software Engineer" description="Selected work and experiments by Vinith Reddy Banda.">
   <main class="front-page">
     <section class="front-intro">
-      <div class="front-meta"><span>INDEPENDENT SOFTWARE ENGINEER</span><span>HYDERABAD, INDIA · 17°23′N 78°29′E</span></div>
       <div class="front-title-wrap">
         <h1>Building things<br /><i>that move.</i></h1>
         <p>I’m Vinith. I build software across web, Android and applied AI, with an eye for the details between the lines of code.</p>
       </div>
-      <div class="front-bottom"><span>SELECTED WORK / 2024—2026</span><a href="#press">SCROLL TO EXPLORE ↓</a></div>
     </section>
     <section class="press-section" id="press" aria-label="Selected work">
-      <div class="press-heading"><span>THE PROJECT PRESS</span><span>DRAG / SCROLL / USE ARROWS</span></div>
+      <div class="press-heading"><span>Selected work</span></div>
       <div class="press-tools">
         <span class="press-counter"><b data-active-index>01</b><i>/</i><span>0{featured.length}</span></span>
         <div class="view-switch" role="group" aria-label="Project view">
@@ -29,27 +27,27 @@ const art=["care","journal","status","voice"];
         <div class="press-ring" data-press-ring>
           {featured.map((project,i)=><button class="press-plate" type="button" data-project-index={i} aria-label={"Select "+project.name} aria-pressed={i===0}>
             <span class="plate-face">
-              <span class="plate-top"><small>{project.number} / {project.category}</small><small>{project.year}</small></span>
+              
               <span class:list={["plate-artwork","art-"+art[i]]}>
                 {i===0&&<span class="care-art"><span class="art-label">CARE / 01</span><b>Care<br />Schedule.</b><span class="art-line"></span><span class="art-foot">CLINIC OPERATIONS PLATFORM</span></span>}
                 {i===1&&<span class="journal-art"><small>YOUR SPACE / 09:41</small><b>Dear,<br /><i>today.</i></b><span class="journal-lines"></span><span class="journal-mark">A PLACE TO THINK</span></span>}
                 {i===2&&<span class="status-art"><span class="status-tile status-tile-a"></span><span class="status-tile status-tile-b"></span><span class="status-tile status-tile-c"></span><small>STATUS / SAVED</small></span>}
                 {i===3&&<span class="voice-art"><small>LIVE TRANSCRIPTION</small><b>Listening<span>...</span></b><span class="voice-wave">{Array.from({length:25},(_,n)=><i style={"--bar:"+((n*17)%38+8)+"px"}></i>)}</span><small>40+ LANGUAGES / REAL TIME</small></span>}
               </span>
-              <span class="plate-bottom"><b>{project.name}</b><small>{project.category}</small></span>
+              <span class="plate-bottom"><b>{project.name}</b></span>
             </span>
           </button>)}
         </div>
         <div class="press-axis" aria-hidden="true"><i></i></div>
       </div>
       <div class="selected-project" aria-live="polite">
-        <div class="selected-no"><span>ON THE PRESS</span><b data-selected-number>01</b></div>
+        <div class="selected-no"><b data-selected-number>01</b></div>
         <div class="selected-description"><small data-selected-type>{featured[0].category}</small><h2 data-selected-name>{featured[0].name}</h2><p data-selected-summary>{featured[0].summary}</p></div>
         <a data-selected-link href={"/work/"+featured[0].slug+"/"}>VIEW PROJECT <span>↗</span></a>
       </div>
     </section>
     <section class="front-outro" data-reveal>
-      <div class="outro-label"><span>OUTSIDE THE PRESS</span><span>EXPERIMENTS / NOTES / CONTACT</span></div>
+      
       <div class="outro-main"><h2>Curiosity<br /><i>does the rest.</i></h2><div><p>Small experiments, useful tools and the occasional idea that refuses to stay in a notebook.</p><a href="/lab/">VISIT THE LAB ↗</a></div></div>
       <div class="outro-links"><a href="/about/"><span>01</span><b>Studio</b><small>A little about me</small><i>↗</i></a><a href="/work/"><span>02</span><b>Archive</b><small>All selected work</small><i>↗</i></a><a href="/contact/"><span>03</span><b>Contact</b><small>Send a note</small><i>↗</i></a></div>
     </section>

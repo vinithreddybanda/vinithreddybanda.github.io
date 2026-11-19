@@ -3,9 +3,9 @@ const reduced=matchMedia("(prefers-reduced-motion: reduce)");
 if(canvas){
   const ctx=canvas.getContext("2d",{alpha:true});
   if(ctx){
-    const SPACING=14,PIXEL_SIZE=1.35;
-    const RIPPLE_SPEED=720,RIPPLE_WIDTH=78,RIPPLE_DECAY=.965,RIPPLE_HEIGHT=13;
-    const SPRING=.055,FRICTION=.82;
+    const SPACING=12,PIXEL_SIZE=1.9;
+    const RIPPLE_SPEED=560,RIPPLE_WIDTH=64,RIPPLE_DECAY=.972,RIPPLE_HEIGHT=17;
+    const SPRING=.062,FRICTION=.84;
     type Pixel={x:number;y:number;homeX:number;homeY:number;vx:number;vy:number};
     type Ripple={x:number;y:number;radius:number;strength:number};
     const pixels:Pixel[]=[];
@@ -61,16 +61,16 @@ if(canvas){
         p.vx=(p.vx+(tx-p.x)*SPRING)*Math.pow(FRICTION,dt*60);
         p.vy=(p.vy+(ty-p.y)*SPRING)*Math.pow(FRICTION,dt*60);
         p.x+=p.vx;p.y+=p.vy;
-        const alpha=Math.max(0,Math.min(.94,depth*.92));
+        const alpha=Math.max(0,Math.min(.42,depth*.46));
         if(alpha<.018)continue;
-        const size=PIXEL_SIZE+depth*1.05,x=Math.round(p.x),y=Math.round(p.y);
+        const size=PIXEL_SIZE+depth*1.25,x=p.x,y=p.y;
         ctx!.fillStyle="rgba("+r+","+g+","+b+","+alpha+")";
-        ctx!.fillRect(x,y,size,size);
+        ctx!.beginPath();ctx!.arc(x,y,size/2,0,Math.PI*2);ctx!.fill();
         if(depth>.16){
           ctx!.fillStyle="rgba(255,255,255,"+Math.min(.34,light*.38)+")";
-          ctx!.fillRect(x,y,size,.55);
+          ctx!.beginPath();ctx!.arc(x-.25,y-.25,size*.28,0,Math.PI*2);ctx!.fill();
           ctx!.fillStyle="rgba(0,0,0,"+Math.min(.28,depth*.3)+")";
-          ctx!.fillRect(x,y+size-.55,size,.55);
+          ctx!.beginPath();ctx!.arc(x+.3,y+.35,size*.24,0,Math.PI*2);ctx!.fill();
         }
       }
     };
