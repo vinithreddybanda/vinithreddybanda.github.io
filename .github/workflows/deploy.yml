@@ -23,6 +23,8 @@ jobs:
       - name: Test
         run: npm test
       - name: Build
+        env:
+          PUBLIC_PRESENCE_URL: ${{ vars.PUBLIC_PRESENCE_URL }}
         run: npm run build
       - uses: actions/upload-pages-artifact@v4
         with:
