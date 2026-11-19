@@ -1,16 +1,21 @@
 ---
 const path = Astro.url.pathname;
-const links = [{href:"/",label:"Home"},{href:"/work/",label:"Work"},{href:"/about/",label:"About"}];
+const links = [{ href: "/work/", label: "Work" }, { href: "/about/", label: "About" }, { href: "/lab/", label: "Lab" }];
 ---
+<div class="site-topline">
+  <div class="topline-left"><span class="status-light"></span><span>INDEPENDENT SOFTWARE ENGINEER</span><span class="topline-divider">/</span><span>HYDERABAD, IN</span></div>
+  <div class="topline-right"><span>LOCAL <b data-local-time>--:--:--</b></span><span>FPS <b data-fps>--</b></span><span>HERE <b data-presence-count>01</b></span></div>
+</div>
 <header class="site-header" data-header>
-  <a class="site-header__brand" href="/" aria-label="Vinith Reddy Banda, home">
-    <span class="brand-stamp">V<span>B</span></span>
-    <span class="brand-copy">VINITH REDDY BANDA<small>SOFTWARE ENGINEER</small></span>
+  <a class="site-brand" href="/" aria-label="Vinith Reddy Banda, home">
+    <span class="brand-monogram">V<span>.</span>B</span>
+    <span class="brand-name">VINITH REDDY BANDA<small>SOFTWARE / SYSTEMS / INTERACTION</small></span>
   </a>
-  <nav class="site-nav" aria-label="Primary navigation">{links.map((link)=><a class:list={["site-nav__link",path===link.href||(link.href!=="/"&&path.startsWith(link.href))&&"is-active"]} href={link.href} aria-current={path===link.href||(link.href!=="/"&&path.startsWith(link.href))?"page":undefined}>{link.label}</a>)}</nav>
-  <div class="site-header__right">
-    <span class="presence-status"><i data-presence-dot></i><span data-presence-count>01</span><small>HERE</small></span>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Switch theme"><span data-theme-icon>◐</span><span data-theme-label>Dark</span></button>
-    <button class="command-trigger" type="button" data-command-open aria-label="Open command menu">⌘ K</button>
+  <nav class="site-nav" aria-label="Primary navigation">
+    {links.map((link) => <a class:list={["nav-link", path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "is-active" : ""]} href={link.href} aria-current={path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "page" : undefined}>{link.label}</a>)}
+  </nav>
+  <div class="header-actions">
+    <button class="theme-button" type="button" data-theme-toggle aria-label="Switch to light theme" title="Switch theme"><span data-theme-icon>☼</span><span data-theme-label>LIGHT</span></button>
+    <button class="command-button" type="button" data-command-open aria-label="Open command menu"><span>⌘</span><kbd>K</kbd></button>
   </div>
 </header>
