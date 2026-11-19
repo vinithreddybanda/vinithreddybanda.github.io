@@ -276,7 +276,7 @@ html[data-theme="dark"] .text-link{border-color:#dce3d6}
 
 /* Motion system: shape morphs, scroll inertia and native page transitions */
 :root{--motion-blur:0px;--scroll-direction:1}
-.hero-art{translate:var(--pointer-x,0px) var(--art-scroll,0px);transition:translate .18s cubic-bezier(.2,.7,.2,1);will-change:translate}
+.hero-art{translate:var(--pointer-x,0px) calc(var(--pointer-y,0px) + var(--art-scroll,0px));transition:translate .18s cubic-bezier(.2,.7,.2,1);will-change:translate}
 .hero-shape{will-change:transform,filter;filter:drop-shadow(18px 24px 18px rgba(40,50,20,.13)) blur(var(--motion-blur,0px))}
 .shape-one{animation:shape-morph-one 13s cubic-bezier(.65,0,.35,1) infinite alternate}
 .shape-two{animation:shape-morph-two 16s cubic-bezier(.65,0,.35,1) infinite alternate}
