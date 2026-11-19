@@ -29,6 +29,8 @@ jobs:
       - name: Test UI contracts
         run: npm test
       - name: Build Astro site
+        env:
+          PUBLIC_PRESENCE_URL: ${{ vars.PUBLIC_PRESENCE_URL }}
         run: npm run build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
