@@ -2,6 +2,7 @@ const root=document.documentElement;
 const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
 let audioContext=null,radioOscillator=null,radioGain=null,frequency=88,sessionStart=Date.now(),rafId=0;
 function initPortfolio(){
+  if(root.dataset.interactionsReady==="true")return;root.dataset.interactionsReady="true";
   const $=(s,p=document)=>p.querySelector(s),$$=(s,p=document)=>[...p.querySelectorAll(s)];
   const clock=$("#local-clock"),progress=$("#read-progress"),overlay=$("#command-overlay"),input=$("#command-input"),drawer=$("#news-drawer");
   const items=$$("[data-command-item],[data-command-action]");let active=0;
@@ -11,8 +12,13 @@ function initPortfolio(){
   const cycleTheme=()=>setTheme(root.dataset.theme==="dark"?"light":"dark");
   $(".theme-toggle")?.addEventListener("click",cycleTheme);
   const presence=$("#presence-toggle"),presenceLabel=$("#presence-label"),aboutPresence=$("#about-presence");
+  let presenceSocket=null,remotePeers=new Map(),presenceActive=true;const presenceRoot=$("#remote-cursors"),presenceUrl=document.body.dataset.presenceUrl;const onlineCount=$("#online-count");
+  const renderPeer=peer=>{if(!presenceRoot)return;let node=presenceRoot.querySelector(`[data-peer="${peer.id}"]`);if(!node){node=document.createElement("div");node.className="remote-cursor";node.dataset.peer=peer.id;node.innerHTML="<i></i><span></span>";presenceRoot.append(node)}node.style.transform="translate3d("+peer.x*innerWidth+"px,"+peer.y*innerHeight+"px,0)";node.querySelector("span").textContent=peer.name};
+  const removePeer=id=>{presenceRoot?.querySelector(`[data-peer="${id}"]`)?.remove();remotePeers.delete(id);if(onlineCount)onlineCount.textContent=String(remotePeers.size+1)};
+  const connectPresence=()=>{if(!presenceUrl||!presenceActive||presenceSocket)return;try{presenceSocket=new WebSocket(presenceUrl);presenceSocket.addEventListener("message",event=>{let data;try{data=JSON.parse(event.data)}catch{return}if(data.type==="welcome"){(data.peers||[]).forEach(p=>{remotePeers.set(p.id,p);renderPeer(p)});if(onlineCount)onlineCount.textContent=String(remotePeers.size+1)}if(data.type==="join"||data.type==="move"){remotePeers.set(data.peer.id,data.peer);renderPeer(data.peer);if(onlineCount)onlineCount.textContent=String(remotePeers.size+1)}if(data.type==="leave")removePeer(data.id)});presenceSocket.addEventListener("close",()=>{presenceSocket=null;remotePeers.clear();if(presenceRoot)presenceRoot.replaceChildren();if(onlineCount)onlineCount.textContent="1"})}catch{presenceSocket=null}};
+  connectPresence();let lastPresenceSend=0;addEventListener("pointermove",e=>{if(!presenceSocket||presenceSocket.readyState!==WebSocket.OPEN||!presenceActive)return;const now=performance.now();if(now-lastPresenceSend<50)return;lastPresenceSend=now;presenceSocket.send(JSON.stringify({type:"move",x:e.clientX/innerWidth,y:e.clientY/innerHeight}))},{passive:true});
   let present=true;
-  const setPresence=()=>{present=!present;if(presenceLabel)presenceLabel.textContent=present?"HERE":"AWAY";if(aboutPresence)aboutPresence.textContent=present?"HERE / ONLINE":"AWAY / QUIET";presence?.classList.toggle("is-away",!present);$(".record-trigger")?.classList.toggle("is-active",present)};
+  const setPresence=()=>{present=!present;presenceActive=present;if(!present){presenceSocket?.close();presenceSocket=null;remotePeers.clear();if(presenceRoot)presenceRoot.replaceChildren();if(onlineCount)onlineCount.textContent="1"}else connectPresence();if(presenceLabel)presenceLabel.textContent=present?"HERE":"AWAY";if(aboutPresence)aboutPresence.textContent=present?"HERE / ONLINE":"AWAY / QUIET";presence?.classList.toggle("is-away",!present);$(".record-trigger")?.classList.toggle("is-active",present)};
   presence?.addEventListener("click",setPresence);$(".record-trigger")?.addEventListener("click",setPresence);
   const tick=()=>{const now=new Date();const value=new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(now);if(clock)clock.textContent=value;const aboutClock=$("#about-clock");if(aboutClock)aboutClock.textContent=value;const session=$("#session-time");if(session){const seconds=Math.floor((Date.now()-sessionStart)/1000);session.textContent=String(Math.floor(seconds/60)).padStart(2,"0")+":"+String(seconds%60).padStart(2,"0")}};
   tick();clearInterval(window.__portfolioClock);window.__portfolioClock=setInterval(tick,1000);
@@ -40,4 +46,4 @@ function initPortfolio(){
   $$("a[href^='#']").forEach(a=>a.addEventListener("click",e=>{const target=$(a.getAttribute("href"));if(target){e.preventDefault();target.scrollIntoView({behavior:reduced?"auto":"smooth",block:"start"})}}));
 }
 document.addEventListener("astro:page-load",initPortfolio);if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initPortfolio,{once:true});else initPortfolio();
-document.addEventListener("astro:before-swap",()=>{if(radioOscillator){try{radioOscillator.stop()}catch{}radioOscillator=null}if(rafId)cancelAnimationFrame(rafId)});
+document.addEventListener("astro:before-swap",()=>{root.dataset.interactionsReady="false";if(radioOscillator){try{radioOscillator.stop()}catch{}radioOscillator=null}if(rafId)cancelAnimationFrame(rafId)});
