@@ -2,16 +2,21 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { experience, skillGroups } from "../data/skills";
 ---
-<BaseLayout title="About — Vinith Reddy Banda" description="Background and engineering interests of Vinith Reddy Banda.">
-<section class="about-page page-wrap">
-  <header class="archive-heading"><span class="micro-label">A LITTLE ABOUT ME</span><h1>Engineer by<br /><em>curiosity.</em></h1><p>I like turning complicated problems into software that feels straightforward. My work moves between backend engineering, web interfaces, Android and applied AI.</p></header>
-  <div class="about-facts">
-    <div><span>BASED IN</span><strong>Hyderabad, India</strong></div>
-    <div><span>EDUCATION</span><strong>B.E. Information Technology · CBIT</strong></div>
-    <div><span>ALSO</span><strong>Diploma in Computer Engineering</strong></div>
+<BaseLayout title="About — Vinith Reddy Banda" description="A short introduction to Vinith Reddy Banda.">
+<section class="about-shell page-shell">
+  <div class="about-head"><div class="intro-overline"><span>PERSONAL FILE</span><span>FILE / 001</span></div><h1>The person<br /><em>behind the work.</em></h1></div>
+  <div class="badge-layout">
+    <aside class="lanyard-badge"><div class="badge-clip"></div><div class="badge-top"><span>IDENTIFICATION</span><span>VB / 001</span></div><div class="badge-monogram">V<span>.</span>B</div><div class="badge-name">VINITH REDDY BANDA</div><div class="badge-role">SOFTWARE ENGINEER</div><div class="badge-bottom"><span>HYDERABAD, INDIA</span><span>2026</span></div></aside>
+    <article class="typed-letter">
+      <span class="letter-label">A LETTER / FROM THE DESK</span><h2>Hello, there.</h2>
+      <p>I’m Vinith, an Information Technology engineer based in Hyderabad. I enjoy building software that solves a real problem, then giving it an interface that feels considered rather than complicated.</p>
+      <p>My work moves between backend systems, web applications, Android and applied AI. I’m especially interested in the details that make products dependable: architecture, performance, interaction and the experience around the code.</p>
+      <p>Outside the editor, I’m usually exploring open-source projects, learning a new tool or taking an idea from a rough sketch to something people can use.</p>
+      <div class="letter-signoff"><span>Regards,</span><strong>Vinith.</strong></div>
+    </article>
   </div>
-  <section class="about-section"><div class="about-section__title"><span>01 / EXPERIENCE</span><h2>Where I've worked</h2></div><div class="timeline">{experience.map((item)=><article class="timeline-item"><span class="eyebrow">{item.period}</span><div><h3>{item.role}</h3><p class="timeline-item__org">{item.organisation}</p></div></article>)}</div></section>
-  <section class="about-section"><div class="about-section__title"><span>02 / TOOLKIT</span><h2>What I work with</h2></div><div class="capability-grid">{skillGroups.map((group)=><div class="capability-group"><span class="eyebrow">{group.title}</span><div class="tag-list tag-list--large">{group.items.map(item=><span>{item}</span>)}</div></div>)}</div></section>
-  <div class="about-cta"><p>Good problems are worth a conversation.</p><a href="mailto:vinithreddybanda@gmail.com">GET IN TOUCH ↗</a></div>
+  <section class="file-section"><div class="section-kicker"><span>THE RECORD</span><span>01 / EXPERIENCE</span></div><div class="record-list">{experience.map(item => <div class="record-row"><span>{item.period}</span><div><b>{item.organisation}</b><small>{item.role}</small></div><p>{item.detail}</p></div>)}</div></section>
+  <section class="file-section"><div class="section-kicker"><span>ON THE DESK</span><span>02 / TOOLKIT</span></div><div class="toolkit-list">{skillGroups.map(group => <div class="toolkit-row"><b>{group.title}</b><p>{group.items.join(" · ")}</p></div>)}</div></section>
+  <div class="about-contact"><p>Have a good problem?</p><a href="mailto:vinithreddybanda@gmail.com">WRITE TO ME ↗</a></div>
 </section>
 </BaseLayout>
