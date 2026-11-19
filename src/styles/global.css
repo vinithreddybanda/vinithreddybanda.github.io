@@ -323,15 +323,9 @@ html{view-transition-name:page}
 
 
 /* Shared project transitions: listing artwork and title become their case-study counterparts */
-.project-art,.case-hero-art{view-transition-class:project-visual}
 ::view-transition-old(page){animation:page-out .16s ease both}
 ::view-transition-new(page){animation:page-in .24s cubic-bezier(.2,.8,.2,1) both}
-::view-transition-group(project-art-*),
-::view-transition-group(project-title-*){animation-duration:.48s;animation-timing-function:cubic-bezier(.2,.85,.25,1)}
-::view-transition-old(project-art-*),
-::view-transition-new(project-art-*){height:100%;object-fit:cover}
-::view-transition-old(project-title-*),
-::view-transition-new(project-title-*){height:100%}
+::view-transition-group(*){animation-duration:.48s;animation-timing-function:cubic-bezier(.2,.85,.25,1)}
 @media(prefers-reduced-motion:reduce){
  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
 }
