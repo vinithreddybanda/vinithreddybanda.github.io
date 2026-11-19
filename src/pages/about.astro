@@ -1,22 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { experience, skillGroups } from "../data/skills";
+import { skillGroups, experience } from "../data/skills";
 ---
-<BaseLayout title="About — Vinith Reddy Banda" description="A short introduction to Vinith Reddy Banda.">
-<section class="about-shell page-shell">
-  <div class="about-head"><div class="intro-overline"><span>PERSONAL FILE</span><span>FILE / 001</span></div><h1>The person<br /><em>behind the work.</em></h1></div>
-  <div class="badge-layout">
-    <button class="lanyard-badge" type="button" data-badge-toggle aria-label="Flip identification badge"><span class="badge-clip"></span><span class="badge-face badge-front"><span class="badge-top"><span>IDENTIFICATION</span><span>VB / 001</span></span><span class="badge-monogram">V<span>.</span>B</span><span class="badge-name">VINITH REDDY BANDA</span><span class="badge-role">SOFTWARE ENGINEER</span><span class="badge-bottom"><span>HYDERABAD, INDIA</span><span>2026</span></span></span><span class="badge-face badge-back"><span class="badge-top"><span>REVERSE / 001</span><span>VB</span></span><span class="badge-back-title">BUILD<br />WITH<br /><em>intent.</em></span><span class="badge-back-copy">WEB / ANDROID / AI<br />SYSTEMS / INTERACTION</span><span class="badge-bottom"><span>FLIP TO RETURN</span><span>↻</span></span></span></button>
-    <article class="typed-letter">
-      <span class="letter-label">A LETTER / FROM THE DESK</span><h2>Hello, there.</h2>
-      <p>I’m Vinith, an Information Technology engineer based in Hyderabad. I enjoy building software that solves a real problem, then giving it an interface that feels considered rather than complicated.</p>
-      <p>My work moves between backend systems, web applications, Android and applied AI. I’m especially interested in the details that make products dependable: architecture, performance, interaction and the experience around the code.</p>
-      <p>Outside the editor, I’m usually exploring open-source projects, learning a new tool or taking an idea from a rough sketch to something people can use.</p>
-      <div class="letter-signoff"><span>Regards,</span><strong>Vinith.</strong></div>
-    </article>
-  </div>
-  <section class="file-section"><div class="section-kicker"><span>THE RECORD</span><span>01 / EXPERIENCE</span></div><div class="record-list">{experience.map(item => <div class="record-row"><span>{item.period}</span><div><b>{item.organisation}</b><small>{item.role}</small></div><p>{item.detail}</p></div>)}</div></section>
-  <section class="file-section"><div class="section-kicker"><span>ON THE DESK</span><span>02 / TOOLKIT</span></div><div class="toolkit-list">{skillGroups.map(group => <div class="toolkit-row"><b>{group.title}</b><p>{group.items.join(" · ")}</p></div>)}</div></section>
-  <div class="about-contact"><p>Have a good problem?</p><a href="/contact/">WRITE TO ME ↗</a></div>
+<BaseLayout title="About | Vinith" description="A little about Vinith and the things he likes building.">
+<section class="inner-page page-wrap about-page">
+  <div class="inner-intro"><p>Hey, that’s me</p><h1>Hi, I’m<br /><em>Vinith.</em></h1><span>I build software and care a lot about how it feels to use.</span></div>
+  <div class="about-story"><div class="about-big-shape">✳</div><div><p>I’m an IT engineer who enjoys making things for the web and Android. I like the full process: figuring out a problem, building the thing, making it faster, then polishing the details until it feels right.</p><p>My interests jump between product development, backend systems, interface design and applied AI. I’m also into open source and learning by building.</p><a class="text-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">Find me on GitHub <span>↗</span></a></div></div>
+  <section class="simple-section"><h2>Stuff I work with</h2><div class="skill-pills">{skillGroups.flatMap(g=>g.items).map(item=><span>{item}</span>)}</div></section>
+  <section class="simple-section"><h2>Currently</h2><div class="current-list">{experience.map(item=><div><span>{item.period}</span><div><b>{item.role}</b><small>{item.organisation}</small></div></div>)}</div></section>
 </section>
 </BaseLayout>

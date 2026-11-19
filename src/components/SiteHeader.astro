@@ -1,9 +1,9 @@
 ---
 const path = Astro.url.pathname;
-const links = [{ href: "/work/", label: "Work" }, { href: "/about/", label: "Studio" }, { href: "/lab/", label: "Lab" }, { href: "/contact/", label: "Contact" }];
+const links = [{ href: "/work/", label: "Work" }, { href: "/about/", label: "About" }, { href: "/lab/", label: "Playground" }, { href: "/contact/", label: "Contact" }];
 ---
-<header class="site-header" data-header>
-  <a class="site-brand" href="/" aria-label="Vinith Reddy Banda, home"><span class="brand-monogram">V<span>.</span>B</span><span class="brand-name">VINITH REDDY BANDA</span></a>
-  <nav class="site-nav" aria-label="Primary navigation">{links.map((link) => <a class:list={["nav-link", path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "is-active" : ""]} href={link.href} aria-current={path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "page" : undefined}>{link.label}</a>)}</nav>
-  <div class="header-actions"><button class="theme-button" type="button" data-theme-toggle aria-label="Switch to light theme" title="Switch theme"><span data-theme-icon>☼</span><span data-theme-label>LIGHT</span></button><button class="command-button" type="button" data-command-open aria-label="Open command menu"><span>⌘</span><kbd>K</kbd></button></div>
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label="Vinith home">vinith<span>✳</span></a>
+  <nav aria-label="Main navigation">{links.map(link => <a class:list={[path === link.href || (link.href !== "/" && path.startsWith(link.href)) ? "active" : ""]} href={link.href}>{link.label}</a>)}</nav>
+  <a class="header-cta" href="/contact/">Let’s talk <span>↗</span></a>
 </header>

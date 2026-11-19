@@ -2,33 +2,27 @@
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/global.css";
-import "../styles/ui.css";
-import "../styles/press.css";
 interface Props { title?: string; description?: string; }
-const { title = "Vinith Reddy Banda — Software Engineer", description = "Vinith Reddy Banda. Software engineer building web products, Android applications and applied AI." } = Astro.props;
+const { title = "Vinith | Creative developer", description = "I’m Vinith. I build apps, websites and little experiments for the internet." } = Astro.props;
 ---
 <!doctype html>
-<html lang="en" data-theme="dark" data-presence-url={import.meta.env.PUBLIC_PRESENCE_URL ?? ""}>
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#111111" />
-  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#f3f2ed" />
   <meta name="description" content={description} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vinithreddybanda.github.io/" />
-  <script is:inline>try { const saved = localStorage.getItem("vb-theme"); if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved; } catch {}</script>
   <title>{title}</title>
 </head>
 <body>
-  <canvas class="dot-field" data-dot-field aria-hidden="true"></canvas>
   <a class="skip-link" href="#main">Skip to content</a>
   <SiteHeader />
   <main id="main"><slot /></main>
   <SiteFooter />
-  <div class="remote-cursors" data-remote-cursors aria-hidden="true"></div>
-  <script>import "../scripts/paper"; import "../scripts/app";</script>
+  <script>import "../scripts/app";</script>
 </body>
 </html>
