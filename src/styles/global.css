@@ -294,7 +294,9 @@ html[data-theme="dark"] .text-link{border-color:#dce3d6}
 .play-card>b{margin-top:22px}
 
 /* The one persistent transition target is the real main element on every route. */
-main#main{view-transition-name:page-content}
+/* Keep the document canvas fixed; only the main content participates in route motion. */
+::view-transition-old(root),::view-transition-new(root){animation:none!important}
+::view-transition-group(root){animation-duration:0s!important}
 ::view-transition-group(page-content){
   animation-duration:.42s;
   animation-timing-function:cubic-bezier(.22,1,.36,1);
@@ -314,6 +316,10 @@ html[data-nav-direction="back"]::view-transition-new(page-content){animation:con
 .project-card:hover .project-art{
   transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) scale(.985);
   border-radius:18px;
+}
+.project-card:active .project-art{
+  transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) scale(.96);
+  border-radius:22px;
 }
 .project-info h3{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
 .project-card:hover .project-info h3{transform:translateX(5px)}
