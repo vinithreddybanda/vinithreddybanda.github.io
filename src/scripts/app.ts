@@ -127,3 +127,76 @@ window.addEventListener("pointerout", event => {
   art?.style.setProperty("--pointer-x", "0px");
   art?.style.setProperty("--pointer-y", "0px");
 });
+
+
+const journeyRoot = document.querySelector<HTMLElement>("[data-shape-journey]");
+const journeyPrimary = journeyRoot?.querySelector<HTMLElement>(".shape-journey__primary");
+const journeySecondary = journeyRoot?.querySelector<HTMLElement>(".shape-journey__secondary");
+const journeyFrames = [
+  { p: 0, x: 78, y: 24, r: -24, s: 0.82, radius: "38% 62% 57% 43% / 48% 38% 62% 52%" },
+  { p: 0.19, x: 18, y: 34, r: 28, s: 1.08, radius: "61% 39% 42% 58% / 43% 57% 38% 62%" },
+  { p: 0.43, x: 83, y: 53, r: 76, s: 0.94, radius: "43% 57% 63% 37% / 58% 39% 61% 42%" },
+  { p: 0.68, x: 24, y: 70, r: 132, s: 1.12, radius: "56% 44% 36% 64% / 39% 61% 42% 58%" },
+  { p: 1, x: 76, y: 84, r: 205, s: 0.9, radius: "39% 61% 54% 46% / 62% 43% 57% 38%" }
+];
+let journeyProgress = 0;
+let journeyTarget = 0;
+let journeyRaf = 0;
+let journeyPointerX = 0;
+let journeyPointerY = 0;
+
+function journeyState(progress: number) {
+  let index = 0;
+  while (index < journeyFrames.length - 2 && progress > journeyFrames[index + 1].p) index++;
+  const from = journeyFrames[index];
+  const to = journeyFrames[index + 1];
+  const amount = Math.max(0, Math.min(1, (progress - from.p) / (to.p - from.p)));
+  const eased = amount * amount * (3 - 2 * amount);
+  return {
+    x: from.x + (to.x - from.x) * eased,
+    y: from.y + (to.y - from.y) * eased,
+    r: from.r + (to.r - from.r) * eased,
+    s: from.s + (to.s - from.s) * eased,
+    radius: amount < 0.5 ? from.radius : to.radius
+  };
+}
+
+function renderShapeJourney() {
+  journeyRaf = 0;
+  if (!journeyRoot || !journeyPrimary || !journeySecondary || motionQuery.matches) return;
+  journeyProgress += (journeyTarget - journeyProgress) * 0.105;
+  if (Math.abs(journeyTarget - journeyProgress) < 0.0005) journeyProgress = journeyTarget;
+  const state = journeyState(journeyProgress);
+  const speed = Math.min(1, Math.abs(velocity) / 34);
+  const stretchX = 1 + speed * 0.2;
+  const stretchY = 1 - speed * 0.13;
+  journeyPrimary.style.transform = `translate3d(calc(${state.x}vw + ${journeyPointerX}px), calc(${state.y}vh + ${journeyPointerY}px), 0) translate(-50%, -50%) rotate(${state.r + velocity * 0.16}deg) scale(${state.s * stretchX}, ${state.s * stretchY})`;
+  journeyPrimary.style.borderRadius = state.radius;
+  journeySecondary.style.transform = `translate3d(calc(${state.x - 9}vw - ${journeyPointerX * 0.45}px), calc(${state.y + 8}vh - ${journeyPointerY * 0.45}px), 0) translate(-50%, -50%) rotate(${-state.r * 0.72}deg) scale(${state.s * 0.64}, ${state.s * 0.78})`;
+  journeySecondary.style.borderRadius = state.radius.split(" / ").reverse().join(" / ");
+  journeyRoot.style.setProperty("--journey-speed", String(speed));
+  if (journeyProgress !== journeyTarget) journeyRaf = requestAnimationFrame(renderShapeJourney);
+}
+
+function updateJourneyTarget() {
+  const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  journeyTarget = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+  if (!journeyRaf && !motionQuery.matches) journeyRaf = requestAnimationFrame(renderShapeJourney);
+}
+
+window.addEventListener("scroll", updateJourneyTarget, { passive: true });
+window.addEventListener("resize", updateJourneyTarget, { passive: true });
+window.addEventListener("pointermove", event => {
+  if (motionQuery.matches || coarsePointer.matches || !journeyRoot) return;
+  journeyPointerX = (event.clientX / window.innerWidth - 0.5) * 18;
+  journeyPointerY = (event.clientY / window.innerHeight - 0.5) * 18;
+  if (!journeyRaf) journeyRaf = requestAnimationFrame(renderShapeJourney);
+}, { passive: true });
+window.addEventListener("pointerout", event => {
+  if ((event as PointerEvent).relatedTarget) return;
+  journeyPointerX = 0;
+  journeyPointerY = 0;
+  if (!journeyRaf) journeyRaf = requestAnimationFrame(renderShapeJourney);
+});
+document.addEventListener("astro:page-load", updateJourneyTarget);
+updateJourneyTarget();
