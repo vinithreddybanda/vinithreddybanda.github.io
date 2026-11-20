@@ -520,7 +520,11 @@ html{scroll-behavior:smooth;scroll-padding-top:130px}body{background:var(--bg);f
 /* Homepage project visibility fallback: content remains visible without JS */
 #selected-work .project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
 #selected-work .project-card{display:block;visibility:visible;opacity:1;transform:none;}
-#selected-work .project-card.reveal:not(.is-visible){opacity:0;transform:translateY(24px);}
-#selected-work .project-card.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+
 @media(max-width:760px){#selected-work .project-grid{grid-template-columns:minmax(0,1fr);}}
 @media(prefers-reduced-motion:reduce){#selected-work .project-card.reveal:not(.is-visible){opacity:1;transform:none;}}
+
+/* Final hard guarantee: selected projects must never be hidden by reveal state */
+#selected-work .project-grid{display:grid!important;visibility:visible!important}
+#selected-work .project-card,#selected-work .project-card.reveal,#selected-work .project-card.reveal:not(.is-visible){display:block!important;visibility:visible!important;opacity:1!important;transform:none!important}
