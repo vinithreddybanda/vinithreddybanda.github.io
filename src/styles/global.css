@@ -528,3 +528,7 @@ html{scroll-behavior:smooth;scroll-padding-top:130px}body{background:var(--bg);f
 /* Final hard guarantee: selected projects must never be hidden by reveal state */
 #selected-work .project-grid{display:grid!important;visibility:visible!important}
 #selected-work .project-card,#selected-work .project-card.reveal,#selected-work .project-card.reveal:not(.is-visible){display:block!important;visibility:visible!important;opacity:1!important;transform:none!important}
+
+/* Keep decorative hero geometry inside the viewport without clipping project content */
+html{overflow-x:clip}
+.home-hero .hero-object{overflow:clip}
