@@ -1,11 +1,66 @@
 ---
-import { ClientRouter } from "astro:transitions"; import "../styles/global.css"; import {projects,socials} from "../data/content";
-const {title="Vinith Reddy Banda — Software Engineer",description="Software engineer building Android apps, web products and applied AI."}=Astro.props;
-const links=[{label:"Home",href:"/"},{label:"Work",href:"/studio/"},{label:"About",href:"/about/"},{label:"Contact",href:"/contact/"}]; const path=Astro.url.pathname;
+import { socials } from "../data/content";
+const {
+  title = "Vinith Reddy Banda — Software Engineer & Builder",
+  description = "A small world of software, experiments and things made with care."
+} = Astro.props;
 ---
-<!doctype html><html lang="en" data-theme="dark"><head><ClientRouter/><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><meta name="theme-color" content="#101010"/><meta name="description" content={description}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:image" content="https://avatars.githubusercontent.com/u/116493221?v=4"/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/><title>{title}</title></head>
-<body><a class="skip-link" href="#main">Skip to content</a><div class="grain"></div><div class="read-progress"><span id="read-progress"></span></div><div class="cursor-follower"></div>
-<header class="masthead site-header"><div class="masthead-top"><a class="wordmark" href="/">V<span>.</span></a><div class="telemetry"><span>INDEPENDENT DEVELOPER</span><i>/</i><span>HYDERABAD, IN</span><i>/</i><span id="local-clock">--:--:--</span></div><div class="head-actions"><span class="header-availability">AVAILABLE FOR SELECT WORK <i></i></span><button class="icon-button command-trigger" type="button">⌘K</button></div></div><div class="masthead-bottom"><span class="edition">PORTFOLIO / 2026</span><nav>{links.map((l,i)=><a href={l.href} class:list={{active:l.href==="/" ? path==="/" : path.startsWith(l.href)}}><small>0{i+1}</small>{l.label}<b>↗</b></a>)}</nav><span class="edition right-edition">SCROLL TO EXPLORE ↓</span></div></header>
-<main id="main" transition:name="page-content"><slot/></main>
-<footer class="site-footer"><div class="footer-top"><a class="wordmark" href="/">V<span>.</span></a><p>Vinith Reddy Banda<br/>Software engineer · India</p><a class="footer-back" href="#main">BACK TO TOP ↑</a></div><div class="footer-bottom"><span>© {new Date().getFullYear()} VINITH REDDY BANDA</span><span>DESIGNED & BUILT IN HYDERABAD</span><div class="footer-socials">{socials.slice(0,3).map(s=><a href={s.href} target="_blank" rel="noreferrer">{s.label} ↗</a>)}</div></div></footer>
-<div class="command-overlay" id="command-overlay" aria-hidden="true"><div class="command-panel" role="dialog" aria-modal="true"><div class="command-input-row"><span>⌕</span><input id="command-input" type="search" placeholder="Search pages, projects, links..." autocomplete="off"/><kbd>ESC</kbd></div><div class="command-caption">PAGES / PROJECTS</div><div class="command-results" id="command-results">{links.map((l,i)=><a href={l.href} data-command-item><span>0{i+1}</span>{l.label}<b>↗</b></a>)}{projects.map(p=><a href={"/studio/"+p.slug+"/"} data-command-item><span>{p.no}</span>{p.name}<b>↗</b></a>)}</div><div class="command-foot">↑↓ MOVE　 ↵ OPEN　 ESC CLOSE</div></div></div><script>import "../scripts/interactions.js";</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#eae0ce" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://vinithreddybanda.github.io/" />
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/116493221?v=4" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,20,1;9..144,500,20,1&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="paper-noise" aria-hidden="true"></div>
+    <div class="page-progress" aria-hidden="true"><span id="page-progress-bar"></span></div>
+    <header class="site-nav" data-site-nav>
+      <a class="brand" href="#home" aria-label="Vinith, home"><span class="brand-mark">v.</span><span class="brand-name">vinith reddy banda</span></a>
+      <nav aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="nav-availability" href="#contact"><span></span> Open to good problems</a>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="footer-top">
+        <div>
+          <span class="footer-kicker">THE LITTLE WORLD OF</span>
+          <a class="footer-signature" href="#home">Vinith<span>.</span></a>
+        </div>
+        <p>Made slowly, with curiosity<br />and a suspicious number of commits.</p>
+        <a class="back-top" href="#home">Back to the clouds <span>↑</span></a>
+      </div>
+      <div class="footer-bottom">
+        <span>© {new Date().getFullYear()} Vinith Reddy Banda</span>
+        <div class="footer-links">
+          {socials.filter((item) => ["GitHub", "LinkedIn", "Devpost"].includes(item.label)).map((item) => (
+            <a href={item.href} target="_blank" rel="noreferrer">{item.label}<span>↗</span></a>
+          ))}
+        </div>
+        <span>Somewhere in India · <span id="local-time">--:--</span></span>
+      </div>
+    </footer>
+    <script>
+      import "../scripts/styles.js";
+      import "../scripts/world.js";
+    </script>
+  </body>
+</html>

@@ -1,10 +1,8 @@
 ---
-import Shell from "../../layouts/Shell.astro";
 import { projects } from "../../data/content";
-export function getStaticPaths() { return projects.map(project => ({ params: { slug: project.slug }, props: { project } })); }
-const { project } = Astro.props;
-const next = projects[(projects.findIndex(p=>p.slug===project.slug)+1)%projects.length];
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug } }));
+}
+const destination = "/#work";
 ---
-<Shell title={project.name+" — Vinith Reddy Banda"} description={project.summary}>
-<section class="case-page section-pad"><a class="back-link" href="/studio/">← ALL PROJECTS</a><div class="section-index"><span>PROJECT FILE / {project.no}</span><span>{project.year} · {project.status.toUpperCase()}</span></div><div class="case-heading"><div><p class="eyebrow"><span class="eyebrow-mark"></span> {project.type.toUpperCase()}</p><h1>{project.name.split(" ")[0]}<br/><em>{project.name.split(" ").slice(1).join(" ") || "Project"}.</em></h1></div><span class="case-index-mark">{project.no}</span></div><div class="case-visual"><div class="case-visual-grid"></div><span>{project.name}</span><small>VINITH REDDY BANDA / {project.year}</small></div><div class="case-description"><div><span class="micro-label">THE BRIEF</span><p>{project.description}</p></div><aside><span class="micro-label">TECH STACK</span><div class="skill-cloud compact">{project.stack.map(s=><span>{s}</span>)}</div>{project.url ? <a class="under-link" href={project.url} target="_blank" rel="noreferrer">VIEW PROJECT / SOURCE <span>↗</span></a> : <p class="source-private">Source repository is not public.</p>}{project.secondaryUrl ? <a class="under-link" href={project.secondaryUrl} target="_blank" rel="noreferrer">VIEW F-DROID LISTING <span>↗</span></a> : null}</aside></div><div class="case-highlights"><span class="micro-label">NOTES FROM THE BUILD</span>{project.points.map((point,i)=><div><span>0{i+1}</span><p>{point}</p></div>)}</div><a class="next-file" href={"/studio/"+next.slug+"/"}><span>NEXT FILE / {next.no}</span><b>{next.name} ↗</b></a></section>
-</Shell>
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta http-equiv="refresh" content={`0;url=${destination}`} /><title>Project — Vinith Reddy Banda</title><script>location.replace("/#work");</script></head><body><p>Taking you back to the project collection. <a href={destination}>Continue</a>.</p></body></html>
