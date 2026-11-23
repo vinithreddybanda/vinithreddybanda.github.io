@@ -1,4 +1,4 @@
-name: Build and deploy portfolio
+name: Build and deploy Little World
 on:
   push:
     branches: [main]
@@ -15,32 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Unit checks
-        run: npm test
-      - name: Build
-        env:
-          PUBLIC_PRESENCE_URL: ${{ vars.PUBLIC_PRESENCE_URL }}
-        run: npm run build
-      - name: Install Chromium
-        run: npx playwright install chromium
-      - name: Verify responsive layouts
-        run: npm run test:responsive
+      - uses: actions/configure-pages@v5
+      - name: Verify game JavaScript
+        run: node --check game.js
+      - name: Verify required files
+        run: test -s index.html && test -s style.css && test -s game.js
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: dist
+          path: .
   deploy:
     needs: build
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: \${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/configure-pages@v5
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

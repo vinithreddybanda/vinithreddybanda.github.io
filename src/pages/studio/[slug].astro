@@ -1,8 +1,0 @@
----
-import { projects } from "../../data/content";
-export function getStaticPaths() {
-  return projects.map((project) => ({ params: { slug: project.slug } }));
-}
-const destination = "/#work";
----
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta http-equiv="refresh" content={`0;url=${destination}`} /><title>Project — Vinith Reddy Banda</title><script>location.replace("/#work");</script></head><body><p>Taking you back to the project collection. <a href={destination}>Continue</a>.</p></body></html>
