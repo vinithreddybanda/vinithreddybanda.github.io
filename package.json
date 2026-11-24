@@ -1,0 +1,8 @@
+{
+  "name": "morrowvale",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/verify-game.mjs"
+  }
+}
