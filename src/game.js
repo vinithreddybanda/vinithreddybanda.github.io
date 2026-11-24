@@ -69,7 +69,7 @@ function createPlayer(){
 }
 function setAvatar(name){
   player.avatar=name;
-  if(playerModel){playerActor.remove(playerModel);playerModel.traverse?.(o=>{if(o.geometry)o.geometry.dispose();});}
+  if(playerModel){playerActor.remove(playerModel);}
   playerModel=addPlayerModel(playerActor,name,player.tint);
   if(!playerModel){playerModel=new THREE.Mesh(new THREE.CapsuleGeometry(.38,.9,5,8),new THREE.MeshStandardMaterial({color:0x879e7e}));playerModel.position.y=.8;playerActor.add(playerModel);}
   if(previewActor){while(previewActor.children.length)previewActor.remove(previewActor.children[0]);addPlayerModel(previewActor,name,player.tint);}
@@ -101,6 +101,7 @@ async function initialise(){
   world.pickups.forEach(p=>{if(saved?.pickups?.includes(p.id))p.found=true,p.group.visible=false;});
   world.keepsakes.forEach(k=>{if(foundKeepsakes.has(k.id))k.found=true,k.group.visible=false;});
   world.keepsakes.forEach(k=>{if(k.found)k.group.visible=false;});
+  catRecovered=questState("kitten").status==="ready"||questState("kitten").status==="complete";
   discovered.forEach(id=>{const r=REGIONS.find(x=>x.id===id);if(r)r.discovered=true;});
   buildRegionStrip();updateQuestUI();updatePlayerHUD();updateRegion();
   $("loading").classList.add("done");
@@ -145,8 +146,7 @@ function startQuest(q){
 function completeQuest(q){
   const s=questState(q.id);if(s.status==="complete")return;
   s.status="complete";coins+=q.reward;activeQuestId=QUESTS.find(x=>questState(x.id).status==="active"||questState(x.id).status==="ready")?.id||"";
-  if(q.item)removeInventory(q.item);
-  if(q.kind==="collect")removeInventory(q.item);
+  if(q.item)removeInventory(q.item,q.kind==="collect"?q.amount||1:1);
   updateQuestUI();updatePlayerHUD();saveGame(true);
   showToast("Story complete · "+q.reward+" shell coins");
 }
@@ -432,6 +432,7 @@ function updateLocationAndDiscovery(){
   if(bd<52){discovered.add(best.id);$("location-name").textContent=best.name;$("header-region").textContent=best.short;}
   if(discovered.size!==before){buildRegionStrip();saveGame(true);}
 }
+let lastMapPaint=0;
 function loop(){
   requestAnimationFrame(loop);
   const dt=Math.min(.04,clock.getDelta());worldTime+=dt;
@@ -439,7 +440,7 @@ function loop(){
     movePlayer(dt);updateCamera(dt);updateInteraction();updateLocationAndDiscovery();updatePetFollow(dt);
     if(worldTime-lastSave>16)saveGame();
   }
-  world.update(dt,worldTime);animateDay(dt);drawMiniMap();
+  world.update(dt,worldTime);animateDay(dt);if(worldTime-lastMapPaint>.16){drawMiniMap();lastMapPaint=worldTime;}
   renderer.render(scene,camera);
   if(previewRenderer&&previewScene){if(previewActor)previewActor.rotation.y=worldTime*.35;previewRenderer.render(previewScene,previewCamera);}
 }

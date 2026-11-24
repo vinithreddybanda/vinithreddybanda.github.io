@@ -36,7 +36,7 @@ export class World {
     return Math.sqrt((x/150)**2+(z/136)**2)<.975 && this.heightAt(x,z)>.02;
   }
   build() {
-    this.buildOcean();this.buildTerrain();this.buildPaths();this.buildLandmarks();this.buildNature();this.buildPeople();this.buildKeepsakes();
+    this.buildOcean();this.buildTerrain();this.buildPaths();this.buildLandmarks();this.buildNature();this.buildPeople();this.buildPickups();this.buildKeepsakes();
     this.buildRegionSigns();
   }
   buildOcean() {
@@ -241,7 +241,7 @@ export class World {
     this.clock=time;
     this.clouds.forEach((c,i)=>{c.position.x+=dt*(.32+(i%4)*.12);if(c.position.x>220)c.position.x=-220;});
     this.windObjects.forEach(o=>{o.root.rotation.z=Math.sin(time*.75+o.phase)*o.amount;});
-    this.npcs.forEach(n=>{n.marker.position.y=3+Math.sin(time*2+n.phase)*.12;n.ring.material.opacity=.37+Math.sin(time*2)*.12;});
+    this.npcs.forEach(n=>{n.marker.position.y=3+Math.sin(time*2+n.phase)*.12;n.ring.material.opacity=.37+Math.sin(time*2)*.12;n.root.rotation.y=Math.PI+Math.sin(time*.48+n.phase)*.1;n.root.position.y=n.baseY+Math.abs(Math.sin(time*1.4+n.phase))*.025;});
     this.pickups.forEach(p=>{if(!p.found){p.group.rotation.y+=dt*.45;p.group.position.y=this.heightAt(p.x,p.z)+Math.sin(time*2+p.phase)*.12;}});
     this.keepsakes.forEach(p=>{if(!p.found){p.group.rotation.y+=dt*.5;p.group.position.y=this.heightAt(p.x,p.z)+Math.sin(time*1.7+p.phase)*.16;}});
     this.pets.forEach(p=>{if(p.kind==="ambient"){const x=p.home.x+Math.sin(time*.28+p.phase)*2.1,z=p.home.z+Math.cos(time*.22+p.phase)*1.6;p.model.position.x=x;p.model.position.z=z;p.model.position.y=this.heightAt(x,z);p.model.rotation.y=Math.sin(time*.3+p.phase)*.3;}});
