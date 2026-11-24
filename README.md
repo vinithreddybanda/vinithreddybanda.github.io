@@ -5,8 +5,9 @@ Personal portfolio built with Astro, React, TypeScript and Framer Motion.
 ## Stack
 
 - Astro for static site generation and routing.
-- React for the interactive command palette.
-- Framer Motion for modal transitions.
+- React for the interactive command palette and live listening widget.
+- Framer Motion for command palette and listening-card transitions.
+- A live SimpMusic status widget that refreshes every 30 seconds and preserves the last played track.
 - Geist and DM Mono typography.
 - CSS for responsive layout and scroll-reveal motion.
 
