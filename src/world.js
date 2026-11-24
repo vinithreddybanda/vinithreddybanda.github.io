@@ -9,7 +9,7 @@ const seeded=(seed)=>()=>{let t=seed+=0x6D2B79F5;t=Math.imul(t^t>>>15,t|1);t^=t+
 export class World {
   constructor(scene,onProgress=()=>{}) {
     this.scene=scene;this.onProgress=onProgress;this.models=new Map();this.npcs=new Map();this.pets=new Map();
-    this.pickups=[];this.keepsakes=[];this.clouds=[];this.windObjects=[];this.clock=0;this.seed=seeded(804219);
+    this.pickups=[];this.keepsakes=[];this.clouds=[];this.windObjects=[];this.birds=[];this.motes=null;this.moteBase=[];this.clock=0;this.seed=seeded(804219);
     this.obstacles=[];this.regionLabels=[];this.ocean=null;
   }
   async loadAssets() {
@@ -36,7 +36,7 @@ export class World {
     return Math.sqrt((x/150)**2+(z/136)**2)<.975 && this.heightAt(x,z)>.02;
   }
   build() {
-    this.buildOcean();this.buildTerrain();this.buildPaths();this.buildLandmarks();this.buildNature();this.buildPeople();this.buildPickups();this.buildKeepsakes();
+    this.buildOcean();this.buildTerrain();this.buildPaths();this.buildLandmarks();this.buildNature();this.buildAmbientLife();this.buildPeople();this.buildPickups();this.buildKeepsakes();
     this.buildRegionSigns();
   }
   buildOcean() {
@@ -197,6 +197,28 @@ export class World {
     if(bunny)this.pets.set("bunny",{id:"bunny",model:bunny,home:{x:-83,z:58},kind:"ambient",phase:2});
     if(cat)this.pets.set("cat",{id:"cat",model:cat,home:{x:24,z:-16},kind:"quest",phase:0});
   }
+
+  buildAmbientLife(){
+    const bodyMat=new THREE.MeshStandardMaterial({color:0x596d62,roughness:.9});
+    const wingMat=new THREE.MeshStandardMaterial({color:0x758879,roughness:1,side:THREE.DoubleSide});
+    for(let i=0;i<11;i++){
+      const bird=new THREE.Group();
+      const body=new THREE.Mesh(new THREE.SphereGeometry(.19,7,6),bodyMat);body.scale.set(.85,.72,1.6);bird.add(body);
+      const wingGeo=new THREE.BufferGeometry();wingGeo.setAttribute("position",new THREE.Float32BufferAttribute([0,0,0,-.74,.02,-.38,-.32,.02,.3,0,0,0,.32,.02,.3,.74,.02,-.38],3));wingGeo.setIndex([0,1,2,3,4,5]);wingGeo.computeVertexNormals();
+      const wings=new THREE.Mesh(wingGeo,wingMat);bird.add(wings);
+      const beak=new THREE.Mesh(new THREE.ConeGeometry(.075,.24,5),new THREE.MeshStandardMaterial({color:0xc39d70}));beak.rotation.x=Math.PI/2;beak.position.z=.34;bird.add(beak);
+      const phase=this.seed()*Math.PI*2;this.scene.add(bird);this.birds.push({root:bird,wings,phase,radius:42+this.seed()*78,speed:.045+this.seed()*.035,height:17+this.seed()*13});
+    }
+    const positions=[],colours=[];
+    for(let i=0;i<110;i++){
+      const x=45+(this.seed()-.5)*58,z=-75+(this.seed()-.5)*54,y=this.heightAt(x,z)+1.1+this.seed()*3;
+      positions.push(x,y,z);this.moteBase.push({x,y,z,phase:this.seed()*Math.PI*2});
+      const c=new THREE.Color(i%3?0xdacb91:0xb7d2a2);colours.push(c.r,c.g,c.b);
+    }
+    const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));geo.setAttribute("color",new THREE.Float32BufferAttribute(colours,3));
+    const mat=new THREE.PointsMaterial({size:.28,vertexColors:true,transparent:true,opacity:.7,depthWrite:false,sizeAttenuation:true});
+    this.motes=new THREE.Points(geo,mat);this.scene.add(this.motes);
+  }
   buildPeople(){
     for(const data of NPC_DATA){
       const root=this.placeModel(data.asset,data.x,data.z,2.05,Math.PI, {lift:.025});
@@ -240,8 +262,10 @@ export class World {
   update(dt,time) {
     this.clock=time;
     this.clouds.forEach((c,i)=>{c.position.x+=dt*(.32+(i%4)*.12);if(c.position.x>220)c.position.x=-220;});
+    this.birds.forEach(b=>{const a=time*b.speed+b.phase;b.root.position.set(Math.cos(a)*b.radius,b.height+Math.sin(a*1.8)*2,Math.sin(a)*b.radius*.65);b.root.rotation.y=-a+Math.PI/2;b.wings.rotation.z=Math.sin(time*9+b.phase)*.48;});
+    if(this.motes){const pos=this.motes.geometry.attributes.position;this.moteBase.forEach((p,i)=>{pos.setXYZ(i,p.x+Math.sin(time*.4+p.phase)*.7,p.y+Math.sin(time*1.5+p.phase)*.28,p.z+Math.cos(time*.32+p.phase)*.65);});pos.needsUpdate=true;this.motes.material.opacity=.48+Math.sin(time*1.2)*.12;}
     this.windObjects.forEach(o=>{o.root.rotation.z=Math.sin(time*.75+o.phase)*o.amount;});
-    this.npcs.forEach(n=>{n.marker.position.y=3+Math.sin(time*2+n.phase)*.12;n.ring.material.opacity=.37+Math.sin(time*2)*.12;n.root.rotation.y=Math.PI+Math.sin(time*.48+n.phase)*.1;n.root.position.y=n.baseY+Math.abs(Math.sin(time*1.4+n.phase))*.025;});
+    this.npcs.forEach(n=>{n.marker.position.y=3+Math.sin(time*2+n.phase)*.12;n.ring.material.opacity=.37+Math.sin(time*2)*.12;const nx=n.x+Math.sin(time*.24+n.phase)*.85,nz=n.z+Math.cos(time*.2+n.phase)*.62;n.root.position.x=nx;n.root.position.z=nz;n.root.position.y=this.heightAt(nx,nz)+Math.abs(Math.sin(time*1.4+n.phase))*.025;n.root.rotation.y=Math.PI+Math.sin(time*.48+n.phase)*.1;});
     this.pickups.forEach(p=>{if(!p.found){p.group.rotation.y+=dt*.45;p.group.position.y=this.heightAt(p.x,p.z)+Math.sin(time*2+p.phase)*.12;}});
     this.keepsakes.forEach(p=>{if(!p.found){p.group.rotation.y+=dt*.5;p.group.position.y=this.heightAt(p.x,p.z)+Math.sin(time*1.7+p.phase)*.16;}});
     this.pets.forEach(p=>{if(p.kind==="ambient"){const x=p.home.x+Math.sin(time*.28+p.phase)*2.1,z=p.home.z+Math.cos(time*.22+p.phase)*1.6;p.model.position.x=x;p.model.position.z=z;p.model.position.y=this.heightAt(x,z);p.model.rotation.y=Math.sin(time*.3+p.phase)*.3;}});
