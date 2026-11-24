@@ -121,3 +121,25 @@ h1 { margin: 23px 0 17px; font-size: clamp(48px, 8vw, 72px); line-height: .99; f
 .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
 .reveal.is-visible { opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+.listening-card { display: flex; align-items: center; gap: 14px; min-height: 88px; padding: 13px; border: 1px solid var(--line); border-radius: 4px; background: linear-gradient(120deg, #f2f4ef, #f8f8f6); }
+.album-art { display: grid; place-items: center; flex: 0 0 58px; width: 58px; height: 58px; overflow: hidden; border-radius: 3px; background: #e3e9e0; color: #718675; font-size: 20px; }
+.album-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.album-empty { background: radial-gradient(circle at 50% 45%, #e8eee5, #dfe6dc); font-size: 24px; }
+.listening-details { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 1px; }
+.listening-state { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; color: #92968b; font: 9px var(--mono); letter-spacing: .07em; }
+.playing-indicator { width: 6px; height: 6px; border-radius: 50%; background: #b2b5ac; }
+.playing-indicator.active { background: #6b9a74; box-shadow: 0 0 0 3px #6b9a741a; animation: pulse-live 1.8s ease-in-out infinite; }
+@keyframes pulse-live { 50% { box-shadow: 0 0 0 6px #6b9a7400; } }
+.listening-details strong { overflow: hidden; color: var(--ink); font-size: 12px; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.listening-artist { overflow: hidden; color: #85877f; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.listening-action { display: flex; align-items: center; gap: 12px; color: #899488; font: 10px var(--mono); }
+.listening-action a { color: #687f6c; font-size: 16px; }
+.listening-action.muted { color: #a2a49b; font-size: 8px; letter-spacing: .06em; }
+.equalizer { display: flex; height: 17px; align-items: end; gap: 2px; }
+.equalizer i { width: 2px; height: 45%; border-radius: 2px; background: #78947d; animation: equalize .7s ease-in-out infinite alternate; }
+.equalizer i:nth-child(2) { height: 90%; animation-delay: -.4s; }
+.equalizer i:nth-child(3) { height: 60%; animation-delay: -.2s; }
+.equalizer i:nth-child(4) { height: 75%; animation-delay: -.55s; }
+@keyframes equalize { to { height: 18%; } }
+@media (prefers-reduced-motion: reduce) { .playing-indicator.active, .equalizer i { animation: none; } }
