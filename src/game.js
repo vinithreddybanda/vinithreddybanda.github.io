@@ -97,7 +97,7 @@ async function initialise(){
   await world.loadAssets();
   world.build();
   if(saved?.position&&world.onLand(saved.position.x,saved.position.z)){player.x=saved.position.x;player.z=saved.position.z;}
-  createPlayer();makePreview();
+  createPlayer();updateCamera(1);makePreview();
   world.pickups.forEach(p=>{if(saved?.pickups?.includes(p.id))p.found=true,p.group.visible=false;});
   world.keepsakes.forEach(k=>{if(foundKeepsakes.has(k.id))k.found=true,k.group.visible=false;});
   world.keepsakes.forEach(k=>{if(k.found)k.group.visible=false;});
