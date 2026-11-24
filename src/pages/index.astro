@@ -1,0 +1,148 @@
+---
+import CommandPalette from "../components/CommandPalette";
+import "../styles/global.css";
+
+const projects = [
+  {
+    number: "01",
+    type: "ANDROID · OPEN SOURCE",
+    name: "SimpMusic",
+    description: "A community-driven music player fork. Working on search reliability, playback details and a more considered liquid-glass interface.",
+    stack: ["Kotlin", "Jetpack Compose", "Android"],
+    href: "https://github.com/vinithreddybanda/SimpMusic",
+  },
+  {
+    number: "02",
+    type: "ANDROID",
+    name: "WhatsApp Status Saver",
+    description: "An image-first status gallery with natural media sizing, fast browsing and direct save, share and repost actions.",
+    stack: ["Kotlin", "Jetpack Compose", "Android"],
+    href: "https://github.com/vinithreddybanda/WhatsapStatusSaver",
+  },
+  {
+    number: "03",
+    type: "AI · DEVOPS",
+    name: "Journal AI",
+    description: "An AI-assisted journaling app with a deployment pipeline spanning containers, CI automation and Azure.",
+    stack: ["Next.js", "Supabase", "Groq", "Docker"],
+    href: "https://github.com/vinithreddybanda/journalai",
+  },
+  {
+    number: "04",
+    type: "REAL-TIME · WEB",
+    name: "LiveVoiceX",
+    description: "A multilingual voice experience built around real-time speech recognition and responsive interaction.",
+    stack: ["React", "TypeScript", "Deepgram"],
+    href: "https://github.com/vinithreddybanda",
+  },
+];
+---
+<div class="site-shell">
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Vinith home">vinith<span>.</span></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#opensource">Open source</a>
+      <a href="#contact">Contact</a>
+      <CommandPalette client:load />
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" id="about">
+      <p class="eyebrow"><span class="status-dot"></span> SOFTWARE ENGINEER <span class="eyebrow-separator">/</span> HYDERABAD, INDIA</p>
+      <h1>Vinith Reddy<br />Banda<span class="hero-period">.</span></h1>
+      <p class="hero-role">I build software, contribute to open source, and care about the details.</p>
+      <div class="intro-copy">
+        <p>I’m an engineer interested in the space between useful software and thoughtful interaction. Most of my work lives around Android, web applications, developer tooling and the systems that keep them running.</p>
+        <p>I like understanding how things work, improving what already exists, and shipping ideas that solve actual problems. Currently building, learning and contributing in public.</p>
+      </div>
+      <div class="social-links">
+        <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
+        <a href="mailto:vinithreddybanda@gmail.com">Email <span>↗</span></a>
+      </div>
+    </section>
+
+    <section class="content-section contribution-section" id="activity">
+      <div class="section-heading">
+        <div><p class="section-index">01 / ACTIVITY</p><h2>Commit canvas</h2></div>
+        <span class="section-aside">The work behind the progress.</span>
+      </div>
+      <p class="section-description">Public GitHub contribution activity over the last year.</p>
+      <a class="contribution-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer" aria-label="View GitHub contribution activity">
+        <img src="https://ghchart.rshah.org/5d806c/vinithreddybanda" alt="GitHub contribution graph for vinithreddybanda" loading="lazy" />
+      </a>
+      <div class="contribution-meta"><span>github.com/vinithreddybanda</span><span>Contribution activity ↗</span></div>
+    </section>
+
+    <section class="content-section" id="now">
+      <div class="section-heading">
+        <div><p class="section-index">02 / CURRENTLY</p><h2>What I’m working on</h2></div>
+        <span class="section-aside">A few things in motion.</span>
+      </div>
+      <div class="now-list">
+        <div class="now-item"><span class="now-marker">↗</span><div><h3>Refining SimpMusic</h3><p>Improving search, playback flows and interface consistency in an established Android codebase.</p></div><span class="now-type">ANDROID</span></div>
+        <div class="now-item"><span class="now-marker">↗</span><div><h3>Building small useful tools</h3><p>Exploring product ideas across web, AI and developer experience.</p></div><span class="now-type">BUILDING</span></div>
+        <div class="now-item"><span class="now-marker">↗</span><div><h3>Learning in the open</h3><p>Reading unfamiliar code, reviewing trade-offs and contributing fixes upstream.</p></div><span class="now-type">OPEN SOURCE</span></div>
+      </div>
+    </section>
+
+    <section class="content-section" id="opensource">
+      <div class="section-heading">
+        <div><p class="section-index">03 / COMMUNITY</p><h2>Open-source contributions</h2></div>
+        <span class="section-aside">Beyond my own repositories.</span>
+      </div>
+      <div class="contribution-list">
+        <a class="contribution-card" href="https://github.com/maxrave-dev/SimpMusic/pull/2893" target="_blank" rel="noreferrer">
+          <div class="contribution-org"><span class="org-mark">M</span><span>maxrave-dev <small>· SimpMusic</small></span><span class="external-arrow">↗</span></div>
+          <h3>Performance / liquid UI cleanup</h3>
+          <p>Contributing interface and performance improvements to the upstream Android music player.</p>
+          <div class="contribution-bottom"><span>Pull request #2893</span><span>View contribution ↗</span></div>
+        </a>
+        <a class="contribution-card" href="https://github.com/cbitosc/HackWeek-Create-A-Pull-Request/pull/77" target="_blank" rel="noreferrer">
+          <div class="contribution-org"><span class="org-mark">C</span><span>cbitosc <small>· HackWeek</small></span><span class="external-arrow">↗</span></div>
+          <h3>First contribution to the HackWeek repository</h3>
+          <p>A community contribution to the CBIT Open Source Community’s pull-request activity.</p>
+          <div class="contribution-bottom"><span>Pull request #77</span><span>View contribution ↗</span></div>
+        </a>
+      </div>
+      <p class="footnote">Only publicly verifiable contributions are listed here. More activity lives on <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub ↗</a>.</p>
+    </section>
+
+    <section class="content-section" id="work">
+      <div class="section-heading">
+        <div><p class="section-index">04 / SELECTED WORK</p><h2>Things I’ve built</h2></div>
+        <a class="section-aside section-link" href="https://github.com/vinithreddybanda?tab=repositories" target="_blank" rel="noreferrer">All repositories ↗</a>
+      </div>
+      <div class="project-list">
+        {projects.map((project) => (
+          <a class="project-row" href={project.href} target="_blank" rel="noreferrer">
+            <span class="project-number">{project.number}</span>
+            <div class="project-main">
+              <div class="project-topline"><span class="project-type">{project.type}</span><span class="project-arrow">↗</span></div>
+              <h3>{project.name}</h3>
+              <p>{project.description}</p>
+              <div class="tag-list">{project.stack.map((tag) => <span>{tag}</span>)}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="content-section contact-section" id="contact">
+      <div class="section-heading">
+        <div><p class="section-index">05 / CONTACT</p><h2>Let’s make something useful.</h2></div>
+      </div>
+      <p class="contact-copy">Have a project, an interesting problem, or an open-source issue worth exploring? I’m always up for a thoughtful conversation.</p>
+      <a class="email-link" href="mailto:vinithreddybanda@gmail.com">vinithreddybanda@gmail.com <span>↗</span></a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© {new Date().getFullYear()} Vinith Reddy Banda</span>
+    <span>Built with care, shipped from Hyderabad.</span>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+</div>
