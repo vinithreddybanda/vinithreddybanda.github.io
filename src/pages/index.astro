@@ -1,5 +1,6 @@
 ---
 import CommandPalette from "../components/CommandPalette";
+import NowPlaying from "../components/NowPlaying";
 import "../styles/global.css";
 
 const projects = [
@@ -123,9 +124,18 @@ const projects = [
       <p class="footnote">Only publicly verifiable contributions are listed here. More activity lives on <a href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">GitHub ↗</a>.</p>
     </section>
 
+
+    <section class="content-section reveal listening-section" id="listening">
+      <div class="section-heading">
+        <div><p class="section-index">04 / LISTENING</p><h2>What I’ve been playing</h2></div>
+        <span class="section-aside">Lately is often random.</span>
+      </div>
+      <NowPlaying client:load />
+    </section>
+
     <section class="content-section reveal" id="work">
       <div class="section-heading">
-        <div><p class="section-index">04 / SELECTED WORK</p><h2>Things I’ve built</h2></div>
+        <div><p class="section-index">05 / SELECTED WORK</p><h2>Things I’ve built</h2></div>
         <a class="section-aside section-link" href="https://github.com/vinithreddybanda?tab=repositories" target="_blank" rel="noreferrer">All repositories ↗</a>
       </div>
       <div class="project-list">
@@ -145,7 +155,7 @@ const projects = [
 
     <section class="content-section reveal contact-section" id="contact">
       <div class="section-heading">
-        <div><p class="section-index">05 / CONTACT</p><h2>Let’s make something useful.</h2></div>
+        <div><p class="section-index">06 / CONTACT</p><h2>Let’s make something useful.</h2></div>
       </div>
       <p class="contact-copy">Have a project, an interesting problem, or an open-source issue worth exploring? I’m always up for a thoughtful conversation.</p>
       <a class="email-link" href="mailto:vinithreddybanda@gmail.com">vinithreddybanda@gmail.com <span>↗</span></a>
