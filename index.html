@@ -1,1 +1,141 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#dce8df"><title>Little World</title><link rel="stylesheet" href="./style.css"><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script></head><body><main id="game"><canvas id="world"></canvas><header><b>✳ &nbsp; LITTLE WORLD</b><nav><span>☼ &nbsp; A gentle day</span><button id="sound">♫</button><button id="map">⌖</button><button id="pause">Ⅱ</button></nav></header><aside class="place"><small>YOU ARE WANDERING IN</small><strong id="region">Old Town</strong></aside><aside class="quest"><small>YOUR LITTLE ADVENTURE</small><strong id="quest-title">Nothing in a hurry.</strong><p id="quest-text">Find someone with a little story to tell.</p><button id="journal">OPEN JOURNAL ↗</button></aside><div class="hint" id="hint"></div><div class="profile"><i id="avatar">V</i><div><b id="player-name-label">Little wanderer</b><small><span id="stars">0</span> keepsakes found</small></div></div><div class="help">W A S D wander &nbsp; · &nbsp; SHIFT hurry &nbsp; · &nbsp; E interact &nbsp; · &nbsp; DRAG look</div><div class="actions"><button id="custom">✳</button><button id="journal2">▤</button></div><div id="mobile"><div id="stick-area"><i id="stick"></i></div><button id="touch-e">E</button></div><div class="overlay" id="dialogue"><section class="dialog"><div class="row"><small id="role">A NEIGHBOUR</small><button class="x" data-close="dialogue">×</button></div><div class="person"><i id="person-icon">M</i><div><h2 id="person-name">Milo</h2><small id="mood"></small></div></div><p id="line"></p><div id="choices"></div></section></div><div class="overlay" id="journal-panel"><section class="sheet"><div class="row"><div><small>YOUR POCKET JOURNAL</small><h2>Little things<br><em>worth keeping.</em></h2></div><button class="x" data-close="journal-panel">×</button></div><div class="tabs"><button data-tab="journey">Journey</button><button data-tab="people">People</button><button data-tab="keepsakes">Keepsakes</button></div><div id="journal-body"></div></section></div><div class="overlay" id="custom-panel"><section class="sheet"><div class="row"><div><small>A LITTLE PERSONAL TOUCH</small><h2>Make yourself<br><em>at home.</em></h2></div><button class="x" data-close="custom-panel">×</button></div><div class="preview">☺</div><div class="custom-row"><span>Hair</span><div id="hair"></div></div><div class="custom-row"><span>Outfit</span><div id="outfit"></div></div><div class="custom-row"><span>Name</span><input id="name-input" maxlength="18" value="Little wanderer"></div><button class="primary" id="save-look">LOOKING GOOD</button></section></div><div class="overlay" id="map-panel"><section class="sheet"><div class="row"><div><small>A WHOLE WORLD TO WANDER</small><h2>Where to<br><em>next?</em></h2></div><button class="x" data-close="map-panel">×</button></div><div class="map-art"><span>OLD TOWN</span><span>FLOWER VALLEY</span><span>HARBOUR</span><span>WHISPERING WOODS</span><i>YOU ARE HERE</i></div><div id="regions"></div></section></div><div class="overlay" id="pause-panel"><section class="dialog pause"><small>TAKE YOUR TIME</small><h2>The world can<br><em>wait a little.</em></h2><p>Nothing here is in a hurry.</p><button class="primary" id="resume">BACK TO WANDERING</button></section></div><div id="toast"></div><div id="loading"><i></i><p>Waking up the little world...</p></div></main><script type="module" src="./game.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#d4e0d2">
+<meta name="description" content="Explore Morrowvale, a hand-built island of forests, meadows, harbours and small stories.">
+<title>Morrowvale — An island of small wonders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<main id="game">
+<canvas id="world" aria-label="Morrowvale three-dimensional exploration game"></canvas>
+<div class="vignette"></div>
+<div class="filmgrain"></div>
+
+<div id="loading" class="loading">
+  <div class="loading-mark"><span></span><i></i></div>
+  <p class="loading-title">Morrowvale</p>
+  <p class="loading-copy" id="loading-copy">Waking the island...</p>
+  <div class="loading-track"><i id="loading-progress"></i></div>
+  <small id="loading-percent">0%</small>
+</div>
+
+<section id="title-screen" class="title-screen">
+  <div class="title-top"><span class="brand-mark">✳</span> MORROWVALE <span class="edition">AN ISLAND EXPLORATION</span></div>
+  <div class="title-copy">
+    <p class="eyebrow">A PLACE TO GET A LITTLE LOST</p>
+    <h1>Somewhere,<br>the world is <em>slower.</em></h1>
+    <p class="title-description">A winding path. A harbour full of stories. A forest that remembers your footsteps. There is no hurry here.</p>
+    <button id="begin" class="begin-button">STEP INTO MORROWVALE <span>↗</span></button>
+    <p class="save-note">YOUR JOURNEY SAVES AUTOMATICALLY ON THIS DEVICE</p>
+  </div>
+  <div class="title-bottom"><span>01 / 06 REGIONS TO FIND</span><span>WASD TO WANDER · E TO MEET</span></div>
+</section>
+
+<header class="game-header" id="game-header">
+  <div class="header-brand"><span>✳</span><div><b>MORROWVALE</b><small id="header-region">THE OLD QUARTER</small></div></div>
+  <div class="header-actions">
+    <div class="day-indicator"><i></i><span id="day-label">LATE MORNING</span></div>
+    <button class="header-button" id="map-open" aria-label="Open map">⌖</button>
+    <button class="header-button" id="journal-open" aria-label="Open journal">▤</button>
+    <button class="header-button" id="wardrobe-open" aria-label="Customize character">◌</button>
+    <button class="header-button" id="pause-open" aria-label="Pause game">Ⅱ</button>
+  </div>
+</header>
+
+<aside class="location-card" id="location-card">
+  <span class="location-symbol">✳</span>
+  <div><small>YOU HAVE WANDERED INTO</small><strong id="location-name">The Old Quarter</strong></div>
+</aside>
+
+<aside class="objective-card" id="objective-card">
+  <div class="objective-top"><span>YOUR CURRENT STORY</span><span class="objective-spark">✦</span></div>
+  <h2 id="objective-title">A letter with no address</h2>
+  <p id="objective-description">Meet Elowen near the old fountain. She has been expecting someone.</p>
+  <div class="objective-progress"><i id="objective-fill"></i></div>
+  <small id="objective-status">A NEW STORY IS WAITING</small>
+</aside>
+
+<div class="interaction-prompt" id="interaction-prompt"><kbd>E</kbd><span id="interaction-text">Talk</span></div>
+
+<div class="minimap-shell" id="minimap-shell">
+  <canvas id="minimap" width="180" height="180"></canvas>
+  <span class="minimap-north">N</span>
+  <span class="minimap-caption">YOUR LITTLE CORNER</span>
+</div>
+
+<div class="player-status">
+  <div class="player-avatar" id="player-avatar">V</div>
+  <div><strong id="player-display-name">Wanderer</strong><small><span id="keepsake-count">0</span> keepsakes <i>·</i> <span id="level-label">WANDERER I</span></small></div>
+</div>
+
+<div class="control-hint" id="control-hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>MOVE</span><b>·</b><kbd>SHIFT</kbd><span>HURRY</span><b>·</b><kbd>E</kbd><span>INTERACT</span><b>·</b><kbd>DRAG</kbd><span>LOOK</span></div>
+<div class="quick-actions">
+  <button id="quick-journal" aria-label="Journal">▤</button>
+  <button id="quick-map" aria-label="Map">⌖</button>
+</div>
+
+<div id="mobile-controls">
+  <div id="joystick"><i id="joystick-knob"></i></div>
+  <button id="mobile-interact">E</button>
+</div>
+
+<section class="overlay" id="dialogue-overlay" aria-hidden="true">
+  <div class="dialogue-panel">
+    <div class="dialogue-meta"><span id="dialogue-role">A RESIDENT OF MORROWVALE</span><button class="close-button" data-close="dialogue-overlay">×</button></div>
+    <div class="dialogue-person"><div class="dialogue-portrait" id="dialogue-portrait">E</div><div><h2 id="dialogue-name">Elowen</h2><small id="dialogue-mood">Keeps a hundred little stories</small></div></div>
+    <p class="dialogue-text" id="dialogue-text"></p>
+    <div class="dialogue-footer"><span id="dialogue-context">THE OLD QUARTER</span><div id="dialogue-actions"></div></div>
+  </div>
+</section>
+
+<section class="overlay" id="journal-overlay" aria-hidden="true">
+  <div class="journal-panel">
+    <div class="panel-heading"><div><span class="eyebrow">A RECORD OF YOUR WANDERING</span><h2>Field <em>notes.</em></h2></div><button class="close-button" data-close="journal-overlay">×</button></div>
+    <div class="journal-tabs"><button class="active" data-tab="stories">Stories</button><button data-tab="people">People</button><button data-tab="keepsakes">Keepsakes</button></div>
+    <div class="journal-body" id="journal-body"></div>
+    <div class="journal-footer"><span>MADE OF LITTLE MOMENTS</span><span id="journal-count">0 / 6 STORIES FOUND</span></div>
+  </div>
+</section>
+
+<section class="overlay" id="map-overlay" aria-hidden="true">
+  <div class="map-panel">
+    <div class="panel-heading"><div><span class="eyebrow">THE ISLAND IS YOURS TO DISCOVER</span><h2>A map of <em>Morrowvale.</em></h2></div><button class="close-button" data-close="map-overlay">×</button></div>
+    <canvas id="world-map" width="760" height="540"></canvas>
+    <div class="map-legend"><span><i class="legend-you"></i> YOU ARE HERE</span><span><i class="legend-quest"></i> STORY TO FOLLOW</span><span><i class="legend-found"></i> DISCOVERED</span></div>
+    <div class="region-strip" id="region-strip"></div>
+  </div>
+</section>
+
+<section class="overlay" id="wardrobe-overlay" aria-hidden="true">
+  <div class="wardrobe-panel">
+    <div class="panel-heading"><div><span class="eyebrow">A LITTLE PERSONAL TOUCH</span><h2>Your own <em>kind of wanderer.</em></h2></div><button class="close-button" data-close="wardrobe-overlay">×</button></div>
+    <div class="wardrobe-preview"><div class="wardrobe-avatar" id="wardrobe-avatar">✳</div><p id="wardrobe-name-preview">A traveller with no particular hurry.</p></div>
+    <div class="wardrobe-section"><span>YOUR LOOK</span><div class="avatar-choices" id="avatar-choices"></div></div>
+    <div class="wardrobe-section"><span>YOUR COLOUR</span><div class="colour-choices" id="colour-choices"></div></div>
+    <label class="name-field">A NAME TO ANSWER TO<input id="name-field" maxlength="18" value="Wanderer"></label>
+    <button id="save-wardrobe" class="primary-button">THAT FEELS LIKE ME</button>
+  </div>
+</section>
+
+<section class="overlay" id="pause-overlay" aria-hidden="true">
+  <div class="pause-panel">
+    <span class="eyebrow">THE ISLAND WILL WAIT</span>
+    <h2>Take the<br><em>long way back.</em></h2>
+    <p>Everything is right where you left it.</p>
+    <button id="resume" class="primary-button">BACK TO THE ISLAND</button>
+    <button id="reset-save" class="quiet-button">START A NEW JOURNEY</button>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+<div class="save-toast" id="save-toast">JOURNEY SAVED <span>✓</span></div>
+</main>
+<script type="module" src="./game.js"></script>
+</body></html>
