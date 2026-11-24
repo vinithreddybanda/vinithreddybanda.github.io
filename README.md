@@ -1,30 +1,31 @@
-# Morrowvale
+# Vinith Reddy — Portfolio
 
-A 3D island exploration game for the browser. Walk the Old Quarter, cross Bluebell Meadow, follow the Saltwind Harbour coast, explore the Whispering Woods, climb Cloudrest Highlands and uncover the Sunken Observatory.
+A motion-led engineering portfolio built around a visual metaphor: one practice, five project fragments, reconstructed through scroll.
 
-## Play
+## Stack
 
-Open the GitHub Pages site. The first load downloads the locally hosted GLB world assets.
+- Semantic HTML and CSS, no application framework or build-time runtime
+- GSAP + ScrollTrigger for timelines, pinned scroll scenes, staggered reveals and reversible motion
+- Native browser scrolling, responsive CSS and reduced-motion support
+- Inline CSS illustrations for project previews; no stock imagery or copied agency assets
 
-- **W / A / S / D** or arrow keys: walk
-- **Shift:** hurry
-- **E:** talk, gather, or interact
-- **Mouse drag:** orbit the third-person camera
-- **M:** map
-- **J:** field journal
-- **Escape:** pause
-- **Touch:** virtual movement stick and interact button; drag the world to look around
+## Motion system
 
-The island includes six distinct regions, named residents, six multi-step storylines, a keepsake trail, character choices, a journal, inventory, a region map, and automatic local saves.
+1. Hero shards assemble on entry.
+2. Manifesto lines reveal through masked vertical motion.
+3. The five-piece composition separates in a scroll-pinned sequence.
+4. Project rows expand into case-study details.
+5. Approach, recognition, stack and contact sections reveal as they enter view.
+6. Mobile uses a simplified, non-pinned fragment reveal to preserve natural scrolling.
 
-## Technical structure
+GSAP and ScrollTrigger are loaded from jsDelivr. If the animation CDN is unavailable, the content remains readable and interactive.
 
-- game.js: browser entry point
-- src/game.js: player controller, camera, interactions, quest progression, journal, map, wardrobe and local save system
-- src/world.js: terrain mesh, water, paths, landmarks, GLB model loading, NPC placement, pickups and ambient animation
-- src/data.js: region, resident, quest, pickup and keepsake definitions
-- assets/models/: self-hosted GLB environment, character and animal assets
+## Local preview
 
-The game uses Three.js (MIT) and Kenney 3D models (CC0 1.0). The model library is credited in CREDITS.md.
+Open index.html in a browser or serve the repository root with any static file server.
 
-This is a single-player static-hosted game. Multiplayer is not implemented.
+## Deployment
+
+GitHub Actions validates the static shell and deploys the repository root to GitHub Pages.
+
+All project descriptions are intentionally concise. Repository links point to the user's GitHub projects/profile. No third-party portfolio source, artwork or proprietary Mosaic assets are copied.

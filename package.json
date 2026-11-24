@@ -1,8 +1,8 @@
 {
-  "name": "morrowvale",
+  "name": "vinith-portfolio",
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node scripts/verify-game.mjs"
+    "test": "node scripts/verify-portfolio.mjs"
   }
 }
