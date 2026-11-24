@@ -1,157 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#11110f">
-<meta name="description" content="Vinith Reddy Banda — software engineer building thoughtful products across mobile, web and AI.">
-<meta property="og:title" content="Vinith Reddy — Software, with intent.">
-<meta property="og:description" content="Selected work, experiments and the thinking behind them.">
-<meta property="og:type" content="website">
-<title>Vinith Reddy — Software, with intent.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
-<link rel="icon" href="./favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="./style.css">
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-<script defer src="./app.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>hello</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      color: #000;
+      font: 400 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+  </style>
 </head>
-<body>
-<div class="grain" aria-hidden="true"></div>
-<div class="cursor" aria-hidden="true"><span></span></div>
-<div class="site-shell">
-  <header class="topbar">
-    <a class="wordmark" href="#top" aria-label="Vinith Reddy home"><span class="mark">v.</span><span>VINITH REDDY</span></a>
-    <span class="topbar-note">INDEPENDENT SOFTWARE ENGINEER <i></i> INDIA</span>
-    <nav class="topnav" aria-label="Main navigation">
-      <a href="#work">WORK <sup>05</sup></a>
-      <a href="#about">ABOUT</a>
-      <a href="#contact">CONTACT <span class="arrow">↗</span></a>
-    </nav>
-    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
-  </header>
-
-  <main id="top">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-kicker reveal"><span class="status-dot"></span> AVAILABLE FOR INTERESTING PROBLEMS <span class="mono">2026 — NOW</span></div>
-      <div class="hero-main">
-        <div class="hero-copy">
-          <p class="eyebrow reveal">ENGINEERING / PRODUCT / CURIOSITY</p>
-          <h1 id="hero-title" class="hero-title"><span class="line-mask"><span class="hero-line">SOFTWARE</span></span><span class="line-mask"><span class="hero-line italic">WITH INTENT.</span></span></h1>
-          <div class="hero-bottom reveal">
-            <p>I build useful things at the intersection of <em>engineering, design and emerging technology.</em> From the first rough idea to the details that make a product feel right.</p>
-            <a class="round-link" href="#work" aria-label="Explore selected work"><span>↓</span></a>
-          </div>
-        </div>
-        <div class="hero-art" aria-label="An abstract five-part object that separates into project fragments">
-          <div class="art-caption mono"><span>FIG. 01</span><span>IDEAS, IN PIECES.</span></div>
-          <div class="shard-stage" id="shard-stage">
-            <div class="shard shard-a"><span class="shard-no">01</span><b>BUILD</b><i>01 / 05</i></div>
-            <div class="shard shard-b"><span class="shard-no">02</span><b>MAKE</b><i>02 / 05</i></div>
-            <div class="shard shard-c"><span class="shard-no">03</span><b>THINK</b><i>03 / 05</i></div>
-            <div class="shard shard-d"><span class="shard-no">04</span><b>REFINE</b><i>04 / 05</i></div>
-            <div class="shard shard-e"><span class="shard-no">05</span><b>SHIP</b><i>05 / 05</i></div>
-            <div class="shard-core"><span>V</span></div>
-          </div>
-          <div class="art-foot mono"><span>ONE PRACTICE</span><span>FIVE DIRECTIONS</span></div>
-        </div>
-      </div>
-      <div class="hero-meta mono"><span>SCROLL TO DECONSTRUCT</span><span class="scroll-line"></span><span>17° 23' N / 78° 29' E</span></div>
-    </section>
-
-    <section class="manifesto" id="manifesto">
-      <div class="section-index mono reveal"><span>00 / PRINCIPLE</span><span>THE WORK IS THE POINT</span></div>
-      <div class="manifesto-copy">
-        <p class="manifesto-overline reveal">NOT JUST LINES OF CODE.</p>
-        <h2 class="manifesto-title"><span class="line-mask"><span>Good software is</span></span><span class="line-mask"><span>an accumulation of</span></span><span class="line-mask"><span class="serif-italic">small decisions.</span></span></h2>
-        <div class="manifesto-aside reveal"><span class="aside-rule"></span><p>Clear systems. Considered interfaces. Reliable foundations. I care about the invisible work as much as the thing people see.</p></div>
-      </div>
-    </section>
-
-    <section class="deconstruct" id="deconstruct">
-      <div class="section-index mono"><span>01 / THE METHOD</span><span>SCROLL-DRIVEN STUDY</span></div>
-      <div class="deconstruct-layout">
-        <div class="deconstruct-copy">
-          <p class="eyebrow">A PRACTICE, NOT A TEMPLATE</p>
-          <h2>Five fragments.<br><em>One body of work.</em></h2>
-          <p class="deconstruct-text">Every project starts as a different problem. Pull the pieces apart and the details appear. Bring them together and you see the way I work.</p>
-          <div class="fragment-count mono"><span id="fragment-count">01</span><span> / 05 FRAGMENTS REVEALED</span></div>
-        </div>
-        <div class="fragment-visual" id="fragment-visual">
-          <div class="fragment-orbit orbit-one"></div><div class="fragment-orbit orbit-two"></div>
-          <div class="fragment-piece piece-one"><small>01 / MOBILE</small><strong>SIMPMUSIC</strong><span>INTERACTION SYSTEMS</span></div>
-          <div class="fragment-piece piece-two"><small>02 / VOICE</small><strong>LIVEVOICEX</strong><span>REAL-TIME COMMUNICATION</span></div>
-          <div class="fragment-piece piece-three"><small>03 / AI</small><strong>JOURNAL AI</strong><span>PERSONAL KNOWLEDGE</span></div>
-          <div class="fragment-piece piece-four"><small>04 / ANDROID</small><strong>STATUS SAVER</strong><span>MEDIA EXPERIENCE</span></div>
-          <div class="fragment-piece piece-five"><small>05 / TOOLING</small><strong>CONVERTER</strong><span>UTILITY DESIGN</span></div>
-          <div class="fragment-center"><span>V.</span></div>
-        </div>
-      </div>
-      <div class="deconstruct-foot mono"><span>SCROLL POSITION DRIVES THE COMPOSITION</span><span>NO AUTOPLAY. NO LOOP.</span></div>
-    </section>
-
-    <section class="work" id="work">
-      <div class="section-index mono"><span>02 / SELECTED WORK</span><span>OPEN A PROJECT TO GO DEEPER</span></div>
-      <div class="work-heading"><h2>Things made<br><em>to be used.</em></h2><p class="mono">A SELECTION / 2024—2026</p></div>
-      <div class="work-list">
-        <article class="work-item" data-project="simp">
-          <button class="work-trigger" aria-expanded="false">
-            <span class="work-number mono">01</span><span class="work-name">SimpMusic</span><span class="work-type">ANDROID / OPEN SOURCE</span><span class="work-year mono">2026</span><span class="work-plus">+</span>
-          </button>
-          <div class="work-detail"><div class="detail-visual visual-music"><div class="phone-frame"><div class="phone-island"></div><div class="music-art"><span>SIMPLER<br>LISTENING.</span><i>◒</i></div><div class="music-lines"><i></i><i></i><i></i></div><div class="music-controls">◁　Ⅱ　▷</div></div></div><div class="detail-copy"><p class="eyebrow">01 / INTERACTION ENGINEERING</p><h3>A listening experience,<br><em>rebuilt from the details.</em></h3><p>Working on a music player fork with a focus on coherent interface systems: search behavior, keyboard-aware layouts, player surfaces, navigation gestures and consistent visual language.</p><div class="detail-tags"><span>KOTLIN</span><span>JETPACK COMPOSE</span><span>ANDROID</span><span>CI / CD</span></div><a class="text-link" href="https://github.com/vinithreddybanda/SimpMusic" target="_blank" rel="noreferrer">EXPLORE REPOSITORY ↗</a></div></div>
-        </article>
-        <article class="work-item" data-project="voice">
-          <button class="work-trigger" aria-expanded="false"><span class="work-number mono">02</span><span class="work-name">LiveVoiceX</span><span class="work-type">REAL-TIME / WEB</span><span class="work-year mono">2025</span><span class="work-plus">+</span></button>
-          <div class="work-detail"><div class="detail-visual visual-voice"><div class="voice-orb"><div class="voice-wave"></div><div class="voice-wave wave-two"></div><div class="voice-core">LVX</div></div><div class="voice-label mono">LIVE · 40+ LANGUAGES</div></div><div class="detail-copy"><p class="eyebrow">02 / REAL-TIME COMMUNICATION</p><h3>Language should not<br><em>be the latency.</em></h3><p>A live voice experience built around streaming transcription and multilingual interaction. The interface is designed to keep the conversation, not the controls, in focus.</p><div class="detail-tags"><span>REACT</span><span>TYPESCRIPT</span><span>DEEPGRAM</span><span>WEB AUDIO</span></div><a class="text-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">VIEW GITHUB ↗</a></div></div>
-        </article>
-        <article class="work-item" data-project="journal">
-          <button class="work-trigger" aria-expanded="false"><span class="work-number mono">03</span><span class="work-name">JournalAI</span><span class="work-type">AI / FULL STACK</span><span class="work-year mono">2025</span><span class="work-plus">+</span></button>
-          <div class="work-detail"><div class="detail-visual visual-journal"><div class="journal-sheet"><span class="mono">MONDAY, 09:42</span><strong>Make space<br>for the signal.</strong><p>Thoughts, notes and the things worth remembering.</p><div class="journal-scribble"></div></div></div><div class="detail-copy"><p class="eyebrow">03 / PERSONAL KNOWLEDGE</p><h3>A journal that can<br><em>think alongside you.</em></h3><p>An AI-assisted journaling project connecting a modern web interface to persistent data and language-model workflows. Also explored containerization and deployment infrastructure.</p><div class="detail-tags"><span>NEXT.JS</span><span>SUPABASE</span><span>GROQ</span><span>DOCKER</span><span>KUBERNETES</span></div><a class="text-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">VIEW GITHUB ↗</a></div></div>
-        </article>
-        <article class="work-item" data-project="status">
-          <button class="work-trigger" aria-expanded="false"><span class="work-number mono">04</span><span class="work-name">WhatsApp Status Saver</span><span class="work-type">ANDROID / MEDIA</span><span class="work-year mono">2025</span><span class="work-plus">+</span></button>
-          <div class="work-detail"><div class="detail-visual visual-status"><div class="status-grid"><div></div><div></div><div></div><div></div><div></div><div></div></div><span class="status-caption mono">A GALLERY THAT GETS OUT OF THE WAY.</span></div><div class="detail-copy"><p class="eyebrow">04 / MOBILE PRODUCT DESIGN</p><h3>Media first.<br><em>Friction last.</em></h3><p>An Android utility focused on a dynamic media gallery, full-screen viewing, natural sharing actions and a responsive interface built around real device behavior.</p><div class="detail-tags"><span>KOTLIN</span><span>JETPACK COMPOSE</span><span>ANDROID</span><span>GRADLE</span></div><a class="text-link" href="https://github.com/vinithreddybanda/WhatsapStatusSaver" target="_blank" rel="noreferrer">EXPLORE REPOSITORY ↗</a></div></div>
-        </article>
-        <article class="work-item" data-project="converter">
-          <button class="work-trigger" aria-expanded="false"><span class="work-number mono">05</span><span class="work-name">Versatile Converter</span><span class="work-type">UTILITY / WEB</span><span class="work-year mono">2024</span><span class="work-plus">+</span></button>
-          <div class="work-detail"><div class="detail-visual visual-converter"><div class="convert-panel"><span>01　INPUT</span><strong>128.00</strong><i>↓</i><span>02　OUTPUT</span><strong>0.128</strong><small>UNIT CONVERSION / INSTANT</small></div></div><div class="detail-copy"><p class="eyebrow">05 / PRODUCT THINKING</p><h3>Small tools.<br><em>Less thinking required.</em></h3><p>A practical conversion utility exploring a direct workflow: enter a value, choose a conversion and get a clear result without interface clutter.</p><div class="detail-tags"><span>WEB</span><span>JAVASCRIPT</span><span>UTILITY DESIGN</span></div><a class="text-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">VIEW GITHUB ↗</a></div></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="approach" id="approach">
-      <div class="section-index mono"><span>03 / HOW I THINK</span><span>THE WORK UNDER THE WORK</span></div>
-      <h2>Make it work.<br>Make it clear.<br><em>Make it last.</em></h2>
-      <div class="approach-grid">
-        <div class="approach-item"><span class="mono">01 — SYSTEMS</span><h3>Understand the shape.</h3><p>Start with the real problem. Trace the data, state, edge cases and constraints before adding another abstraction.</p></div>
-        <div class="approach-item"><span class="mono">02 — INTERFACES</span><h3>Respect the details.</h3><p>Motion, spacing, feedback and responsiveness are part of the product, not decoration added at the end.</p></div>
-        <div class="approach-item"><span class="mono">03 — DELIVERY</span><h3>Ship the whole thing.</h3><p>Build, test, automate and observe. A feature is not finished just because it works on one screen.</p></div>
-      </div>
-    </section>
-
-    <section class="about" id="about">
-      <div class="section-index mono"><span>04 / A LITTLE CONTEXT</span><span>THE PERSON BEHIND THE BUILDS</span></div>
-      <div class="about-layout">
-        <div class="about-title"><p class="eyebrow">ENGINEER IN PROGRESS</p><h2>Curious by<br><em>construction.</em></h2></div>
-        <div class="about-copy"><p class="about-lead">I'm Vinith, an IT engineer interested in building software that feels considered from the first interaction to the underlying system.</p><p>My work moves between Android, full-stack web development, AI integrations and developer tooling. I enjoy taking a complicated workflow, understanding its moving parts and making the result feel simple.</p><div class="education"><div><span class="mono">2023 — PRESENT</span><strong>B.E. Information Technology</strong><small>Chaitanya Bharathi Institute of Technology</small></div><div><span class="mono">2020 — 2023</span><strong>Diploma, Computer Engineering</strong><small>Government Polytechnic College, Warangal</small></div></div></div>
-      </div>
-      <div class="recognition"><span class="mono">SELECTED RECOGNITION</span><div><strong>TOP 100</strong><small>Microsoft AI for Good · Blend360</small></div><div><strong>#06</strong><small>GFG HackWeek</small></div><div><strong>STATE LEVEL</strong><small>NxtWave Buildathon</small></div><div><strong>ARCADE</strong><small>Google Cloud Skills</small></div></div>
-    </section>
-
-    <section class="stack" id="stack">
-      <div class="section-index mono"><span>05 / TOOLS OF THE TRADE</span><span>USED TO SOLVE, NOT TO DECORATE</span></div>
-      <div class="stack-cloud"><span> C# </span><span>.NET</span><span>ASP.NET CORE</span><span>REACT</span><span>ANGULAR</span><span>TYPESCRIPT</span><span>KOTLIN</span><span>JETPACK COMPOSE</span><span>SQL SERVER</span><span>SUPABASE</span><span>DOCKER</span><span>KUBERNETES</span><span>AZURE</span><span>GITHUB ACTIONS</span><span>THREE.JS</span><span>GSAP</span></div>
-    </section>
-
-    <section class="contact" id="contact">
-      <div class="section-index mono"><span>06 / NEXT</span><span>OPEN TO GOOD PROBLEMS</span></div>
-      <div class="contact-main"><p class="eyebrow">HAVE SOMETHING INTERESTING?</p><h2>Let's make<br><em>something matter.</em></h2><a class="contact-link" href="https://github.com/vinithreddybanda" target="_blank" rel="noreferrer">FIND ME ON GITHUB <span>↗</span></a></div>
-      <footer class="footer"><a class="wordmark" href="#top"><span class="mark">v.</span><span>VINITH REDDY</span></a><span class="mono">DESIGNED & BUILT WITH INTENT</span><a class="mono back-top" href="#top">BACK TO TOP ↑</a><span class="mono">© 2026</span></footer>
-    </section>
-  </main>
-</div>
-<div class="mobile-menu" aria-hidden="true"><a href="#work">WORK</a><a href="#about">ABOUT</a><a href="#contact">CONTACT ↗</a></div>
-</body>
+<body>hello</body>
 </html>

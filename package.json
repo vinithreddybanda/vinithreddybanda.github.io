@@ -1,8 +1,0 @@
-{
-  "name": "vinith-portfolio",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "node scripts/verify-portfolio.mjs"
-  }
-}
