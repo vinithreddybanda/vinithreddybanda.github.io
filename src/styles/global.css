@@ -1596,3 +1596,43 @@ body {
   .intro h1 { font-size: 27px; }
   .intro-copy { font-size: 12px; }
 }
+
+
+/* Small, friendly brand marks for project and update rows */
+.project-icon,
+.update-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 11px;
+  background: var(--surface);
+}
+.project-icon img,
+.update-mark img {
+  display: block;
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+}
+.project-icon img { width: 27px; height: 27px; }
+.update-mark img { width: 25px; height: 25px; }
+.project-icon,
+.update-mark { color: var(--text); }
+@media (max-width: 600px) {
+  .project-icon,
+  .update-mark {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+  .project-icon img,
+  .update-mark img {
+    width: 24px;
+    height: 24px;
+  }
+}
