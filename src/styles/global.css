@@ -519,3 +519,55 @@ html[data-theme="light"] .playing-indicator.active { background: #222; box-shado
 }
 .cognizant-logo img { filter: grayscale(1) contrast(1.15); }
 .poly-logo img { padding: 0; object-fit: cover; }
+
+
+/* Aditya Rahmad / Sora palette adaptation */
+:root {
+  color-scheme: dark;
+  --bg: oklch(0.1677 0.0027 247.99);
+  --surface: oklch(0.2178 0 0);
+  --panel: oklch(0.263 0 0);
+  --text: oklch(0.9672 0 0);
+  --muted: oklch(0.8266 0 0);
+  --subtle: oklch(0.68 0 0);
+  --line: oklch(0.3446 0 0);
+  --line-soft: oklch(0.29 0 0);
+  --accent: oklch(0.546 0.245 262.881);
+  --accent-strong: oklch(0.68 0.19 262.881);
+  --dock-bg: color-mix(in oklch, oklch(0.2178 0 0) 88%, transparent);
+  --shadow: 0 14px 40px rgba(0,0,0,.28);
+  --positive: oklch(0.765 0.177 163.223);
+  --negative: oklch(0.712 0.194 13.428);
+}
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: oklch(1 0 0);
+  --surface: oklch(0.9672 0 0);
+  --panel: oklch(0.94 0 0);
+  --text: oklch(0.2002 0 0);
+  --muted: oklch(0.4386 0 0);
+  --subtle: oklch(0.58 0 0);
+  --line: oklch(0.9067 0 0);
+  --line-soft: oklch(0.94 0 0);
+  --accent: oklch(0.546 0.245 262.881);
+  --accent-strong: oklch(0.48 0.22 262.881);
+  --dock-bg: color-mix(in oklch, white 90%, transparent);
+  --shadow: 0 14px 40px rgba(0,0,0,.08);
+  --positive: oklch(0.596 0.145 163.225);
+  --negative: oklch(0.586 0.253 17.585);
+}
+.playing-indicator.active {
+  background: var(--positive);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--positive) 14%, transparent);
+}
+html[data-theme="light"] .playing-indicator.active {
+  background: var(--positive);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--positive) 12%, transparent);
+}
+.equalizer i { background: var(--accent); }
+.state-open {
+  border-color: color-mix(in oklch, var(--positive) 35%, var(--line));
+  background: color-mix(in oklch, var(--positive) 12%, transparent);
+  color: var(--positive);
+}
+.state-closed { background: var(--surface); color: var(--muted); }
