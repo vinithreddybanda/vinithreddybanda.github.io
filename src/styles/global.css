@@ -1392,3 +1392,16 @@ html[data-theme="light"] .commit-legend .level-4 { background: #222222; }
 
 /* Keep the hero centered, but set its paragraph copy to a readable left edge */
 .intro-copy { text-align: left; }
+
+/* Align every hero text element to the same left edge */
+.intro h1,
+.intro .role,
+.intro .cozy-note,
+.intro-copy {
+  width: 100%;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.intro .role { justify-content: flex-start; }
