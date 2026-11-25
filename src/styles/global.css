@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Kalam:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap");
 
 :root {
   color-scheme: dark;
@@ -14,9 +14,9 @@
   --accent-strong: #d2dcb8;
   --dock-bg: rgba(31, 30, 25, .88);
   --shadow: 0 12px 38px rgba(0,0,0,.24);
-  --sans: "Geist", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
-  --mono: "Geist Mono", ui-monospace, monospace;
-  --hand: "Kalam", cursive;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+  --mono: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --hand: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 html[data-theme="light"] {
   color-scheme: light;
@@ -307,4 +307,86 @@ html[data-theme="light"] .playing-indicator.active { background: #111; box-shado
   .timeline-mark { flex-basis: 33px; width: 33px; height: 33px; }
   .timeline-content h3 { font-size: 12px; }
   .timeline-description { font-size: 9px; }
+}
+
+
+/* Quiet, warm neutrals: softened charcoal and oat instead of stark black/white */
+:root {
+  color-scheme: dark;
+  --bg: #242321;
+  --surface: #2b2926;
+  --panel: #33312d;
+  --text: #e9e4da;
+  --muted: #b9b2a7;
+  --subtle: #918a80;
+  --line: #403d37;
+  --line-soft: #37342f;
+  --accent: #b7b29e;
+  --accent-strong: #d0cabb;
+  --dock-bg: rgba(43,41,38,.88);
+  --shadow: 0 12px 34px rgba(20,18,15,.2);
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+  --mono: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --hand: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f1eee7;
+  --surface: #f7f4ed;
+  --panel: #e9e5dc;
+  --text: #37342f;
+  --muted: #716c63;
+  --subtle: #999287;
+  --line: #e1dcd1;
+  --line-soft: #e9e4da;
+  --accent: #777b68;
+  --accent-strong: #626653;
+  --dock-bg: rgba(247,244,237,.9);
+  --shadow: 0 12px 34px rgba(66,57,43,.09);
+}
+body, button, input, textarea, select { font-family: var(--sans); }
+.intro h1, .footer-intro h2, .editorial-heading, .project-name-wrap h3,
+.timeline-content h3, .education-copy h3, .update-copy strong {
+  font-family: var(--sans);
+  font-feature-settings: "ss01" 1;
+}
+.intro h1 { font-weight: 560; letter-spacing: -.055em; }
+.cozy-note { font-family: var(--sans); font-size: 12px; color: var(--subtle); }
+.role, .update-date, .project-meta, .timeline-tag, .listening-state, .commit-caption {
+  font-family: var(--sans);
+}
+.commit-cell.level-0, .commit-legend .level-0 { background: #403d37; }
+.commit-cell.level-1, .commit-legend .level-1 { background: #68645b; }
+.commit-cell.level-2, .commit-legend .level-2 { background: #918b7e; }
+.commit-cell.level-3, .commit-legend .level-3 { background: #b9b2a5; }
+.commit-cell.level-4, .commit-legend .level-4 { background: #d8d0c1; }
+html[data-theme="light"] .commit-cell.level-0, html[data-theme="light"] .commit-legend .level-0 { background: #e7e2d8; }
+html[data-theme="light"] .commit-cell.level-1, html[data-theme="light"] .commit-legend .level-1 { background: #c9c2b5; }
+html[data-theme="light"] .commit-cell.level-2, html[data-theme="light"] .commit-legend .level-2 { background: #a39b8d; }
+html[data-theme="light"] .commit-cell.level-3, html[data-theme="light"] .commit-legend .level-3 { background: #777467; }
+html[data-theme="light"] .commit-cell.level-4, html[data-theme="light"] .commit-legend .level-4 { background: #4c4a40; }
+.playing-indicator.active { background: #b7b29e; box-shadow: 0 0 0 3px rgba(183,178,158,.13); }
+html[data-theme="light"] .playing-indicator.active { background: #777b68; box-shadow: 0 0 0 3px rgba(119,123,104,.12); }
+.equalizer i { background: var(--accent); }
+.education-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.education-card { overflow: hidden; border: 1px solid var(--line-soft); border-radius: 16px; background: var(--surface); }
+.education-photo-link { display: block; overflow: hidden; aspect-ratio: 16 / 9; background: var(--panel); }
+.education-photo { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+.education-photo-link:hover .education-photo { transform: scale(1.035); }
+.education-copy { padding: 13px 14px 15px; }
+.education-copy h3 { margin: 0; color: var(--text); font-size: 13px; line-height: 1.45; font-weight: 560; letter-spacing: -.025em; }
+.education-copy .timeline-role { margin-top: 6px; }
+.education-copy .timeline-description { margin-top: 3px; }
+.career-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 11px; }
+.career-steps > div { display: flex; align-items: flex-start; gap: 9px; }
+.career-dot { flex: 0 0 7px; width: 7px; height: 7px; margin-top: 6px; border-radius: 50%; background: var(--accent); }
+.career-steps p { display: flex; flex-direction: column; gap: 2px; margin: 0; line-height: 1.45; }
+.career-steps strong { color: var(--text); font-size: 11px; font-weight: 550; }
+.career-steps small { color: var(--subtle); font-size: 10px; }
+@media (max-width: 600px) {
+  .education-grid { grid-template-columns: 1fr; gap: 10px; }
+  .education-card { display: grid; grid-template-columns: 112px minmax(0,1fr); align-items: stretch; }
+  .education-photo-link { height: 100%; min-height: 112px; aspect-ratio: auto; }
+  .education-copy { display: flex; flex-direction: column; justify-content: center; padding: 10px 11px; }
+  .education-copy h3 { font-size: 12px; }
 }
