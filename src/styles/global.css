@@ -1303,7 +1303,7 @@ html, body { background: var(--bg); color: var(--text); }
   justify-content: center;
   align-items: center;
   padding: 24px 0 48px;
-  text-align: center;
+  text-align: left;
 }
 .intro h1 {
   max-width: 100%;
@@ -1388,3 +1388,7 @@ html[data-theme="light"] .commit-legend .level-4 { background: #222222; }
   .intro h1 { font-size: 31px; }
   .intro-copy { font-size: 11px; }
 }
+
+
+/* Keep the hero centered, but set its paragraph copy to a readable left edge */
+.intro-copy { text-align: left; }
