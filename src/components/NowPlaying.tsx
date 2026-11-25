@@ -19,7 +19,6 @@ type ListeningStatus = {
 };
 
 const STATUS_URL = "https://vinith-music-status.vinithreddy08-123.workers.dev/status";
-const HISTORY_KEY = "vinith-listening-history-v1";
 
 function trackKey(track: Track) {
   return track.id || `${track.title}::${track.artist}`;
@@ -32,50 +31,52 @@ export default function NowPlaying() {
   useEffect(() => {
     let mounted = true;
 
-    try {
-      const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]") as Track[];
-      if (Array.isArray(saved)) setHistory(saved.slice(0, 3));
-    } catch {
-      localStorage.removeItem(HISTORY_KEY);
-    }
-
     const refresh = async () => {
       try {
         const response = await fetch(STATUS_URL, { cache: "no-store" });
         if (!response.ok) return;
+
         const next = (await response.json()) as ListeningStatus;
         if (!mounted) return;
 
-        setStatus((previous) => next.track ? next : previous ? { ...next, track: previous.track, isPlaying: false, status: "last_played" } : next);
+        setStatus((previous) =>
+          next.track
+            ? next
+            : previous?.track
+              ? { ...next, track: previous.track, isPlaying: false, status: "last_played" }
+              : next
+        );
 
         if (next.track) {
           setHistory((previous) => {
             const key = trackKey(next.track!);
-            const updated = [next.track!, ...previous.filter((item) => trackKey(item) !== key)].slice(0, 3);
-            try { localStorage.setItem(HISTORY_KEY, JSON.stringify(updated)); } catch { /* Storage can be unavailable. */ }
-            return updated;
+            return [next.track!, ...previous.filter((item) => trackKey(item) !== key)].slice(0, 3);
           });
         }
       } catch {
-        // Preserve the last successful status and listening history.
+        // Keep the last successful status while the Worker is temporarily unavailable.
       }
     };
 
     void refresh();
-    const interval = window.setInterval(() => void refresh(), 30_000);
-    const onFocus = () => void refresh();
-    const onVisibility = () => {
+
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === "visible") void refresh();
+    }, 2000);
+
+    const handleFocus = () => void refresh();
+    const handleVisibility = () => {
       if (document.visibilityState === "visible") void refresh();
     };
 
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       mounted = false;
       window.clearInterval(interval);
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 
@@ -121,13 +122,12 @@ export default function NowPlaying() {
         <div className="listening-empty">
           <div className="album-art album-empty"><span>♪</span></div>
           <div className="listening-details">
-            <div className="listening-state">LISTENING HISTORY</div>
-            <strong>Nothing played here yet</strong>
-            <span className="listening-artist">Your recent tracks will appear here.</span>
+            <div className="listening-state">LISTENING</div>
+            <strong>Nothing playing right now</strong>
+            <span className="listening-artist">Your current track will appear here.</span>
           </div>
         </div>
       )}
-      <p className="listening-footnote">Recent listening is remembered on this device.</p>
     </motion.div>
   );
 }
