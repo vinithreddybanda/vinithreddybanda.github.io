@@ -19,12 +19,25 @@ type ListeningStatus = {
 };
 
 const STATUS_URL = "https://vinith-music-status.vinithreddy08-123.workers.dev/status";
+const HISTORY_KEY = "vinith-listening-history-v1";
+
+function trackKey(track: Track) {
+  return track.id || `${track.title}::${track.artist}`;
+}
 
 export default function NowPlaying() {
   const [status, setStatus] = useState<ListeningStatus | null>(null);
+  const [history, setHistory] = useState<Track[]>([]);
 
   useEffect(() => {
     let mounted = true;
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]") as Track[];
+      if (Array.isArray(saved)) setHistory(saved.slice(0, 3));
+    } catch {
+      localStorage.removeItem(HISTORY_KEY);
+    }
 
     const refresh = async () => {
       try {
@@ -33,13 +46,18 @@ export default function NowPlaying() {
         const next = (await response.json()) as ListeningStatus;
         if (!mounted) return;
 
-        setStatus((previous) => {
-          if (next.track) return next;
-          if (previous?.track) return { ...next, track: previous.track, isPlaying: false, status: "last_played" };
-          return next;
-        });
+        setStatus((previous) => next.track ? next : previous ? { ...next, track: previous.track, isPlaying: false, status: "last_played" } : next);
+
+        if (next.track) {
+          setHistory((previous) => {
+            const key = trackKey(next.track!);
+            const updated = [next.track!, ...previous.filter((item) => trackKey(item) !== key)].slice(0, 3);
+            try { localStorage.setItem(HISTORY_KEY, JSON.stringify(updated)); } catch { /* Storage can be unavailable. */ }
+            return updated;
+          });
+        }
       } catch {
-        // Keep the last successful response visible when the status service is unavailable.
+        // Preserve the last successful status and listening history.
       }
     };
 
@@ -61,43 +79,55 @@ export default function NowPlaying() {
     };
   }, []);
 
-  const track = status?.track;
-  const isPlaying = Boolean(status?.isPlaying && track);
+  const isPlaying = Boolean(status?.isPlaying && status.track);
+  const current = status?.track ?? history[0] ?? null;
+  const recent = history.filter((track) => !current || trackKey(track) !== trackKey(current)).slice(0, 2);
+  const tracks = current ? [current, ...recent] : recent;
 
   return (
     <motion.div
-      className="listening-card"
+      className="listening-panel"
       initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
-      {track ? (
-        <>
-          <div className="album-art">
-            {track.artwork ? <img src={track.artwork} alt="" loading="lazy" /> : <span>{track.title.slice(0, 1).toUpperCase()}</span>}
-          </div>
-          <div className="listening-details">
-            <div className="listening-state"><span className={isPlaying ? "playing-indicator active" : "playing-indicator"} />{isPlaying ? "NOW PLAYING" : "LAST PLAYED"}</div>
-            <strong>{track.title}</strong>
-            <span className="listening-artist">{track.artist}{track.album ? ` · ${track.album}` : ""}</span>
-          </div>
-          <div className="listening-action">
-            {isPlaying && <span className="equalizer" aria-label="Playing"><i /><i /><i /><i /></span>}
-            {track.url && <a href={track.url} target="_blank" rel="noreferrer" aria-label="Open track">↗</a>}
-          </div>
-        </>
+      {tracks.length ? (
+        <div className="listening-list">
+          {tracks.map((track, index) => {
+            const active = index === 0 && isPlaying;
+            return (
+              <div className={`listening-row ${index === 0 ? "listening-current" : ""}`} key={trackKey(track)}>
+                <div className="album-art">
+                  {track.artwork ? <img src={track.artwork} alt="" loading="lazy" /> : <span>{track.title.slice(0, 1).toUpperCase()}</span>}
+                </div>
+                <div className="listening-details">
+                  <div className="listening-state">
+                    <span className={active ? "playing-indicator active" : "playing-indicator"} />
+                    {index === 0 ? (active ? "NOW PLAYING" : "LAST PLAYED") : index === 1 ? "PREVIOUS" : "EARLIER"}
+                  </div>
+                  <strong>{track.title}</strong>
+                  <span className="listening-artist">{track.artist}{track.album ? ` · ${track.album}` : ""}</span>
+                </div>
+                <div className="listening-action">
+                  {active && <span className="equalizer" aria-label="Playing"><i /><i /><i /><i /></span>}
+                  {track.url && <a href={track.url} target="_blank" rel="noreferrer" aria-label="Open track">↗</a>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       ) : (
-        <>
+        <div className="listening-empty">
           <div className="album-art album-empty"><span>♪</span></div>
           <div className="listening-details">
-            <div className="listening-state">LISTENING STATUS</div>
-            <strong>Nothing playing yet</strong>
-            <span className="listening-artist">The next track will show up here.</span>
+            <div className="listening-state">LISTENING HISTORY</div>
+            <strong>Nothing played here yet</strong>
+            <span className="listening-artist">Your recent tracks will appear here.</span>
           </div>
-          <span className="listening-action muted">SIMPMUSIC</span>
-        </>
+        </div>
       )}
+      <p className="listening-footnote">Recent listening is remembered on this device.</p>
     </motion.div>
   );
 }
