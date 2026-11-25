@@ -1684,3 +1684,52 @@ body {
   .profile-logo.cognizant-logo img { width: 33px; }
   .profile-logo.poly-logo img { width: 29px; height: 29px; }
 }
+
+
+/* Edge-to-edge logo tiles. The artwork itself fills the complete icon area. */
+.project-icon,
+.update-mark,
+.profile-logo {
+  display: block !important;
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.project-icon img,
+.update-mark img,
+.profile-logo img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  filter: none !important;
+}
+.profile-logo.cognizant-logo img {
+  object-fit: contain !important;
+  padding: 2px !important;
+}
+@media (max-width: 600px) {
+  .project-icon,
+  .update-mark,
+  .profile-logo {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 7px !important;
+  }
+}
