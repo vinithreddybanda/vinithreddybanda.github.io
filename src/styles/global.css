@@ -508,3 +508,14 @@ html[data-theme="light"] .playing-indicator.active { background: #222; box-shado
   .profile-detail, .role-history-item small { font-size: 9px; }
   .role-history { gap: 9px; margin-top: 10px; }
 }
+
+/* Use the mark portion of wide institutional/company wordmarks as compact square icons */
+.cognizant-logo img, .cbit-logo img {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  object-fit: cover;
+  object-position: left center;
+}
+.cognizant-logo img { filter: grayscale(1) contrast(1.15); }
+.poly-logo img { padding: 0; object-fit: cover; }
