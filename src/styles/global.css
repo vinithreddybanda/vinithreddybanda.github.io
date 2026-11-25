@@ -390,3 +390,121 @@ html[data-theme="light"] .playing-indicator.active { background: #777b68; box-sh
   .education-copy { display: flex; flex-direction: column; justify-content: center; padding: 10px 11px; }
   .education-copy h3 { font-size: 12px; }
 }
+
+
+/* Portfolio refinement: restrained monochrome, list-first information design */
+:root {
+  color-scheme: dark;
+  --bg: #101010;
+  --surface: #171717;
+  --panel: #202020;
+  --text: #f0f0f0;
+  --muted: #b0b0b0;
+  --subtle: #818181;
+  --line: #333333;
+  --line-soft: #272727;
+  --accent: #d4d4d4;
+  --accent-strong: #f0f0f0;
+  --dock-bg: rgba(23,23,23,.9);
+  --shadow: 0 14px 40px rgba(0,0,0,.28);
+}
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #fafafa;
+  --panel: #f2f2f2;
+  --text: #151515;
+  --muted: #626262;
+  --subtle: #929292;
+  --line: #e4e4e4;
+  --line-soft: #ededed;
+  --accent: #333333;
+  --accent-strong: #111111;
+  --dock-bg: rgba(255,255,255,.92);
+  --shadow: 0 14px 40px rgba(0,0,0,.08);
+}
+body { background: var(--bg); }
+.intro h1, .footer-intro h2, .editorial-heading, .project-name-wrap h3,
+.timeline-content h3, .profile-main h3, .update-copy strong {
+  font-family: var(--sans);
+  font-weight: 560;
+  letter-spacing: -.045em;
+}
+.intro h1 { letter-spacing: -.06em; font-weight: 580; }
+.intro-copy a, .source-link, .footer-socials a, u {
+  text-decoration: none;
+  text-decoration-line: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='8' viewBox='0 0 120 8'%3E%3Cpath d='M1 5.8 C13 3.2 19 6.5 31 4.7 S52 5.8 64 4.4 S85 6.1 98 4.3 S111 5.2 119 3.8' fill='none' stroke='%23777777' stroke-width='1.15' stroke-linecap='round'/%3E%3Cpath d='M2 7 C17 5.7 25 7.3 40 5.9 S66 7 80 5.6 S104 6.7 118 5.4' fill='none' stroke='%23777777' stroke-width='.45' opacity='.48' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 100% 7px;
+  background-position: 0 100%;
+  padding-bottom: 4px;
+}
+.profile-list { display: flex; flex-direction: column; }
+.profile-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  min-width: 0;
+  padding: 15px 2px;
+  border-bottom: 1px solid var(--line-soft);
+  color: inherit;
+  text-decoration: none;
+  transition: background .2s ease;
+}
+.profile-row:first-child { padding-top: 5px; }
+.profile-row:last-child { border-bottom: 0; }
+.profile-row:hover .profile-arrow { transform: translate(2px,-2px); color: var(--text); }
+.profile-logo {
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: #151515;
+}
+.profile-logo img { display: block; width: 100%; height: 100%; padding: 5px; object-fit: contain; filter: grayscale(1); }
+.cognizant-logo img { padding: 7px 4px; }
+.cbit-logo img { padding: 4px; }
+.poly-logo { background: var(--panel); color: var(--text); font-size: 12px; font-weight: 650; letter-spacing: -.08em; }
+.profile-main { min-width: 0; flex: 1; }
+.profile-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.profile-main h3 { margin: 0; color: var(--text); font-size: 14px; line-height: 1.45; }
+.profile-meta { flex: 0 0 auto; color: var(--subtle); font-size: 9px; letter-spacing: .045em; }
+.profile-subtitle { margin: 3px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.profile-detail { margin: 4px 0 0; color: var(--subtle); font-size: 10px; }
+.profile-arrow { margin: 3px 2px 0 0; color: var(--subtle); font-size: 13px; transition: transform .2s ease, color .2s ease; }
+.role-history { position: relative; display: flex; flex-direction: column; gap: 11px; margin: 13px 0 2px 3px; padding-left: 17px; }
+.role-history::before { position: absolute; top: 5px; bottom: 6px; left: 3px; width: 1px; background: var(--line); content: ""; }
+.role-history-item { position: relative; display: flex; gap: 10px; }
+.role-history-dot { position: absolute; top: 5px; left: -17px; width: 7px; height: 7px; border: 1px solid var(--muted); border-radius: 50%; background: var(--bg); }
+.role-history-item div { display: flex; flex-direction: column; gap: 2px; }
+.role-history-item strong { color: var(--text); font-size: 11px; font-weight: 560; }
+.role-history-item small { color: var(--subtle); font-size: 10px; }
+.timeline-list, .education-grid, .education-card { display: none; }
+.commit-cell.level-0, .commit-legend .level-0 { background: #292929; }
+.commit-cell.level-1, .commit-legend .level-1 { background: #505050; }
+.commit-cell.level-2, .commit-legend .level-2 { background: #777777; }
+.commit-cell.level-3, .commit-legend .level-3 { background: #a5a5a5; }
+.commit-cell.level-4, .commit-legend .level-4 { background: #dedede; }
+html[data-theme="light"] .commit-cell.level-0, html[data-theme="light"] .commit-legend .level-0 { background: #eeeeee; }
+html[data-theme="light"] .commit-cell.level-1, html[data-theme="light"] .commit-legend .level-1 { background: #cccccc; }
+html[data-theme="light"] .commit-cell.level-2, html[data-theme="light"] .commit-legend .level-2 { background: #999999; }
+html[data-theme="light"] .commit-cell.level-3, html[data-theme="light"] .commit-legend .level-3 { background: #666666; }
+html[data-theme="light"] .commit-cell.level-4, html[data-theme="light"] .commit-legend .level-4 { background: #222222; }
+.playing-indicator.active { background: #dedede; box-shadow: 0 0 0 3px rgba(220,220,220,.1); }
+html[data-theme="light"] .playing-indicator.active { background: #222; box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
+.equalizer i { background: var(--text); }
+@media (max-width: 600px) {
+  .profile-row { gap: 10px; padding: 13px 1px; }
+  .profile-logo { flex-basis: 40px; width: 40px; height: 40px; border-radius: 11px; }
+  .profile-main h3 { font-size: 12px; }
+  .profile-meta { font-size: 8px; }
+  .profile-subtitle { font-size: 10px; }
+  .profile-detail, .role-history-item small { font-size: 9px; }
+  .role-history { gap: 9px; margin-top: 10px; }
+}
