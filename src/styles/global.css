@@ -905,18 +905,16 @@ html[data-theme="light"] .playing-indicator.active {
 }
 
 
-/* Cleaner hero and typography pass */
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;600;700;800&display=swap");
-
+/* Bold typography without condensed lettering */
 :root {
-  --sans: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
-  --mono: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+  --mono: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 body {
   font-family: var(--sans);
   font-weight: 500;
-  letter-spacing: -0.012em;
+  letter-spacing: 0;
 }
 
 .intro {
@@ -931,18 +929,18 @@ body {
 .intro h1 {
   font-size: clamp(36px, 6vw, 52px);
   font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: .98;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
 }
 
 .role {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 650;
 }
 
 .cozy-note {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 550;
 }
 
 .intro-copy {
@@ -952,7 +950,7 @@ body {
 }
 
 .intro-copy strong {
-  font-weight: 800;
+  font-weight: 750;
 }
 
 /* Use spacing, not rules, to distinguish content sections */
@@ -968,7 +966,7 @@ body {
 .editorial-heading {
   font-size: clamp(21px, 3.4vw, 25px);
   font-weight: 800;
-  letter-spacing: -.035em;
+  letter-spacing: -0.045em;
 }
 
 .update-row,
@@ -992,8 +990,8 @@ body {
 .project-name-wrap h3,
 .timeline-content h3,
 .update-copy strong {
-  font-weight: 800;
-  letter-spacing: -.025em;
+  font-weight: 750;
+  letter-spacing: -0.025em;
 }
 
 .profile-subtitle,
@@ -1002,7 +1000,7 @@ body {
 .update-copy small,
 .timeline-role,
 .timeline-description {
-  font-weight: 500;
+  font-weight: 450;
 }
 
 .project-meta,
@@ -1018,6 +1016,11 @@ body {
 
 .footer-bottom {
   border-top: 0;
+}
+
+.footer-intro h2 {
+  font-weight: 800;
+  letter-spacing: -0.04em;
 }
 
 @media (min-width: 601px) {
