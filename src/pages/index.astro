@@ -201,12 +201,12 @@ const projects = [
 
     <script>
       const root = document.documentElement;
-      const themeButton = document.getElementById("theme-toggle");
-      const menuButton = document.getElementById("menu-toggle");
-      const backdrop = document.getElementById("menu-backdrop");
+      const themeButton = document.getElementById("theme-toggle")!;
+      const menuButton = document.getElementById("menu-toggle")!;
+      const backdrop = document.getElementById("menu-backdrop")!;
       const metaTheme = document.querySelector('meta[name="theme-color"]');
 
-      const applyTheme = (theme) => {
+      const applyTheme = (theme: "light" | "dark") => {
         root.dataset.theme = theme;
         metaTheme?.setAttribute("content", theme === "dark" ? "#0b0c10" : "#f9fafe");
         localStorage.setItem("vinith-theme", theme);
