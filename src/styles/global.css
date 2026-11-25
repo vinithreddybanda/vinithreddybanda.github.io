@@ -903,3 +903,159 @@ html[data-theme="light"] .playing-indicator.active {
     flex-wrap: wrap;
   }
 }
+
+
+/* Cleaner hero and typography pass */
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --sans: "Roboto Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --mono: "Roboto Condensed", "Arial Narrow", sans-serif;
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 500;
+  letter-spacing: -0.012em;
+}
+
+.intro {
+  min-height: min(720px, calc(100svh - 24px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 24px;
+  padding-bottom: 32px;
+}
+
+.intro h1 {
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: .98;
+}
+
+.role {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cozy-note {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.intro-copy {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.intro-copy strong {
+  font-weight: 800;
+}
+
+/* Use spacing, not rules, to distinguish content sections */
+.section {
+  border-top: 0 !important;
+  padding-top: 0;
+}
+
+.section + .section {
+  margin-top: clamp(42px, 6vw, 58px);
+}
+
+.editorial-heading {
+  font-size: clamp(21px, 3.4vw, 25px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+}
+
+.update-row,
+.project-item,
+.profile-row,
+.timeline-item {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.update-row,
+.project-item {
+  padding-block: 13px;
+}
+
+.profile-row {
+  padding-block: 15px;
+}
+
+.profile-main h3,
+.project-name-wrap h3,
+.timeline-content h3,
+.update-copy strong {
+  font-weight: 800;
+  letter-spacing: -.025em;
+}
+
+.profile-subtitle,
+.profile-detail,
+.project-item > p,
+.update-copy small,
+.timeline-role,
+.timeline-description {
+  font-weight: 500;
+}
+
+.project-meta,
+.profile-meta,
+.update-date,
+.timeline-tag {
+  font-weight: 600;
+}
+
+.site-footer {
+  border-top: 0;
+}
+
+.footer-bottom {
+  border-top: 0;
+}
+
+@media (min-width: 601px) {
+  .intro {
+    min-height: min(760px, 100svh);
+  }
+}
+
+@media (max-width: 600px) {
+  .intro {
+    min-height: calc(100svh - 18px);
+    padding-top: 12px;
+    padding-bottom: 28px;
+  }
+  .intro h1 {
+    font-size: clamp(34px, 9vw, 44px);
+    font-weight: 800;
+  }
+  .intro-copy {
+    font-size: 14px;
+    line-height: 1.62;
+  }
+  .section + .section {
+    margin-top: 40px;
+  }
+  .editorial-heading {
+    font-size: 21px;
+  }
+  .profile-row {
+    padding-block: 13px;
+  }
+}
+
+@media (max-width: 360px) {
+  .intro h1 {
+    font-size: 32px;
+  }
+  .intro-copy {
+    font-size: 13px;
+  }
+}
