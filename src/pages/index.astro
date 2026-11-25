@@ -5,7 +5,8 @@ import "../styles/global.css";
 
 const projects = [
   {
-    mark: "S",
+    logo: "https://raw.githubusercontent.com/vinithreddybanda/SimpMusic/dev/androidApp/src/main/res/drawable/app_icon.png",
+    logoAlt: "SimpMusic app logo",
     name: "SimpMusic",
     description: "An open-source music player built around YouTube Music. I work on search reliability, playback flows and a more coherent Android experience.",
     meta: "ANDROID · OPEN SOURCE",
@@ -13,7 +14,8 @@ const projects = [
     source: "Source",
   },
   {
-    mark: "W",
+    logo: "https://raw.githubusercontent.com/vinithreddybanda/WhatsapStatusSaver/master/metadata/en-US/images/icon.png",
+    logoAlt: "WhatsApp Status Saver app logo",
     name: "WhatsApp Status Saver",
     description: "A media-first Android gallery for browsing, saving and sharing WhatsApp statuses, with natural image sizing and fast interactions.",
     meta: "ANDROID · 29 STARS",
@@ -21,7 +23,8 @@ const projects = [
     source: "Source",
   },
   {
-    mark: "S",
+    logo: "https://cdn.simpleicons.org/discord/5865F2",
+    logoAlt: "Discord logo",
     name: "Saturn",
     description: "A Rust-powered Discord bot for cross-server communication, relaying messages and keeping edits, reactions and media in sync.",
     meta: "RUST · DISCORD",
@@ -29,7 +32,8 @@ const projects = [
     source: "Source",
   },
   {
-    mark: "J",
+    logo: "https://raw.githubusercontent.com/vinithreddybanda/journalai/main/public/logo.png",
+    logoAlt: "Journal AI logo",
     name: "Journal AI",
     description: "An AI-assisted journaling project exploring a practical full-stack workflow with Supabase, Groq and a containerized deployment pipeline.",
     meta: "NEXT.JS · AI · DEVOPS",
@@ -37,7 +41,8 @@ const projects = [
     source: "Source",
   },
   {
-    mark: "L",
+    logo: "https://cdn.simpleicons.org/deepgram/13EF93",
+    logoAlt: "Deepgram logo",
     name: "LiveVoiceX",
     description: "A real-time multilingual voice experience built with React, TypeScript and Deepgram speech recognition.",
     meta: "REACT · REAL TIME",
@@ -89,17 +94,17 @@ const projects = [
         </div>
         <div class="updates-list">
           <a class="update-row" href="https://github.com/vinithreddybanda/saturn/pulls" target="_blank" rel="noreferrer">
-            <span class="update-mark">S</span>
+            <span class="update-mark"><img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord logo" loading="lazy" /></span>
             <span class="update-copy"><strong>Saturn · Cross-server relay</strong><small>Working on message edits, reactions and inline GIF delivery</small></span>
             <span class="update-date">NOV ’26</span>
           </a>
           <a class="update-row" href="https://github.com/vinithreddybanda/WhatsapStatusSaver" target="_blank" rel="noreferrer">
-            <span class="update-mark">W</span>
+            <span class="update-mark"><img src="https://raw.githubusercontent.com/vinithreddybanda/WhatsapStatusSaver/master/metadata/en-US/images/icon.png" alt="WhatsApp Status Saver logo" loading="lazy" /></span>
             <span class="update-copy"><strong>WhatsApp Status Saver</strong><small>Refining the gallery, media presentation and save actions</small></span>
             <span class="update-date">NOV ’26</span>
           </a>
           <a class="update-row" href="https://github.com/vinithreddybanda/SimpMusic" target="_blank" rel="noreferrer">
-            <span class="update-mark">S</span>
+            <span class="update-mark"><img src="https://raw.githubusercontent.com/vinithreddybanda/SimpMusic/dev/androidApp/src/main/res/drawable/app_icon.png" alt="SimpMusic logo" loading="lazy" /></span>
             <span class="update-copy"><strong>SimpMusic · Search experience</strong><small>Investigating keyboard insets, search flow and stability</small></span>
             <span class="update-date">NOV ’26</span>
           </a>
@@ -120,7 +125,7 @@ const projects = [
           {projects.map((project) => (
             <article class="project-item">
               <div class="project-heading">
-                <span class="project-icon">{project.mark}</span>
+                <span class="project-icon"><img src={project.logo} alt={project.logoAlt} loading="lazy" /></span>
                 <div class="project-name-wrap">
                   <h3><a href={project.href} target="_blank" rel="noreferrer">{project.name}</a></h3>
                   <span class="project-meta">{project.meta}</span>
