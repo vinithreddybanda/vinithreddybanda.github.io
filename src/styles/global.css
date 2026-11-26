@@ -1733,3 +1733,134 @@ body {
     border-radius: 7px !important;
   }
 }
+
+
+/* Refined app marks and listening card */
+.whatsapp-saver-project .project-icon,
+.whatsapp-saver-mark {
+  background: #101010 !important;
+  border: 1px solid #303030 !important;
+}
+.whatsapp-saver-project .project-icon img,
+.whatsapp-saver-mark img {
+  object-fit: contain !important;
+  padding: 2px !important;
+  filter: brightness(.82) saturate(.82) contrast(1.08) !important;
+}
+.profile-logo.cbit-logo {
+  background: #fff !important;
+}
+.profile-logo.cbit-logo img {
+  object-fit: cover !important;
+  object-position: left center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.listening-panel {
+  padding: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--line) !important;
+  border-radius: 13px !important;
+  background: var(--surface) !important;
+}
+.listening-list { display: grid; gap: 0; }
+.listening-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px !important;
+  min-width: 0;
+  background: transparent;
+}
+.listening-current {
+  background: linear-gradient(115deg, color-mix(in srgb, var(--panel) 95%, transparent), var(--surface)) !important;
+}
+.listening-history-row {
+  border-top: 1px solid var(--line-soft);
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  padding-block: 9px !important;
+}
+.album-art {
+  position: relative;
+  width: 58px !important;
+  height: 58px !important;
+  flex: none;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: var(--panel) !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,.18);
+}
+.listening-history-row .album-art {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 5px !important;
+  box-shadow: none;
+}
+.album-art img { width: 100%; height: 100%; object-fit: cover; }
+.art-playing-mark {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(0,0,0,.72);
+  font-size: 12px;
+  line-height: 1;
+}
+.listening-details { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.listening-state {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9px !important;
+  line-height: 1.3;
+  letter-spacing: .09em;
+  font-weight: 650;
+}
+.listening-details strong {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.35;
+  font-weight: 750;
+  letter-spacing: -.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.listening-artist {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.listening-history-row .listening-details strong { font-size: 11px; font-weight: 650; }
+.listening-history-row .listening-artist { font-size: 10px; }
+.listening-action { display: flex; align-items: center; gap: 10px; }
+.listening-action a {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--muted);
+  font-size: 13px;
+}
+.listening-action a:hover { color: var(--text); background: var(--panel); }
+.equalizer { height: 17px; }
+.equalizer i { width: 2px; border-radius: 2px; }
+@media (max-width: 600px) {
+  .listening-row { grid-template-columns: 50px minmax(0,1fr) auto; gap: 10px; padding: 11px !important; }
+  .album-art { width: 50px !important; height: 50px !important; }
+  .listening-history-row { grid-template-columns: 34px minmax(0,1fr) auto; padding-block: 8px !important; }
+  .listening-history-row .album-art { width: 34px !important; height: 34px !important; }
+}
