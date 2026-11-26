@@ -122,7 +122,7 @@ const projects = [
           {projects.map((project) => (
             <article class={`project-item ${project.name === "WhatsApp Status Saver" ? "whatsapp-saver-project" : ""}`}>
               <div class="project-heading">
-                <span class="project-icon"><img src={project.logo} alt={project.logoAlt} loading="lazy" /></span>
+                <span class={`project-icon ${project.name === "WhatsApp Status Saver" ? "whatsapp-saver-project-icon" : ""}`}><img src={project.logo} alt={project.logoAlt} loading="lazy" /></span>
                 <div class="project-name-wrap">
                   <h3><a href={project.href} target="_blank" rel="noreferrer">{project.name}</a></h3>
                   <span class="project-meta">{project.meta}</span>
