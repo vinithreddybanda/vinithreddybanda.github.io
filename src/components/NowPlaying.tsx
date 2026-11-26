@@ -98,9 +98,10 @@ export default function NowPlaying() {
           {tracks.map((track, index) => {
             const active = index === 0 && isPlaying;
             return (
-              <div className={`listening-row ${index === 0 ? "listening-current" : ""}`} key={trackKey(track)}>
+              <div className={`listening-row ${index === 0 ? "listening-current" : "listening-history-row"}`} key={trackKey(track)}>
                 <div className="album-art">
                   {track.artwork ? <img src={track.artwork} alt="" loading="lazy" /> : <span>{track.title.slice(0, 1).toUpperCase()}</span>}
+                  {active && <span className="art-playing-mark" aria-hidden="true">♫</span>}
                 </div>
                 <div className="listening-details">
                   <div className="listening-state">
