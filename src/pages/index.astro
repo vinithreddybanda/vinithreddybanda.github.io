@@ -99,7 +99,7 @@ const projects = [
             <span class="update-date">NOV ’26</span>
           </a>
           <a class="update-row" href="https://github.com/vinithreddybanda/WhatsapStatusSaver" target="_blank" rel="noreferrer">
-            <span class="update-mark"><img src="https://raw.githubusercontent.com/vinithreddybanda/WhatsapStatusSaver/master/metadata/en-US/images/icon.png" alt="WhatsApp Status Saver logo" loading="lazy" /></span>
+            <span class="update-mark whatsapp-saver-mark"><img src="https://raw.githubusercontent.com/vinithreddybanda/WhatsapStatusSaver/master/metadata/en-US/images/icon.png" alt="WhatsApp Status Saver logo" loading="lazy" /></span>
             <span class="update-copy"><strong>WhatsApp Status Saver</strong><small>Refining the gallery, media presentation and save actions</small></span>
             <span class="update-date">NOV ’26</span>
           </a>
@@ -111,10 +111,7 @@ const projects = [
         </div>
       </section>
 
-      <section class="section reveal" id="listening">
-        <h2 class="editorial-heading">What I’ve been playing <em>lately is often random, it just depends.</em></h2>
-        <NowPlaying client:load />
-      </section>
+
 
       <section class="section reveal" id="projects">
         <div class="section-title-row">
@@ -123,7 +120,7 @@ const projects = [
         </div>
         <div class="projects-list">
           {projects.map((project) => (
-            <article class="project-item">
+            <article class={`project-item ${project.name === "WhatsApp Status Saver" ? "whatsapp-saver-project" : ""}`}>
               <div class="project-heading">
                 <span class="project-icon"><img src={project.logo} alt={project.logoAlt} loading="lazy" /></span>
                 <div class="project-name-wrap">
@@ -160,7 +157,7 @@ const projects = [
         <h2 class="editorial-heading">Education</h2>
         <div class="profile-list">
           <a class="profile-row education-row" href="https://www.cbit.ac.in/" target="_blank" rel="noreferrer">
-            <div class="profile-logo cbit-logo"><img src="https://www.cbit.ac.in/wp-content/themes/CBIT/images/event-post.jpg" alt="Official Chaitanya Bharathi Institute of Technology emblem and wordmark" loading="lazy" /></div>
+            <div class="profile-logo cbit-logo"><img src="https://www.cbit.ac.in/wp-content/uploads/2023/09/CBIT-LOGO.png" alt="Chaitanya Bharathi Institute of Technology official emblem" loading="lazy" /></div>
             <div class="profile-main">
               <div class="profile-heading"><h3>Chaitanya Bharathi Institute of Technology</h3><span class="profile-meta">2023–2026</span></div>
               <p class="profile-subtitle">B.E. · Information Technology</p>
@@ -178,6 +175,11 @@ const projects = [
             <span class="profile-arrow" aria-hidden="true">↗</span>
           </a>
         </div>
+      </section>
+
+      <section class="section reveal" id="listening">
+        <h2 class="editorial-heading">What I’ve been playing <em>lately is often random, it just depends.</em></h2>
+        <NowPlaying client:load />
       </section>
 
       <footer class="site-footer reveal" id="contact">
