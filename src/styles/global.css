@@ -1932,3 +1932,25 @@ html[data-theme="light"] {
     min-height: 38px;
   }
 }
+
+/* Final brand-mark treatment: keep the WhatsApp artwork readable in both themes. */
+.whatsapp-saver-project .project-icon img,
+.whatsapp-saver-mark img {
+  object-fit: contain !important;
+  padding: 3px !important;
+  filter: none !important;
+}
+html[data-theme="light"] .whatsapp-saver-project .project-icon img,
+html[data-theme="light"] .whatsapp-saver-mark img {
+  filter: invert(1) !important;
+}
+
+/* Rasterized, mark-only Cognizant and CBIT assets. Crop to the emblem, not the wordmark. */
+.profile-logo.cognizant-logo img,
+.profile-logo.cbit-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 3px !important;
+  object-fit: cover !important;
+  object-position: left center !important;
+}
