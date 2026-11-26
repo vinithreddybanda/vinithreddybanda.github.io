@@ -1940,10 +1940,6 @@ html[data-theme="light"] {
   padding: 3px !important;
   filter: none !important;
 }
-html[data-theme="light"] .whatsapp-saver-project .project-icon img,
-html[data-theme="light"] .whatsapp-saver-mark img {
-  filter: invert(1) !important;
-}
 
 /* Rasterized, mark-only Cognizant and CBIT assets. Crop to the emblem, not the wordmark. */
 .profile-logo.cognizant-logo img,
@@ -1968,7 +1964,4 @@ html[data-theme="light"] .whatsapp-saver-mark img {
   padding: 3px !important;
   object-fit: contain !important;
   filter: none !important;
-}
-html[data-theme="light"] .whatsapp-saver-project-icon img {
-  filter: invert(1) !important;
 }
