@@ -1864,3 +1864,71 @@ body {
   .listening-history-row { grid-template-columns: 34px minmax(0,1fr) auto; padding-block: 8px !important; }
   .listening-history-row .album-art { width: 34px !important; height: 34px !important; }
 }
+
+
+/* Theme-aware raster icon tiles: the tile follows the page, not the brand. */
+:root {
+  --icon-tile: #111111;
+  --icon-tile-border: #303030;
+}
+html[data-theme="light"] {
+  --icon-tile: #ffffff;
+  --icon-tile-border: #e5e5e5;
+}
+.project-icon,
+.update-mark,
+.profile-logo {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 40px !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 1px solid var(--icon-tile-border) !important;
+  border-radius: 9px !important;
+  background: var(--icon-tile) !important;
+  box-shadow: none !important;
+}
+.project-icon img,
+.update-mark img,
+.profile-logo img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 5px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  filter: none !important;
+  mix-blend-mode: normal;
+}
+/* Keep full-bleed app artwork crisp while letting its tile change with theme. */
+.whatsapp-saver-project .project-icon img,
+.whatsapp-saver-mark img {
+  padding: 3px !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+/* Institutional wordmarks need breathing room; never crop them into the tile. */
+.profile-logo.cognizant-logo img,
+.profile-logo.cbit-logo img,
+.profile-logo.poly-logo img {
+  object-fit: contain !important;
+  padding: 4px !important;
+}
+@media (max-width: 600px) {
+  .project-icon,
+  .update-mark,
+  .profile-logo {
+    flex-basis: 38px !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px;
+    min-height: 38px;
+  }
+}
