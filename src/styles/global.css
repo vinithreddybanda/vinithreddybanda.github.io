@@ -1954,3 +1954,21 @@ html[data-theme="light"] .whatsapp-saver-mark img {
   object-fit: cover !important;
   object-position: left center !important;
 }
+
+
+/* Explicit selected-project icon hook, independent of card styling. */
+.whatsapp-saver-project-icon {
+  background: var(--icon-tile, var(--panel)) !important;
+  border-color: var(--icon-tile-border, var(--line)) !important;
+  overflow: hidden;
+}
+.whatsapp-saver-project-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 3px !important;
+  object-fit: contain !important;
+  filter: none !important;
+}
+html[data-theme="light"] .whatsapp-saver-project-icon img {
+  filter: invert(1) !important;
+}
